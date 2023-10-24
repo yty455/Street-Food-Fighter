@@ -6,6 +6,9 @@ const StyledLanding = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  position: fixed;
+  z-index: 100;
 `;
 
 export { StyledLanding };
