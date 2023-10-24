@@ -3,40 +3,17 @@
   word-break: keep-all;
   -ms-overflow-style: none;
   transition: all ease 0.08s 0s;
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    Liberation Mono,
-    Courier New,
-    monospace;
+  font-family: BoldFont;
 }
 
 @font-face {
-  font-family: "HangeulFontMedium";
-  src: url("./fonts/SUIT-Medium.ttf");
+  font-family: 'BoldFont';
+  src: url('./fonts/BMHANNAPro.ttf');
 }
 
 @font-face {
-  font-family: "HangeulFontRegular";
-  src: url("./fonts/SUIT-Regular.ttf");
-}
-
-@font-face {
-  font-family: "HangeulFontSemiBold";
-  src: url("./fonts/SUIT-SemiBold.ttf");
-}
-
-@font-face {
-  font-family: "EnglishFontBold";
-  src: url("./fonts/PPNeueMachina-InktrapUltrabold.otf");
-}
-
-@font-face {
-  font-family: "EnglishFontLight";
-  src: url("./fonts/PPNeueMachina-PlainLight.otf");
+  font-family: 'AirFont';
+  src: url('./fonts/BMHANNAAir_ttf.ttf');
 }
 
 ::-webkit-scrollbar {
@@ -166,7 +143,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
