@@ -35,7 +35,7 @@ export default function Home() {
           <LandingPage />
         </FadeOut>
       )}
-      {!showLanding && <MainPage />}
+      <MainPage />
     </>
   );
 }
