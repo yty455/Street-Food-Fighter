@@ -1,6 +1,6 @@
-"use client";
-// import HomePage from "@/pagecomponents/home";
+'use client';
+import LandingPage from '@/pagecomponents/landing';
 
 export default function Home() {
-  return <div />;
+  return <LandingPage />;
 }
