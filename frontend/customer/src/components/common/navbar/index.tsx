@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
+import { useNavStore } from '@/stores/curnavStore';
 
 const NavItem = ({ id, label, curnav, onClick }: any) => {
   const isActive = curnav === id;
@@ -16,8 +17,7 @@ const NavItem = ({ id, label, curnav, onClick }: any) => {
 };
 
 const Navbar = () => {
-  // 임시
-  const [curnav, setCurnav] = useState(1);
+  const { curnav, setCurnav } = useNavStore();
   const NAV_ITEMS = [
     { id: 1, label: '주문' },
     { id: 2, label: '펀딩' },
