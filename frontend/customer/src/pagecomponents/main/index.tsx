@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Curpos, Filter, Research, Position, StyledTop, Topbar } from './Main.styled';
+import Card from '@/components/main/card';
 
 declare global {
   interface Window {
@@ -37,6 +38,10 @@ const MainPage = () => {
       <Curpos>
         <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
       </Curpos>
+      <div style={{ position: 'fixed', bottom: '70px', zIndex: '3', display: 'flex', gap: '10px' }}>
+        <Card />
+        <Card />
+      </div>
       <div style={{ height: '95vh' }}>
         <div id="map" style={{ width: '100%', height: '100%' }}></div>
       </div>

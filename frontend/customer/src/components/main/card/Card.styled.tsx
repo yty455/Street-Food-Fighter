@@ -1,17 +1,17 @@
 import styled, { css } from 'styled-components';
 const CardBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const white = props.theme.colors.white;
-
+    const bgcolor = props.theme.colors.light;
+    const main = props.theme.colors.main;
     return css`
       display: flex;
       justify-content: center;
       gap: 25px;
       align-items: center;
-
+      border: 3px solid ${main};
       width: 225px;
       height: 98px;
-      background-color: ${white};
+      background-color: ${bgcolor};
       border-radius: 10px;
     `;
   }};

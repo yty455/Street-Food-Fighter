@@ -7,7 +7,7 @@ const BadgeBox = styled.div.attrs<any>((props) => ({}))`
       justify-content: center;
       align-items: center;
 
-      padding: 5px 10px;
+      padding: 3px 8px;
       background-color: ${main};
       border-radius: 4px;
       font-size: 12px;

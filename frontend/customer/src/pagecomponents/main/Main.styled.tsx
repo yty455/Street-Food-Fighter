@@ -76,7 +76,7 @@ const Curpos = styled.div`
   z-index: 3;
   position: fixed;
   right: 10px;
-  bottom: 70px;
+  bottom: 170px;
 `;
 
 export { StyledTop, Topbar, Filter, Research, Position, Curpos };
