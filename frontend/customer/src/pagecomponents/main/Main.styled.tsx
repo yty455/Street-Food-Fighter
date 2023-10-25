@@ -6,7 +6,7 @@ const StyledTop = styled.div`
   align-items: center;
   position: fixed;
   z-index: 3;
-  top: 0;
+  top: 10px;
   left: 0;
   right: 0;
   gap: 8px;
