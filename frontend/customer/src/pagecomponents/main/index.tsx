@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Curpos, Filter, Research, Position, StyledTop, Topbar } from './Main.styled';
 
 declare global {
   interface Window {
@@ -22,8 +23,23 @@ const MainPage = () => {
     });
   }, []);
   return (
-    <div style={{ height: '95vh' }}>
-      <div id="map" style={{ width: '100%', height: '100%' }}></div>
+    <div>
+      <StyledTop>
+        <Topbar>
+          <Filter>
+            <img src="/images/top/filter.png" style={{ width: '35px' }} />
+          </Filter>
+
+          <Position>부산시 강서구 녹산동</Position>
+        </Topbar>
+        <Research>현 위치에서 재검색</Research>
+      </StyledTop>
+      <Curpos>
+        <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
+      </Curpos>
+      <div style={{ height: '95vh' }}>
+        <div id="map" style={{ width: '100%', height: '100%' }}></div>
+      </div>
     </div>
   );
 };
