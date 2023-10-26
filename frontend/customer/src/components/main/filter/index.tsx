@@ -1,6 +1,5 @@
 import { categories } from '@/assets/category';
 import { ModalOverlay, FilterBox, FilterTitle, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer } from './Filter.styled';
-import { useState } from 'react';
 import useMainFilterStore from '@/stores/mainFilterStore';
 
 const FilterComponent = ({ onClose }: any) => {

@@ -1,17 +1,27 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/main/filter';
-import { useState } from 'react';
-import { Map } from 'react-kakao-maps-sdk';
+import { useRef, useState } from 'react';
+import { Map, MapTypeControl } from 'react-kakao-maps-sdk';
 
 const MainPage = () => {
-  const [isFilterVisible, setFilterVisible] = useState(false);
+  // 중심좌표
+  const mapRef = useRef<kakao.maps.Map>(null);
+  const handleResearchClick = () => {
+    const map = mapRef.current;
+    if (!map) return;
 
+    const center = map.getCenter();
+    console.log('중심 좌표:', center.getLat(), center.getLng());
+  };
+
+  // filter
+  const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
   return (
     <div style={{ height: '93vh' }}>
-      <Map center={{ lat: 33.5563, lng: 126.79581 }} style={{ width: '100%', height: '100%' }}></Map>
+      <Map center={{ lat: 33.5563, lng: 126.79581 }} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
       <StyledTop>
         <Topbar>
           <Filter onClick={toggleFilter}>
@@ -20,7 +30,7 @@ const MainPage = () => {
 
           <Position>부산시 강서구 녹산동</Position>
         </Topbar>
-        <Research>현 위치에서 재검색</Research>
+        <Research onClick={handleResearchClick}>현 위치에서 재검색</Research>
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
 
