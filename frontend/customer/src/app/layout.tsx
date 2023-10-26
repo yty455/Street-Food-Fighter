@@ -11,10 +11,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="text/javascript" src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JS_KEY}&autoload=false`} />
       </head>
       <ThemeProvider theme={theme}>
-        <body>
+        <body style={{ height: '100vh' }}>
           <StyledComponentsRegistry>
-            <Navbar />
             {children}
+            <Navbar />
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>

@@ -24,7 +24,7 @@ const FundingPage = () => {
     });
   }, []);
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <StyledTop>
         <Topbar>
           <Filter>
@@ -44,7 +44,7 @@ const FundingPage = () => {
         </div>
       </ButtonList>
 
-      <div style={{ height: '95vh' }}>
+      <div style={{ height: '100%' }}>
         <div id="map" style={{ width: '100%', height: '100%' }}></div>
       </div>
     </div>
