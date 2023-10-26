@@ -30,11 +30,11 @@ export default function Home() {
 
   return (
     <>
-      {showLanding && (
+      {/* {showLanding && (
         <FadeOut fade={fadeLanding}>
           <LandingPage />
         </FadeOut>
-      )}
+      )} */}
       <MainPage />
     </>
   );
