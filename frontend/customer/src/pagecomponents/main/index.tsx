@@ -3,9 +3,8 @@ import Card from '@/components/main/card';
 import FilterComponent from '@/components/main/filter';
 import { useEffect, useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
-import handleCurposClick from '@/hooks/currentHook';
 import handleRefreshClick from '@/hooks/refreshHook';
-import kakaomapApi from '@/apis/kakaoAPI';
+import useCurrentLocation from '@/hooks/currentHook';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -15,20 +14,7 @@ const MainPage = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
-  const [position, setPosition] = useState({ lat: 35.08541957184095, lng: 128.87934499308867 });
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        setPosition({ lat: latitude, lng: longitude });
-        const address = await kakaomapApi({ latitude, longitude });
-        if (address) setAddressName(address);
-      },
-      (error) => {
-        console.error('Error getting current position:', error);
-      },
-    );
-  }, []);
+  const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
 
   return (
     <div style={{ height: '93vh' }}>
@@ -45,7 +31,7 @@ const MainPage = () => {
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
 
-      <Curpos onClick={() => handleCurposClick(mapRef.current, setAddressName)}>
+      <Curpos onClick={updateLocation}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
       </Curpos>
       <CardList>
