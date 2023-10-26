@@ -79,4 +79,23 @@ const Curpos = styled.div`
   bottom: 170px;
 `;
 
-export { StyledTop, Topbar, Filter, Research, Position, Curpos };
+const CardList = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const light = props.theme.colors.light;
+    const font = props.theme.fonts.air;
+    return css`
+      position: fixed;
+      bottom: 70px;
+      z-index: 3; 
+      display: flex;
+      gap: 20px;
+      width: 100vw;
+      overflow-x: scroll;
+      white-space: nowrap;
+      flex-direction: row;
+    `;
+  }};
+`;
+
+
+export { CardList, StyledTop, Topbar, Filter, Research, Position, Curpos };
