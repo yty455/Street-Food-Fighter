@@ -59,6 +59,8 @@ const CategoryItem = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const white = props.theme.colors.white;
     const main = props.theme.colors.main;
+    const bgcolor = props.selected ? props.theme.colors.main : props.theme.colors.white;
+
     return css`
       display: flex;
       align-items: center;
@@ -67,7 +69,7 @@ const CategoryItem = styled.div.attrs<any>((props) => ({}))`
       border-radius: 10px;
       flex-direction: column;
       justify-content: space-around;
-      background-color: ${main};
+      background-color: ${bgcolor};
       cursor: pointer;
     `;
   }};
