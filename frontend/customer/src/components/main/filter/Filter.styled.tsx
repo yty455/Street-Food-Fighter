@@ -40,12 +40,12 @@ const FilterTitle = styled.div.attrs<any>((props) => ({}))`
 `;
 const CloseButton = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const main = props.theme.colors.main;
+    const light = props.theme.colors.light;
     const black = props.theme.colors.black;
     return css`
       border: none;
       width: 100%;
-      background-color: ${main};
+      background-color: ${light};
       color: ${black};
       cursor: pointer;
       padding: 15px;
