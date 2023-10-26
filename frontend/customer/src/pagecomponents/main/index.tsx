@@ -1,23 +1,38 @@
-import kakaomapApi from '@/apis/kakaoAPI';
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/main/filter';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 import handleCurposClick from '@/hooks/currentHook';
 import handleRefreshClick from '@/hooks/refreshHook';
+import kakaomapApi from '@/apis/kakaoAPI';
 
 const MainPage = () => {
-  const [addressName, setAddressName] = useState('부산시 강서구 녹산동');
+  const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
 
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
+  const [position, setPosition] = useState({ lat: 35.08541957184095, lng: 128.87934499308867 });
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        setPosition({ lat: latitude, lng: longitude });
+        const address = await kakaomapApi({ latitude, longitude });
+        if (address) setAddressName(address);
+      },
+      (error) => {
+        console.error('Error getting current position:', error);
+      },
+    );
+  }, []);
+
   return (
     <div style={{ height: '93vh' }}>
-      <Map center={{ lat: 35.08541957184095, lng: 128.87934499308867 }} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
+      <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
       <StyledTop>
         <Topbar>
           <Filter onClick={toggleFilter}>
