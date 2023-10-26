@@ -6,15 +6,12 @@ const StyledNavbar = styled.div.attrs<any>((props) => ({}))`
 
     return css`
       width: 100%;
-      height: 8vh;
-      /* padding: 10px 0px; */
+      height: 7vh;
       background-color: ${white};
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 3;
-      /* position: fixed;
-      bottom: 0; */
     `;
   }};
 `;
