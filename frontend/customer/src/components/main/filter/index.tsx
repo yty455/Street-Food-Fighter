@@ -1,22 +1,16 @@
 import { categories } from '@/assets/category';
 import { ModalOverlay, FilterBox, FilterTitle, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer } from './Filter.styled';
 import { useState } from 'react';
+import useMainFilterStore from '@/stores/mainFilterStore';
 
 const FilterComponent = ({ onClose }: any) => {
-  const [selectedCategories, setSelectedCategories] = useState<any>([]);
+  const { selectedCategories, toggleCategory, clearCategories } = useMainFilterStore();
 
   const handleCategoryClick = (categoryname: any) => {
-    console.log(categoryname);
     if (categoryname === '메뉴 전체') {
-      setSelectedCategories(['메뉴 전체']);
+      clearCategories();
     } else {
-      setSelectedCategories((prev: any) => {
-        if (prev.includes(categoryname)) {
-          return prev.filter((item: any) => item !== categoryname);
-        } else {
-          return [...prev.filter((item: any) => item !== '메뉴 전체'), categoryname];
-        }
-      });
+      toggleCategory(categoryname);
     }
   };
   return (
