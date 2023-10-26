@@ -20,7 +20,7 @@ const FilterBox = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: space-between;
       width: 100%;
       height: 600px;
       background-color: ${white};
@@ -55,4 +55,39 @@ const CloseButton = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { ModalOverlay, FilterBox, FilterTitle, CloseButton };
+const CategoryItem = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+    const main = props.theme.colors.main;
+    return css`
+      display: flex;
+      align-items: center;
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      flex-direction: column;
+      justify-content: space-around;
+      background-color: ${main};
+      cursor: pointer;
+    `;
+  }};
+`;
+
+const CategoryImage = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const CategoryName = styled.div`
+  font-size: 16px;
+`;
+
+const CategoriesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 10px 10px 20px;
+  justify-content: flex-start;
+`;
+
+export { ModalOverlay, FilterBox, FilterTitle, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer };
