@@ -1,30 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Filter, Position, Research, StyledTop, Topbar } from '../main/Main.styled';
+import { Filter, Position, StyledTop, Topbar } from '../main/Main.styled';
 import { ButtonList } from './Funding.styled';
+import { Map } from 'react-kakao-maps-sdk';
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
 const FundingPage = () => {
-  const [map, setMap] = useState<any>();
-  const [marker, setMarker] = useState<any>();
-
-  useEffect(() => {
-    window.kakao.maps.load(() => {
-      const container = document.getElementById('map');
-      const options = {
-        center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
-      };
-
-      setMap(new window.kakao.maps.Map(container, options));
-      setMarker(new window.kakao.maps.Marker());
-    });
-  }, []);
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '92vh' }}>
+      <Map center={{ lat: 33.5563, lng: 126.79581 }} style={{ width: '100%', height: '100%' }}></Map>
       <StyledTop>
         <Topbar>
           <Filter>
@@ -43,10 +24,6 @@ const FundingPage = () => {
           <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
         </div>
       </ButtonList>
-
-      <div style={{ height: '100%' }}>
-        <div id="map" style={{ width: '100%', height: '100%' }}></div>
-      </div>
     </div>
   );
 };

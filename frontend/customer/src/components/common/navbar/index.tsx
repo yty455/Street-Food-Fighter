@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
