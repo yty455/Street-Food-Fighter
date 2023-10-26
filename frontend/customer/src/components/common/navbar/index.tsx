@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
 import { useNavStore } from '@/stores/curnavStore';
+import { useRouter } from 'next/navigation';
 
-const NavItem = ({ id, label, curnav, onClick }: any) => {
+const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const isActive = curnav === id;
   const imgSrc = isActive ? `/images/navbar/check${id}.png` : `/images/navbar/${id}.png`;
 
+  const router = useRouter();
+
+  const handleClick = () => {
+    onClick();
+    router.push(link);
+  };
+
   return (
-    <Flexbox onClick={onClick}>
+    <Flexbox onClick={handleClick}>
       <img src={imgSrc} style={{ width: '30px' }} />
       <NavText curnav={curnav} cur={id.toString()}>
         {label}
@@ -19,16 +27,16 @@ const NavItem = ({ id, label, curnav, onClick }: any) => {
 const Navbar = () => {
   const { curnav, setCurnav } = useNavStore();
   const NAV_ITEMS = [
-    { id: 1, label: '주문' },
-    { id: 2, label: '펀딩' },
-    { id: 3, label: '알림' },
-    { id: 4, label: '주문 내역' },
-    { id: 5, label: '내 정보' },
+    { id: 1, label: '주문', link: '/main' },
+    { id: 2, label: '펀딩', link: '/funding' },
+    { id: 3, label: '알림', link: '/alert' },
+    { id: 4, label: '주문 내역', link: '/orderlist' },
+    { id: 5, label: '내 정보', link: '/mypage' },
   ];
   return (
     <StyledNavbar>
-      {NAV_ITEMS.map(({ id, label }) => (
-        <NavItem key={id} id={id} label={label} curnav={curnav} onClick={() => setCurnav(id)} />
+      {NAV_ITEMS.map(({ id, label, link }) => (
+        <NavItem key={id} id={id} label={label} link={link} curnav={curnav} onClick={() => setCurnav(id)} />
       ))}
     </StyledNavbar>
   );
