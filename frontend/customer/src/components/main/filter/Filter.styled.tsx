@@ -48,7 +48,7 @@ const CloseButton = styled.div.attrs<any>((props) => ({}))`
       background-color: ${main};
       color: ${black};
       cursor: pointer;
-      padding: 10px;
+      padding: 15px;
       text-align: center;
       font-size: 20px;
     `;
@@ -57,8 +57,6 @@ const CloseButton = styled.div.attrs<any>((props) => ({}))`
 
 const CategoryItem = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const white = props.theme.colors.white;
-    const main = props.theme.colors.main;
     const bgcolor = props.selected ? props.theme.colors.main : props.theme.colors.white;
 
     return css`
