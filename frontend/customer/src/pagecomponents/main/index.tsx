@@ -4,11 +4,11 @@ import Card from '@/components/main/card';
 import FilterComponent from '@/components/main/filter';
 import { useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
+import handleCurposClick from '@/hooks/currentHook';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('부산시 강서구 녹산동');
   // 중심좌표
-
   const mapRef = useRef<kakao.maps.Map>(null);
   const handleResearchClick = async () => {
     const map = mapRef.current;
@@ -27,35 +27,6 @@ const MainPage = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
-  // 현위치
-  const handleCurposClick = async () => {
-    if (!navigator.geolocation) {
-      console.log('브라우저가 위치 정보를 지원하지 않음');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const map = mapRef.current;
-        if (!map) return;
-
-        const newCenter = new kakao.maps.LatLng(latitude, longitude);
-        map.setCenter(newCenter);
-
-        const address = await kakaomapApi({ latitude, longitude });
-        if (address) {
-          setAddressName(address);
-          console.log(address);
-        }
-      },
-      () => {
-        console.log('현재 위치를 가져올 수 없음');
-      },
-    );
-  };
-
   return (
     <div style={{ height: '93vh' }}>
       <Map center={{ lat: 35.08541957184095, lng: 128.87934499308867 }} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
@@ -71,7 +42,7 @@ const MainPage = () => {
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
 
-      <Curpos onClick={handleCurposClick}>
+      <Curpos onClick={() => handleCurposClick(mapRef.current, setAddressName)}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
       </Curpos>
       <CardList>
