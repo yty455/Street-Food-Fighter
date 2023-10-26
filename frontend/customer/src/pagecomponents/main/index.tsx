@@ -5,23 +5,11 @@ import FilterComponent from '@/components/main/filter';
 import { useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 import handleCurposClick from '@/hooks/currentHook';
+import handleRefreshClick from '@/hooks/refreshHook';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('부산시 강서구 녹산동');
-  // 중심좌표
   const mapRef = useRef<kakao.maps.Map>(null);
-  const handleResearchClick = async () => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const center = map.getCenter();
-    const latitude = center.getLat();
-    const longitude = center.getLng();
-
-    // console.log('중심 좌표:', center.getLat(), center.getLng());
-    const address = await kakaomapApi({ latitude, longitude });
-    if (address) setAddressName(address);
-  };
 
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -38,7 +26,7 @@ const MainPage = () => {
 
           <Position>{addressName}</Position>
         </Topbar>
-        <Research onClick={handleResearchClick}>현 지도에서 검색</Research>
+        <Research onClick={() => handleRefreshClick(mapRef, setAddressName)}>현 지도에서 검색</Research>
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
 
