@@ -1,4 +1,5 @@
-import { Curpos, Filter, Research, Position, StyledTop, Topbar } from './Main.styled';
+import { useEffect, useRef, useState } from 'react';
+import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import { Map } from 'react-kakao-maps-sdk';
 
@@ -19,10 +20,11 @@ const MainPage = () => {
       <Curpos>
         <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
       </Curpos>
-      <div style={{ position: 'fixed', bottom: '70px', zIndex: '3', display: 'flex', gap: '10px' }}>
+      <CardList>
+        <div />
         <Card />
         <Card />
-      </div>
+      </CardList>
     </div>
   );
 };

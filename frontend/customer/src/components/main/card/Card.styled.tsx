@@ -9,7 +9,7 @@ const CardBox = styled.div.attrs<any>((props) => ({}))`
       gap: 25px;
       align-items: center;
       border: 3px solid ${main};
-      width: 225px;
+      min-width: 225px;
       height: 98px;
       background-color: ${bgcolor};
       border-radius: 10px;
