@@ -35,18 +35,17 @@ const MainPage = () => {
           vendors.map((vendor: any) => {
             const category = categories.find((c) => c.id === vendor.category);
             const imageSrc = `/images/category/${category?.image}`;
-            console.log(parseFloat(vendor.lat), parseFloat(vendor.lng));
             return (
               <MapMarker
                 key={vendor.id}
                 position={{ lat: parseFloat(vendor.lat), lng: parseFloat(vendor.lng) }}
                 image={{
                   src: imageSrc,
-                  size: { width: 30, height: 30 },
+                  size: { width: 50, height: 50 },
                   options: {
                     offset: {
-                      x: 15,
-                      y: 30,
+                      x: 25,
+                      y: 25,
                     },
                   },
                 }}

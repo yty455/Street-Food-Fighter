@@ -3,7 +3,7 @@ import { CardBox, ContentBox, ContentBox2, Text } from './Card.styled';
 import Badge from '@/components/common/badge';
 
 const Card = ({ vendor }: any) => {
-  console.log(vendor);
+  // console.log(vendor);
   const catImage = categories.find((cat) => cat.id === vendor.category)?.image;
 
   return (
