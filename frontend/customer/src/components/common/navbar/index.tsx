@@ -1,5 +1,7 @@
 import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
 import { useNavStore } from '@/stores/curnavStore';
+import useMainFilterStore from '@/stores/mainFilterStore';
+import useSelectedDateStore from '@/stores/selectdateStore';
 import { useRouter } from 'next/navigation';
 
 const NavItem = ({ id, label, curnav, link, onClick }: any) => {
@@ -7,10 +9,13 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const imgSrc = isActive ? `/images/navbar/check${id}.png` : `/images/navbar/${id}.png`;
 
   const router = useRouter();
-
+  const { setSelectedDate } = useSelectedDateStore();
+  const { clearCategories } = useMainFilterStore();
   const handleClick = () => {
     onClick();
     router.push(link);
+    setSelectedDate(null);
+    clearCategories();
   };
 
   return (
