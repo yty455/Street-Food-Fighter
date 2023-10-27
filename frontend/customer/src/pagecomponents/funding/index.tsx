@@ -4,7 +4,7 @@ import { Filter, Position, Research, StyledTop, Topbar } from '../main/Main.styl
 import { Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
-import FilterComponent from '@/components/main/filter';
+import FilterComponent from '@/components/common/filter';
 import useSelectedDateStore from '@/stores/selectdateStore';
 import useDateOptions from '@/hooks/sevendaysHook';
 

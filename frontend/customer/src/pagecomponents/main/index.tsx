@@ -1,6 +1,6 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
-import FilterComponent from '@/components/main/filter';
+import FilterComponent from '@/components/common/filter';
 import { useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';

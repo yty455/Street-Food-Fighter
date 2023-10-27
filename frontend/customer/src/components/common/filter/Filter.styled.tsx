@@ -15,8 +15,6 @@ const ModalOverlay = styled.div`
 `;
 const FilterBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const white = props.theme.colors.white;
-
     return css`
       display: flex;
       flex-direction: column;
@@ -30,7 +28,7 @@ const FilterBox = styled.div.attrs<any>((props) => ({}))`
       position: relative;
       gap: 20px;
       padding-bottom: 60px;
-      padding-top: 30px;
+      padding-top: 45px;
     `;
   }};
 `;
