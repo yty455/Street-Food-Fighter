@@ -7,6 +7,8 @@ import handleRefreshClick from '@/hooks/refreshHook';
 import FilterComponent from '@/components/common/filter';
 import useSelectedDateStore from '@/stores/selectdateStore';
 import useDateOptions from '@/hooks/sevendaysHook';
+import useSetPlaceHook from '@/hooks/setplaceHook';
+import SearchPlace from '@/components/common/searchplace';
 
 const FundingPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -17,7 +19,12 @@ const FundingPage = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
+  // position
   const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
+  const [isPositionVisible, setPositionVisible] = useState(false);
+  const togglePosition = () => setPositionVisible(!isPositionVisible);
+
+  const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
   return (
     <div style={{ height: '93vh' }}>
@@ -28,7 +35,7 @@ const FundingPage = () => {
             <img src="/images/top/filter.png" style={{ width: '35px' }} />
           </Filter>
 
-          <Position>{addressName}</Position>
+          <Position onClick={togglePosition}>{addressName}</Position>
         </Topbar>
         <Topbar2>
           <Day onClick={toggleFilter}> {selectedDate ? formatDate(selectedDate, false) : '날짜 없음'}</Day>
@@ -38,6 +45,7 @@ const FundingPage = () => {
         </Topbar2>
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} isfundingpage="true" />}
+      {isPositionVisible && <SearchPlace onClose={togglePosition} onSelectPlace={setPlace} />}
 
       <Curpos onClick={updateLocation}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
