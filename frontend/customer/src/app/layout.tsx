@@ -14,10 +14,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <ThemeProvider theme={theme}>
         <body style={{ height: '100vh' }}>
-          {/* <Script
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JS_KEY}&autoload=false`}
-            strategy="beforeInteractive"
-          /> */}
           <StyledComponentsRegistry>
             {children}
             <Navbar />
