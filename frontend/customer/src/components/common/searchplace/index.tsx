@@ -9,7 +9,7 @@ type SearchResult = {
   y: string;
 };
 
-const SearchPlace = ({ onClose }: any) => {
+const SearchPlace = ({ onClose, onSelectPlace }: any) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
 
@@ -57,7 +57,7 @@ const SearchPlace = ({ onClose }: any) => {
       <List>
         {results.length > 0 ? (
           results.map((result, index) => (
-            <Place key={index}>
+            <Place key={index} onClick={() => onSelectPlace(result.x, result.y)}>
               <BoldText>{result.place_name}</BoldText>
               <LightText>{result.address_name}</LightText>
             </Place>
