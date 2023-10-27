@@ -5,11 +5,14 @@ import { Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import FilterComponent from '@/components/main/filter';
+import useSelectedDateStore from '@/stores/selectdateStore';
+import useDateOptions from '@/hooks/sevendaysHook';
 
 const FundingPage = () => {
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
-
+  const { selectedDate } = useSelectedDateStore();
+  const { formatDate } = useDateOptions();
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
@@ -28,7 +31,7 @@ const FundingPage = () => {
           <Position>{addressName}</Position>
         </Topbar>
         <Topbar2>
-          <Day> 10월 27일</Day>
+          <Day onClick={toggleFilter}> {selectedDate ? formatDate(selectedDate, false) : '날짜 없음'}</Day>
           <ResearchBox>
             <Research onClick={() => handleRefreshClick(mapRef, setAddressName)}>현 지도에서 검색</Research>
           </ResearchBox>

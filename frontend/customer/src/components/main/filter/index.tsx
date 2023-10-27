@@ -16,20 +16,21 @@ import {
 import useMainFilterStore from '@/stores/mainFilterStore';
 import { useState } from 'react';
 import useDateOptions from '@/hooks/sevendaysHook';
+import useSelectedDateStore from '@/stores/selectdateStore';
 
 const FilterComponent = ({ onClose, isfundingpage }: any) => {
   // 날짜 선택
   const { dateOptions, formatDate } = useDateOptions();
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDateSelector, setShowDateSelector] = useState(false);
-
-  const handleFilterDateClick = () => {
-    setShowDateSelector(!showDateSelector);
-  };
+  const { selectedDate, setSelectedDate } = useSelectedDateStore();
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
     setShowDateSelector(false);
+  };
+
+  const handleFilterDateClick = () => {
+    setShowDateSelector(!showDateSelector);
   };
 
   // 카테고리 선택
