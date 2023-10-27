@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
+import SearchPlace from '@/components/common/searchplace';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -14,6 +15,9 @@ const MainPage = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
+  // position
+  const [isPositionVisible, setPositionVisible] = useState(false);
+  const togglePosition = () => setPositionVisible(!isPositionVisible);
   const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
 
   return (
@@ -25,11 +29,12 @@ const MainPage = () => {
             <img src="/images/top/filter.png" style={{ width: '35px' }} />
           </Filter>
 
-          <Position>{addressName}</Position>
+          <Position onClick={togglePosition}>{addressName}</Position>
         </Topbar>
         <Research onClick={() => handleRefreshClick(mapRef, setAddressName)}>현 지도에서 검색</Research>
       </StyledTop>
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
+      {isPositionVisible && <SearchPlace onClose={togglePosition} />}
 
       <Curpos onClick={updateLocation}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
