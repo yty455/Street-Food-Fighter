@@ -6,6 +6,7 @@ export const vendordata = [
     lng: 128.8536064,
     category: 1,
     review: 4.8,
+    phone: '010-1111-1111',
   },
   {
     id: 2,
@@ -14,5 +15,6 @@ export const vendordata = [
     lng: 128.8566064,
     category: 2,
     review: 4.3,
+    phone: '010-1234-1111',
   },
 ];

@@ -79,7 +79,6 @@ const MainPage = () => {
             key={vendor.id}
             vendor={vendor}
             onClick={() => {
-              console.log('click');
               router.push(`/vendor/${vendor.id}`);
             }}
           />
