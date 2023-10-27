@@ -47,6 +47,11 @@ const SearchPlace = ({ onClose }: any) => {
         <SearchBar>
           <img src="/images/orderfunding/search.png" style={{ width: '30px' }} />
           <SearchText value={query} onChange={(e: any) => setQuery(e.target.value)} placeholder="지번, 도로명, 건물명으로 검색" />
+          {query.length > 0 && (
+            <button onClick={() => setQuery('')} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}>
+              <img src="/images/orderfunding/erase.png" style={{ width: '30px' }} />
+            </button>
+          )}
         </SearchBar>
       </div>
       <List>
