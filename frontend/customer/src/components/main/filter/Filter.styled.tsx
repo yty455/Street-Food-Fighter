@@ -20,11 +20,17 @@ const FilterBox = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       width: 100%;
       height: 600px;
-      background-color: ${white};
+      background-color: #fffffe;
       border-radius: 20px 20px 0px 0px;
+      overflow-y: auto;
+      padding: 30px 0px 0px 0px;
+      position: relative;
+      gap: 20px;
+      padding-bottom: 60px;
+      padding-top: 30px;
     `;
   }};
 `;
@@ -51,6 +57,10 @@ const CloseButton = styled.div.attrs<any>((props) => ({}))`
       padding: 15px;
       text-align: center;
       font-size: 20px;
+
+      position: absolute;
+      bottom: 0;
+      left: 0;
     `;
   }};
 `;
@@ -86,8 +96,8 @@ const CategoriesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px 10px 10px 20px;
   justify-content: flex-start;
+  width: 350px;
 `;
 
 export { ModalOverlay, FilterBox, FilterTitle, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer };
