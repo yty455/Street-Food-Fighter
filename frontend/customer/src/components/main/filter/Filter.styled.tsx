@@ -126,4 +126,44 @@ const CategoriesContainer = styled.div`
   width: 350px;
 `;
 
-export { ModalOverlay, FilterBox, Datebox, FilterTitle, FilterDate, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer };
+const DateSelector = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const lightgray = props.theme.colors.lightgray;
+
+    return css`
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+      margin-left: 30px;
+      margin-right: 30px;
+      border: 1px solid ${lightgray};
+      border-radius: 10px;
+    `;
+  }};
+`;
+const DateItem = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const bgcolor = props.selected ? props.theme.colors.main : props.theme.colors.white;
+
+    return css`
+      padding: 10px;
+      border-radius: 5px;
+      background-color: ${bgcolor};
+    `;
+  }};
+`;
+
+export {
+  DateSelector,
+  DateItem,
+  ModalOverlay,
+  FilterBox,
+  Datebox,
+  FilterTitle,
+  FilterDate,
+  CloseButton,
+  CategoryItem,
+  CategoryImage,
+  CategoryName,
+  CategoriesContainer,
+};
