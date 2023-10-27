@@ -1,4 +1,4 @@
-package com.sff.userserver.config;
+package com.sff.userserver.global.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

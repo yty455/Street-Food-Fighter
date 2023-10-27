@@ -1,4 +1,4 @@
-package com.sff.userserver.domain;
+package com.sff.userserver.domain.Member.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

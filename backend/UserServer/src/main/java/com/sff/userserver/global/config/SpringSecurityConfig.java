@@ -1,4 +1,4 @@
-package com.sff.userserver.config;
+package com.sff.userserver.global.config;
 
 import static org.springframework.security.config.Customizer.*;
 
