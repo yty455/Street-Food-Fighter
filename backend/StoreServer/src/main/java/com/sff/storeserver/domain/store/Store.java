@@ -30,6 +30,8 @@ public class Store {
     private LocalDateTime openTime;
     private LocalDateTime closeTime;
     private String activeArea;
+
+    @Column(columnDefinition = "Point")
     private Point areaPoint;
     private String storeUrl;
     private String state;
