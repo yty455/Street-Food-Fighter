@@ -1,7 +1,7 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/main/filter';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
@@ -32,7 +32,7 @@ const MainPage = () => {
       {isFilterVisible && <FilterComponent onClose={toggleFilter} />}
 
       <Curpos onClick={updateLocation}>
-        <img src="/images/orderfunding/curpos.png" style={{ width: '40px' }} />
+        <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
       </Curpos>
       <CardList>
         <div />
