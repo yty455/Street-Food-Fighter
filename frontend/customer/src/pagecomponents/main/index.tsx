@@ -2,16 +2,20 @@ import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from 
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/common/filter';
 import { useRef, useState } from 'react';
-import { Map } from 'react-kakao-maps-sdk';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
 import SearchPlace from '@/components/common/searchplace';
 import useSetPlaceHook from '@/hooks/setplaceHook';
+import { vendordata } from '@/temp/vendordata';
+import { categories } from '@/assets/category';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
 
+  // 임시 : 가게 정보 불러오기
+  const vendors = vendordata;
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
@@ -25,7 +29,31 @@ const MainPage = () => {
 
   return (
     <div style={{ height: '93vh' }}>
-      <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
+      <Map center={position} style={{ width: '100%', height: '100%' }} level={3} ref={mapRef}>
+        {vendors &&
+          vendors.length > 0 &&
+          vendors.map((vendor: any) => {
+            const category = categories.find((c) => c.id === vendor.category);
+            const imageSrc = `/images/category/${category?.image}`;
+            console.log(parseFloat(vendor.lat), parseFloat(vendor.lng));
+            return (
+              <MapMarker
+                key={vendor.id}
+                position={{ lat: parseFloat(vendor.lat), lng: parseFloat(vendor.lng) }}
+                image={{
+                  src: imageSrc,
+                  size: { width: 30, height: 30 },
+                  options: {
+                    offset: {
+                      x: 15,
+                      y: 30,
+                    },
+                  },
+                }}
+              />
+            );
+          })}
+      </Map>
       <StyledTop>
         <Topbar>
           <Filter onClick={toggleFilter}>
@@ -44,8 +72,9 @@ const MainPage = () => {
       </Curpos>
       <CardList>
         <div />
-        <Card />
-        <Card />
+        {vendors.map((vendor) => (
+          <Card key={vendor.id} vendor={vendor} />
+        ))}
         <div />
       </CardList>
     </div>
