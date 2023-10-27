@@ -1,39 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ModalOverlay, List, SearchTop, TopTitle, SearchBar, SearchText, Place, BoldText, LightText, NoResult } from './Searchplace.styled';
-import kakaosearchApi from '@/apis/kakaoSearchAPI';
-
-type SearchResult = {
-  place_name: string;
-  address_name: string;
-  x: string;
-  y: string;
-};
+import useKakaoSearchHook from '@/hooks/searchplaceHook';
 
 const SearchPlace = ({ onClose, onSelectPlace }: any) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (query.length > 0) {
-        const data = await kakaosearchApi(query);
-        if (data) {
-          console.log(data);
-          setResults(data);
-        } else {
-          setResults([]);
-        }
-      }
-    };
-
-    const timerId = setTimeout(() => {
-      fetchData();
-    }, 500);
-
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [query]);
+  const results = useKakaoSearchHook(query);
 
   return (
     <ModalOverlay>
