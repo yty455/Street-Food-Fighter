@@ -1,10 +1,12 @@
 package com.sff.storeserver.domain.store;
 
+import com.sff.storeserver.domain.store.dto.StoreInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 @Entity
 @Getter
@@ -31,5 +33,20 @@ public class Store {
     private Point areaPoint;
     private String storeUrl;
     private String state;
+
+    public void update(StoreInfo storeInfo) {
+        updateName(storeInfo.getName());
+        
+    }
+
+    private <T> void updateIfNotNull(Consumer<T> updater, T newValue) {
+        if (newValue != null) {
+            updater.accept(newValue);
+        }
+    }
+
+    public void updateName(String name) {
+        updateIfNotNull(newValue -> this.name = newValue, name);
+    }
 
 }
