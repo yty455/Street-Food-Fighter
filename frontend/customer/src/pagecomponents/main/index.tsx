@@ -6,7 +6,7 @@ import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
 import SearchPlace from '@/components/common/searchplace';
-import kakaomapApi from '@/apis/kakaoAPI';
+import useSetPlaceHook from '@/hooks/setplaceHook';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -17,21 +17,11 @@ const MainPage = () => {
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
 
   // position
+  const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
   const [isPositionVisible, setPositionVisible] = useState(false);
   const togglePosition = () => setPositionVisible(!isPositionVisible);
-  const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
 
-  const setPlace = async (x: string, y: string) => {
-    const latitude = Number(y);
-    const longitude = Number(x);
-    const coords = new kakao.maps.LatLng(latitude, longitude);
-    mapRef.current?.setCenter(coords);
-
-    const address = await kakaomapApi({ latitude, longitude });
-    if (address) setAddressName(address);
-
-    setPositionVisible(false);
-  };
+  const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
   return (
     <div style={{ height: '93vh' }}>
