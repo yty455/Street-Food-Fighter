@@ -1,7 +1,5 @@
 package com.sff.userserver.config;
 
-import java.util.Optional;
-
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,8 +24,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
 		return User.builder()
 				.username(member.getEmail())
-				.password(member.getPw())
-				.roles(member.getRole())
+				.password(member.getPassword())
+				.roles(member.getRole().getKey())
 				.build();
 	}
 }
