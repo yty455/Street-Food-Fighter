@@ -34,16 +34,42 @@ const FilterBox = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
+
+const Datebox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
 const FilterTitle = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const black = props.theme.colors.black;
     return css`
       color: ${black};
-      font-size: 30px;
+      font-size: 22px;
       padding-left: 30px;
     `;
   }};
 `;
+
+const FilterDate = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const black = props.theme.colors.black;
+    const light = props.theme.colors.light;
+    return css`
+      color: ${black};
+      font-size: 18px;
+      background-color: ${light};
+      margin-left: 30px;
+      margin-right: 30px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+    `;
+  }};
+`;
+
 const CloseButton = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const light = props.theme.colors.light;
@@ -100,4 +126,4 @@ const CategoriesContainer = styled.div`
   width: 350px;
 `;
 
-export { ModalOverlay, FilterBox, FilterTitle, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer };
+export { ModalOverlay, FilterBox, Datebox, FilterTitle, FilterDate, CloseButton, CategoryItem, CategoryImage, CategoryName, CategoriesContainer };

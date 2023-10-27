@@ -4,6 +4,7 @@ import { Filter, Position, Research, StyledTop, Topbar } from '../main/Main.styl
 import { Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
+import FilterComponent from '@/components/main/filter';
 
 const FundingPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -33,6 +34,7 @@ const FundingPage = () => {
           </ResearchBox>
         </Topbar2>
       </StyledTop>
+      {isFilterVisible && <FilterComponent onClose={toggleFilter} isfundingpage="true" />}
 
       <Curpos onClick={updateLocation}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
