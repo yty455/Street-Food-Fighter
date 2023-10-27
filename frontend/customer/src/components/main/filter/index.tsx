@@ -14,11 +14,12 @@ import {
   DateSelector,
 } from './Filter.styled';
 import useMainFilterStore from '@/stores/mainFilterStore';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useDateOptions from '@/hooks/sevendaysHook';
 
 const FilterComponent = ({ onClose, isfundingpage }: any) => {
   // 날짜 선택
-  const [dateOptions, setDateOptions] = useState<Date[]>([]);
+  const { dateOptions, formatDate } = useDateOptions();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDateSelector, setShowDateSelector] = useState(false);
 
@@ -29,27 +30,6 @@ const FilterComponent = ({ onClose, isfundingpage }: any) => {
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
     setShowDateSelector(false);
-  };
-
-  useEffect(() => {
-    const today = new Date();
-    const options = [];
-
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      options.push(date);
-    }
-
-    setDateOptions(options);
-  }, []);
-
-  const formatDate = (date: Date, needdayofweek: boolean) => {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-
-    return needdayofweek ? `${month}월 ${day}일 ${dayOfWeek}요일` : `${month}월 ${day}일`;
   };
 
   // 카테고리 선택
