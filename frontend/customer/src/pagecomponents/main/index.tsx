@@ -9,10 +9,13 @@ import SearchPlace from '@/components/common/searchplace';
 import useSetPlaceHook from '@/hooks/setplaceHook';
 import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
+import { useRouter } from 'next/navigation';
+import VendorPage from '../vendor';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
+  const router = useRouter();
 
   // 임시 : 가게 정보 불러오기
   const vendors = vendordata;
@@ -72,7 +75,14 @@ const MainPage = () => {
       <CardList>
         <div />
         {vendors.map((vendor) => (
-          <Card key={vendor.id} vendor={vendor} />
+          <Card
+            key={vendor.id}
+            vendor={vendor}
+            onClick={() => {
+              console.log('click');
+              router.push(`/vendor/${vendor.id}`);
+            }}
+          />
         ))}
         <div />
       </CardList>

@@ -2,13 +2,15 @@ import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
 import { useNavStore } from '@/stores/curnavStore';
 import useMainFilterStore from '@/stores/mainFilterStore';
 import useSelectedDateStore from '@/stores/selectdateStore';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const isActive = curnav === id;
   const imgSrc = isActive ? `/images/navbar/check${id}.png` : `/images/navbar/${id}.png`;
 
   const router = useRouter();
+  const pathname = usePathname();
+
   const { setSelectedDate } = useSelectedDateStore();
   const { clearCategories } = useMainFilterStore();
   const handleClick = () => {
@@ -17,7 +19,9 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
     setSelectedDate(null);
     clearCategories();
   };
-
+  if (pathname.includes('/vendor')) {
+    return;
+  }
   return (
     <Flexbox onClick={handleClick}>
       <img src={imgSrc} style={{ width: '30px' }} />
