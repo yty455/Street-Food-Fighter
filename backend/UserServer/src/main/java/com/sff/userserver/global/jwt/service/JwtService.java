@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -41,7 +42,6 @@ public class JwtService {
      */
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
-    private static final String EMAIL_CLAIM = "email";
     private static final String ID_CLAIM = "userId";
     private static final String BEARER = "Bearer ";
 
@@ -49,15 +49,14 @@ public class JwtService {
 
     /**
      * AccessToken 생성
-     * 클레임은 기본적으로 email 와 userId 만 사용
+     * 클레임은 기본적으로 userId 만 사용
      * 추가하고 싶다면 .withClaim() 을 사용해서 추가 가능
      */
-    public String createAccessToken(String email, Long id) {
+    public String createAccessToken(Long id) {
         Date now = new Date();
         return JWT.create() // JWT 토큰을 생성하는 빌더 반환
-                .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
+                .withSubject(ACCESS_TOKEN_SUBJECT) // JWT 의 Subject 지정 -> AccessToken이므로 AccessToken
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
-                .withClaim(EMAIL_CLAIM, email)
                 .withClaim(ID_CLAIM, id)
                 .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
     }
@@ -87,11 +86,18 @@ public class JwtService {
     /**
      * AccessToken + RefreshToken 헤더에 실어서 보내기
      */
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        response.setStatus(HttpServletResponse.SC_OK);
+    @Transactional
+    public void sendAccessAndRefreshToken(String refreshToken, HttpServletResponse response) {
+        Member findMember = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 200)));
 
-        setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
+        String reissueAccessToken = createAccessToken(findMember.getId());
+        String reissueRefreshToken = createRefreshToken();
+        setAccessTokenHeader(response, reissueAccessToken);
+        setRefreshTokenHeader(response, reissueRefreshToken);
+
+        findMember.updateRefreshToken(reissueRefreshToken);
+
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -107,14 +113,5 @@ public class JwtService {
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
         response.setHeader(refreshHeader, refreshToken);
-    }
-
-    /**
-     * RefreshToken DB 저장(업데이트)
-     */
-    public void updateRefreshToken(String email, String refreshToken) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 200)));
-        member.updateRefreshToken(refreshToken);
     }
 }
