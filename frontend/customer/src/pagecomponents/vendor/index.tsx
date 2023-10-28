@@ -1,7 +1,8 @@
 'use client';
 import { vendordata } from '@/temp/vendordata';
 import { useRouter } from 'next/navigation';
-import { TopBox, StyledTop, VendorName, Review } from './Vendor.styled';
+import { VendorContainer, TopBox, StyledTop, VendorName, Review } from './Vendor.styled';
+import TabBar from '@/components/order/tab';
 
 const VendorPage = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const VendorPage = ({ id }: { id: string }) => {
   };
 
   return (
-    <div>
+    <VendorContainer>
       <TopBox>
         <StyledTop>
           <img src="/images/top/back.png" style={{ width: '40px' }} onClick={() => router.back()} />
@@ -49,9 +50,8 @@ const VendorPage = ({ id }: { id: string }) => {
           <div>{vendor.review}</div>
         </Review>
       </TopBox>
-      <div> 메뉴/가게정보/리뷰 tab</div>
-      <div> 메뉴 리스트</div>
-    </div>
+      <TabBar />
+    </VendorContainer>
   );
 };
 

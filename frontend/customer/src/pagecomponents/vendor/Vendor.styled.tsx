@@ -1,4 +1,9 @@
 import styled, { css } from 'styled-components';
+const VendorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 const TopBox = styled.div`
   width: 100%;
   display: flex;
@@ -41,4 +46,4 @@ const Review = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { TopBox, StyledTop, VendorName, Review };
+export { VendorContainer, TopBox, StyledTop, VendorName, Review };
