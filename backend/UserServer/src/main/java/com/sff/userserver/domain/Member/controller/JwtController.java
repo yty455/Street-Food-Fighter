@@ -20,7 +20,7 @@ public class JwtController {
 
     @PostMapping("/jwt")
     public ApiResult<?> reissueJwt(@Valid @RequestBody JwtRequest jwtRequest, HttpServletResponse response) {
-        jwtService.sendAccessAndRefreshToken(jwtRequest.getRefreshToken(), response);
+        jwtService.findMemberAndUpdateJwt(jwtRequest.getRefreshToken(), response);
 
         return ApiUtils.success(null);
     }

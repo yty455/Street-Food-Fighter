@@ -83,22 +83,27 @@ public class JwtService {
         log.info("재발급된 Access Token : {}", accessToken);
     }
 
+    @Transactional
+    public void findMemberAndUpdateJwt(String refreshToken, HttpServletResponse response) {
+        Member findMember = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 200)));
+        String reissueRefreshToken = sendAccessAndRefreshToken(findMember, response);
+
+        updateRefreshToken(findMember, reissueRefreshToken);
+    }
+
     /**
      * AccessToken + RefreshToken 헤더에 실어서 보내기
      */
-    @Transactional
-    public void sendAccessAndRefreshToken(String refreshToken, HttpServletResponse response) {
-        Member findMember = memberRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 200)));
-
-        String reissueAccessToken = createAccessToken(findMember.getId());
+    public String sendAccessAndRefreshToken(Member member, HttpServletResponse response) {
+        String reissueAccessToken = createAccessToken(member.getId());
         String reissueRefreshToken = createRefreshToken();
         setAccessTokenHeader(response, reissueAccessToken);
         setRefreshTokenHeader(response, reissueRefreshToken);
-
-        findMember.updateRefreshToken(reissueRefreshToken);
-
         log.info("Access Token, Refresh Token 헤더 설정 완료");
+        log.info("Access Token : {}", reissueAccessToken);
+        log.info("Access Token 만료 기간 : {}", accessTokenExpirationPeriod);
+        return reissueRefreshToken;
     }
 
     /**
@@ -113,5 +118,9 @@ public class JwtService {
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
         response.setHeader(refreshHeader, refreshToken);
+    }
+
+    public void updateRefreshToken(Member member, String refreshToken) {
+        member.updateRefreshToken(refreshToken);
     }
 }
