@@ -18,8 +18,11 @@ const StyledTop = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
   margin-top: 30px;
+  justify-content: space-between;
+  /* gap: 80px; */
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const VendorName = styled.div.attrs<any>((props) => ({}))`

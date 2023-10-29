@@ -9,7 +9,7 @@ const TabContainer = styled.div`
 
 const Tab = styled.button<any>`
   width: 33.33%;
-  padding: 10px 0;
+  padding: 16px 0;
   border: none;
   background: none;
   color: ${(props) => props.theme.colors.black};
