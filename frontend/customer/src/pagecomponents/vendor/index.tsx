@@ -50,7 +50,7 @@ const VendorPage = ({ id }: { id: string }) => {
           <div>{vendor.review}</div>
         </Review>
       </TopBox>
-      <TabBar />
+      <TabBar vendorid={index} />
     </VendorContainer>
   );
 };

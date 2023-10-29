@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { TabContainer, Tab, Content } from './Tab.styled';
+import VendorInfo from '../vendorinfo';
 
-export default function TabBar() {
+const TabBar = ({ vendorid }: any) => {
   const [activeTab, setActiveTab] = useState('menu');
 
   return (
@@ -19,9 +20,11 @@ export default function TabBar() {
       </TabContainer>
       <Content>
         {activeTab === 'menu' && <p>메뉴 정보</p>}
-        {activeTab === 'info' && <p>가게 정보</p>}
+        {activeTab === 'info' && <VendorInfo vendorid={vendorid} />}
         {activeTab === 'review' && <p>리뷰</p>}
       </Content>
     </div>
   );
-}
+};
+
+export default TabBar;
