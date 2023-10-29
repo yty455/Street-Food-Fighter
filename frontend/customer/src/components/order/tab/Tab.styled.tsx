@@ -30,7 +30,8 @@ const Tab = styled.button<any>`
   }
 `;
 const Content = styled.div`
-  padding: 20px;
+  height: 100vh;
+  background-color: ${(props) => props.theme.colors.lightgray};
 `;
 
 export { TabContainer, Tab, Content };

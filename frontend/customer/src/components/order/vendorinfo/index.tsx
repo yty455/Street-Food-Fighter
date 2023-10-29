@@ -1,40 +1,46 @@
 import { vendordata } from '@/temp/vendordata';
+import { VendorContainer, BoxContainer, Title, Content, ContentTd } from './Vendorinfo.styled';
 
 const VendorInfo = ({ vendorid }: any) => {
   const vendor = vendordata[vendorid];
 
   console.log(vendor);
   return (
-    <div>
-      <div>가게소개</div>
-      <div>{vendor.introduction}</div>
+    <VendorContainer>
+      <BoxContainer>
+        <Title>가게소개</Title>
+        <Content>{vendor.introduction}</Content>
+      </BoxContainer>
 
-      <div>영업정보</div>
+      <BoxContainer>
+        <Title>영업정보</Title>
 
-      <table>
-        <tr>
-          <td>상호명</td>
-          <td>{vendor.name}</td>
-        </tr>
-        <tr>
-          <td>운영시간</td>
-          <td>
-            {vendor.starttime} ~ {vendor.endtime}
-          </td>
-        </tr>
-        <tr>
-          <td>전화번호</td>
-          <td>{vendor.phone}</td>
-        </tr>
-        <tr>
-          <td>위치</td>
-          <td>{vendor.loc}</td>
-        </tr>
-      </table>
-
-      <div>안내</div>
-      <div> {vendor.notice}</div>
-    </div>
+        <table>
+          <tr>
+            <ContentTd>상호명</ContentTd>
+            <ContentTd>{vendor.name}</ContentTd>
+          </tr>
+          <tr>
+            <ContentTd>운영시간</ContentTd>
+            <ContentTd>
+              {vendor.starttime} ~ {vendor.endtime}
+            </ContentTd>
+          </tr>
+          <tr>
+            <ContentTd>전화번호</ContentTd>
+            <ContentTd>{vendor.phone}</ContentTd>
+          </tr>
+          <tr>
+            <ContentTd>위치</ContentTd>
+            <ContentTd>{vendor.loc}</ContentTd>
+          </tr>
+        </table>
+      </BoxContainer>
+      <BoxContainer>
+        <Title>안내</Title>
+        <Content> {vendor.notice}</Content>
+      </BoxContainer>
+    </VendorContainer>
   );
 };
 
