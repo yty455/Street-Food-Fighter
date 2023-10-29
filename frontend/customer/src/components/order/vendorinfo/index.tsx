@@ -4,7 +4,7 @@ import { VendorContainer, BoxContainer, Title, Content, ContentTd } from './Vend
 const VendorInfo = ({ vendorid }: any) => {
   const vendor = vendordata[vendorid];
 
-  console.log(vendor);
+  // console.log(vendor);
   return (
     <VendorContainer>
       <BoxContainer>
