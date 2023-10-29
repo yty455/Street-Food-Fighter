@@ -3,6 +3,8 @@ const TabContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  background-color: ${(props) => props.theme.colors.white};
+  border-bottom: 4px solid ${(props) => props.theme.colors.lightgray};
 `;
 
 const Tab = styled.button<any>`

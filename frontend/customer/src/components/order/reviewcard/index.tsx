@@ -1,18 +1,28 @@
 import { vendordata } from '@/temp/vendordata';
+import { CardContainer, Profile, Name, Content, Starlist, TitleList } from './Reviewcard.styled';
+import Stars from '@/components/common/stars';
 
-const ReviewCard = ({ vendorid }: any) => {
-  const vendor = vendordata[vendorid];
+const ReviewCard = ({ vendorid, reviewid }: any) => {
+  const reviewlist = vendordata[vendorid].reviewlist;
+  //   console.log('card', reviewlist);
+  const reviewdata = reviewlist[reviewid - 1];
+  if (!reviewdata) return null;
   return (
-    <div>
+    <CardContainer>
       <div>
-        <div>
-          <img src="/images/orderfunding/profile.png" style={{ width: '30px' }} />
-          <div> 붕어빵킬러</div>
-        </div>
-        <div> 리뷰 별 3.0</div>
+        <Profile>
+          <img src="/images/orderfunding/profile.png" style={{ width: '50px' }} />
+          <TitleList>
+            <Name> {reviewdata.username}</Name>
+            <Starlist>
+              <Stars stars={reviewdata.stars} />
+              <div>{reviewdata.stars}.0 </div>
+            </Starlist>
+          </TitleList>
+        </Profile>
       </div>
-      <div> 세계에서 가장 맛있는 붕어빵이네요 잘먹었습니다!</div>
-    </div>
+      <Content> {reviewdata.content}</Content>
+    </CardContainer>
   );
 };
 

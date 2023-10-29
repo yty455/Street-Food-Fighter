@@ -2,8 +2,7 @@ import styled, { css } from 'styled-components';
 const VendorContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 4px;
+  gap: 6px;
 `;
 const BoxContainer = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
