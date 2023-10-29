@@ -30,7 +30,7 @@ const Tab = styled.button<any>`
   }
 `;
 const Content = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
   background-color: ${(props) => props.theme.colors.lightgray};
 `;
 
