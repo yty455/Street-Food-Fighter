@@ -9,7 +9,6 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const imgSrc = isActive ? `/images/navbar/check${id}.png` : `/images/navbar/${id}.png`;
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const { setSelectedDate } = useSelectedDateStore();
   const { clearCategories } = useMainFilterStore();
@@ -19,9 +18,6 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
     setSelectedDate(null);
     clearCategories();
   };
-  if (pathname.includes('/vendor')) {
-    return;
-  }
   return (
     <Flexbox onClick={handleClick}>
       <img src={imgSrc} style={{ width: '30px' }} />
