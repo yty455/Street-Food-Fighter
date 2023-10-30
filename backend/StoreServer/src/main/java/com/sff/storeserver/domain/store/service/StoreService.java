@@ -1,6 +1,6 @@
 package com.sff.storeserver.domain.store.service;
 
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
@@ -35,12 +35,28 @@ public class StoreService {
         store.update(storeInfo);
     }
 
-    public void getNearStore(Point point, List<String> categories) {
-        Store store = storeRepository.findNearStore(point, categories);
+    public List<Store> getNearStore(Point point, List<String> categories) {
+        List<Store> nearbyStores = storeRepository.findNearStore(point);
+
+        // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
+        List<Store> filteredStores = nearbyStores
+                .stream()
+                .filter(store -> categories.contains(store.getCategory()))
+                .toList();
+
+        return filteredStores;
     }
 
-    public void getNearFlag(Date date, Point point, List<String> categories) {
-        Store store = storeRepository.findNearFlag(date, point, categories);
+    public List<Store> getNearFlag(Date date, Point point, List<String> categories) {
+        List<Store> nearbyFlags = storeRepository.findNearFlag(point, date);
+
+        // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
+        List<Store> filteredFlags = nearbyFlags
+                .stream()
+                .filter(store -> categories.contains(store.getCategory()))
+                .toList();
+
+        return filteredFlags;
     }
 
 

@@ -1,6 +1,6 @@
 package com.sff.storeserver.domain.store.dto;
 
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
