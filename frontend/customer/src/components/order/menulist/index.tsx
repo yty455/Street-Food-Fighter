@@ -14,10 +14,26 @@ const Menulist = ({ vendorid }: any) => {
   const menulist = vendor.menulist || [];
   // console.log(menulist);
 
-  const { order } = useOrderStore();
-  const isOrderNotEmpty = order.length > 0 && order.every((menu) => menu.quantity > 0);
+  const { order, setQuantity } = useOrderStore();
+  const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
+
   const router = useRouter();
   const { curnav } = useNavStore();
+
+  const updateMenuQuantity = (menuId: number, quantity: number) => {
+    setQuantity(menuId, quantity);
+  };
+
+  const handleButtonClick = () => {
+    const isOrderValid = order.every((menu) => menu.quantity > 0);
+
+    if (isOrderValid) {
+      router.push('/topurchase');
+    } else {
+      console.error('Order is not valid');
+    }
+  };
+
   return (
     <BoxContainer>
       {menulist.map((menu) => (
@@ -25,7 +41,7 @@ const Menulist = ({ vendorid }: any) => {
       ))}
       <div
         onClick={() => {
-          router.push('/topurchase');
+          handleButtonClick();
         }}
       >
         {isOrderNotEmpty && <BottomBtn text={curnav == 1 ? '주문 하기' : '펀딩 하기'} />}
