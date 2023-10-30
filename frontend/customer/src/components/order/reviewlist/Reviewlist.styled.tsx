@@ -14,5 +14,18 @@ const BoxContainer = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
+const NoReview = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+    return css`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: ${white};
+      height: calc(100vh - 210px);
+      font-size: 20px;
+    `;
+  }};
+`;
 
-export { BoxContainer };
+export { BoxContainer, NoReview };
