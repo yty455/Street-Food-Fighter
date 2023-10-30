@@ -1,6 +1,6 @@
 export const vendordata = [
   {
-    id: 1,
+    id: 10,
     name: '녹산 호떡 트럭',
     lat: 35.0870048,
     lng: 128.8536064,

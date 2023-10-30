@@ -6,12 +6,17 @@ import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 const Menulist = ({ vendorid }: any) => {
-  const vendor = vendordata[vendorid];
-  const menulist = vendor?.menulist || [];
+  const vendor = vendordata.find((v) => v.id === vendorid);
+  if (!vendor) {
+    return <div>가게가 없어졌어요 🥺</div>;
+  }
+
+  const menulist = vendor.menulist || [];
+  // console.log(menulist);
+
   const { order } = useOrderStore();
   const isOrderNotEmpty = order.length > 0 && order.every((menu) => menu.quantity > 0);
   const router = useRouter();
-  // console.log(order);
   const { curnav } = useNavStore();
   return (
     <BoxContainer>

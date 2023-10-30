@@ -2,8 +2,14 @@ import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import { TopBox, Title, Content } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
+import { useVendorStore } from '@/stores/curvendoridStore';
+import { vendordata } from '@/temp/vendordata';
 const PurchasePage = () => {
   const { curnav } = useNavStore();
+  const storedVendorId = useVendorStore((state) => state.vendorId);
+  console.log('id', storedVendorId);
+  const vendor = vendordata.find((v) => v.id === storedVendorId);
+  console.log(vendor);
   const router = useRouter();
   return (
     <div>
@@ -27,7 +33,8 @@ const PurchasePage = () => {
 
       <Content>
         <div>
-          <div>가게정보 컴포넌트</div>
+          {/* <div>{vendordata.name}</div> */}
+          <div>전화번호</div>
           <div>주문 목록 컴포넌트</div>
           <div>요청 사항 컴포넌트</div>
         </div>
