@@ -1,7 +1,8 @@
 package com.sff.userserver.domain.member.service;
 
 import com.sff.userserver.domain.member.dto.MemberInfoResponse;
-import com.sff.userserver.domain.member.dto.MemberSignupRequest;
+import com.sff.userserver.domain.member.dto.MyInfoRequest;
+import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.repository.MemberRepository;
 import com.sff.userserver.global.error.type.BaseException;
@@ -22,15 +23,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void signUp(MemberSignupRequest memberSignupRequest) {
-        validateDuplicateMember(memberSignupRequest);
-        Member member = memberSignupRequest.toEntity();
+    public void signUp(SignupRequest signupRequest) {
+        validateDuplicateMember(signupRequest);
+        Member member = signupRequest.toEntity();
         member.passwordEncode(passwordEncoder);
+        // TODO: 포인트 생성하기(결제 비밀번호, 금액)
         memberRepository.save(member);
     }
 
-    private void validateDuplicateMember(MemberSignupRequest memberSignupRequest) {
-        memberRepository.findByEmail(memberSignupRequest.getEmail())
+    private void validateDuplicateMember(SignupRequest signupRequest) {
+        memberRepository.findByEmail(signupRequest.getEmail())
                 .ifPresent(m -> {
                     throw new BaseException(new ApiError("이미 존재하는 계정입니다.", 1111));
                 });
@@ -48,9 +50,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberInfoResponse getMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
-        return MemberInfoResponse.builder().member(member).build();
+        return MemberInfoResponse.builder().member(findMember(memberId)).build();
 
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
+    }
+
+    @Transactional
+    public void updateMember(Long memberId, MyInfoRequest myInfoRequest) {
     }
 }

@@ -10,11 +10,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor
 @Getter
-public class MemberSignupRequest {
+public class SignupRequest {
 
     @Email(message = "올바른 이메일을 입력해주세요.")
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -32,9 +31,10 @@ public class MemberSignupRequest {
     private String region2;
     private String region3;
     private String region4;
+    private String paymentPassword;
 
     @Builder
-    public MemberSignupRequest(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String region1, String region2, String region3, String region4, PasswordEncoder passwordEncoder) {
+    public SignupRequest(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String region1, String region2, String region3, String region4, String paymentPassword) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -44,6 +44,7 @@ public class MemberSignupRequest {
         this.region2 = region2;
         this.region3 = region3;
         this.region4 = region4;
+        this.paymentPassword = paymentPassword;
     }
 
     public Member toEntity() {

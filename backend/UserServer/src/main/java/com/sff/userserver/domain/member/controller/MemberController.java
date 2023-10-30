@@ -1,7 +1,8 @@
 package com.sff.userserver.domain.member.controller;
 
 import com.sff.userserver.domain.member.dto.MemberInfoResponse;
-import com.sff.userserver.domain.member.dto.MemberSignupRequest;
+import com.sff.userserver.domain.member.dto.MyInfoRequest;
+import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.service.MemberServiceImpl;
 import com.sff.userserver.global.utils.ApiResult;
 import com.sff.userserver.global.utils.ApiUtils;
@@ -16,8 +17,8 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/sign-up")
-    public ApiResult<?> signUp(@Valid @RequestBody MemberSignupRequest memberSignupRequest) {
-        memberService.signUp(memberSignupRequest);
+    public ApiResult<?> signUp(@Valid @RequestBody SignupRequest signupRequest) {
+        memberService.signUp(signupRequest);
         return ApiUtils.success("회원 가입 성공");
     }
 
@@ -33,6 +34,11 @@ public class MemberController {
         return ApiUtils.success(member);
     }
 
+    @PatchMapping("/me")
+    public ApiResult<?> updateMember(@RequestBody MyInfoRequest myInfoRequest) {
+        memberService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
+        return ApiUtils.success(null);
+    }
 
     @GetMapping("jwt-test")
     public String jwtTest() {
