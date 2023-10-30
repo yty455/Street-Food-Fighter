@@ -4,6 +4,7 @@ import { CheckboxType } from './Checkbox.type';
 const CheckboxContainer = styled.label`
   display: flex;
   align-items: center;
+  width: 100%;
   cursor: pointer;
 `;
 const Box = styled.input.attrs<CheckboxType>((props) => ({
@@ -46,4 +47,10 @@ const P = styled.p.attrs<CheckboxType>((props) => ({}))`
   }}
 `;
 
-export { CheckboxContainer, Box, P };
+const TextBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+export { CheckboxContainer, Box, P, TextBox };

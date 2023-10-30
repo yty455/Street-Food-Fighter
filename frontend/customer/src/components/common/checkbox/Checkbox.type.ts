@@ -3,5 +3,7 @@ export interface CheckboxType {
   value?: string;
   text?: string;
   size?: string;
-  islinethrough?: boolean;
+  price?: number;
+  checked: boolean;
+  onChange: () => void;
 }
