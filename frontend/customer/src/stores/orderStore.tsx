@@ -12,6 +12,7 @@ interface OptionStore {
   removeOption: (menuId: number, optionId: number) => void;
   setQuantity: (menuId: number, quantity: number) => void;
   clearOrder: () => void;
+  removeItem: (menuId: number) => void;
 }
 
 const useOrderStore = create<OptionStore>((set) => ({
@@ -62,6 +63,10 @@ const useOrderStore = create<OptionStore>((set) => ({
   clearOrder: () => {
     set(() => ({ order: [] }));
   },
+  removeItem: (menuId) =>
+    set((state) => {
+      return { order: state.order.filter((menu) => menu.menuId !== menuId) };
+    }),
 }));
 
 export default useOrderStore;

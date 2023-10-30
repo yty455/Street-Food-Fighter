@@ -14,7 +14,7 @@ const Menulist = ({ vendorid }: any) => {
   const menulist = vendor.menulist || [];
   // console.log(menulist);
 
-  const { order, setQuantity } = useOrderStore();
+  const { order, setQuantity, removeItem } = useOrderStore();
   const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
 
   const router = useRouter();
@@ -25,7 +25,15 @@ const Menulist = ({ vendorid }: any) => {
   };
 
   const handleButtonClick = () => {
-    const isOrderValid = order.every((menu) => menu.quantity > 0);
+    order.forEach((menu) => {
+      if (menu.quantity === 0) {
+        removeItem(menu.menuId);
+      }
+    });
+
+    const updatedOrder = useOrderStore.getState().order;
+
+    const isOrderValid = updatedOrder.some((menu) => menu.quantity > 0);
 
     if (isOrderValid) {
       router.push('/topurchase');
