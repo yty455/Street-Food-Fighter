@@ -51,6 +51,7 @@ export const vendordata = [
       {
         id: 1,
         name: '세계 최강 팥 붕어빵',
+        menuimg: '/images/orderfunding/menuimg.png',
         options: [
           {
             id: 1,
@@ -68,6 +69,7 @@ export const vendordata = [
       {
         id: 2,
         name: '세계 최강 슈크림 붕어빵',
+        menuimg: '/images/orderfunding/menuimg.png',
         options: [
           {
             id: 1,

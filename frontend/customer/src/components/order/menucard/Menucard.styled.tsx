@@ -7,9 +7,9 @@ const CardContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
-      padding: 20px;
+      padding: 20px 25px;
       background-color: ${white};
       gap: 10px;
     `;
@@ -23,22 +23,17 @@ const LeftContainer = styled.div`
 `;
 
 const Name = styled.div`
-  font-size: 20px;
-`;
-const TitleList = styled.div`
-  display: flex;
-  gap: 5px;
-  font-size: 12px;
-  flex-direction: column;
-`;
-const Starlist = styled.div`
-  display: flex;
-  gap: 5px;
-  font-size: 12px;
-  align-items: center;
+  font-size: 18px;
 `;
 
-const Content = styled.div.attrs<any>((props) => ({}))`
+const InfoList = styled.div`
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+
+const Price = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const black = props.theme.colors.black;
     const font = props.theme.fonts.air;
@@ -46,9 +41,8 @@ const Content = styled.div.attrs<any>((props) => ({}))`
       color: ${black};
       font-size: 16px;
       font-family: ${font};
-      padding-left: 10px;
     `;
   }};
 `;
 
-export { CardContainer, LeftContainer, Name, Content, Starlist };
+export { CardContainer, LeftContainer, Name, Price, InfoList };
