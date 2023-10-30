@@ -7,7 +7,7 @@ const theme: DefaultTheme = {
     white: '#FFFFFE',
     black: '#1A1300',
     lightgray: '#EFEFEB',
-    gray: '807E77',
+    gray: '#807E77',
   },
   fonts: {
     bold: 'BoldFont',
