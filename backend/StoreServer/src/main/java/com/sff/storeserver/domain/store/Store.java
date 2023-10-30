@@ -24,6 +24,7 @@ public class Store {
     private String name;
     private String ownerName;
     private String phone;
+    private String category;
     private String businessCategory;
     private String information;
     private String introduction;

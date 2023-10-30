@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.store.controller;
 
 import com.sff.storeserver.common.BasicResponse;
+import com.sff.storeserver.domain.store.Store;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,7 +65,7 @@ public class StoreController {
     public ResponseEntity<BasicResponse> getNearStore(@RequestParam("latitude") double latitude,
                                                       @RequestParam("longitude") double longitude,
                                                       @RequestParam("categories") List<String> categories) {
-        storeService.getNearStore(new Point(latitude, longitude), categories);
+        List<Store> stores = storeService.getNearStore(new Point(latitude, longitude), categories);
 
         BasicResponse basicResponse = BasicResponse.builder()
                 .message("내 근처 가게 조회 성공")
@@ -79,7 +80,7 @@ public class StoreController {
                                                      @RequestParam("latitude") double latitude,
                                                      @RequestParam("longitude") double longitude,
                                                      @RequestParam("categories") List<String> categories) {
-        storeService.getNearFlag(date, new Point(latitude, longitude), categories);
+        List<Store> stores = storeService.getNearFlag(date, new Point(latitude, longitude), categories);
 
         BasicResponse basicResponse = BasicResponse.builder()
                 .message("내 근처 펀딩 조회 성공")
