@@ -1,5 +1,6 @@
 import { Option } from '@/types/vendortype';
 import { OptionBox, Content, RowBox, OptionList, CountBox, Airfont } from './Optioncard.styled';
+import Checkbox from '@/components/common/checkbox';
 
 const Optioncard = ({ menudata }: any) => {
   const optionlist = menudata.options;
@@ -14,8 +15,8 @@ const Optioncard = ({ menudata }: any) => {
               <div>
                 <Content>
                   <RowBox>
-                    <div> checkbox</div>
-                    <Airfont> {option.name}</Airfont>
+                    <Checkbox text={option.name}></Checkbox>
+                    {/* <Airfont> {option.name}</Airfont> */}
                   </RowBox>
                   <Airfont> {option.price} 원</Airfont>
                 </Content>
@@ -26,9 +27,9 @@ const Optioncard = ({ menudata }: any) => {
       <CountBox>
         <div> 수량</div>
         <RowBox>
-          <img src="/images/orderfunding/minus.png" style={{ width: '22px' }} />
+          <img src="/images/orderfunding/minus.png" style={{ width: '26px' }} />
           <div> 숫자</div>
-          <img src="/images/orderfunding/plus.png" style={{ width: '22px' }} />
+          <img src="/images/orderfunding/plus.png" style={{ width: '26px' }} />
         </RowBox>
       </CountBox>
     </OptionList>

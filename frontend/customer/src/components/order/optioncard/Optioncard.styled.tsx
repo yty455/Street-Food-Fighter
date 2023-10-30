@@ -54,7 +54,7 @@ const RowBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 3px;
 `;
 const Content = styled.div`
   display: flex;
