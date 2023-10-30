@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class NotificationService {
     @Value("${project.properties.firebase-topic}")
     String topic;
 
+    String tokenf = "c1agebjUTSaN111v7igtKj:APA91bG744QXqT18Y7Vp_1QoqeXoC_PJ1JAQYstBgXtp6HrhoNrXyIwUXSvJ7roCWhgxhBOFph0x8AqwHs92kAN2FkM1TGNxYUAIgCRpfZjXs83dzMwHi15nMPaYT2r50ZS0m2wcTD1y";
 
     private FirebaseMessaging firebaseMessaging;
 
@@ -47,12 +49,24 @@ public class NotificationService {
 
     }
 
+    public void ss(){
+        List<Long> longs = new ArrayList<>();
+        longs.add(2L);
+        sendNotificationToUser(UserNotificationInfo.builder()
+                .storeId(1L)
+                .storeName("테스트가게요")
+                .recipient_type("주문성공")
+                .recipients(longs)
+                .build());
+    }
+
     @Transactional
     public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {
         // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
 
         String title = null;
         String content = null;
+        String url = null;
 
         switch (userNotificationInfo.getRecipient_type()) {
             case "주문성공":
@@ -80,23 +94,33 @@ public class NotificationService {
                 content = userNotificationInfo.getStoreName() + "에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!";
                 break;
         }
-        userNotificationInfo.getRecipients().forEach(id -> sendNotification(id, userNotificationInfo));
+
+        String finalTitle = title;
+        String finalContent = content;
+
+        userNotificationInfo.getRecipients().forEach(id -> sendNotification(id, finalTitle, finalContent, url, userNotificationInfo.getRecipient_type()));
     }
 
     @Transactional
     public void sendNotificationToOwner(NotificationInfo notificationInfo) {
-        //
+        // TODO - 사장 알림 추가 하기
 
     }
 
-    public void sendNotification(Long userId, UserNotificationInfo userNotificationInfo) {
-        log.info(sendNotificationByToken(new FCMNotificationRequestDto(userId, "1", "1")));
+    @Transactional
+    public void sendNotification(Long userId, String title, String content, String url, String type) {
+        log.info(sendNotificationByToken(new FCMNotificationRequestDto(userId, title, content)));
+        notificationRepository.save(Notification.builder()
+                .recipient(userId)
+                .recipient_type(type)
+                .content(content)
+                .url(url).build());
     }
 
     @PostConstruct
     public void firebaseSetting() throws IOException {
         //내 firebase 콘솔에서 가져온 비공개 키 파일을 통해 백엔드에서 파이어베이스에 접속함
-        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("streetfoodfighter-75db4-firebase-adminsdk-p8iq0-a111ae6edb.json").getInputStream())
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("firebase/streetfoodfighter-75db4-firebase-adminsdk-p8iq0-a111ae6edb.json").getInputStream())
                 .createScoped((Arrays.asList(fireBaseCreateScoped)));
         FirebaseOptions secondaryAppConfig = FirebaseOptions.builder()
                 .setCredentials(googleCredentials)
@@ -120,7 +144,7 @@ public class NotificationService {
                 .build();
 
         Message message = Message.builder()
-                .setToken("token")
+                .setToken(tokenf)
                 .setNotification(notification)
                 .build();
 

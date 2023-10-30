@@ -18,7 +18,5 @@ public class UserNotificationInfo {
 
     private List<Long> recipients;
     private String recipient_type;
-    private String content;
-    private String url;
 
 }
