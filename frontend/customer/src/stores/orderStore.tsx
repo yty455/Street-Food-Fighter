@@ -48,6 +48,8 @@ const useOrderStore = create<OptionStore>((set) => ({
         } else {
           state.order.splice(menuIndex, 1);
         }
+      } else if (quantity > 0) {
+        state.order.push({ menuId, selectedOptions: [], quantity });
       }
       return { order: [...state.order] };
     }),
