@@ -1,6 +1,6 @@
 package com.sff.storeserver.domain.store.service;
 
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

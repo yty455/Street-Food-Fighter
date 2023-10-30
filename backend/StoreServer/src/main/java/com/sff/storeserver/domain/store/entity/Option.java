@@ -1,4 +1,4 @@
-package com.sff.storeserver.domain.store;
+package com.sff.storeserver.domain.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

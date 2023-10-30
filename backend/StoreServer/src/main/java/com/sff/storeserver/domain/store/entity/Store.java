@@ -1,4 +1,4 @@
-package com.sff.storeserver.domain.store;
+package com.sff.storeserver.domain.store.entity;
 
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import jakarta.persistence.*;

@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ApiError {
-    private final String message;
-    private final int status;
-
+public class ApiResult<T> {
+    private final boolean success;
+    private final T response;
+    private final ApiError apiError;
 }

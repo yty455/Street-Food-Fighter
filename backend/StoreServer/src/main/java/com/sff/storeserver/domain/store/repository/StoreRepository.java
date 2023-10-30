@@ -1,6 +1,6 @@
 package com.sff.storeserver.domain.store.repository;
 
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

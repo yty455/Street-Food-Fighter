@@ -1,7 +1,7 @@
 package com.sff.storeserver.domain.store.controller;
 
 import com.sff.storeserver.common.BasicResponse;
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
