@@ -2,8 +2,8 @@ package com.sff.userserver.global.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.sff.userserver.domain.Member.entity.Member;
-import com.sff.userserver.domain.Member.repository.MemberRepository;
+import com.sff.userserver.domain.member.entity.Member;
+import com.sff.userserver.domain.member.repository.MemberRepository;
 import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.utils.ApiError;
 import jakarta.servlet.http.HttpServletResponse;

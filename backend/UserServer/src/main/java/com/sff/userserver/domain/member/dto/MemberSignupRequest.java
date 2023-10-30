@@ -1,8 +1,8 @@
-package com.sff.userserver.domain.Member.dto;
+package com.sff.userserver.domain.member.dto;
 
-import com.sff.userserver.domain.Member.entity.Member;
-import com.sff.userserver.domain.Member.entity.Role;
-import com.sff.userserver.domain.Member.entity.SocialType;
+import com.sff.userserver.domain.member.entity.Member;
+import com.sff.userserver.domain.member.entity.Role;
+import com.sff.userserver.domain.member.entity.SocialType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

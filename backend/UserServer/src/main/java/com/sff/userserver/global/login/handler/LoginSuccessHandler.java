@@ -1,7 +1,7 @@
 package com.sff.userserver.global.login.handler;
 
-import com.sff.userserver.domain.Member.entity.Member;
-import com.sff.userserver.domain.Member.repository.MemberRepository;
+import com.sff.userserver.domain.member.entity.Member;
+import com.sff.userserver.domain.member.repository.MemberRepository;
 import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.jwt.service.JwtService;
 import com.sff.userserver.global.utils.ApiError;

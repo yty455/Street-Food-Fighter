@@ -1,4 +1,4 @@
-package com.sff.userserver.domain.Member.entity;
+package com.sff.userserver.domain.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

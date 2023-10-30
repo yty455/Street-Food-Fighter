@@ -1,4 +1,4 @@
-package com.sff.userserver.domain.Member.dto;
+package com.sff.userserver.domain.member.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

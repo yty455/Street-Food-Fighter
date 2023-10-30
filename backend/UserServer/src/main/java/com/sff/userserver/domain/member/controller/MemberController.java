@@ -1,7 +1,7 @@
-package com.sff.userserver.domain.Member.controller;
+package com.sff.userserver.domain.member.controller;
 
-import com.sff.userserver.domain.Member.dto.MemberSignupRequest;
-import com.sff.userserver.domain.Member.service.MemberService;
+import com.sff.userserver.domain.member.dto.MemberSignupRequest;
+import com.sff.userserver.domain.member.service.MemberService;
 import com.sff.userserver.global.utils.ApiResult;
 import com.sff.userserver.global.utils.ApiUtils;
 import jakarta.validation.Valid;

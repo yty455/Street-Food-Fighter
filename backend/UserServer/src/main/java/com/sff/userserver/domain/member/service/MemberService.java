@@ -1,8 +1,8 @@
-package com.sff.userserver.domain.Member.service;
+package com.sff.userserver.domain.member.service;
 
-import com.sff.userserver.domain.Member.dto.MemberSignupRequest;
-import com.sff.userserver.domain.Member.entity.Member;
-import com.sff.userserver.domain.Member.repository.MemberRepository;
+import com.sff.userserver.domain.member.dto.MemberSignupRequest;
+import com.sff.userserver.domain.member.entity.Member;
+import com.sff.userserver.domain.member.repository.MemberRepository;
 import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.utils.ApiError;
 import lombok.RequiredArgsConstructor;
