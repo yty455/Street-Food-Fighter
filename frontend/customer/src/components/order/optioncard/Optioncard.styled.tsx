@@ -10,8 +10,6 @@ const OptionList = styled.div.attrs<any>((props) => ({}))`
       flex-direction: column;
       justify-content: space-around;
       background-color: ${white};
-      gap: 16px;
-
       border-top: 2px solid ${lightgray};
     `;
   }};
@@ -64,7 +62,7 @@ const Content = styled.div`
   justify-content: space-between;
 `;
 
-const Name = styled.div`
+const Title = styled.div`
   font-size: 18px;
 `;
 
@@ -80,4 +78,4 @@ const Airfont = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { OptionBox, CountBox, RowBox, Content, Name, Airfont, OptionList };
+export { OptionBox, CountBox, RowBox, Content, Title, Airfont, OptionList };
