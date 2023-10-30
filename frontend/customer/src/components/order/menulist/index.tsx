@@ -7,7 +7,7 @@ const Menulist = ({ vendorid }: any) => {
   const vendor = vendordata[vendorid];
   const menulist = vendor?.menulist || [];
 
-  console.log(menulist);
+  // console.log(menulist);
   return (
     <BoxContainer>
       {menulist.map((menu) => (
