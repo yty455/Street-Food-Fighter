@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { VendorContainer, TopBox, StyledTop, VendorName, Review } from './Vendor.styled';
 import TabBar from '@/components/order/tab';
 import useOrderStore from '@/stores/orderStore';
+import { useEffect } from 'react';
+import { useVendorStore } from '@/stores/curvendoridStore';
 
 const VendorPage = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -32,10 +34,16 @@ const VendorPage = ({ id }: { id: string }) => {
     return images;
   };
 
-  const { order, clearOrder } = useOrderStore((state) => ({
-    order: state.order,
-    clearOrder: state.clearOrder,
-  }));
+  const storedVendorId = useVendorStore((state) => state.vendorId);
+  const setVendorId = useVendorStore((state) => state.setVendorId);
+  const clearOrder = useOrderStore((state) => state.clearOrder);
+  useEffect(() => {
+    setVendorId(index);
+    if (storedVendorId !== null && storedVendorId !== index) {
+      clearOrder();
+    }
+    setVendorId(index);
+  }, [index, setVendorId, clearOrder]);
 
   return (
     <VendorContainer>
@@ -46,7 +54,6 @@ const VendorPage = ({ id }: { id: string }) => {
             style={{ width: '40px' }}
             onClick={() => {
               router.back();
-              clearOrder();
             }}
           />
           <VendorName>{vendor.name}</VendorName>
