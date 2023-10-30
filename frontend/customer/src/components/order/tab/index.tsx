@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TabContainer, Tab, Content } from './Tab.styled';
 import VendorInfo from '../vendorinfo';
 import Reviewlist from '../reviewlist';
+import Menulist from '../menulist';
 
 const TabBar = ({ vendorid }: any) => {
   const [activeTab, setActiveTab] = useState('menu');
@@ -20,7 +21,7 @@ const TabBar = ({ vendorid }: any) => {
         </Tab>
       </TabContainer>
       <Content>
-        {activeTab === 'menu' && <p>메뉴 정보</p>}
+        {activeTab === 'menu' && <Menulist vendorid={vendorid}>메뉴 정보</Menulist>}
         {activeTab === 'info' && <VendorInfo vendorid={vendorid} />}
         {activeTab === 'review' && <Reviewlist vendorid={vendorid}></Reviewlist>}
       </Content>

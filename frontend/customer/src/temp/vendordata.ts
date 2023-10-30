@@ -16,6 +16,7 @@ export const vendordata = [
       {
         id: 1,
         name: '호호떡',
+        menuimg: '/images/orderfunding/menuimg.png',
         options: [
           {
             id: 1,
