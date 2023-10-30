@@ -9,7 +9,7 @@ const Checkbox = (props: CheckboxType) => {
         <Box {...props} type="checkbox" checked={props.checked} onChange={props.onChange} />
         <TextBox>
           <P {...props}>{props.text}</P>
-          <P {...props}>{props.price}원</P>
+          <P {...props}>{Number(props.price).toLocaleString()}원</P>
         </TextBox>
       </CheckboxContainer>
     </>

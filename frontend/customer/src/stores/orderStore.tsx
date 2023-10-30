@@ -18,16 +18,18 @@ const useOrderStore = create<OptionStore>((set) => ({
   order: [],
   addOption: (menuId, optionId) =>
     set((state) => {
-      const existingMenu = state.order.find((menu) => menu.menuId === menuId);
+      let existingMenu = state.order.find((menu) => menu.menuId === menuId);
       if (existingMenu) {
         if (!existingMenu.selectedOptions.includes(optionId)) {
           existingMenu.selectedOptions.push(optionId);
         }
       } else {
-        state.order.push({ menuId, selectedOptions: [optionId], quantity: 1 });
+        existingMenu = { menuId, selectedOptions: [optionId], quantity: 0 };
+        state.order.push(existingMenu);
       }
       return { order: [...state.order] };
     }),
+
   removeOption: (menuId, optionId) =>
     set((state) => {
       const existingMenu = state.order.find((menu) => menu.menuId === menuId);
@@ -36,6 +38,7 @@ const useOrderStore = create<OptionStore>((set) => ({
       }
       return { order: [...state.order] };
     }),
+
   setQuantity: (menuId, quantity) =>
     set((state) => {
       const menuIndex = state.order.findIndex((menu) => menu.menuId === menuId);
@@ -48,6 +51,7 @@ const useOrderStore = create<OptionStore>((set) => ({
       }
       return { order: [...state.order] };
     }),
+
   clearOrder: () => {
     set(() => ({ order: [] }));
   },
