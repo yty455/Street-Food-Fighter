@@ -1,6 +1,7 @@
 import { vendordata } from '@/temp/vendordata';
 import React from 'react';
 import MenuCard from '../menucard';
+import { BoxContainer } from './Menulist.styled';
 
 const Menulist = ({ vendorid }: any) => {
   const vendor = vendordata[vendorid];
@@ -8,11 +9,11 @@ const Menulist = ({ vendorid }: any) => {
 
   console.log(menulist);
   return (
-    <div>
+    <BoxContainer>
       {menulist.map((menu) => (
         <MenuCard key={menu.id} vendorid={vendorid} menuid={menu.id} />
       ))}
-    </div>
+    </BoxContainer>
   );
 };
 

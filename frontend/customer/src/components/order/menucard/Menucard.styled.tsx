@@ -11,7 +11,7 @@ const CardContainer = styled.div.attrs<any>((props) => ({}))`
       align-items: center;
       padding: 20px 25px;
       background-color: ${white};
-      gap: 10px;
+      gap: 16px;
     `;
   }};
 `;
