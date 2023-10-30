@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body style={{ height: '100vh' }}>
           <StyledComponentsRegistry>
             {children}
-            {!pathname.includes('/vendor') && <Navbar />}
+            {!pathname.includes('/vendor') && pathname != '/topurchase' && <Navbar />}
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>
