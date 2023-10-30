@@ -22,7 +22,7 @@ const Content = styled.div.attrs<any>((props) => ({}))`
       background-color: ${lightgray};
       flex-direction: column;
       justify-content: space-between;
-      height: calc(100vh - 140px);
+      height: calc(100vh - 125px);
     `;
   }};
 `;

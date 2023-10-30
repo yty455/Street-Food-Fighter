@@ -1,6 +1,7 @@
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import { TopBox, Title, Content } from './Topurchase.styled';
+import BottomBtn from '@/components/common/bottombtn';
 const PurchasePage = () => {
   const { curnav } = useNavStore();
   const router = useRouter();
@@ -37,7 +38,7 @@ const PurchasePage = () => {
         </div>
       </Content>
 
-      <div>결제하기 버튼 - position fixed</div>
+      <BottomBtn text="결제하기"></BottomBtn>
     </div>
   );
 };
