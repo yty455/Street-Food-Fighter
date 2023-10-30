@@ -11,10 +11,7 @@ const MenuCard = ({ vendorid, menuid }: any) => {
   if (!menudata) return null;
 
   const cardclick = () => {
-    // console.log('click', menudata);
     setOpen(!open);
-
-    // option card
   };
   return (
     <div>
@@ -34,7 +31,7 @@ const MenuCard = ({ vendorid, menuid }: any) => {
           <img src="/images/orderfunding/down.png" style={{ width: '30px' }} />
         )}
       </CardContainer>
-      {open && <Optioncard menudata={menudata} />}
+      {open && <Optioncard menuid={menuid} menudata={menudata} />}
     </div>
   );
 };

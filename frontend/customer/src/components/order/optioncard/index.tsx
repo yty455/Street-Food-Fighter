@@ -1,10 +1,28 @@
 import { Option } from '@/types/vendortype';
 import { OptionBox, Title, Content, RowBox, OptionList, CountBox, Airfont } from './Optioncard.styled';
 import Checkbox from '@/components/common/checkbox';
+import { useState } from 'react';
 
-const Optioncard = ({ menudata }: any) => {
-  const optionlist = menudata.options;
-  //   console.log(optionlist);
+const Optioncard = ({ menuid, menudata }: any) => {
+  const optionlist = menudata.options || [];
+
+  const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: { menuid: number; optionid: number } }>({});
+  console.log('Selected Options:', selectedOptions);
+
+  const handleCheckboxChange = (option: Option) => {
+    setSelectedOptions((prevSelectedOptions) => {
+      const newSelectedOptions = { ...prevSelectedOptions };
+
+      if (newSelectedOptions[option.id]) {
+        delete newSelectedOptions[option.id];
+      } else {
+        newSelectedOptions[option.id] = { menuid, optionid: option.id };
+      }
+
+      return newSelectedOptions;
+    });
+  };
+
   return (
     <OptionList>
       <OptionBox>
@@ -13,11 +31,13 @@ const Optioncard = ({ menudata }: any) => {
           optionlist.map((option: Option) => (
             <div key={option.id}>
               <Content>
-                <RowBox>
-                  <Checkbox text={option.name}></Checkbox>
-                  {/* <Airfont> {option.name}</Airfont> */}
-                </RowBox>
-                <Airfont> {option.price} 원</Airfont>
+                <Checkbox
+                  key={option.id}
+                  text={option.name}
+                  price={option.price}
+                  checked={!!selectedOptions[option.id]}
+                  onChange={() => handleCheckboxChange(option)}
+                />
               </Content>
             </div>
           ))}
