@@ -40,7 +40,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         assertThat(store.getOwnerId()).isEqualTo(1L);
     }
 
-    @DisplayName("가게ID를 통해 가게정보를 가져온다.")
+    @DisplayName("사장ID를 통해 가게정보를 가져온다.")
     @Test
     void getStoreByStoreId() {
         // given
