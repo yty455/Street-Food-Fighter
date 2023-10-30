@@ -7,7 +7,10 @@ import useOrderStore from '@/stores/orderStore';
 const Optioncard = ({ menuid, menudata }: any) => {
   const optionlist = menudata.options || [];
   const { order, addOption, removeOption, setQuantity } = useOrderStore();
-  const [quantity, setLocalQuantity] = useState(0);
+
+  const menu = order.find((o) => o.menuId === menuid);
+  const initialQuantity = menu ? menu.quantity : 0;
+  const [quantity, setLocalQuantity] = useState(initialQuantity);
 
   const handleCheckboxChange = (optionId: number, checked: boolean) => {
     if (checked) {
@@ -25,6 +28,7 @@ const Optioncard = ({ menuid, menudata }: any) => {
     }
   };
 
+  console.log(order);
   return (
     <OptionList>
       <OptionBox>
