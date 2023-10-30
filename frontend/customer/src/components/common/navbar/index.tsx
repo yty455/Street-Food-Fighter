@@ -9,6 +9,7 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const imgSrc = isActive ? `/images/navbar/check${id}.png` : `/images/navbar/${id}.png`;
 
   const router = useRouter();
+
   const { setSelectedDate } = useSelectedDateStore();
   const { clearCategories } = useMainFilterStore();
   const handleClick = () => {
@@ -17,7 +18,6 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
     setSelectedDate(null);
     clearCategories();
   };
-
   return (
     <Flexbox onClick={handleClick}>
       <img src={imgSrc} style={{ width: '30px' }} />
