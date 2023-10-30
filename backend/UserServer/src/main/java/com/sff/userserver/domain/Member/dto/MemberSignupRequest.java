@@ -1,6 +1,12 @@
 package com.sff.userserver.domain.Member.dto;
 
-import com.sff.userserver.domain.Member.entity.*;
+import com.sff.userserver.domain.Member.entity.Member;
+import com.sff.userserver.domain.Member.entity.Role;
+import com.sff.userserver.domain.Member.entity.SocialType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 public class MemberSignupRequest {
 
+    @Email(message = "올바른 이메일을 입력해주세요.")
+    @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
+    @NotBlank(message = "닉네임을 입력해주세요.")
+    @Size(min = 1, max = 10, message = "닉네임은 10자까지 가능합니다.")
     private String nickname;
+    @NotBlank(message = "휴대폰 번호를 입력해주세요.")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "올바른 휴대폰 번호를 입력해주세요.")
     private String phone;
     private String imageUrl;
     private String region1;
@@ -23,7 +36,7 @@ public class MemberSignupRequest {
     @Builder
     public MemberSignupRequest(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String region1, String region2, String region3, String region4, PasswordEncoder passwordEncoder) {
         this.email = email;
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
         this.nickname = nickname;
         this.phone = phone;
         this.imageUrl = imageUrl;

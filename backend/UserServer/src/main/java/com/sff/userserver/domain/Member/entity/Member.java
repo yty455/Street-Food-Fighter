@@ -34,9 +34,9 @@ public class Member {
     private Address address;
 
     @Builder
-    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String region1, String region2, String region3, String region4, PasswordEncoder passwordEncoder) {
+    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String region1, String region2, String region3, String region4) {
         this.email = email;
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
         this.nickname = nickname;
         this.phone = phone;
         this.imageUrl = imageUrl;
@@ -48,7 +48,14 @@ public class Member {
         this.address = new Address(region1, region2, region3, region4);
     }
 
+    // 비밀번호 암호화 메소드
+    public void passwordEncode(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+
 }
