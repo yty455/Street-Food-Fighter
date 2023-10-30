@@ -3,6 +3,7 @@ import { vendordata } from '@/temp/vendordata';
 import { useRouter } from 'next/navigation';
 import { VendorContainer, TopBox, StyledTop, VendorName, Review } from './Vendor.styled';
 import TabBar from '@/components/order/tab';
+import useOrderStore from '@/stores/orderStore';
 
 const VendorPage = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -31,11 +32,23 @@ const VendorPage = ({ id }: { id: string }) => {
     return images;
   };
 
+  const { order, clearOrder } = useOrderStore((state) => ({
+    order: state.order,
+    clearOrder: state.clearOrder,
+  }));
+
   return (
     <VendorContainer>
       <TopBox>
         <StyledTop>
-          <img src="/images/top/back.png" style={{ width: '40px' }} onClick={() => router.back()} />
+          <img
+            src="/images/top/back.png"
+            style={{ width: '40px' }}
+            onClick={() => {
+              router.back();
+              clearOrder();
+            }}
+          />
           <VendorName>{vendor.name}</VendorName>
           <a href={`tel:${vendor.phone}`} style={{ textDecoration: 'none' }}>
             <img src="/images/vendor/phone.png" alt="Phone" style={{ width: '30px' }} />
