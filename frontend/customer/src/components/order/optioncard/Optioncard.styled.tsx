@@ -66,16 +66,9 @@ const Title = styled.div`
   font-size: 18px;
 `;
 
-const Airfont = styled.div.attrs<any>((props) => ({}))`
-  ${(props) => {
-    const black = props.theme.colors.black;
-    const font = props.theme.fonts.air;
-    return css`
-      color: ${black};
-      font-size: 16px;
-      font-family: ${font};
-    `;
-  }};
+const Quantity = styled.div`
+  display: block;
+  width: 15px;
+  text-align: center;
 `;
-
-export { OptionBox, CountBox, RowBox, Content, Title, Airfont, OptionList };
+export { OptionBox, Quantity, Title, Content, RowBox, OptionList, CountBox };

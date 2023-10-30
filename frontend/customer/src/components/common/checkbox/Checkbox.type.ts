@@ -5,5 +5,5 @@ export interface CheckboxType {
   size?: string;
   price?: number;
   checked: boolean;
-  onChange: () => void;
+  onChange: (e: any) => void;
 }
