@@ -4,6 +4,7 @@ import { BoxContainer, Putin } from './Menulist.styled';
 import useOrderStore from '@/stores/orderStore';
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
+import BottomBtn from '@/components/common/bottombtn';
 const Menulist = ({ vendorid }: any) => {
   const vendor = vendordata[vendorid];
   const menulist = vendor?.menulist || [];
@@ -22,7 +23,7 @@ const Menulist = ({ vendorid }: any) => {
           router.push('/topurchase');
         }}
       >
-        {isOrderNotEmpty && <Putin> {curnav == 1 ? '주문 하기' : '펀딩 하기'} </Putin>}
+        {isOrderNotEmpty && <BottomBtn text={curnav == 1 ? '주문 하기' : '펀딩 하기'} />}
       </div>
     </BoxContainer>
   );
