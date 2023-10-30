@@ -45,12 +45,13 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/", "css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-consol/**")
-                                .permitAll()
-                                .requestMatchers("/api/user-server/sign-up")
-                                .permitAll()
+//                                .requestMatchers("/", "css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-consol/**")
+//                                .permitAll()
+//                                .requestMatchers("/api/user-server/sign-up")
+//                                .permitAll()
                                 .anyRequest()
-                                .authenticated()
+                                .permitAll()
+//                                .authenticated()
                 );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);

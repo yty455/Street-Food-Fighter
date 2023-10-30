@@ -1,5 +1,6 @@
 package com.sff.userserver.domain.member.service;
 
+import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.MemberSignupRequest;
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.repository.MemberRepository;
@@ -31,13 +32,25 @@ public class MemberServiceImpl implements MemberService {
     private void validateDuplicateMember(MemberSignupRequest memberSignupRequest) {
         memberRepository.findByEmail(memberSignupRequest.getEmail())
                 .ifPresent(m -> {
-                    throw new BaseException(new ApiError("이미 존재하는 이메일입니다.", 100));
+                    throw new BaseException(new ApiError("이미 존재하는 계정입니다.", 1111));
                 });
     }
 
     @Override
     @Transactional
-    public void deleteMember(Long userId) {
-        memberRepository.deleteById(userId);
+    public void deleteMember(Long memberId) {
+        if (memberRepository.existsById(memberId)) {
+            memberRepository.deleteById(memberId);
+        } else {
+            throw new BaseException(new ApiError("존재하지 않는 사용자입니다.", 1101));
+        }
+    }
+
+    @Override
+    public MemberInfoResponse getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
+        return MemberInfoResponse.builder().member(member).build();
+
     }
 }

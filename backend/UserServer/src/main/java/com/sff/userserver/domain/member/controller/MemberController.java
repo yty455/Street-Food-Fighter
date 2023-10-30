@@ -1,5 +1,6 @@
 package com.sff.userserver.domain.member.controller;
 
+import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.MemberSignupRequest;
 import com.sff.userserver.domain.member.service.MemberServiceImpl;
 import com.sff.userserver.global.utils.ApiResult;
@@ -23,7 +24,13 @@ public class MemberController {
     @DeleteMapping("/{memberId}")
     public ApiResult<?> deleteMember(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
-        return ApiUtils.success("회원 가입 성공");
+        return ApiUtils.success("회원 탈퇴 완료");
+    }
+
+    @GetMapping("/me")
+    public ApiResult<?> getMember() {
+        MemberInfoResponse member = memberService.getMember(1L); // TODO: 실제 인증된 회원의 ID 넣기
+        return ApiUtils.success(member);
     }
 
 
