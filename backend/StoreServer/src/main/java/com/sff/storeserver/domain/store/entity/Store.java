@@ -3,8 +3,8 @@ package com.sff.storeserver.domain.store.entity;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.geo.Point;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class Store {
+public class Store implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +32,17 @@ public class Store {
     private LocalDateTime closeTime;
     private String activeArea;
 
-    @Column(columnDefinition = "Point")
-    private Point areaPoint;
+    //    @Column(columnDefinition = "geometry(Point, 4326)")
+//    @Column(columnDefinition = "POINT")
+//    private Point areaPoint;
+    private double lati;
+    private double longi;
     private String storeUrl;
     private String state;
 
     public void update(StoreInfo storeInfo) {
         updateName(storeInfo.getName());
-        
+
     }
 
     private <T> void updateIfNotNull(Consumer<T> updater, T newValue) {

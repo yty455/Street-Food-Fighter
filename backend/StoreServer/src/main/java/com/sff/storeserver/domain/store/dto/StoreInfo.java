@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
 
@@ -19,12 +18,15 @@ public class StoreInfo {
     private String ownerName;
     private String phone;
     private String businessCategory;
+    private String category;
     private String information;
     private String introduction;
     private LocalDateTime openTime;
     private LocalDateTime closeTime;
     private String activeArea;
-    private Point areaPoint;
+    //    private Point areaPoint;
+    private double lati;
+    private double longi;
     private String storeUrl;
     private String state;
 
@@ -34,13 +36,16 @@ public class StoreInfo {
                 .name(name)
                 .ownerName(ownerName)
                 .phone(phone)
+                .category(category)
                 .businessCategory(businessCategory)
                 .information(information)
                 .introduction(introduction)
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .activeArea(activeArea)
-                .areaPoint(areaPoint)
+//                .areaPoint(areaPoint)
+                .lati(lati)
+                .longi(longi)
                 .storeUrl(storeUrl)
                 .state(state).build();
     }

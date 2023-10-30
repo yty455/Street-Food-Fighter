@@ -1,8 +1,10 @@
 package com.sff.storeserver.domain.store.controller;
 
 import com.sff.storeserver.common.BasicResponse;
-import com.sff.storeserver.domain.store.entity.Store;
+import com.sff.storeserver.common.utils.ApiResult;
+import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
+import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,15 +25,11 @@ public class StoreController {
 
     @Operation(summary = "사장 - 가게 등록", description = "사장 회원가입시 가게를 등록합니다.")
     @PostMapping("/api/owner/store")
-    public ResponseEntity<BasicResponse> registerStore(@RequestBody StoreInfo storeInfo) {
+    public ApiResult<String> registerStore(@RequestBody StoreInfo storeInfo) {
 
-        storeService.registerStore(storeInfo);
+        storeService.createStore(storeInfo);
 
-        BasicResponse basicResponse = BasicResponse.builder()
-                .message("가계 등록 성공")
-                .build();
-
-        return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
+        return ApiUtils.success("가게 등록 성공");
     }
 
     @Operation(summary = "사장 - 가게 정보 조회", description = "가게 정보를 조회합니다.")
@@ -62,10 +60,10 @@ public class StoreController {
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/api/user/store")
-    public ResponseEntity<BasicResponse> getNearStore(@RequestParam("latitude") double latitude,
-                                                      @RequestParam("longitude") double longitude,
-                                                      @RequestParam("categories") List<String> categories) {
-        List<Store> stores = storeService.getNearStore(new Point(latitude, longitude), categories);
+    public ResponseEntity<BasicResponse> getNearStore(@RequestParam("latitude") double lati,
+            @RequestParam("longitude") double longi,
+            @RequestParam("categories") List<String> categories) {
+        List<Store> stores = storeService.getNearStore(lati, longi, categories);
 
         BasicResponse basicResponse = BasicResponse.builder()
                 .message("내 근처 가게 조회 성공")
@@ -77,9 +75,9 @@ public class StoreController {
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
     @GetMapping("/api/user/flag")
     public ResponseEntity<BasicResponse> getNearFlag(@RequestParam("date") Date date,
-                                                     @RequestParam("latitude") double latitude,
-                                                     @RequestParam("longitude") double longitude,
-                                                     @RequestParam("categories") List<String> categories) {
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
+            @RequestParam("categories") List<String> categories) {
         List<Store> stores = storeService.getNearFlag(date, new Point(latitude, longitude), categories);
 
         BasicResponse basicResponse = BasicResponse.builder()
@@ -88,7 +86,6 @@ public class StoreController {
 
         return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
     }
-
 
 
 }
