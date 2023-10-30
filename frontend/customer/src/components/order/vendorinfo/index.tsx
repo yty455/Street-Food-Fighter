@@ -16,24 +16,26 @@ const VendorInfo = ({ vendorid }: any) => {
         <Title>영업정보</Title>
 
         <table>
-          <tr>
-            <ContentTd>상호명</ContentTd>
-            <ContentTd>{vendor.name}</ContentTd>
-          </tr>
-          <tr>
-            <ContentTd>운영시간</ContentTd>
-            <ContentTd>
-              {vendor.starttime} ~ {vendor.endtime}
-            </ContentTd>
-          </tr>
-          <tr>
-            <ContentTd>전화번호</ContentTd>
-            <ContentTd>{vendor.phone}</ContentTd>
-          </tr>
-          <tr>
-            <ContentTd>위치</ContentTd>
-            <ContentTd>{vendor.loc}</ContentTd>
-          </tr>
+          <tbody>
+            <tr>
+              <ContentTd>상호명</ContentTd>
+              <ContentTd>{vendor.name}</ContentTd>
+            </tr>
+            <tr>
+              <ContentTd>운영시간</ContentTd>
+              <ContentTd>
+                {vendor.starttime} ~ {vendor.endtime}
+              </ContentTd>
+            </tr>
+            <tr>
+              <ContentTd>전화번호</ContentTd>
+              <ContentTd>{vendor.phone}</ContentTd>
+            </tr>
+            <tr>
+              <ContentTd>위치</ContentTd>
+              <ContentTd>{vendor.loc}</ContentTd>
+            </tr>
+          </tbody>
         </table>
       </BoxContainer>
       <BoxContainer>
