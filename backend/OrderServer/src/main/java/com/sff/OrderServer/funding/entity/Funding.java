@@ -1,7 +1,7 @@
-package com.sff.OrderServer.bucket.entity;
+package com.sff.OrderServer.funding.entity;
 
 
-import com.sff.OrderServer.funding.entity.Bucket;
+import com.sff.OrderServer.bucket.entity.Bucket;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
