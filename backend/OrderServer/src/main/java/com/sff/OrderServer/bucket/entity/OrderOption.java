@@ -1,5 +1,6 @@
 package com.sff.OrderServer.bucket.entity;
 
+import com.sff.OrderServer.bucket.dto.Option;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,13 +22,21 @@ public class OrderOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderOptionId;
 
-    @ManyToOne
-    @Column(name = "ORDER_MENU_ID", nullable = false)
-    private OrderMenu orderMenu;
+//    @ManyToOne
+//    @Column(name = "ORDER_MENU_ID", nullable = false)
+//    private OrderMenu orderMenu;
+    @Column(nullable = false)
+    private Long optionId;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private Integer price;
+
+    public OrderOption(Option option){
+        this.optionId = option.getOptionId();
+        this.name = option.getName();
+        this.price = option.getPrice();
+    }
 }
