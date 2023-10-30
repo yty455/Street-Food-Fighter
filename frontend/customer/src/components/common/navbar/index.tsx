@@ -2,7 +2,7 @@ import { StyledNavbar, Flexbox, NavText } from './Navbar.styled';
 import { useNavStore } from '@/stores/curnavStore';
 import useMainFilterStore from '@/stores/mainFilterStore';
 import useSelectedDateStore from '@/stores/selectdateStore';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const isActive = curnav === id;
