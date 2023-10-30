@@ -1,4 +1,4 @@
-package com.sff.storeserver.domain.store;
+package com.sff.storeserver.domain.store.entity;
 
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import jakarta.persistence.*;
@@ -24,6 +24,7 @@ public class Store {
     private String name;
     private String ownerName;
     private String phone;
+    private String category;
     private String businessCategory;
     private String information;
     private String introduction;

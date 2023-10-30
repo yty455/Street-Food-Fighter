@@ -1,6 +1,6 @@
-package com.sff.storeserver.domain.flag;
+package com.sff.storeserver.domain.flag.entity;
 
-import com.sff.storeserver.domain.store.Store;
+import com.sff.storeserver.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.geo.Point;
