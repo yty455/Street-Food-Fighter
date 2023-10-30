@@ -35,16 +35,16 @@ public class StoreService {
         store.update(storeInfo);
     }
 
-    public List<Store> getNearStore(double lati, double longi, List<String> categories) {
+    public List<StoreInfoResponse> getNearStore(double lati, double longi, List<String> categories) {
         List<Store> nearbyStores = storeRepository.findNearStore(lati, longi);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        List<Store> filteredStores = nearbyStores
+        return nearbyStores
                 .stream()
                 .filter(store -> categories.contains(store.getCategory()))
+                .map(StoreInfoResponse::fromEntity)
                 .toList();
 
-        return filteredStores;
     }
 
     public List<Store> getNearFlag(Date date, Point point, List<String> categories) {

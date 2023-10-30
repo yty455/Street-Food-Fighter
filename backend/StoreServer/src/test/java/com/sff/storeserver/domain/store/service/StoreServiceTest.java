@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,7 +68,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         List<String> arr = Arrays.asList("붕어빵");
 
         // when
-        List<Store> stores = storeService.getNearStore(48.87373649724123, 2.2954639195323968, arr);
+        List<StoreInfoResponse> stores = storeService.getNearStore(48.87373649724123, 2.2954639195323968, arr);
         System.out.println(stores.size());
         stores.forEach(prev -> {
             System.out.println(prev.getLongi());
@@ -76,7 +76,6 @@ class StoreServiceTest extends IntegrationTestSupport {
         });
         // then
         assertThat(stores.size()).isEqualTo(2);
-//        assertThat(storeInfoResponse.getOwnerId()).isEqualTo(storeInfo.getOwnerId());
     }
 
     StoreInfo createStore(Long ownerId) {
@@ -89,8 +88,8 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")
-                .openTime(LocalDateTime.now())
-                .closeTime(LocalDateTime.now().plusHours(10L))
+                .openTime(LocalTime.now())
+                .closeTime(LocalTime.now().plusHours(2L))
                 .activeArea("강서구")
 //                .areaPoint(new Point(48.87373649724122, 2.2954639195323967))
                 .lati(48.87373649724122)
@@ -110,8 +109,8 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")
-                .openTime(LocalDateTime.now())
-                .closeTime(LocalDateTime.now().plusHours(10L))
+                .openTime(LocalTime.now())
+                .closeTime(LocalTime.now().plusHours(10L))
                 .activeArea("강서구")
 //                .areaPoint(new Point(48.87373649724122, 2.2954639195323967))
                 .lati(lati)

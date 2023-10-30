@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.function.Consumer;
 
 @Entity
@@ -28,8 +28,8 @@ public class Store implements Serializable {
     private String businessCategory;
     private String information;
     private String introduction;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private String activeArea;
 
     //    @Column(columnDefinition = "geometry(Point, 4326)")
