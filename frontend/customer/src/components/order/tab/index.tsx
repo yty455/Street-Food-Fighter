@@ -9,13 +9,13 @@ const TabBar = ({ vendorid }: any) => {
   return (
     <div>
       <TabContainer>
-        <Tab active={activeTab === 'menu'} onClick={() => setActiveTab('menu')}>
+        <Tab active={(activeTab === 'menu').toString()} onClick={() => setActiveTab('menu')}>
           메뉴
         </Tab>
-        <Tab active={activeTab === 'info'} onClick={() => setActiveTab('info')}>
+        <Tab active={(activeTab === 'info').toString()} onClick={() => setActiveTab('info')}>
           가게/정보
         </Tab>
-        <Tab active={activeTab === 'review'} onClick={() => setActiveTab('review')}>
+        <Tab active={(activeTab === 'review').toString()} onClick={() => setActiveTab('review')}>
           리뷰
         </Tab>
       </TabContainer>
