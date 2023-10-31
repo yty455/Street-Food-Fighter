@@ -3,10 +3,6 @@ package com.sff.storeserver.domain.review.entity;
 import com.sff.storeserver.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.geo.Point;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
