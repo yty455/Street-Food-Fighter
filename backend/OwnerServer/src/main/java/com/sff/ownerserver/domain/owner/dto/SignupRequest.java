@@ -1,0 +1,49 @@
+package com.sff.ownerserver.domain.owner.dto;
+
+import com.sff.ownerserver.domain.owner.entity.Owner;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Getter
+public class SignupRequest {
+    @Email(message = "올바른 이메일을 입력해주세요.")
+    @NotBlank(message = "이메일을 입력해주세요.")
+    private String email;
+    @NotBlank(message = "비밀번호를 입력해주세요.")
+    private String password;
+    @NotBlank(message = "휴대폰 번호를 입력해주세요.")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "올바른 휴대폰 번호를 입력해주세요.")
+    private String phone;
+    @NotBlank(message = "이름을 입력해주세요")
+    @Size(min = 1, max = 5, message = "이름은 5자까지 가능합니다.")
+    private String name;
+    private String bank;
+    private String accountNumber;
+
+    @Builder
+    public SignupRequest(String email, String password, String phone, String name, String bank, String accountNumber) {
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.name = name;
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+    }
+
+    public Owner toEntity() {
+        return Owner.builder()
+                .email(email)
+                .password(password)
+                .phone(phone)
+                .name(name)
+                .bank(bank)
+                .accountNumber(accountNumber)
+                .build();
+    }
+}
