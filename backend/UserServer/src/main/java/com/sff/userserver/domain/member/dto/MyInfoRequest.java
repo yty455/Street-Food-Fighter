@@ -5,8 +5,12 @@ import com.sff.userserver.domain.member.entity.SocialType;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Getter
+@NoArgsConstructor
 public class MyInfoRequest {
     @Size(min = 1, max = 10, message = "닉네임은 10자까지 가능합니다.")
     private String nickname;

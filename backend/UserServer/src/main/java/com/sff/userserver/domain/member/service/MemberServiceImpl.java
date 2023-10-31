@@ -61,5 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     public void updateMember(Long memberId, MyInfoRequest myInfoRequest) {
+        Member member = findMember(memberId);
+        member.update(myInfoRequest);
     }
 }
