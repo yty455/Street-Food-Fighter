@@ -1,11 +1,14 @@
 package com.sff.ownerserver.domain.owner.entity;
 
+import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.function.Consumer;
 
 @Entity
 @Getter
@@ -18,18 +21,18 @@ public class Owner {
 
     private String email;
     private String password;
-    private String phone;
     private String name;
+    private String phone;
     private String bank;
     private String accountNumber;
     private String refreshToken;
 
     @Builder
-    public Owner(String email, String password, String phone, String name, String bank, String accountNumber, String refreshToken) {
+    public Owner(String email, String password, String name, String phone, String bank, String accountNumber, String refreshToken) {
         this.email = email;
         this.password = password;
-        this.phone = phone;
         this.name = name;
+        this.phone = phone;
         this.bank = bank;
         this.accountNumber = accountNumber;
         this.refreshToken = refreshToken;
@@ -44,5 +47,38 @@ public class Owner {
         this.refreshToken = refreshToken;
     }
 
+
+    public void update(MyInfoRequest myInfoRequest) {
+        this.phone = phone;
+        this.name = name;
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+        updateName(myInfoRequest.getName());
+        updatePhone(myInfoRequest.getPhone());
+        updateBank(myInfoRequest.getBank());
+        updateAccountNumber(myInfoRequest.getAccountNumber());
+    }
+
+    private void updateName(String name) {
+        updateIfNotNull(newValue -> this.name = newValue, name);
+    }
+
+    public void updatePhone(String phone) {
+        updateIfNotNull(newValue -> this.phone = newValue, phone);
+    }
+
+    private void updateBank(String bank) {
+        updateIfNotNull(newValue -> this.bank = newValue, bank);
+    }
+
+    private void updateAccountNumber(String accountNumber) {
+        updateIfNotNull(newValue -> this.accountNumber = newValue, accountNumber);
+    }
+
+    private <T> void updateIfNotNull(Consumer<T> updater, T newValue) {
+        if (newValue != null) {
+            updater.accept(newValue);
+        }
+    }
 
 }

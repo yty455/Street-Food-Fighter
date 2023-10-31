@@ -1,5 +1,7 @@
 package com.sff.ownerserver.domain.owner.service;
 
+import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
+import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
 import com.sff.ownerserver.domain.owner.dto.SignupRequest;
 import com.sff.ownerserver.domain.owner.entity.Owner;
 import com.sff.ownerserver.domain.owner.repository.OwnerRepository;
@@ -25,6 +27,33 @@ public class OwnerServiceImpl implements OwnerService {
         owner.passwordEncode(passwordEncoder);
         // TODO: 포인트 생성하기(결제 비밀번호, 금액)
         ownerRepository.save(owner);
+    }
+
+    @Override
+    @Transactional
+    public void deleteOwner(Long ownerId) {
+        if (ownerRepository.existsById(ownerId)) {
+            ownerRepository.deleteById(ownerId);
+        } else {
+            throw new BaseException(new ApiError("존재하지 않는 사용자입니다.", 1201));
+        }
+    }
+
+    @Override
+    public OwnerInfoResponse getOwner(Long ownerId) {
+        return OwnerInfoResponse.builder().owner(findOwner(ownerId)).build();
+    }
+
+    @Override
+    @Transactional
+    public void updateMember(Long ownerId, MyInfoRequest myInfoRequest) {
+        Owner owner = findOwner(ownerId);
+        owner.update(myInfoRequest);
+    }
+
+    private Owner findOwner(Long ownerId) {
+        return ownerRepository.findById(ownerId)
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1201)));
     }
 
     private void validateDuplicateMember(SignupRequest signupRequest) {
