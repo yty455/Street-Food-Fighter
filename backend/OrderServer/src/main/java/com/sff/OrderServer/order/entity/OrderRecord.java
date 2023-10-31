@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +38,7 @@ public class OrderRecord {
     private String requirement;
 
     @OneToOne
-    @Column(name = "BUCKET_ID", nullable = false)
+    @PrimaryKeyJoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
     @Column(nullable = false)

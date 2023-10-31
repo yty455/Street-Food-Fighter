@@ -4,9 +4,11 @@ import '../styles/globals.css';
 import { ThemeProvider } from 'styled-components';
 import theme from '../styles/DefaultTheme';
 import Navbar from '@/components/common/navbar';
-import Script from 'next/script';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   return (
     <html>
       <head>
@@ -16,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body style={{ height: '100vh' }}>
           <StyledComponentsRegistry>
             {children}
-            <Navbar />
+            {!pathname.includes('/vendor') && <Navbar />}
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>

@@ -10,7 +10,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class Option {
+public class Options {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

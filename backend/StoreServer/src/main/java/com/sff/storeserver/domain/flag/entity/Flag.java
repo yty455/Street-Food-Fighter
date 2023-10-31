@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -26,8 +26,8 @@ public class Flag {
     private Store store;
 
     private LocalDate date;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private int fundraising_amount;
     private String address;
     private Point areaPoint;
