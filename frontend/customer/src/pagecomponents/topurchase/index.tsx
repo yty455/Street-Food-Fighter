@@ -1,6 +1,6 @@
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
-import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont, Cashline } from './Topurchase.styled';
+import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont, Cashline, FlexRow } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import { vendordata } from '@/temp/vendordata';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import Input from '@/components/common/input';
 import { buckets } from '@/temp/buckets';
 import { user } from '@/temp/user';
+import Button from '@/components/common/button';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -93,7 +94,10 @@ const PurchasePage = () => {
         <Requested>
           <Cashline>
             <Title> 보유 파이트 머니</Title>
-            <div>{Number(user.points).toLocaleString()} 원</div>
+            <FlexRow>
+              <Airfont>{Number(user.points).toLocaleString()} 원</Airfont>
+              <Button text="충전"></Button>
+            </FlexRow>
           </Cashline>
           <Cashline>
             <Title> 결제 예정 금액 </Title>

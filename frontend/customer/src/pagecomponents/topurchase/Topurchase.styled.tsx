@@ -77,6 +77,12 @@ const FlexColumn = styled.div`
   flex-direction: column;
   gap: 4px;
 `;
+const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+`;
 
 const Location = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
@@ -116,4 +122,4 @@ const More = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { Cashline, Requested, Airfont, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
+export { Cashline, Requested, FlexRow, Airfont, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
