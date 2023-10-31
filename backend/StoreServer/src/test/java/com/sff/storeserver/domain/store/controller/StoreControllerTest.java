@@ -36,6 +36,7 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response").value("가게 등록 성공"));
     }
 
+    @DisplayName("가게를 저장하고 ")
     StoreInfo createStore(Long ownerId) {
         return StoreInfo.builder()
                 .ownerId(ownerId)

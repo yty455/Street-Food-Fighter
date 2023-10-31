@@ -3,6 +3,7 @@ package com.sff.storeserver.domain.store.service;
 import com.sff.storeserver.IntegrationTestSupport;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Transactional
 class StoreServiceTest extends IntegrationTestSupport {
@@ -56,6 +58,41 @@ class StoreServiceTest extends IntegrationTestSupport {
         assertThat(storeInfoResponse.getOwnerId()).isEqualTo(storeInfo.getOwnerId());
     }
 
+    @DisplayName("사장ID를 가게 정보를 수정한다.")
+    @Test
+    void updateStoreByOwnerId() {
+        // given
+        Long ownerId = 2L;
+        StoreInfo storeInfo = createStore(ownerId);
+        Store store = storeInfo.toEntity();
+        StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
+                .name("변경된 가게이름")
+                .ownerName("변경된 사장이름")
+                .phone("010-1111-1111")
+                .openTime(LocalTime.now())
+                .closeTime(LocalTime.now())
+                .information("변경된 설명")
+                .introduction("변경된 안내")
+                .build();
+
+        // when
+        storeRepository.save(store);
+        storeService.updateStore(storeUpdateInfo, ownerId);
+
+        Store store1 = storeRepository.findByOwnerId(ownerId);
+
+        // then
+        assertAll(
+                () -> assertThat(store1.getName()).isEqualTo(storeUpdateInfo.getName()),
+                () -> assertThat(store1.getOwnerName()).isEqualTo(storeUpdateInfo.getOwnerName()),
+                () -> assertThat(store1.getPhone()).isEqualTo(storeUpdateInfo.getPhone()),
+                () -> assertThat(store1.getOpenTime()).isEqualTo(storeUpdateInfo.getOpenTime()),
+                () -> assertThat(store1.getCloseTime()).isEqualTo(storeUpdateInfo.getCloseTime()),
+                () -> assertThat(store1.getInformation()).isEqualTo(storeUpdateInfo.getInformation()),
+                () -> assertThat(store1.getIntroduction()).isEqualTo(storeUpdateInfo.getIntroduction())
+        );
+    }
+
     @DisplayName("현재 좌표기준에서 근처 가게를 찾는다.")
     @Test
     void getStoreByLaitAndLongi() {
@@ -78,6 +115,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         // then
         assertThat(stores.size()).isEqualTo(2);
     }
+
 
     StoreInfo createStore(Long ownerId) {
         return StoreInfo.builder()

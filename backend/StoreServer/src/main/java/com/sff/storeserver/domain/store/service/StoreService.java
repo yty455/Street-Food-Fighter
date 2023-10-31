@@ -2,6 +2,8 @@ package com.sff.storeserver.domain.store.service;
 
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
+import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
@@ -31,9 +33,14 @@ public class StoreService {
         return StoreInfoResponse.fromEntity(storeRepository.findByOwnerId(ownerId));
     }
 
-    public void modifyStore(StoreInfo storeInfo) {
-        Store store = storeRepository.findByOwnerId(storeInfo.getOwnerId());
-        store.update(storeInfo);
+    public void updateStore(StoreUpdateInfo storeUpdateInfo, Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId);
+        store.update(storeUpdateInfo);
+    }
+
+    public void updateStoreCategory(StoreUpdateCategory storeUpdateCategory, Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId);
+        store.updateCategory(storeUpdateCategory);
     }
 
     public List<StoreInfoResponse> getNearStore(double lati, double longi, List<CategoryType> categories) {

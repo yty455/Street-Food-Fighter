@@ -21,8 +21,6 @@ public class StoreUpdateInfo {
     private String ownerName;
     @NotBlank(message = "휴대폰 번호가 공백입니다.")
     private String phone;
-    @NotBlank(message = "업태가 공백입니다.")
-    private String businessCategory;
     @NotBlank(message = "오픈시간이 공백입니다.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime openTime;

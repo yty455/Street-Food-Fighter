@@ -5,6 +5,8 @@ import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
+import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.service.StoreService;
@@ -42,10 +44,17 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
-    @PatchMapping("/stores/{storeId}")
-    public ApiResult<String> modifyStore(@PathVariable Long storeId, @RequestBody StoreInfo storeInfo) {
-        storeService.modifyStore(storeInfo);
+    @PatchMapping("/stores/{ownerId}")
+    public ApiResult<String> updateStore(@PathVariable Long ownerId, @RequestBody StoreUpdateInfo storeUpdateInfo) {
+        storeService.updateStore(storeUpdateInfo, ownerId);
         return ApiUtils.success("가게 정보 수정을 성공했습니다.");
+    }
+
+    @Operation(summary = "사장 - 가게 카테고리, 업태 수정", description = "가게 카테고리, 업태를 수정합니다.")
+    @PatchMapping("/stores/categories/{ownerId}")
+    public ApiResult<String> updateStoreCategory(@PathVariable Long ownerId, @RequestBody StoreUpdateCategory storeUpdateCategory) {
+        storeService.updateStoreCategory(storeUpdateCategory, ownerId);
+        return ApiUtils.success("가게 카테고리 수정을 성공했습니다.");
     }
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
