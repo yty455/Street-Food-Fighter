@@ -23,4 +23,8 @@ public class Options {
 
     private String name;
     private int price;
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
 }

@@ -37,8 +37,8 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 정보 조회", description = "가게 정보를 조회합니다.")
-    @GetMapping("/stores")
-    public ApiResult<StoreInfoResponse> getStore(@RequestBody Long ownerId) {
+    @GetMapping("/stores/{ownerId}")
+    public ApiResult<StoreInfoResponse> getStore(@PathVariable Long ownerId) {
         StoreInfoResponse storeInfoResponse = storeService.getStore(ownerId);
         return ApiUtils.success(storeInfoResponse);
     }
