@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BucketRepository extends JpaRepository<Bucket, Long> {
     Optional<Bucket> findByUserIdAndPaymentStateFalse(Long userId);
+    Optional<Bucket> findByBucketIdAndUserId(Long bucketId, Long userId);
 }
