@@ -16,7 +16,7 @@ const BagOrder = ({ menuid }: any) => {
     }
   };
 
-  return <div>Orderlist</div>;
+  return <div>주문 상품 (이후 수정)</div>;
 };
 
 export default BagOrder;

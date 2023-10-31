@@ -1,6 +1,6 @@
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
-import { TopBox, Title, Content, VendorBox, VendorInfo, Location, VendorName } from './Topurchase.styled';
+import { TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import { vendordata } from '@/temp/vendordata';
@@ -47,21 +47,30 @@ const PurchasePage = () => {
       </TopBox>
 
       <Content>
-        <div>
+        <FlexColumn>
           <VendorBox>
             <img src={`/images/category/${catImage}`} style={{ width: '45px', height: '45px' }} />
-            <VendorInfo>
-              <VendorName>{vendor.name}</VendorName>
+            <FlexColumn>
+              <Title>{vendor.name}</Title>
               <Location>{vendor.loc}</Location>
-            </VendorInfo>
+            </FlexColumn>
           </VendorBox>
-          <div>주문 목록 컴포넌트</div>
-          {order.map((o, index) => (
-            <BagOrder key={index} menuid={o.menuId} />
-          ))}
+          <Orderlist>
+            <Title style={{ padding: '10px 15px' }}>주문 목록</Title>
+            {order.map((o, index) => (
+              <BagOrder key={index} menuid={o.menuId} />
+            ))}
+            <More
+              onClick={() => {
+                router.back();
+              }}
+            >
+              + 더 담으러 가기
+            </More>
+          </Orderlist>
 
           <div>요청 사항 컴포넌트</div>
-        </div>
+        </FlexColumn>
 
         <div>
           <div> 보유 파이트 머니</div>

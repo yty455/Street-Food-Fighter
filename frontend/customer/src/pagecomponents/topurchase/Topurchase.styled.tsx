@@ -10,7 +10,7 @@ const TopBox = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 20px;
+  font-size: 18px;
 `;
 
 const Content = styled.div.attrs<any>((props) => ({}))`
@@ -40,14 +40,12 @@ const VendorBox = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-const VendorInfo = styled.div`
+const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
-const VendorName = styled.div`
-  font-size: 18px;
-`;
+
 const Location = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const gray = props.theme.colors.gray;
@@ -59,4 +57,32 @@ const Location = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { TopBox, Title, Content, VendorName, VendorBox, VendorInfo, Location };
+const Orderlist = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      display: flex;
+      background-color: ${white};
+      flex-direction: column;
+      gap: 10px;
+      /* padding: 10px 15px; */
+    `;
+  }};
+`;
+const More = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const lightgray = props.theme.colors.lightgray;
+
+    return css`
+      display: flex;
+      border-top: 1px solid ${lightgray};
+      gap: 10px;
+      padding: 10px;
+      justify-content: center;
+      align-items: center;
+    `;
+  }};
+`;
+
+export { TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
