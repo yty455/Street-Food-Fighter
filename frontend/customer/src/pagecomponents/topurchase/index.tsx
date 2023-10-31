@@ -7,6 +7,7 @@ import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
 import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
+import { useState } from 'react';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -25,7 +26,18 @@ const PurchasePage = () => {
 
   const { order } = useOrderStore();
 
-  console.log('order', order);
+  // console.log('order', order);\
+
+  // input (요청사항)
+  const [request, setRequest] = useState('');
+  const handleRequestChange = (e: any) => {
+    setRequest(e.target.value);
+  };
+
+  // 결제하기 클릭
+  const handleSubmit = () => {
+    console.log('저장된 요청 사항:', request);
+  };
   return (
     <div>
       <TopBox>
@@ -74,7 +86,7 @@ const PurchasePage = () => {
           <Requested>
             <Title>요청 사항</Title>
             <Airfont> 가게 사장님께 </Airfont>
-            <input />
+            <input value={request} onChange={handleRequestChange} />
           </Requested>
           <div>
             <div> 보유 파이트 머니</div>
@@ -83,7 +95,7 @@ const PurchasePage = () => {
         </div>
       </Content>
 
-      <BottomBtn text="결제하기"></BottomBtn>
+      <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
     </div>
   );
 };
