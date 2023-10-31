@@ -28,7 +28,7 @@ const Optioncard = ({ menuid, menudata }: any) => {
     }
   };
 
-  console.log(order);
+  // console.log(order);
   return (
     <OptionList>
       <OptionBox>

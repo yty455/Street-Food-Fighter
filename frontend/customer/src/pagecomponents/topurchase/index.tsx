@@ -5,24 +5,27 @@ import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
-import { Vendor } from '@/types/vendortype';
+import useOrderStore from '@/stores/orderStore';
+import BagOrder from '@/components/purchase/bagorder';
 
 const PurchasePage = () => {
   const router = useRouter();
   const { curnav } = useNavStore();
 
   const storedVendorId = useVendorStore((state) => state.vendorId);
-  const vendor: Vendor = vendordata.find((v) => v.id === storedVendorId)!;
+  const vendor = vendordata.find((v) => v.id === storedVendorId);
 
   if (!vendor) {
-    <div>'가게가 없어졌어요 🥺'</div>;
     console.log('가게가 없어졌어요');
     router.push('/');
+    return <div>'가게가 없어졌어요 🥺'</div>;
   }
 
-  const catImage: string = categories.find((cat) => cat.id === vendor.category)?.image || '/images/category/16.png';
+  const catImage = categories.find((cat) => cat.id === vendor.category)?.image || '/images/category/16.png';
 
-  // console.log(vendor);
+  const { order } = useOrderStore();
+
+  console.log('order', order);
   return (
     <div>
       <TopBox>
@@ -53,6 +56,10 @@ const PurchasePage = () => {
             </VendorInfo>
           </VendorBox>
           <div>주문 목록 컴포넌트</div>
+          {order.map((o, index) => (
+            <BagOrder key={index} menuid={o.menuId} />
+          ))}
+
           <div>요청 사항 컴포넌트</div>
         </div>
 

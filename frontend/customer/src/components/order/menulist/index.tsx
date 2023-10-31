@@ -14,15 +14,11 @@ const Menulist = ({ vendorid }: any) => {
   const menulist = vendor.menulist || [];
   // console.log(menulist);
 
-  const { order, setQuantity, removeItem } = useOrderStore();
+  const { order, removeItem } = useOrderStore();
   const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
 
   const router = useRouter();
   const { curnav } = useNavStore();
-
-  const updateMenuQuantity = (menuId: number, quantity: number) => {
-    setQuantity(menuId, quantity);
-  };
 
   const handleButtonClick = () => {
     order.forEach((menu) => {

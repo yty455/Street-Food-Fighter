@@ -2,14 +2,14 @@ import styled, { css } from 'styled-components';
 const ButtonBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const main = props.theme.colors.main;
-    const white = props.theme.colors.white;
+    const light = props.theme.colors.light;
     return css`
       display: flex;
       align-items: center;
       justify-content: center;
 
       background-color: ${main};
-      color: ${white};
+      color: ${light};
 
       position: fixed;
       bottom: 0;
