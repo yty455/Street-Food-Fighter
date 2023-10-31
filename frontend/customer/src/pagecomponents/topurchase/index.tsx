@@ -8,6 +8,7 @@ import { categories } from '@/assets/category';
 import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
 import { useState } from 'react';
+import Input from '@/components/common/input';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -85,8 +86,10 @@ const PurchasePage = () => {
         <div>
           <Requested>
             <Title>요청 사항</Title>
-            <Airfont> 가게 사장님께 </Airfont>
-            <input value={request} onChange={handleRequestChange} />
+            <div>
+              <Airfont> 가게 사장님께 </Airfont>
+              <Input value={request} onChange={handleRequestChange} placeholder="예) 견과류 빼주세요...(글자수 제한 25자)" maxLength={25} />
+            </div>
           </Requested>
           <div>
             <div> 보유 파이트 머니</div>

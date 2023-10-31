@@ -44,7 +44,7 @@ const VendorBox = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       background-color: ${white};
       flex-direction: row;
-      padding: 10px 15px;
+      padding: 15px 15px 10px 15px;
       gap: 15px;
     `;
   }};
@@ -57,7 +57,7 @@ const Requested = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       background-color: ${white};
       flex-direction: column;
-      padding: 10px 15px;
+      padding: 15px;
       gap: 15px;
     `;
   }};
@@ -89,7 +89,6 @@ const Orderlist = styled.div.attrs<any>((props) => ({}))`
       background-color: ${white};
       flex-direction: column;
       gap: 10px;
-      /* padding: 10px 15px; */
     `;
   }};
 `;
