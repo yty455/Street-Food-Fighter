@@ -10,6 +10,7 @@ import BagOrder from '@/components/purchase/bagorder';
 import { useState } from 'react';
 import Input from '@/components/common/input';
 import { buckets } from '@/temp/buckets';
+import { user } from '@/temp/user';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -27,10 +28,7 @@ const PurchasePage = () => {
   const catImage = categories.find((cat) => cat.id === vendor.category)?.image || '/images/category/16.png';
 
   const { order } = useOrderStore();
-
   // console.log('order', order);
-
-  const bucket = buckets;
 
   // input (요청사항)
   const [request, setRequest] = useState('');
@@ -95,10 +93,13 @@ const PurchasePage = () => {
 
         <div>
           <Requested>
-            <Title> 보유 파이트 머니</Title>
+            <Cashline>
+              <Title> 보유 파이트 머니</Title>
+              <div>{Number(user.points).toLocaleString()} 원</div>
+            </Cashline>
             <Cashline>
               <Title> 결제 예정 금액 </Title>
-              <div>{Number(bucket.totalPrice).toLocaleString()} 원</div>
+              <div>{Number(buckets.totalPrice).toLocaleString()} 원</div>
             </Cashline>
           </Requested>
         </div>
