@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/owner-service")
+@RequestMapping("api/owner-server")
 public class OwnerController {
     private final OwnerService ownerService;
 
