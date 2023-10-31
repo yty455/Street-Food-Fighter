@@ -22,9 +22,6 @@ public class OrderOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderOptionId;
 
-//    @ManyToOne
-//    @Column(name = "ORDER_MENU_ID", nullable = false)
-//    private OrderMenu orderMenu;
     @Column(nullable = false)
     private Long optionId;
 
