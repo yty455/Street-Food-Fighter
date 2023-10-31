@@ -27,7 +27,7 @@ public class OrderMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderMenuId;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "BUCKET_ID", nullable = false)
     private Bucket bucket;
 
@@ -49,13 +49,15 @@ public class OrderMenu {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderOption> options;
 
-    public OrderMenu(Bucket bucket, Item item, List<OrderOption> options){
-        this.bucket = bucket;
-        this.menuId = item.getMenuId();
-        this.name = item.getName();
-        this.price = item.getPrice();
-        this.menuUrl = item.getMenuUrl();
-        this.count = item.getCount();
-        this.options = options;
+    public static OrderMenu toEntity(Bucket bucket, Item item, List<OrderOption> options){
+        return OrderMenu.builder()
+                .bucket(bucket)
+                .menuId(item.getMenuId())
+                .name(item.getName())
+                .price(item.getPrice())
+                .menuUrl(item.getMenuUrl())
+                .count(item.getCount())
+                .options(options)
+                .build();
     }
 }
