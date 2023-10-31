@@ -4,6 +4,7 @@ import com.sff.storeserver.ControllerTestSupport;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -41,7 +42,7 @@ class StoreControllerTest extends ControllerTestSupport {
                 .name("붕어빵집 1")
                 .ownerName("황재영")
                 .phone("010-1234-1234")
-                .category("붕어빵")
+                .category(CategoryType.FISHBREAD)
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")

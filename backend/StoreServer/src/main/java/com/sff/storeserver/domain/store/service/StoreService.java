@@ -2,6 +2,7 @@ package com.sff.storeserver.domain.store.service;
 
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class StoreService {
         store.update(storeInfo);
     }
 
-    public List<StoreInfoResponse> getNearStore(double lati, double longi, List<String> categories) {
+    public List<StoreInfoResponse> getNearStore(double lati, double longi, List<CategoryType> categories) {
         List<Store> nearbyStores = storeRepository.findNearStore(lati, longi);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)

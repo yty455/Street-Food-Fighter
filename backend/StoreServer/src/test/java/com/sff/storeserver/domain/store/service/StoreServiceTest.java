@@ -3,6 +3,7 @@ package com.sff.storeserver.domain.store.service;
 import com.sff.storeserver.IntegrationTestSupport;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import jakarta.persistence.EntityManager;
@@ -65,7 +66,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         StoreInfo storeInfo2 = createStore(2L, 48.87373649724123, 2.2954639195323968);
         Store store2 = storeInfo.toEntity();
         storeRepository.save(store2);
-        List<String> arr = Arrays.asList("붕어빵");
+        List<CategoryType> arr = Arrays.asList(CategoryType.FISHBREAD);
 
         // when
         List<StoreInfoResponse> stores = storeService.getNearStore(48.87373649724123, 2.2954639195323968, arr);
@@ -84,7 +85,7 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .name("붕어빵집 1")
                 .ownerName("황재영")
                 .phone("010-1234-1234")
-                .category("붕어빵")
+                .category(CategoryType.FISHBREAD)
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")
@@ -105,7 +106,7 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .name("붕어빵집 1")
                 .ownerName("황재영")
                 .phone("010-1234-1234")
-                .category("붕어빵")
+                .category(CategoryType.FISHBREAD)
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")

@@ -24,7 +24,8 @@ public class Store implements Serializable {
     private String name;
     private String ownerName;
     private String phone;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private CategoryType category;
     private String businessCategory;
     private String information;
     private String introduction;

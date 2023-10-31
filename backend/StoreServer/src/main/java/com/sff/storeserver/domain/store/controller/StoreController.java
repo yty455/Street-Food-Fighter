@@ -5,6 +5,7 @@ import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,37 +43,26 @@ public class StoreController {
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
     @PatchMapping("/stores/{storeId}")
-    public ResponseEntity<BasicResponse> modifyStore(@PathVariable Long storeId, @RequestBody StoreInfo storeInfo) {
-
+    public ApiResult<String> modifyStore(@PathVariable Long storeId, @RequestBody StoreInfo storeInfo) {
         storeService.modifyStore(storeInfo);
-
-        BasicResponse basicResponse = BasicResponse.builder()
-                .message("가계 등록 성공")
-                .build();
-
-        return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
+        return ApiUtils.success("가게 정보 수정을 성공했습니다.");
     }
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near/{lati}/{longi}")
-    public ResponseEntity<BasicResponse> getNearStore(@PathVariable double lati,
-                                                      @PathVariable double longi,
-                                                      @RequestParam("categories") List<String> categories) {
+    public ApiResult<List<StoreInfoResponse>> getNearStore(@PathVariable double lati,
+            @PathVariable double longi,
+            @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
-
-        BasicResponse basicResponse = BasicResponse.builder()
-                .message("내 근처 가게 조회 성공")
-                .build();
-
-        return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
+        return ApiUtils.success(stores);
     }
 
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
     @GetMapping("/funding/near")
     public ResponseEntity<BasicResponse> getNearFlag(@RequestParam("date") Date date,
-                                                     @RequestParam("latitude") double latitude,
-                                                     @RequestParam("longitude") double longitude,
-                                                     @RequestParam("categories") List<String> categories) {
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
+            @RequestParam("categories") List<String> categories) {
         List<Store> stores = storeService.getNearFlag(date, new Point(latitude, longitude), categories);
         BasicResponse basicResponse = BasicResponse.builder()
                 .message("내 근처 펀딩 조회 성공")
