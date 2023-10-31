@@ -26,4 +26,37 @@ const Content = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-export { TopBox, Title, Content };
+const VendorBox = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      display: flex;
+      background-color: ${white};
+      flex-direction: row;
+      padding: 10px 15px;
+      gap: 15px;
+    `;
+  }};
+`;
+
+const VendorInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const VendorName = styled.div`
+  font-size: 18px;
+`;
+const Location = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const gray = props.theme.colors.gray;
+
+    return css`
+      font-size: 14px;
+      color: ${gray};
+    `;
+  }};
+`;
+
+export { TopBox, Title, Content, VendorName, VendorBox, VendorInfo, Location };

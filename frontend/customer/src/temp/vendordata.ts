@@ -45,7 +45,7 @@ export const vendordata = [
     introduction: '세계 최강 맛있는 붕어빵집 세계 최강 붕어빵 입니다. 색다른 붕어빵들을 먹어보세요.',
     starttime: '08:00',
     endtime: '17:00',
-    loc: '녹산동 다이소 앞',
+    loc: '부산 강서구 녹산산단335로 24-10 ',
     notice: '세계 최강 붕어빵을 찾아주셔서 감사합니다.더욱 맛있는 붕어빵을 만들어 드리겠습니다.',
     menulist: [
       {
