@@ -31,7 +31,7 @@ public class BucketService {
         Optional<Bucket> tempBucket = bucketRepository.findByUserIdAndPaymentStateFalse(userId);
         tempBucket.ifPresent(this::deleteUnpaymentBucket);
 
-        Bucket bucket = new Bucket(userId, getTotalPrice(items));
+        Bucket bucket = Bucket.toEntity(userId, getTotalPrice(items));
 
         bucketRepository.save(bucket);
 

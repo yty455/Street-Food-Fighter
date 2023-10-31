@@ -30,14 +30,10 @@ public class Bucket {
 
     private Long userId;
 
-    public Bucket(Long userId, Integer totalPrice){
-        Bucket.builder()
+    public static Bucket toEntity(Long userId, Integer totalPrice){
+        return Bucket.builder()
                 .userId(userId)
                 .totalPrice(totalPrice)
                 .build();
-    }
-
-    public void setBucketTotalPrice(int total){
-        this.totalPrice = total;
     }
 }
