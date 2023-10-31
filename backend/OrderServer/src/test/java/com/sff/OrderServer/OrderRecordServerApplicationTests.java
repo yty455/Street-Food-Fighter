@@ -1,13 +1,13 @@
-package com.sff.storeserver;
+package com.sff.OrderServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StoreServerApplicationTests {
+class OrderRecordServerApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
