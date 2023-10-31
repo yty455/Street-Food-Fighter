@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Order {
+public class OrderRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
@@ -34,7 +35,7 @@ public class Order {
     private String requirement;
 
     @OneToOne
-    @Column(name = "BUCKET_ID", nullable = false)
+    @PrimaryKeyJoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
     @Column(nullable = false)

@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Funding {
     private Long fundingId;
 
     @OneToOne
-    @Column(name = "BUCKET_ID", nullable = false)
+    @PrimaryKeyJoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
     @Column(nullable = false)
