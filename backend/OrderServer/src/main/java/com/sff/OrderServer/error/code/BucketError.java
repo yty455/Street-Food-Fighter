@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public enum BucketError implements ServiceError {
-    EXIST_UNPAYMENT_BUCKET(3300, "exist_unpayment_bucket");
+    NON_EXIST_BUCKET_USER(3300, "입력한 유저와 바구니 정보가 존재하지 않습니다.");
 
     private final int code;
     private final String message;
