@@ -1,6 +1,6 @@
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
-import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont } from './Topurchase.styled';
+import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont, Cashline } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import { vendordata } from '@/temp/vendordata';
@@ -9,6 +9,7 @@ import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
 import { useState } from 'react';
 import Input from '@/components/common/input';
+import { buckets } from '@/temp/buckets';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -27,7 +28,9 @@ const PurchasePage = () => {
 
   const { order } = useOrderStore();
 
-  // console.log('order', order);\
+  // console.log('order', order);
+
+  const bucket = buckets;
 
   // input (요청사항)
   const [request, setRequest] = useState('');
@@ -68,6 +71,13 @@ const PurchasePage = () => {
               <Location>{vendor.loc}</Location>
             </FlexColumn>
           </VendorBox>
+          <Requested>
+            <Title>요청 사항</Title>
+            <div>
+              <Airfont> 가게 사장님께 </Airfont>
+              <Input value={request} onChange={handleRequestChange} placeholder="예) 견과류 빼주세요...(글자수 제한 25자)" maxLength={25} />
+            </div>
+          </Requested>
           <Orderlist>
             <Title style={{ padding: '10px 15px' }}>주문 목록</Title>
             {order.map((o, index) => (
@@ -85,16 +95,12 @@ const PurchasePage = () => {
 
         <div>
           <Requested>
-            <Title>요청 사항</Title>
-            <div>
-              <Airfont> 가게 사장님께 </Airfont>
-              <Input value={request} onChange={handleRequestChange} placeholder="예) 견과류 빼주세요...(글자수 제한 25자)" maxLength={25} />
-            </div>
+            <Title> 보유 파이트 머니</Title>
+            <Cashline>
+              <Title> 결제 예정 금액 </Title>
+              <div>{Number(bucket.totalPrice).toLocaleString()} 원</div>
+            </Cashline>
           </Requested>
-          <div>
-            <div> 보유 파이트 머니</div>
-            <div> 결제 예정 금액 </div>
-          </div>
         </div>
       </Content>
 

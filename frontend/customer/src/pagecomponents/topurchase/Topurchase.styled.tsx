@@ -8,6 +8,13 @@ const TopBox = styled.div`
   justify-content: space-between;
   padding: 20px;
 `;
+const Cashline = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 const Title = styled.div`
   font-size: 18px;
@@ -107,4 +114,4 @@ const More = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { Requested, Airfont, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
+export { Cashline, Requested, Airfont, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
