@@ -1,6 +1,6 @@
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
-import { TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More } from './Topurchase.styled';
+import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import { vendordata } from '@/temp/vendordata';
@@ -68,13 +68,18 @@ const PurchasePage = () => {
               + 더 담으러 가기
             </More>
           </Orderlist>
-
-          <div>요청 사항 컴포넌트</div>
         </FlexColumn>
 
         <div>
-          <div> 보유 파이트 머니</div>
-          <div> 결제 예정 금액 </div>
+          <Requested>
+            <Title>요청 사항</Title>
+            <Airfont> 가게 사장님께 </Airfont>
+            <input />
+          </Requested>
+          <div>
+            <div> 보유 파이트 머니</div>
+            <div> 결제 예정 금액 </div>
+          </div>
         </div>
       </Content>
 

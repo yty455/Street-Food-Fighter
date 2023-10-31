@@ -13,6 +13,16 @@ const Title = styled.div`
   font-size: 18px;
 `;
 
+const Airfont = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+
+    return css`
+      font-family: ${font};
+    `;
+  }};
+`;
+
 const Content = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const lightgray = props.theme.colors.lightgray;
@@ -34,6 +44,19 @@ const VendorBox = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       background-color: ${white};
       flex-direction: row;
+      padding: 10px 15px;
+      gap: 15px;
+    `;
+  }};
+`;
+const Requested = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      display: flex;
+      background-color: ${white};
+      flex-direction: column;
       padding: 10px 15px;
       gap: 15px;
     `;
@@ -85,4 +108,4 @@ const More = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
+export { Requested, Airfont, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More };
