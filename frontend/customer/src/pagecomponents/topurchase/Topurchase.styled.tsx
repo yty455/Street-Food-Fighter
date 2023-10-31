@@ -40,6 +40,8 @@ const Content = styled.div.attrs<any>((props) => ({}))`
       flex-direction: column;
       justify-content: space-between;
       height: calc(100vh - 125px);
+      overflow-y: auto;
+      gap: 20px;
     `;
   }};
 `;
@@ -73,7 +75,7 @@ const Requested = styled.div.attrs<any>((props) => ({}))`
 const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
 `;
 
 const Location = styled.div.attrs<any>((props) => ({}))`
@@ -95,7 +97,6 @@ const Orderlist = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       background-color: ${white};
       flex-direction: column;
-      gap: 10px;
     `;
   }};
 `;
@@ -105,11 +106,12 @@ const More = styled.div.attrs<any>((props) => ({}))`
 
     return css`
       display: flex;
-      border-top: 1px solid ${lightgray};
+      border-top: 3px solid ${lightgray};
       gap: 10px;
-      padding: 10px;
+      padding: 14px 10px;
       justify-content: center;
       align-items: center;
+      font-size: 18px;
     `;
   }};
 `;

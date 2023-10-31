@@ -24,7 +24,6 @@ const PurchasePage = () => {
     router.push('/');
     return <div>'가게가 없어졌어요 🥺'</div>;
   }
-
   const catImage = categories.find((cat) => cat.id === vendor.category)?.image || '/images/category/16.png';
 
   const { order } = useOrderStore();
@@ -79,7 +78,7 @@ const PurchasePage = () => {
           <Orderlist>
             <Title style={{ padding: '10px 15px' }}>주문 목록</Title>
             {order.map((o, index) => (
-              <BagOrder key={index} menuid={o.menuId} />
+              <BagOrder key={index} curorder={o} vendor={vendor} />
             ))}
             <More
               onClick={() => {
@@ -91,18 +90,16 @@ const PurchasePage = () => {
           </Orderlist>
         </FlexColumn>
 
-        <div>
-          <Requested>
-            <Cashline>
-              <Title> 보유 파이트 머니</Title>
-              <div>{Number(user.points).toLocaleString()} 원</div>
-            </Cashline>
-            <Cashline>
-              <Title> 결제 예정 금액 </Title>
-              <div>{Number(buckets.totalPrice).toLocaleString()} 원</div>
-            </Cashline>
-          </Requested>
-        </div>
+        <Requested>
+          <Cashline>
+            <Title> 보유 파이트 머니</Title>
+            <div>{Number(user.points).toLocaleString()} 원</div>
+          </Cashline>
+          <Cashline>
+            <Title> 결제 예정 금액 </Title>
+            <div>{Number(buckets.totalPrice).toLocaleString()} 원</div>
+          </Cashline>
+        </Requested>
       </Content>
 
       <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
