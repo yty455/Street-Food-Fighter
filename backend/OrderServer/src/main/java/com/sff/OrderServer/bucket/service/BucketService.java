@@ -27,15 +27,16 @@ public class BucketService {
 
     // Bucket 생성 및 OrderMenu, OrderOption 저장
     @Transactional
-    public void createBucket(Long userId, List<Item> items){
+    public Bucket createBucket(Long userId, List<Item> items){
         Optional<Bucket> tempBucket = bucketRepository.findByUserIdAndPaymentStateFalse(userId);
-        tempBucket.ifPresent(this::deleteUnpaymentBucket);
+        tempBucket.ifPresent(this::deleteNonpaymentBucket);
 
         Bucket bucket = Bucket.toEntity(userId, getTotalPrice(items));
 
         bucketRepository.save(bucket);
 
         orderMenuRepository.saveAll(getOrderMenuList(items, bucket));
+        return bucket;
     }
 
     // bucket의 total price
@@ -59,14 +60,16 @@ public class BucketService {
             for(Option option : item.getOptionList()){
                 options.add(new OrderOption(option));
             }
-            orderMenus.add(new OrderMenu(bucket, item, options));
+            orderMenus.add(OrderMenu.toEntity(bucket, item, options));
         }
         return orderMenus;
     }
 
     @Transactional
-    public void updateBucketPaymentState(){
-
+    public void updateBucketPaymentState(Long userId, Long bucketId){
+        bucketRepository.findByBucketIdAndUserId(bucketId, userId).orElseThrow(
+                ()->new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
+        ).updateState();
     }
 
     public Long getUnpaymentBucket(){
@@ -75,7 +78,8 @@ public class BucketService {
     }
 
     @Transactional
-    public void deleteUnpaymentBucket(Bucket bucket){
+    public void deleteNonpaymentBucket(Bucket bucket){
+        orderMenuRepository.deleteAll(orderMenuRepository.findAllByBucket(bucket));
         bucketRepository.delete(bucket);
     }
 
