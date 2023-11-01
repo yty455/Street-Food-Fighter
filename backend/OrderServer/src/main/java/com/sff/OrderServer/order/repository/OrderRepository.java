@@ -11,5 +11,5 @@ public interface OrderRepository extends JpaRepository<OrderRecord, Long> {
     @Query("SELECT COUNT(o) FROM OrderRecord o WHERE o.storeId = :storeId")
     Integer countOrdersByStoreId(@Param("storeId") Long storeId);
 
-    List<OrderRecord> findAllByUserId(Long userId);
+    List<OrderRecord> findAllByUserIdOrderByOrderDate(Long userId);
 }
