@@ -10,7 +10,6 @@ import useSetPlaceHook from '@/hooks/setplaceHook';
 import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
 import { useRouter } from 'next/navigation';
-import VendorPage from '../vendor';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
