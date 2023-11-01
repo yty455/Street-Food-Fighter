@@ -20,7 +20,7 @@ public class Menu {
     @Column(name = "MENU_ID")
     private Long id;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Options> options;
 
     @ManyToOne(fetch = LAZY)
@@ -39,5 +39,9 @@ public class Menu {
             this.options.add(option);
             option.setMenu(this);
         });
+    }
+
+    public void addStore(Store store) {
+        this.store = store;
     }
 }
