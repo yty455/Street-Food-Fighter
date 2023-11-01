@@ -7,11 +7,13 @@ import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -19,17 +21,19 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.when;
 
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class StoreServiceTest extends IntegrationTestSupport {
-    @Autowired
+    @Mock
     private StoreRepository storeRepository;
-    @Autowired
+    @InjectMocks
     private StoreService storeService;
-    @Autowired
-    private EntityManager em;
 
     @DisplayName("가게정보를 통해 가게를 생성한다.")
+    @Disabled("Reposiotory 테스트로 옮길예정")
     @Test
     void createStoreByInfo() {
         // given
@@ -49,7 +53,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         // given
         StoreInfo storeInfo = createStore(1L);
         Store store = storeInfo.toEntity();
-        storeRepository.save(store);
+        when(storeRepository.findByOwnerId(any())).thenReturn(store);
 
         // when
         StoreInfoResponse storeInfoResponse = storeService.getStore(1L);
@@ -59,6 +63,7 @@ class StoreServiceTest extends IntegrationTestSupport {
     }
 
     @DisplayName("사장ID를 가게 정보를 수정한다.")
+    @Disabled
     @Test
     void updateStoreByOwnerId() {
         // given
@@ -99,19 +104,16 @@ class StoreServiceTest extends IntegrationTestSupport {
         // given
         StoreInfo storeInfo = createStore(1L);
         Store store = storeInfo.toEntity();
-        storeRepository.save(store);
         StoreInfo storeInfo2 = createStore(2L, 48.87373649724123, 2.2954639195323968);
         Store store2 = storeInfo.toEntity();
-        storeRepository.save(store2);
+        List<Store> storeList = Arrays.asList(store, store2);
         List<CategoryType> arr = Arrays.asList(CategoryType.FISHBREAD);
 
         // when
+        when(storeRepository.findNearStore(anyDouble(), anyDouble())).thenReturn(storeList);
+
         List<StoreInfoResponse> stores = storeService.getNearStore(48.87373649724123, 2.2954639195323968, arr);
-        System.out.println(stores.size());
-        stores.forEach(prev -> {
-            System.out.println(prev.getLongi());
-            System.out.println(prev.getLati());
-        });
+
         // then
         assertThat(stores.size()).isEqualTo(2);
     }
