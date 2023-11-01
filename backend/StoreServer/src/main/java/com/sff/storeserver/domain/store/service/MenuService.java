@@ -29,10 +29,6 @@ public class MenuService {
                 new BaseException(StoreError.NOT_FOUND_STORE)
         );
         Menu menu = menuInfo.toEntity();
-        menu.getOptions().forEach(option -> {
-            log.info(String.valueOf(option.getPrice()));
-            log.info(option.getMenu().getName());
-        });
         menu.addStore(store);
         menuRepository.save(menu);
     }
