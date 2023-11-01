@@ -1,5 +1,5 @@
 import React from 'react';
-import { Topbar, Title, AlertImage, AlertList, AlertContainer } from './Alert.styled';
+import { Topbar, Title, AlertImage, AlertList, AlertContainer, ShowBeforeAlert } from './Alert.styled';
 import { alerts } from '@/temp/alerts';
 import AlertCard from '@/components/alert/alertcard';
 
@@ -9,16 +9,16 @@ const AlertPage = () => {
       <Topbar>
         <Title>알림 센터</Title>
         <AlertImage>
-          <img src="/images/top/alert.png" style={{ width: '30px' }} />
+          <img src="/images/top/alert.png" style={{ width: '25px' }} />
         </AlertImage>
       </Topbar>
       <AlertContainer>
-        <AlertList>
-          {alerts.map((alert, index) => (
-            <AlertCard key={index} alert={alert} />
-          ))}
-        </AlertList>
-        <div> 이전 알림 보기 </div>
+        {/* <AlertList> */}
+        {alerts.map((alert, index) => (
+          <AlertCard key={index} alert={alert} />
+        ))}
+        {/* </AlertList> */}
+        <ShowBeforeAlert> 이전 알림 보기 </ShowBeforeAlert>
       </AlertContainer>
     </div>
   );

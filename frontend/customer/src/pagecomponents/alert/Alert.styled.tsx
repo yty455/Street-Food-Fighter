@@ -4,7 +4,7 @@ const Topbar = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 5px 20px;
+  padding: 5px 20px 0px 20px;
 `;
 const Title = styled.div`
   font-size: 20px;
@@ -25,8 +25,11 @@ const AlertContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 140px);
+      height: calc(100vh - 100px);
       background-color: ${light};
+      align-items: center;
+      gap: 20px;
+      padding-top: 20px;
     `;
   }};
 `;
@@ -37,4 +40,17 @@ const AlertList = styled.div`
   gap: 20px;
   margin-top: 20px;
 `;
-export { Topbar, Title, AlertImage, AlertContainer, AlertList };
+
+const ShowBeforeAlert = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      padding: 10px 20px;
+      background-color: ${white};
+      border-radius: 10px;
+      font-size: 13px;
+    `;
+  }};
+`;
+export { Topbar, Title, AlertImage, AlertContainer, AlertList, ShowBeforeAlert };
