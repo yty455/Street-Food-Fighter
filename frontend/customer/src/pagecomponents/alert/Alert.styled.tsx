@@ -33,13 +33,6 @@ const AlertContainer = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-const AlertList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-`;
 
 const ShowBeforeAlert = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
@@ -53,4 +46,4 @@ const ShowBeforeAlert = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-export { Topbar, Title, AlertImage, AlertContainer, AlertList, ShowBeforeAlert };
+export { Topbar, Title, AlertImage, AlertContainer, ShowBeforeAlert };
