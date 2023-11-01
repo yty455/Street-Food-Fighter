@@ -7,6 +7,9 @@ import com.sff.userserver.global.login.filter.CustomJsonUsernamePasswordAuthenti
 import com.sff.userserver.global.login.handler.LoginFailureHandler;
 import com.sff.userserver.global.login.handler.LoginSuccessHandler;
 import com.sff.userserver.global.login.service.LoginService;
+import com.sff.userserver.global.oauth2.handler.OAuth2LoginFailureHandler;
+import com.sff.userserver.global.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.sff.userserver.global.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +37,9 @@ public class SpringSecurityConfig {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,7 +58,14 @@ public class SpringSecurityConfig {
                                 .anyRequest()
                                 .permitAll()
 //                                .authenticated()
-                );
+                )
+                .oauth2Login(
+                        oAuth2LoginConfigurer -> oAuth2LoginConfigurer
+                                .successHandler(oAuth2LoginSuccessHandler)
+                                .failureHandler(oAuth2LoginFailureHandler)
+                                .userInfoEndpoint(endpointConfig -> {
+                                    endpointConfig.userService(customOAuth2UserService);
+                                }));
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         return http.build();
@@ -96,9 +109,9 @@ public class SpringSecurityConfig {
 
     /**
      * CustomJsonUsernamePasswordAuthenticationFilter 빈 등록
-     * 커스텀 필터를 사용하기 위해 만든 커스텀 필터를 Bean으로 등록
+     * 커스텀 필터를 사용하기 위해 만든 커스텀 필터를 Bean 으로 등록
      * setAuthenticationManager(authenticationManager())로 위에서 등록한 AuthenticationManager(ProviderManager) 설정
-     * 로그인 성공 시 호출할 handler, 실패 시 호출할 handler로 위에서 등록한 handler 설정
+     * 로그인 성공 시 호출할 handler, 실패 시 호출할 handler 로 위에서 등록한 handler 설정
      */
     @Bean
     public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
