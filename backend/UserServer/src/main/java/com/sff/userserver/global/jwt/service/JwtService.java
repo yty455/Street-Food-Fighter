@@ -86,7 +86,7 @@ public class JwtService {
     @Transactional
     public void findMemberAndUpdateJwt(String refreshToken, HttpServletResponse response) {
         Member findMember = memberRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 200)));
+                .orElseThrow(() -> new BaseException(new ApiError("일치하는 회원이 없습니다.", 1101)));
         String reissueRefreshToken = sendAccessAndRefreshToken(findMember, response);
 
         updateRefreshToken(findMember, reissueRefreshToken);
