@@ -7,7 +7,7 @@ const MyPage = () => {
       <Topbar>my 스푸파</Topbar>
       <Profile></Profile>
       <div>먹고싶은걸 골라봐요 컴포넌트</div>
-      <div>파이트머니 컴포넌트</div>
+      <div>파이터</div>
     </MypageContainer>
   );
 };

@@ -51,6 +51,7 @@ const Airfont = styled.div.attrs<any>((props) => ({}))`
 const LevelList = styled.div`
   display: flex;
   gap: 5px;
+  align-items: center;
 `;
 const Nickname = styled.div`
   font-size: 24px;

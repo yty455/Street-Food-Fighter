@@ -1,3 +1,4 @@
+import Level from '../level';
 import { RowDisplay, ProfileContainer, List, StyledButton, Airfont, LevelList, Nickname, ProfileList } from './Profile.styled';
 
 const Profile = () => {
@@ -5,12 +6,12 @@ const Profile = () => {
     <ProfileContainer>
       <ProfileList>
         <RowDisplay>
-          <img src="/images/common/profile.png" style={{ height: '70px' }} />
-          <div>
+          <img src="/images/common/profile.png" style={{ height: '80px' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <Nickname>붕어빵 조아</Nickname>
             <LevelList>
-              <div>헤비급 파이터</div>
-              <img src="/images/mypage/quest.png" style={{ height: '15px' }} />
+              <Level level="light"></Level>
+              <img src="/images/mypage/quest.png" style={{ height: '20px' }} />
             </LevelList>
           </div>
         </RowDisplay>
