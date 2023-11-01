@@ -1,5 +1,6 @@
 import { alertMessages, alertTypeToIdMapping } from '@/assets/alert';
 import { AlertAPI, AlertType } from '@/types/alerttype';
+import { Airfont, AlertBox, Title, Vendorname } from './Alertcard.styled';
 
 interface AlertCardProps {
   alert: AlertAPI;
@@ -10,18 +11,18 @@ const AlertCard = ({ alert }: AlertCardProps) => {
 
   if (!alertMessage) return null;
   return (
-    <div>
-      <div>
+    <AlertBox>
+      <Title>
         <div>{alertMessage.title} </div>
         <img src={alertMessage.imgsrc} style={{ width: '20px' }} />
-      </div>
+      </Title>
 
-      <div>
-        {alert.vendorname}
+      <Airfont>
+        <Vendorname>{alert.vendorname}</Vendorname>
         {alertMessage.content}
-      </div>
+      </Airfont>
       <div>{alert.date}</div>
-    </div>
+    </AlertBox>
   );
 };
 
