@@ -6,7 +6,6 @@ import lombok.Getter;
 public class OrderCreateRequest {
 
     private Long bucketId;
-    private Long userId;
     private Long storeId;
     private String requirement;
 }
