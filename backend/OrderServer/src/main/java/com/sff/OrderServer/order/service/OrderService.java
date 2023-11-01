@@ -27,7 +27,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
-    private final OrderOptionRepository orderOptionRepository;
 
     @Transactional
     public void createOrder(OrderCreateRequest orderCreateRequest) {
@@ -47,9 +46,9 @@ public class OrderService {
             // 주문 바구니
             Bucket bucket = bucketRepository.findById(orderRecord.getBucket().getBucketId()).get();
             // 바구니에 들은 주문 메뉴, 옵션
-            List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucketId(bucket.getBucketId());
+            List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket_BucketId(bucket.getBucketId());
             for (OrderMenu orderMenu : orderMenuList) {
-                List<OrderOption> orderOptionList = orderOptionRepository.findAllByMenuId(orderMenu.getOrderMenuId());
+                List<OrderOption> orderOptionList = orderMenu.getOptions();
             }
         }
         return orderResponseList;
