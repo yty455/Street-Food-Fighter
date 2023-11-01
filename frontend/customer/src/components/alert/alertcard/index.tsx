@@ -1,7 +1,8 @@
 import { alertMessages, alertTypeToIdMapping } from '@/assets/alert';
 import { AlertAPI, AlertType } from '@/types/alerttype';
-import { Airfont, AlertBox, Title, Vendorname, Daybefore } from './Alertcard.styled';
+import { Airfont, AlertBox, Title, Vendorname, Daybefore, BottomBox, ButtonList } from './Alertcard.styled';
 import moment from 'moment';
+import Button from '@/components/common/button';
 
 interface AlertCardProps {
   alert: AlertAPI;
@@ -38,7 +39,24 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         <Vendorname>{alert.vendorname}</Vendorname>
         {alertMessage.content}
       </Airfont>
-      <Daybefore>{getTimeDifference(alert.date)}</Daybefore>
+      <BottomBox>
+        <Daybefore>{getTimeDifference(alert.date)}</Daybefore>
+        {alertMessage.type === 'SUCCESS' && (
+          <ButtonList>
+            <div style={{ width: '80px' }}>
+              <Button text="취소하기" color="light"></Button>
+            </div>
+            <div style={{ width: '80px' }}>
+              <Button text="주문하기"></Button>
+            </div>
+          </ButtonList>
+        )}
+        {alertMessage.type === 'REQUEST' && (
+          <div style={{ width: '80px' }}>
+            <Button text="리뷰하기"></Button>
+          </div>
+        )}
+      </BottomBox>
     </AlertBox>
   );
 };

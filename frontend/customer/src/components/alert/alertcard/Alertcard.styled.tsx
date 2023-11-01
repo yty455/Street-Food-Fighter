@@ -54,4 +54,16 @@ const Title = styled.div`
   flex-direction: row;
 `;
 
-export { Airfont, AlertBox, Vendorname, Title, Daybefore };
+const BottomBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+`;
+
+const ButtonList = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+`;
+export { Airfont, AlertBox, Vendorname, Title, Daybefore, BottomBox, ButtonList };
