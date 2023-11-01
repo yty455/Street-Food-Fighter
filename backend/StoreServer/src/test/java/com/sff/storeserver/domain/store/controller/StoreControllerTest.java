@@ -59,7 +59,21 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value("true"))
-                .andExpect(jsonPath("$.response.ownerId").value(1L));
+                .andExpect(jsonPath("$.response.ownerId").value(1L))
+                .andExpect(jsonPath("$.response.name").value("붕어빵집 1"))
+                .andExpect(jsonPath("$.response.ownerName").value("황재영"))
+                .andExpect(jsonPath("$.response.phone").value("010-1234-1234"))
+                .andExpect(jsonPath("$.response.category").value("FISHBREAD"))
+                .andExpect(jsonPath("$.response.businessCategory").value("포장마차"))
+                .andExpect(jsonPath("$.response.information").value("붕어빵집입니다."))
+                .andExpect(jsonPath("$.response.introduction").value("붕어빵집 입니다! 어서오세요."))
+                .andExpect(jsonPath("$.response.openTime").value(storeInfo.getOpenTime()))
+                .andExpect(jsonPath("$.response.closeTime").value(storeInfo.getCloseTime()))
+                .andExpect(jsonPath("$.response.activeArea").value("강서구"))
+                .andExpect(jsonPath("$.response.lati").value(48.87373649724122))
+                .andExpect(jsonPath("$.response.longi").value(2.2954639195323967))
+                .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"))
+                .andExpect(jsonPath("$.response.state").value("생성"));
     }
 
     StoreInfo createStore(Long ownerId) {
