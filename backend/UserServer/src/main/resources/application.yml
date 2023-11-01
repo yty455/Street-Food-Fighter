@@ -14,7 +14,7 @@ spring:
         format_sql: true
 
   profiles:
-    include: jwt
+    include: jwt, oauth
 
 logging.level:
   org.hibernate.SQL: debug
