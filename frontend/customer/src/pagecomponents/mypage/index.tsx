@@ -1,11 +1,11 @@
-import React from 'react';
 import { MypageContainer, Topbar } from './Mypage.styled';
+import Profile from '@/components/mypage/profile';
 
 const MyPage = () => {
   return (
     <MypageContainer>
       <Topbar>my 스푸파</Topbar>
-      <div>프로필 컴포넌트</div>
+      <Profile></Profile>
       <div>먹고싶은걸 골라봐요 컴포넌트</div>
       <div>파이트머니 컴포넌트</div>
     </MypageContainer>

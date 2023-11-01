@@ -26,7 +26,7 @@ export const alertMessages: AlertMessage[] = [
     type: 'PROCESSING',
     title: '주문이 접수되었어요',
     content: ' 사장님이 맛있게 드실수 있도록 메뉴를 조리하고 있어요',
-    imgsrc: '/images/alert/list.png',
+    imgsrc: '/images/common/list.png',
   },
   {
     type: 'REQUEST',
