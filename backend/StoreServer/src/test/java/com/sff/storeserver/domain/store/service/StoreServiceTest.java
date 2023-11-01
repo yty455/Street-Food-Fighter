@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,7 +42,7 @@ class StoreServiceTest extends IntegrationTestSupport {
 
         //when
         storeService.createStore(storeInfo);
-        Store store = storeRepository.findByOwnerId(1L);
+        Store store = storeRepository.findByOwnerId(1L).orElseThrow();
 
         //then
         assertThat(store.getOwnerId()).isEqualTo(1L);
@@ -53,7 +54,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         // given
         StoreInfo storeInfo = createStore(1L);
         Store store = storeInfo.toEntity();
-        when(storeRepository.findByOwnerId(any())).thenReturn(store);
+        when(storeRepository.findByOwnerId(any())).thenReturn(Optional.ofNullable(store));
 
         // when
         StoreInfoResponse storeInfoResponse = storeService.getStore(1L);
@@ -84,7 +85,7 @@ class StoreServiceTest extends IntegrationTestSupport {
         storeRepository.save(store);
         storeService.updateStore(storeUpdateInfo, ownerId);
 
-        Store store1 = storeRepository.findByOwnerId(ownerId);
+        Store store1 = storeRepository.findByOwnerId(ownerId).orElseThrow();
 
         // then
         assertAll(

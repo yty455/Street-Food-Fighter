@@ -37,6 +37,22 @@ class StoreControllerTest extends ControllerTestSupport {
     }
 
     @DisplayName("가게를 저장하고 ")
+    @Test
+    void getStore() throws Exception {
+//        // given
+//        StoreInfo storeInfo = createStore(1L);
+//        ApiResult<String> result = ApiUtils.success("가게 등록 성공");
+//        // when // then
+//        mockMvc.perform(
+//                        get("/api/store-service/stores/1")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                )
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.success").value("true"))
+//                .andExpect(jsonPath("$.response").value("가게 등록 성공"));
+    }
+
     StoreInfo createStore(Long ownerId) {
         return StoreInfo.builder()
                 .ownerId(ownerId)
