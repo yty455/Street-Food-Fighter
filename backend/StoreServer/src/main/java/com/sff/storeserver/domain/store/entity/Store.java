@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.function.Consumer;
 
 @Entity
@@ -41,6 +42,10 @@ public class Store extends BaseEntity {
     private String storeUrl;
     private String state;
 
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "STORE_ID")
+    private List<Menu> menus;
+
     public void update(StoreUpdateInfo storeInfo) {
         this.name = storeInfo.getName();
         this.ownerName = storeInfo.getOwnerName();
@@ -65,4 +70,10 @@ public class Store extends BaseEntity {
         this.category = storeUpdateCategory.getCategory();
         this.businessCategory = storeUpdateCategory.getBusinessCategory();
     }
+
+    public void delete() {
+        this.deleteStatus();
+        menus.forEach(Menu::delete);
+    }
+
 }

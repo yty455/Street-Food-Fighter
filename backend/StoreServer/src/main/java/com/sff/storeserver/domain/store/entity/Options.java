@@ -30,4 +30,8 @@ public class Options extends BaseEntity {
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
+
+    public void delete() {
+        this.deleteStatus();
+    }
 }

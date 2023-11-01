@@ -25,16 +25,17 @@ public class Menu extends BaseEntity {
     @Column(name = "MENU_ID")
     private Long id;
 
+    private String name;
+    private int price;
+    private String menuUrl;
+
+
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Options> options;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_ID")
     private Store store;
 
-    private String name;
-    private int price;
-    private String menuUrl;
 
     public void addOptions(List<Options> options) {
         if (this.options == null) {
@@ -60,5 +61,10 @@ public class Menu extends BaseEntity {
                     .map(OptionInfo::toEntity).toList();
             addOptions(options);
         }
+    }
+
+    public void delete() {
+        this.deleteStatus();
+        options.forEach(Options::delete);
     }
 }
