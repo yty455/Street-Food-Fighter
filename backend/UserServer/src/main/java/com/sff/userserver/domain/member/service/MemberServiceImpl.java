@@ -7,6 +7,8 @@ import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.entity.Role;
 import com.sff.userserver.domain.member.entity.SocialType;
 import com.sff.userserver.domain.member.repository.MemberRepository;
+import com.sff.userserver.domain.member.repository.PointRepository;
+import com.sff.userserver.domain.point.entity.Point;
 import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.utils.ApiError;
 import lombok.Builder;
@@ -21,25 +23,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final PointRepository pointRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void signUp(SignupRequest signupRequest) {
+        Point newPoint = Point.create(signupRequest.getPaymentPassword());
         if (signupRequest.getSocialId() != null) {
-            Member member = memberRepository.findBySocialTypeAndSocialId(SocialType.KAKAO, signupRequest.getSocialId())
-                    .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
-            member.update(signupRequest);
-            member.updateRole(Role.USER);
+            updateMemberWithSocialId(signupRequest, newPoint);
         } else {
-            validateDuplicateMember(signupRequest);
-            Member member = signupRequest.toEntity();
-            member.passwordEncode(passwordEncoder);
-            memberRepository.save(member);
+            createNewMember(signupRequest, newPoint);
         }
 
-        // TODO: 포인트 생성하기(결제 비밀번호, 금액)
+        pointRepository.save(newPoint);
+    }
 
+    private void createNewMember(SignupRequest signupRequest, Point point) {
+        validateDuplicateMember(signupRequest);
+        Member member = signupRequest.toEntity();
+        member.passwordEncode(passwordEncoder);
+        member.updatePoint(point);
+        memberRepository.save(member);
+    }
+
+    private void updateMemberWithSocialId(SignupRequest signupRequest, Point point) {
+        Member member = memberRepository.findBySocialTypeAndSocialId(SocialType.KAKAO, signupRequest.getSocialId())
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
+        member.update(signupRequest);
+        member.updateRole(Role.USER);
+        member.updatePoint(point);
     }
 
     private void validateDuplicateMember(SignupRequest signupRequest) {

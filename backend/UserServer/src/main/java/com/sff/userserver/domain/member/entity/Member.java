@@ -2,6 +2,7 @@ package com.sff.userserver.domain.member.entity;
 
 import com.sff.userserver.domain.member.dto.MyInfoRequest;
 import com.sff.userserver.domain.member.dto.SignupRequest;
+import com.sff.userserver.domain.point.entity.Point;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,9 +37,12 @@ public class Member {
     private String refreshToken;
     @Embedded
     private Address address;
+    @OneToOne
+    @JoinColumn(name = "POINT_ID")
+    private Point point;
 
     @Builder
-    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String region1, String region2, String region3, String region4) {
+    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String region1, String region2, String region3, String region4, Point point) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -50,6 +54,7 @@ public class Member {
         this.socialId = socialId;
         this.refreshToken = refreshToken;
         this.address = new Address(region1, region2, region3, region4);
+        this.point = point;
     }
 
     // 비밀번호 암호화 메소드
@@ -100,6 +105,10 @@ public class Member {
                 this.address = new Address(region1, region2, region3);
             }
         }
+    }
+
+    public void updatePoint(Point point) {
+        this.point = point;
     }
 
     private <T> void updateIfNotNull(Consumer<T> updater, T newValue) {
