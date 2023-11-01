@@ -2,7 +2,6 @@ package com.sff.notificationserver.domain.notification.controller;
 
 import com.sff.notificationserver.common.utils.ApiResult;
 import com.sff.notificationserver.common.utils.ApiUtils;
-import com.sff.notificationserver.domain.notification.dto.NotificationInfo;
 import com.sff.notificationserver.domain.notification.dto.NotificationRequest;
 import com.sff.notificationserver.domain.notification.dto.NotificationResponse;
 import com.sff.notificationserver.domain.notification.dto.UserNotificationInfo;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "알림 API", description = "알림 관련 API")
@@ -36,7 +34,7 @@ public class NotificationController {
     @PostMapping("/api/notification-server/user/notification")
     public ApiResult<?> sendNotificationToUser(@RequestBody UserNotificationInfo userNotificationInfo) {
 
-        notificationService.sendNotificationToUser(userNotificationInfo);
+//        notificationService.sendNotificationToUser(userNotificationInfo);
 
         return ApiUtils.success("성공");
     }
@@ -45,7 +43,7 @@ public class NotificationController {
     @PostMapping("/api/notification-server/owner/notification")
     public ApiResult<?> sendNotificationToOwner(@RequestBody NotificationRequest notificationRequest) {
 
-        notificationService.sendNotificationToOwner(notificationRequest);
+//        notificationService.sendNotificationToOwner(notificationRequest);
 
         return ApiUtils.success("성공");
     }

@@ -1,5 +1,6 @@
 package com.sff.notificationserver.domain.notification.dto;
 
+import com.sff.notificationserver.domain.notification.entity.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class UserNotificationInfo {
     private Long storeId;
     private String storeName;
 
-    private List<Long> recipients;
-    private String recipient_type;
+    private List<Long> userList;
+    private NotificationType type;
 
 }
