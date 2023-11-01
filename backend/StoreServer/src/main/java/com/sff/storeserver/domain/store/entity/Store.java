@@ -1,11 +1,12 @@
 package com.sff.storeserver.domain.store.entity;
 
+import com.sff.storeserver.common.BaseEntity;
 import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
 import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
-import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.function.Consumer;
 
@@ -14,7 +15,8 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class Store implements Serializable {
+@Where(clause = "status = 'ACTIVE'")
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

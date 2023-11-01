@@ -1,7 +1,9 @@
 package com.sff.storeserver.domain.store.entity;
 
+import com.sff.storeserver.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -10,7 +12,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class Options {
+@Where(clause = "status = 'ACTIVE'")
+public class Options extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

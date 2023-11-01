@@ -1,9 +1,11 @@
 package com.sff.storeserver.domain.store.entity;
 
+import com.sff.storeserver.common.BaseEntity;
 import com.sff.storeserver.domain.store.dto.MenuInfo;
 import com.sff.storeserver.domain.store.dto.OptionInfo;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class Menu {
+@Where(clause = "status = 'ACTIVE'")
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
