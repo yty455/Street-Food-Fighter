@@ -7,13 +7,29 @@ const MypageContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 100px);
+      height: 93vh;
       background-color: ${light};
       align-items: center;
       gap: 20px;
-      padding-top: 20px;
     `;
   }};
 `;
 
-export { MypageContainer };
+const Topbar = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      display: flex;
+      background-color: ${white};
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+
+      font-size: 20px;
+    `;
+  }};
+`;
+
+export { MypageContainer, Topbar };
