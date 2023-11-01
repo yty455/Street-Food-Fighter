@@ -9,9 +9,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class OrderRecord {
     private Long orderId;
 
     @Column(nullable = false)
-    private Integer receiptNumber;
+    private String receiptNumber;
 
     @Column(nullable = false) // not null 설정
     @Enumerated(EnumType.STRING)
@@ -38,7 +39,7 @@ public class OrderRecord {
     private String requirement;
 
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "BUCKET_ID")
+    @JoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
     @Column(nullable = false)
@@ -50,15 +51,17 @@ public class OrderRecord {
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    public static OrderRecord toEntity(OrderCreateRequest orderCreateRequest, Integer orderCount) {
-        // bucketId 추가하는 코드 추가
-        return OrderRecord.builder()
-                .receiptNumber(orderCount + 1)
-                .state(OrderState.WAITING)
-                .requirement(orderCreateRequest.getRequirement())
-                .userId(orderCreateRequest.getUserId())
-                .storeId(orderCreateRequest.getStoreId())
-                .orderDate(LocalDateTime.now())
-                .build();
+    public OrderRecord(OrderCreateRequest orderCreateRequest, Integer orderCount, Bucket bucket,
+            Long userId) {
+        String receiptNumber = orderCreateRequest.getStoreId() + "_" + LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyyMMdd")) + "-" + (orderCount + 1);
+        this.receiptNumber = receiptNumber;
+        this.state = OrderState.WAITING;
+        this.requirement = orderCreateRequest.getRequirement();
+        this.bucket = bucket;
+        this.userId = userId;
+        this.storeId = orderCreateRequest.getStoreId();
+        this.orderDate = LocalDateTime.now();
     }
+
 }
