@@ -36,6 +36,7 @@ public class StoreInfoResponse {
         return StoreInfoResponse.builder()
                 .ownerId(store.getOwnerId())
                 .name(store.getName())
+                .ownerName(store.getOwnerName())
                 .phone(store.getPhone())
                 .category(store.getCategory())
                 .businessCategory(store.getBusinessCategory())
