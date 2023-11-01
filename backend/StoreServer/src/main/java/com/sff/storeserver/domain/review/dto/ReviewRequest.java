@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewRequest {
 
-    private Long storeId;
+    //    private Long storeId;
     private Long userId;
     private Long orderId;
 

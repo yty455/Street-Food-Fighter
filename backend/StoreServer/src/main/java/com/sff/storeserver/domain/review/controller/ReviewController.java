@@ -25,12 +25,12 @@ public class ReviewController {
 
     @Operation(summary = "손님 - 리뷰 등록", description = "손님 - 리뷰를 등록 합니다.")
     @PostMapping("/api/store-server/user/review")
-    public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest storeInfo, BindingResult bindingResult) {
+    public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest reviewRequest, BindingResult bindingResult) {
 
         // 예외처리
         validation(bindingResult);
 
-        reviewService.createReview(storeInfo);
+        reviewService.createReview(reviewRequest);
 
         return ApiUtils.success("리뷰 등록 성공");
     }

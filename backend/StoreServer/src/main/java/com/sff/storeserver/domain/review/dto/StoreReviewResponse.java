@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
@@ -24,15 +23,10 @@ public class StoreReviewResponse {
     private String userName;
     private String userProfileUrl;
 
-    // 주문 정보
-    private Long orderId;
-    private List<String> menu;
-
-    public StoreReviewResponse(LocalDateTime createdDate, int score, String content, Long userId, Long orderId) {
+    public StoreReviewResponse(LocalDateTime createdDate, int score, String content, Long userId) {
         this.createdDate = createdDate;
         this.score = score;
         this.content = content;
         this.userId = userId;
-        this.orderId = orderId;
     }
 }

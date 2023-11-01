@@ -24,7 +24,11 @@ public class ReviewService {
 
     @Transactional
     public void createReview(ReviewRequest reviewRequest) {
-        Store store = storeRepository.findById(reviewRequest.getStoreId())
+
+        // 주문 아이디 -> 주문 서비스에 보내서 가게 아이디 받아오기 (Long)
+        Long storeId = 1L;
+
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(BaseException::new);
 
         reviewRepository.save(reviewRequest.toEntity(store));
@@ -34,6 +38,7 @@ public class ReviewService {
 
         // TODO - 페이지네이션 적용( 무한 스크롤 ) 대비 하기
         List<MyReviewResponse> myReviewResponseList = reviewRepository.findByUserId(userId);
+
         // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
 
         // 합쳐서 내려주기
@@ -44,12 +49,10 @@ public class ReviewService {
     public List<StoreReviewResponse> getStoreReviews(Long storeId) {
 
         List<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId);
+
         // 유저 아이디 리스트 -> 회원 서비스에 보내서 회원 정보 받아오기 (userName, userProfileUrl)
 
-        // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
-
         // 합쳐서 내려주기
-
         return storeReviewResponseList;
     }
 }
