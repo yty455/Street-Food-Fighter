@@ -5,10 +5,15 @@ import Optioncard from '../optioncard';
 
 const MenuCard = ({ vendorid, menuid }: any) => {
   const [open, setOpen] = useState(false);
-  const menulist = vendordata[vendorid].menulist;
-  const menudata = menulist[menuid - 1];
+  const vendor = vendordata.find((v) => v.id === vendorid);
+  if (!vendor) {
+    return <div>가게가 없어졌어요 🥺</div>;
+  }
 
-  if (!menudata) return null;
+  const menulist = vendor.menulist || [];
+  const menudata = menulist.find((menu) => menu.id === menuid);
+
+  if (!menudata) return <div>메뉴가 없어요 🥺</div>;
 
   const cardclick = () => {
     setOpen(!open);
