@@ -1,5 +1,7 @@
 import React from 'react';
 import { Topbar, Title, AlertImage } from './Alert.styled';
+import { alerts } from '@/temp/alerts';
+import AlertCard from '@/components/alert/alertcard';
 
 const AlertPage = () => {
   return (
@@ -12,6 +14,9 @@ const AlertPage = () => {
       </Topbar>
       <div>
         <div> 오늘 알림 리스트 </div>
+        {alerts.map((alert, index) => (
+          <AlertCard key={index} alert={alert} />
+        ))}
         <div> 이전 알림 보기 </div>
       </div>
     </div>
