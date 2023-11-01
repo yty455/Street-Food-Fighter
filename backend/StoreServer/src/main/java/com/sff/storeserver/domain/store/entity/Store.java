@@ -42,8 +42,7 @@ public class Store extends BaseEntity {
     private String storeUrl;
     private String state;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "STORE_ID")
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus;
 
     public void update(StoreUpdateInfo storeInfo) {

@@ -32,6 +32,7 @@ public class Menu extends BaseEntity {
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Options> options;
+    
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_ID")
     private Store store;
