@@ -1,7 +1,6 @@
 export type AlertType = 'FAILURE' | 'SUCCESS' | 'PROCESSING' | 'REQUEST' | 'COMPLETED' | 'REFUSED';
 
 export interface AlertMessage {
-  id: number;
   type: AlertType;
   title: string;
   content: string;
@@ -11,3 +10,10 @@ export interface AlertMessage {
 export type AlertTypeToIdMapping = {
   [key in AlertType]: number;
 };
+
+export interface AlertAPI {
+  recipient_type: string;
+  refundpoint: number | null;
+  date: string;
+  vendorname: string;
+}
