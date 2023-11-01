@@ -32,11 +32,10 @@ public class Bucket {
 
     private Long userId;
 
-    public static Bucket toEntity(Long userId, Integer totalPrice){
-        return Bucket.builder()
-                .userId(userId)
-                .totalPrice(totalPrice)
-                .build();
+    public Bucket(Long userId, Integer totalPrice){
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.paymentState = false;
     }
 
     public void updateState(){

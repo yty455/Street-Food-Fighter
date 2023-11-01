@@ -31,7 +31,7 @@ public class BucketService {
         Optional<Bucket> tempBucket = bucketRepository.findByUserIdAndPaymentStateFalse(userId);
         tempBucket.ifPresent(this::deleteNonpaymentBucket);
 
-        Bucket bucket = Bucket.toEntity(userId, getTotalPrice(items));
+        Bucket bucket = new Bucket(userId, getTotalPrice(items));
 
         bucketRepository.save(bucket);
 
@@ -60,7 +60,7 @@ public class BucketService {
             for(Option option : item.getOptionList()){
                 options.add(new OrderOption(option));
             }
-            orderMenus.add(OrderMenu.toEntity(bucket, item, options));
+            orderMenus.add(new OrderMenu(bucket, item, options));
         }
         return orderMenus;
     }
@@ -70,11 +70,6 @@ public class BucketService {
         bucketRepository.findByBucketIdAndUserId(bucketId, userId).orElseThrow(
                 ()->new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
         ).updateState();
-    }
-
-    public Long getUnpaymentBucket(){
-
-        return null;
     }
 
     @Transactional
