@@ -48,4 +48,10 @@ public class MenuService {
         );
         menu.updateMenu(menuInfo);
     }
+
+    public void deleteMenus(Long menuId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
+                new BaseException(MenuError.NOT_FOUND_MENU));
+        menu.delete();
+    }
 }

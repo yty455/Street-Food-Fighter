@@ -33,4 +33,10 @@ public class MenuController {
         menuService.updateMenus(menuInfo, menuId);
         return ApiUtils.success("메뉴 수정을 성공했습니다.");
     }
+
+    @DeleteMapping("/menus/{menuId}")
+    public ApiResult<String> deleteOptions(@PathVariable Long menuId) {
+        menuService.deleteMenus(menuId);
+        return ApiUtils.success("메뉴 삭제를 성공했습니다.");
+    }
 }
