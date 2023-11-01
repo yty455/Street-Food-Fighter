@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 public interface OrderMenuRepository extends JpaRepository<OrderMenu, Long> {
 
-    List<OrderMenu> findAllByBucketId(Long bucketId);
+    List<OrderMenu> findAllByBucket_BucketId(Long bucketId);
     List<OrderMenu> findAllByBucket(Bucket bucket);
     
 }
