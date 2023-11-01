@@ -11,6 +11,15 @@ const Airfont = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
+const Daybefore = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    return css`
+      font-size: 12px;
+      font-family: ${font};
+    `;
+  }};
+`;
 const Vendorname = styled.span.attrs<any>((props) => ({}))`
   ${(props) => {
     const font = props.theme.fonts.air;
@@ -45,4 +54,4 @@ const Title = styled.div`
   flex-direction: row;
 `;
 
-export { Airfont, AlertBox, Vendorname, Title };
+export { Airfont, AlertBox, Vendorname, Title, Daybefore };

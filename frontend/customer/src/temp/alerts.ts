@@ -2,7 +2,7 @@ export const alerts = [
   {
     recipient_type: 'FAILURE',
     refundpoint: null,
-    date: '2023-10-30T17:26:26.335558',
+    date: '2023-11-01T14:26:26.335558',
     vendorname: '순대에 반하다',
   },
   {
