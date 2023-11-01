@@ -2,7 +2,8 @@ package com.sff.storeserver.domain.review.dto;
 
 import com.sff.storeserver.domain.review.entity.Review;
 import com.sff.storeserver.domain.store.entity.Store;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,8 @@ public class ReviewRequest {
 
     private String content;
 
-    @Size(min = 0, max = 5, message = "리뷰의 점수는 0~5사이의 정수만 가능합니다.")
+    @Max(value = 5, message = "리뷰의 점수는 0~5사이의 정수만 가능합니다.")
+    @Min(value = 0, message = "리뷰의 점수는 0~5사이의 정수만 가능합니다.")
     private int score;
 
     public Review toEntity(Store store) {
