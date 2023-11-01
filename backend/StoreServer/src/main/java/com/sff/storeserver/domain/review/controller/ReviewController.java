@@ -1,18 +1,20 @@
 package com.sff.storeserver.domain.review.controller;
 
-import com.sff.storeserver.common.BasicResponse;
 import com.sff.storeserver.common.error.type.ValidationException;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
+import com.sff.storeserver.domain.review.dto.MyReviewResponse;
 import com.sff.storeserver.domain.review.dto.ReviewRequest;
+import com.sff.storeserver.domain.review.dto.StoreReviewResponse;
 import com.sff.storeserver.domain.review.service.ReviewService;
-import com.sff.storeserver.domain.store.dto.StoreInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API")
 @RestController
@@ -37,18 +39,18 @@ public class ReviewController {
     @GetMapping("/api/store-server/user/{userId}/review")
     public ApiResult<?> getMyReviews(@PathVariable("userId") Long userId) {
 
-        reviewService.getMyReviews(userId);
+        List<MyReviewResponse> myReviewResponseList = reviewService.getMyReviews(userId);
 
-        return ApiUtils.success("가게 등록 성공");
+        return ApiUtils.success(myReviewResponseList);
     }
 
     @Operation(summary = "손님 - 가게에 등록된 리뷰 조회", description = "손님 - 가게에 등록된 리뷰를 조회 합니다.")
     @GetMapping("/api/store-server/user/store/{storeId}/review")
-    public ApiResult<String> getStoreReviews(@PathVariable("storeId") Long storeId) {
+    public ApiResult<?> getStoreReviews(@PathVariable("storeId") Long storeId) {
 
-        reviewService.getStoreReviews();
+        List<StoreReviewResponse> storeReviewResponseList = reviewService.getStoreReviews(storeId);
 
-        return ApiUtils.success("가게 등록 성공");
+        return ApiUtils.success(storeReviewResponseList);
     }
 
     public void validation(BindingResult bindingResult){

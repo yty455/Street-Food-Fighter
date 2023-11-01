@@ -2,7 +2,6 @@ package com.sff.storeserver.domain.review.dto;
 
 import com.sff.storeserver.domain.review.entity.Review;
 import com.sff.storeserver.domain.store.entity.Store;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,7 @@ public class ReviewRequest {
     @Size(min = 0, max = 5, message = "리뷰의 점수는 0~5사이의 정수만 가능합니다.")
     private int score;
 
-    public Review toEntity(Store store){
+    public Review toEntity(Store store) {
         return Review.builder()
                 .store(store)
                 .userId(userId)

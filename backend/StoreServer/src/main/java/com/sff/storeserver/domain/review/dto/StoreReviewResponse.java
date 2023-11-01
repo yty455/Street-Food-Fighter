@@ -1,12 +1,12 @@
 package com.sff.storeserver.domain.review.dto;
 
-import com.sff.storeserver.domain.review.entity.Review;
-import com.sff.storeserver.domain.store.entity.Store;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -14,23 +14,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StoreReviewResponse {
 
-    private Long storeId;
-    private Long userId;
-    private Long orderId;
-
+    // 리뷰 정보
+    private LocalDateTime createdDate;
+    private int score;
     private String content;
 
-    @Min(0)
-    @Min(5)
-    private int score;
+    // 회원 정보
+    private Long userId;
+    private String userName;
+    private String userProfileUrl;
 
-    public Review toEntity(Store store){
-        return Review.builder()
-                .store(store)
-                .userId(userId)
-                .orderId(orderId)
-                .content(content)
-                .score(score)
-                .build();
+    // 주문 정보
+    private Long orderId;
+    private List<String> menu;
+
+    public StoreReviewResponse(LocalDateTime createdDate, int score, String content, Long userId, Long orderId) {
+        this.createdDate = createdDate;
+        this.score = score;
+        this.content = content;
+        this.userId = userId;
+        this.orderId = orderId;
     }
 }
