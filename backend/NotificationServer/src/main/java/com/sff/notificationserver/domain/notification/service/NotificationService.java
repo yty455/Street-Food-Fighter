@@ -6,23 +6,21 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.sff.notificationserver.domain.notification.Notification;
-import com.sff.notificationserver.domain.notification.dto.FCMNotificationRequestDto;
-import com.sff.notificationserver.domain.notification.dto.NotificationInfo;
-import com.sff.notificationserver.domain.notification.dto.UserNotificationInfo;
+import com.sff.notificationserver.domain.notification.dto.*;
+import com.sff.notificationserver.domain.notification.entity.Notification;
 import com.sff.notificationserver.domain.notification.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -36,28 +34,27 @@ public class NotificationService {
     @Value("${project.properties.firebase-topic}")
     String topic;
 
+    final double getRefundFee = 0.1;
+
     String tokenf = "c1agebjUTSaN111v7igtKj:APA91bG744QXqT18Y7Vp_1QoqeXoC_PJ1JAQYstBgXtp6HrhoNrXyIwUXSvJ7roCWhgxhBOFph0x8AqwHs92kAN2FkM1TGNxYUAIgCRpfZjXs83dzMwHi15nMPaYT2r50ZS0m2wcTD1y";
 
     private FirebaseMessaging firebaseMessaging;
 
     private final NotificationRepository notificationRepository;
 
-    public List<Notification> getNotification(Long userId) {
-        List<Notification> notificationList = notificationRepository.findByRecipient(userId);
+    public NotificationResponse getNotifications(Long userId, int page, int size) {
 
-        return notificationList;
+        PageRequest pageRequest = PageRequest.of(page, size);
 
-    }
+        Slice<NotificationInfo> notificationInfos = notificationRepository.findByUserId(userId, pageRequest);
 
-    public void ss(){
-        List<Long> longs = new ArrayList<>();
-        longs.add(2L);
-        sendNotificationToUser(UserNotificationInfo.builder()
-                .storeId(1L)
-                .storeName("테스트가게요")
-                .recipient_type("주문성공")
-                .recipients(longs)
-                .build());
+        // 환불 수수료 정책 도입시 변경
+        double refundFee = getRefundFee;
+
+        return NotificationResponse.builder()
+                .refundFee(refundFee)
+                .notificationInfos(notificationInfos)
+                .build();
     }
 
     @Transactional
@@ -102,14 +99,14 @@ public class NotificationService {
     }
 
     @Transactional
-    public void sendNotificationToOwner(NotificationInfo notificationInfo) {
+    public void sendNotificationToOwner(NotificationRequest notificationRequest) {
         // TODO - 사장 알림 추가 하기
 
     }
 
     @Transactional
     public void sendNotification(Long userId, String title, String content, String url, String type) {
-        log.info(sendNotificationByToken(new FCMNotificationRequestDto(userId, title, content)));
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userId, title, content)));
         notificationRepository.save(Notification.builder()
                 .recipient(userId)
                 .recipient_type(type)
@@ -129,7 +126,7 @@ public class NotificationService {
         this.firebaseMessaging = FirebaseMessaging.getInstance(app);
     }
 
-    public String sendNotificationByToken(FCMNotificationRequestDto fcmDto) {
+    public String sendNotificationByToken(FCMNotificationRequest fcmDto) {
 
 
 //            FcmToken fcmToken = fcmTokenRepository.findById(String.valueOf(fcmUserId))

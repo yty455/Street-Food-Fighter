@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class FCMNotificationRequestDto {
+public class FCMNotificationRequest {
     private Long recipient;
     private String title;
     private String body;
