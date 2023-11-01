@@ -4,13 +4,18 @@ import com.sff.storeserver.ControllerTestSupport;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
+import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
 import com.sff.storeserver.domain.store.entity.CategoryType;
+import com.sff.storeserver.domain.store.entity.Store;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import java.time.LocalTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,18 +44,22 @@ class StoreControllerTest extends ControllerTestSupport {
     @DisplayName("가게를 저장하고 ")
     @Test
     void getStore() throws Exception {
-//        // given
-//        StoreInfo storeInfo = createStore(1L);
-//        ApiResult<String> result = ApiUtils.success("가게 등록 성공");
-//        // when // then
-//        mockMvc.perform(
-//                        get("/api/store-service/stores/1")
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                )
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.success").value("true"))
-//                .andExpect(jsonPath("$.response").value("가게 등록 성공"));
+        // given
+        StoreInfo storeInfo = createStore(1L);
+        Store store = storeInfo.toEntity();
+        StoreInfoResponse storeInfoResponse = StoreInfoResponse.fromEntity(store);
+
+        // when
+        when(storeService.getStore(any())).thenReturn(storeInfoResponse);
+        // when // then
+        mockMvc.perform(
+                        get("/api/store-service/stores/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.response.ownerId").value(1L));
     }
 
     StoreInfo createStore(Long ownerId) {
