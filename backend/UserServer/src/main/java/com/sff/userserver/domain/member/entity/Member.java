@@ -1,6 +1,7 @@
 package com.sff.userserver.domain.member.entity;
 
 import com.sff.userserver.domain.member.dto.MyInfoRequest;
+import com.sff.userserver.domain.member.dto.SignupRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -67,6 +68,13 @@ public class Member {
         updateAddress(myInfoRequest.getRegion1(), myInfoRequest.getRegion2(), myInfoRequest.getRegion3(), myInfoRequest.getRegion4());
     }
 
+    public void update(SignupRequest signupRequest) {
+        updateNickname(signupRequest.getNickname());
+        updatePhone(signupRequest.getPhone());
+        updateImageUrl(signupRequest.getImageUrl());
+        updateAddress(signupRequest.getRegion1(), signupRequest.getRegion2(), signupRequest.getRegion3(), signupRequest.getRegion4());
+    }
+
 
     public void updateNickname(String nickname) {
         updateIfNotNull(newValue -> this.nickname = newValue, nickname);
@@ -78,6 +86,10 @@ public class Member {
 
     public void updateImageUrl(String imageUrl) {
         updateIfNotNull(newValue -> this.imageUrl = newValue, imageUrl);
+    }
+
+    public void updateRole(Role role) {
+        updateIfNotNull(newValue -> this.role = newValue, role);
     }
 
     public void updateAddress(String region1, String region2, String region3, String region4) {

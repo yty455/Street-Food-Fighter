@@ -120,6 +120,7 @@ public class JwtService {
         response.setHeader(refreshHeader, refreshToken);
     }
 
+    @Transactional
     public void updateRefreshToken(Member member, String refreshToken) {
         member.updateRefreshToken(refreshToken);
     }

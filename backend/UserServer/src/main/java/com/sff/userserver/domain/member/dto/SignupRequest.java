@@ -2,7 +2,6 @@ package com.sff.userserver.domain.member.dto;
 
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.entity.Role;
-import com.sff.userserver.domain.member.entity.SocialType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -32,9 +31,10 @@ public class SignupRequest {
     private String region3;
     private String region4;
     private String paymentPassword;
+    private String socialId;
 
     @Builder
-    public SignupRequest(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String region1, String region2, String region3, String region4, String paymentPassword) {
+    public SignupRequest(String email, String password, String nickname, String phone, String imageUrl, String region1, String region2, String region3, String region4, String paymentPassword, String socialId) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -45,6 +45,7 @@ public class SignupRequest {
         this.region3 = region3;
         this.region4 = region4;
         this.paymentPassword = paymentPassword;
+        this.socialId = socialId;
     }
 
     public Member toEntity() {
@@ -58,6 +59,7 @@ public class SignupRequest {
                 .region1(region1)
                 .region2(region2)
                 .region3(region3)
-                .region4(region4).build();
+                .region4(region4)
+                .socialId(socialId).build();
     }
 }

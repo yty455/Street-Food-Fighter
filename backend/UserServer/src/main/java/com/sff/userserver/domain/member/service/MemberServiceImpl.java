@@ -4,6 +4,8 @@ import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.MyInfoRequest;
 import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.entity.Member;
+import com.sff.userserver.domain.member.entity.Role;
+import com.sff.userserver.domain.member.entity.SocialType;
 import com.sff.userserver.domain.member.repository.MemberRepository;
 import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.utils.ApiError;
@@ -24,11 +26,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void signUp(SignupRequest signupRequest) {
-        validateDuplicateMember(signupRequest);
-        Member member = signupRequest.toEntity();
-        member.passwordEncode(passwordEncoder);
+        if (signupRequest.getSocialId() != null) {
+            Member member = memberRepository.findBySocialTypeAndSocialId(SocialType.KAKAO, signupRequest.getSocialId())
+                    .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
+            member.update(signupRequest);
+            member.updateRole(Role.USER);
+        } else {
+            validateDuplicateMember(signupRequest);
+            Member member = signupRequest.toEntity();
+            member.passwordEncode(passwordEncoder);
+            memberRepository.save(member);
+        }
+
         // TODO: 포인트 생성하기(결제 비밀번호, 금액)
-        memberRepository.save(member);
+
     }
 
     private void validateDuplicateMember(SignupRequest signupRequest) {
