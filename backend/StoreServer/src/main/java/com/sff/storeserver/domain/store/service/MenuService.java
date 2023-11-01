@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.service;
 
+import com.sff.storeserver.common.error.code.MenuError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.domain.store.dto.MenuInfo;
@@ -39,5 +40,12 @@ public class MenuService {
     public List<MenuInfoResponse> getMenus(Long storeId) {
         List<Menu> menus = menuRepository.findByStoreId(storeId);
         return menus.stream().map(MenuInfoResponse::fromEntity).toList();
+    }
+
+    public void updateMenus(MenuInfo menuInfo, Long menuId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
+                new BaseException(MenuError.NOT_FOUND_MENU)
+        );
+        menu.updateMenu(menuInfo);
     }
 }

@@ -1,5 +1,7 @@
 package com.sff.storeserver.domain.store.entity;
 
+import com.sff.storeserver.domain.store.dto.MenuInfo;
+import com.sff.storeserver.domain.store.dto.OptionInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +22,7 @@ public class Menu {
     @Column(name = "MENU_ID")
     private Long id;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Options> options;
 
     @ManyToOne(fetch = LAZY)
@@ -43,5 +45,17 @@ public class Menu {
 
     public void addStore(Store store) {
         this.store = store;
+    }
+
+    public void updateMenu(MenuInfo menuInfo) {
+        this.name = menuInfo.getName();
+        this.price = menuInfo.getPrice();
+        this.menuUrl = menuInfo.getMenuUrl();
+        this.options.clear();
+        if (menuInfo.getOptionInfoList() != null) {
+            List<Options> options = menuInfo.getOptionInfoList().stream()
+                    .map(OptionInfo::toEntity).toList();
+            addOptions(options);
+        }
     }
 }

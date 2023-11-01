@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MenuError implements ServiceError {
-    NOT_FOUND_STORE(2000, "exist_unpayment_bucket");
+    NOT_FOUND_MENU(2200, "메뉴를 찾을수 없습니다.");
 
     private final int code;
     private final String message;

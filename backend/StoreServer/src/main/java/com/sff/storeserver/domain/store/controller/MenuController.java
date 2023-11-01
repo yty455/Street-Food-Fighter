@@ -28,4 +28,9 @@ public class MenuController {
         return ApiUtils.success(menuService.getMenus(storeId));
     }
 
+    @PutMapping("/menus/{menuId}")
+    public ApiResult<String> addOptions(@PathVariable Long menuId, @Valid @RequestBody MenuInfo menuInfo) {
+        menuService.updateMenus(menuInfo, menuId);
+        return ApiUtils.success("메뉴 수정을 성공했습니다.");
+    }
 }
