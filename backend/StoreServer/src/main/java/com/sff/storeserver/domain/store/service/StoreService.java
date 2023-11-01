@@ -1,5 +1,7 @@
 package com.sff.storeserver.domain.store.service;
 
+import com.sff.storeserver.common.error.code.StoreError;
+import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
 import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
@@ -30,16 +32,20 @@ public class StoreService {
     }
 
     public StoreInfoResponse getStore(Long ownerId) {
-        return StoreInfoResponse.fromEntity(storeRepository.findByOwnerId(ownerId));
+        return StoreInfoResponse.fromEntity(storeRepository.findByOwnerId(ownerId)
+                .orElseThrow(() ->
+                        new BaseException(StoreError.NOT_FOUND_STORE)));
     }
 
     public void updateStore(StoreUpdateInfo storeUpdateInfo, Long ownerId) {
-        Store store = storeRepository.findByOwnerId(ownerId);
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
         store.update(storeUpdateInfo);
     }
 
     public void updateStoreCategory(StoreUpdateCategory storeUpdateCategory, Long ownerId) {
-        Store store = storeRepository.findByOwnerId(ownerId);
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
         store.updateCategory(storeUpdateCategory);
     }
 
