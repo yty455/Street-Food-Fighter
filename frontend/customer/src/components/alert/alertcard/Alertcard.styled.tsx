@@ -43,7 +43,7 @@ const AlertBox = styled.div.attrs<any>((props) => ({}))`
       width: 90vw;
       background-color: ${white};
       border-radius: 10px;
-      gap: 10px;
+      gap: 20px;
     `;
   }};
 `;
@@ -57,7 +57,6 @@ const Title = styled.div`
 const BottomBox = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
   align-items: center;
 `;
 
