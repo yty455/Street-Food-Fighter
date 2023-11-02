@@ -37,7 +37,7 @@ public class Member {
     private String refreshToken;
     @Embedded
     private Address address;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POINT_ID")
     private Point point;
 

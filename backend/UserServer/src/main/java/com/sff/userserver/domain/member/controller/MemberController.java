@@ -22,9 +22,9 @@ public class MemberController {
         return ApiUtils.success("회원 가입 성공");
     }
 
-    @DeleteMapping("/{memberId}")
-    public ApiResult<?> deleteMember(@PathVariable Long memberId) {
-        memberService.deleteMember(memberId);
+    @DeleteMapping("/me")
+    public ApiResult<?> deleteMember() {
+        memberService.deleteMember(1L); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success("회원 탈퇴 완료");
     }
 
