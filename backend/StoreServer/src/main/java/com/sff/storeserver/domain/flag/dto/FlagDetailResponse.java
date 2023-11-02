@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Builder
@@ -27,13 +29,18 @@ public class FlagDetailResponse {
     // 펀딩 주문 정보
     // 총 펀딩 금액, 펀딩한 회원 등급 ( 등급별 명수 ), 펀딩한 회원 리스트 ( 닉네임, 등급, 금액, 메뉴 )
     private int fundingAmount;
+    private Map<UserGrade, Integer> fundingUserGrade;
+    private List<FundingUserInfo> fundingUserInfoList;
 
-    public static FlagDetailResponse fromEntity(Flag flag) {
+    public static FlagDetailResponse fromEntity(Flag flag, int fundingAmount, Map<UserGrade, Integer> fundingUserGrade, List<FundingUserInfo> fundingUserInfoList) {
         return FlagDetailResponse.builder()
                 .date(flag.getDate())
                 .openTime(flag.getOpenTime())
                 .closeTime(flag.getCloseTime())
                 .address(flag.getAddress())
+                .fundingAmount(fundingAmount)
+                .fundingUserGrade(fundingUserGrade)
+                .fundingUserInfoList(fundingUserInfoList)
                 .build();
     }
 }

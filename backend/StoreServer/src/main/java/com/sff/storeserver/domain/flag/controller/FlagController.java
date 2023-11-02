@@ -7,6 +7,7 @@ import com.sff.storeserver.domain.flag.dto.FlagRequest;
 import com.sff.storeserver.domain.flag.dto.FlagResponse;
 import com.sff.storeserver.domain.flag.service.FlagService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,9 @@ public class FlagController {
     }
 
     @Operation(summary = "사장 - 깃발 조회", description = "사장이 선택한 날짜의 깃발을 조회 합니다..")
-    @GetMapping("/store/{storeId}/flags/{date}")
-    public ApiResult<?> getFlags(@PathVariable("storeId") Long storeId, @PathVariable("date") LocalDate date) {
+    @GetMapping("/store/{storeId}/flags")
+    public ApiResult<?> getFlags(@PathVariable("storeId") Long storeId,
+                                 @RequestParam @Parameter(name = "date", description = "조회할 날짜") LocalDate date) {
         List<FlagResponse> flagResponses = flagService.getFlags(storeId, date);
         return ApiUtils.success(flagResponses);
     }
