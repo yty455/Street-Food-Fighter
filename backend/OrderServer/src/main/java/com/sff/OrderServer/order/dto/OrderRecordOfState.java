@@ -14,11 +14,11 @@ public class OrderRecordOfState {
     private OrderState state;
     private String requirement;
     private LocalDateTime orderDate;
-    private List<OrderMenuResponse> orderMenuResponseList;
+    private List<OrderItem> orderMenuResponseList;
     private int totalPrice;
     private int totalMenuCount;
 
-    public OrderRecordOfState(OrderRecord orderRecord, List<OrderMenuResponse> orderMenuResponseList) {
+    public OrderRecordOfState(OrderRecord orderRecord, List<OrderItem> orderMenuResponseList) {
         this.orderId = orderRecord.getOrderId();
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.state = orderRecord.getState();
