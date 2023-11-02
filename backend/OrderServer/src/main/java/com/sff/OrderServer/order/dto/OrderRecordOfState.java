@@ -15,8 +15,8 @@ public class OrderRecordOfState {
     private String requirement;
     private LocalDateTime orderDate;
     private List<OrderItem> orderMenuResponseList;
-    private int totalPrice;
-    private int totalMenuCount;
+    private Integer totalPrice;
+    private Integer totalMenuCount;
 
     public OrderRecordOfState(OrderRecord orderRecord, List<OrderItem> orderMenuResponseList) {
         this.orderId = orderRecord.getOrderId();

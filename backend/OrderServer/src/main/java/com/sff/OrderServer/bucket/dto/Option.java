@@ -14,6 +14,7 @@ public class Option {
     private Integer price;
 
     public Option(OrderOption orderOption) {
+        this.optionId = orderOption.getOptionId();
         this.name = orderOption.getName();
         this.price = orderOption.getPrice();
     }
