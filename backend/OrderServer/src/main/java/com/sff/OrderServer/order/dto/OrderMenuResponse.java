@@ -12,11 +12,13 @@ public class OrderMenuResponse {
     private int count;
 
     private List<OrderOptionResponse> orderOptionList;
+    private int menuTotalPrice;
 
-    public OrderMenuResponse(OrderMenu orderMenu, List<OrderOptionResponse> orderOptionList) {
+    public OrderMenuResponse(OrderMenu orderMenu, List<OrderOptionResponse> orderOptionList, int menuTotalPrice) {
         this.name = orderMenu.getName();
         this.price = orderMenu.getPrice();
         this.count = orderMenu.getCount();
         this.orderOptionList = orderOptionList;
+        this.menuTotalPrice = menuTotalPrice;
     }
 }

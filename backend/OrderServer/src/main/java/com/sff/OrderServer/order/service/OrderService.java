@@ -11,10 +11,13 @@ import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderMenuResponse;
 import com.sff.OrderServer.order.dto.OrderOptionResponse;
+import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderRecordResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
-import com.sff.OrderServer.order.repository.OrderRepository;
+import com.sff.OrderServer.order.entity.OrderState;
+import com.sff.OrderServer.order.repository.OrderRecordRepository;
 import com.sff.OrderServer.utils.ApiError;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+    private final OrderRecordRepository orderRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
     public void createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
-        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId());
+        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(), LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
         try {
             orderRepository.save(new OrderRecord(orderCreateRequest, orderCount, bucket, userId));
@@ -43,7 +46,8 @@ public class OrderService {
 
     public List<OrderRecordResponse> getOrderRecords(Long userId) {
         List<OrderRecordResponse> orderResponseList = new ArrayList<>();
-        List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByOrderDate(userId);
+        List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByOrderDateDesc(
+                userId);
         for (OrderRecord orderRecord : orderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             // 가게 정보(가게 이름, 가게 이미지, 가게 주소) 요청 후 밑으로 넘겨주기 필요
@@ -66,7 +70,10 @@ public class OrderService {
         List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
         List<OrderMenuResponse> orderMenuResponseList = new ArrayList<>();
         for (OrderMenu orderMenu : orderMenuList) {
-            orderMenuResponseList.add(new OrderMenuResponse(orderMenu, getOrderOptions(orderMenu)));
+            List<OrderOptionResponse> orderOptionResponseList = getOrderOptions(orderMenu);
+            int menuTotalPrice = calMenuAndOption(orderMenu, orderOptionResponseList);
+            orderMenuResponseList.add(
+                    new OrderMenuResponse(orderMenu, orderOptionResponseList, menuTotalPrice));
         }
         return orderMenuResponseList;
     }
@@ -81,6 +88,55 @@ public class OrderService {
         return orderOptionResponseList;
     }
 
+    // 해당 메뉴에 대한 총 합 계산
+    private int calMenuAndOption(OrderMenu orderMenu,
+            List<OrderOptionResponse> orderOptionResponseList) {
+        int menuTotalPrice = 0;
+        for (OrderOptionResponse orderOptionResponse : orderOptionResponseList) {
+            menuTotalPrice += orderOptionResponse.getPrice();
+        }
+        return (menuTotalPrice + orderMenu.getPrice()) * orderMenu.getCount();
+    }
+
+    public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
+        List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
+        List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
+                OrderState.WAITING, LocalDateTime.now());
+        for (OrderRecord orderRecord : watingOrderRecordList) {
+            Bucket bucket = orderRecord.getBucket();
+            OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
+                    getOrderMenus(bucket));
+            waitingOrderList.add(orderRecordOfState);
+        }
+        return waitingOrderList;
+    }
+
+    public List<OrderRecordOfState> getProcessingOrders(Long storeId) {
+        List<OrderRecordOfState> processingOrderList = new ArrayList<>();
+        List<OrderRecord> processingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
+                OrderState.PROCESSING, LocalDateTime.now());
+        for (OrderRecord orderRecord : processingOrderRecordList) {
+            Bucket bucket = orderRecord.getBucket();
+            OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
+                    getOrderMenus(bucket));
+            processingOrderList.add(orderRecordOfState);
+        }
+        return processingOrderList;
+    }
+
+    public List<OrderRecordOfState> getCompletedOrders(Long storeId) {
+        List<OrderRecordOfState> completedOrderList = new ArrayList<>();
+        List<OrderRecord> completedOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
+                OrderState.COMPLETED, LocalDateTime.now());
+        for (OrderRecord orderRecord : completedOrderRecordList) {
+            Bucket bucket = orderRecord.getBucket();
+            OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
+                    getOrderMenus(bucket));
+            completedOrderList.add(orderRecordOfState);
+        }
+        return completedOrderList;
+    }
+
     private Bucket getBucket(Long bucketId) {
         return bucketRepository.findById(bucketId).orElseThrow(
                 () -> new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
@@ -92,4 +148,5 @@ public class OrderService {
                 () -> new BaseException(new ApiError(OrderError.NON_EXIST_ORDER))
         );
     }
+
 }

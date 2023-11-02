@@ -7,29 +7,26 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class OrderRecordResponse {
+public class OrderRecordOfState {
 
     private Long orderId;
-    private String store_name;
-    private String store_url;
-    private String active_area;
     private String receiptNumber;
     private OrderState state;
     private String requirement;
     private LocalDateTime orderDate;
     private List<OrderMenuResponse> orderMenuResponseList;
     private int totalPrice;
+    private int totalMenuCount;
 
-    public OrderRecordResponse(OrderRecord orderRecord, List<OrderMenuResponse> orderMenuResponseList) {
+    public OrderRecordOfState(OrderRecord orderRecord, List<OrderMenuResponse> orderMenuResponseList) {
         this.orderId = orderRecord.getOrderId();
-        this.store_name = "받아와야 함_가게이름";
-        this.store_url = "받아와야 함_가게 이미지 url";
-        this.active_area = "받아와야 함_가게 주소";
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.state = orderRecord.getState();
         this.requirement = orderRecord.getRequirement();
         this.orderDate = orderRecord.getOrderDate();
         this.orderMenuResponseList = orderMenuResponseList;
         this.totalPrice = orderRecord.getBucket().getTotalPrice();
+        this.totalMenuCount = orderMenuResponseList.size();
     }
+
 }
