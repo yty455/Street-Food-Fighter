@@ -21,8 +21,9 @@ const TitleBox = styled.div`
   display: flex;
   align-items: center;
   font-size: 24px;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   width: 100%;
+  gap: 20px;
 `;
 
 export { WishListContainer, TitleBox };

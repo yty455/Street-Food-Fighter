@@ -50,7 +50,7 @@ const Airfont = styled.div.attrs<any>((props) => ({}))`
 
 const LevelList = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 10px;
   align-items: center;
 `;
 const Nickname = styled.div`

@@ -1,6 +1,7 @@
 import WishList from '@/components/mypage/wishlist';
 import { MypageContainer, Topbar } from './Mypage.styled';
 import Profile from '@/components/mypage/profile';
+import Fightmoney from '@/components/mypage/fightmoney';
 
 const MyPage = () => {
   return (
@@ -8,7 +9,7 @@ const MyPage = () => {
       <Topbar>my 스푸파</Topbar>
       <Profile></Profile>
       <WishList></WishList>
-      <div>파이터</div>
+      <Fightmoney></Fightmoney>
     </MypageContainer>
   );
 };
