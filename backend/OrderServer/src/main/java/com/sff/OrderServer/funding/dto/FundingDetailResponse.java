@@ -1,19 +1,29 @@
 package com.sff.OrderServer.funding.dto;
 
-import com.sff.OrderServer.order.dto.OrderMenuResponse;
-import com.sff.OrderServer.order.entity.OrderState;
+import com.sff.OrderServer.funding.entity.FundingState;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FundingDetailResponse {
-    private OrderState state;
+    private FundingState state;
+    private Long storeId;
+
     private String storeName;
     private String storeUrl;
-    private String activeArea;
+
+    private String flagAddress;
+    private LocalDateTime flagDate;
+
     private LocalDateTime createAt;
-    private String receiptNumber;
-    private Long orderId;
     private String requirement;
-    private List<OrderMenuResponse> orderMenuResponseList;
-    private int totalPrice;
+    private List<FundingItem> fundingItemList;
+    private Integer totalPrice;
 }
