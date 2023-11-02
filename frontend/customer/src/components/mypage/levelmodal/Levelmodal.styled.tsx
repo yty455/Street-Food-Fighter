@@ -14,9 +14,47 @@ const ModalBackground = styled.div`
 
 const ModalContainer = styled.div`
   background-color: white;
-  padding: 20px;
+  padding: 40px 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 93vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 `;
 
-export { ModalBackground, ModalContainer };
+const Title = styled.div`
+  font-size: 28px;
+`;
+
+const Airfont = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    const black = props.theme.colors.black;
+    return css`
+      font-family: ${font};
+      color: ${black};
+      font-size: 18px;
+    `;
+  }};
+`;
+
+const LevelBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
+  gap: 20px;
+`;
+
+const LevelTitle = styled.div`
+  font-size: 24px;
+`;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 60px;
+  justify-content: space-around;
+`;
+export { Content, LevelBox, LevelTitle, ModalBackground, ModalContainer, Title, Airfont };

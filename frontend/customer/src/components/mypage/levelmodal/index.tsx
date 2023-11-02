@@ -1,4 +1,4 @@
-import { ModalBackground, ModalContainer } from './Levelmodal.styled';
+import { Airfont, Content, LevelBox, LevelTitle, ModalBackground, ModalContainer, Title } from './Levelmodal.styled';
 
 const LevelModal = ({ toggleModal }: any) => {
   const handleContainerClick = (e: any) => {
@@ -8,12 +8,36 @@ const LevelModal = ({ toggleModal }: any) => {
   return (
     <ModalBackground onClick={toggleModal}>
       <ModalContainer onClick={handleContainerClick}>
-        <div>파이터 등급</div>
-        <div>저번달 주문 횟수를 기준으로 파이터 등급이 정해져요! 등급별로 다양한 혜택을 만나보세요!</div>
-        <div>라이트</div>
-        <div>미들</div>
-        <div>헤비</div>
-        <div>챔피언</div>
+        <Title>파이터 등급</Title>
+        <Airfont>저번달 주문 횟수를 기준으로 파이터 등급이 정해져요! 등급별로 다양한 혜택을 만나보세요!</Airfont>
+        <LevelBox>
+          <img src="/images/level/light.png" style={{ width: '80px' }} />
+          <Content>
+            <LevelTitle> 라이트</LevelTitle>
+            <Airfont> 월 5회 이상 주문</Airfont>
+          </Content>
+        </LevelBox>
+        <LevelBox>
+          <img src="/images/level/middle.png" style={{ width: '80px' }} />
+          <Content>
+            <LevelTitle> 미들</LevelTitle>
+            <Airfont> 월 10회 이상 주문</Airfont>
+          </Content>
+        </LevelBox>
+        <LevelBox>
+          <img src="/images/level/heavy.png" style={{ width: '80px' }} />
+          <Content>
+            <LevelTitle> 헤비</LevelTitle>
+            <Airfont> 월 15회 이상 주문</Airfont>
+          </Content>
+        </LevelBox>
+        <LevelBox>
+          <img src="/images/level/champion.png" style={{ width: '80px' }} />
+          <Content>
+            <LevelTitle> 챔피언 </LevelTitle>
+            <Airfont> 월 20회 이상 주문</Airfont>
+          </Content>
+        </LevelBox>
       </ModalContainer>
     </ModalBackground>
   );
