@@ -6,9 +6,9 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.sff.notificationserver.domain.notification.dto.*;
-import com.sff.notificationserver.domain.notification.entity.Notification;
-import com.sff.notificationserver.domain.notification.entity.NotificationType;
+import com.sff.notificationserver.domain.notification.dto.FCMNotificationRequest;
+import com.sff.notificationserver.domain.notification.dto.NotificationInfo;
+import com.sff.notificationserver.domain.notification.dto.NotificationResponse;
 import com.sff.notificationserver.domain.notification.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,7 @@ public class NotificationService {
     @Value("${project.properties.firebase-topic}")
     String topic;
 
-    final double getRefundFee = 0.1;
+    final double getRefundFee = 0.1; // 환불 수수료
 
     String tokenf = "c1agebjUTSaN111v7igtKj:APA91bG744QXqT18Y7Vp_1QoqeXoC_PJ1JAQYstBgXtp6HrhoNrXyIwUXSvJ7roCWhgxhBOFph0x8AqwHs92kAN2FkM1TGNxYUAIgCRpfZjXs83dzMwHi15nMPaYT2r50ZS0m2wcTD1y";
 
@@ -45,15 +46,18 @@ public class NotificationService {
 
     public NotificationResponse getNotifications(Long userId, int page, int size) {
 
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
         Slice<NotificationInfo> notificationInfos = notificationRepository.findByUserId(userId, pageRequest);
 
         // 환불 수수료 정책 도입시 변경
         double refundFee = getRefundFee;
+        // 유저 포인트 받아오기
+        int userPoint = 5000;
 
         return NotificationResponse.builder()
                 .refundFee(refundFee)
+                .userPoint(userPoint)
                 .notificationInfos(notificationInfos)
                 .build();
     }

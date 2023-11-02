@@ -12,5 +12,6 @@ import org.springframework.data.domain.Slice;
 @AllArgsConstructor
 public class NotificationResponse {
     private double refundFee;
+    private int userPoint;
     private Slice<NotificationInfo> notificationInfos;
 }
