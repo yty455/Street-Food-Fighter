@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,12 @@ public class FundingController {
     @GetMapping("/api/order-server/user/fundings/{fundingId}")
     public ApiResult<?> getFunding(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
         return ApiUtils.success(fundingService.getFunding(userId, fundingId));
+    }
+
+    @PutMapping("/api/order-server/user/fundings/order-state/cancel/{fundingId}")
+    public ApiResult<?> updateFunding(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
+        fundingService.updateFundingOrderStateCancled(userId, fundingId);
+        return ApiUtils.success("펀딩 주문 상태 취소로 변경 완료");
     }
 
 }

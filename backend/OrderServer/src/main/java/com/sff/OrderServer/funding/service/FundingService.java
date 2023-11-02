@@ -96,7 +96,7 @@ public class FundingService {
                 .totalPrice(bucket.getTotalPrice()).build();
     }
 
-    public List<FundingItem> getFundingItems(List<OrderMenu> orderMenus){
+    private List<FundingItem> getFundingItems(List<OrderMenu> orderMenus){
         try {
             return orderMenus.stream().map(orderMenu -> {
                         List<Option> options = orderMenu.getOptions().stream().map(Option::new)
@@ -111,5 +111,27 @@ public class FundingService {
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.CREATE_FUNDINGITEM_LIST));
         }
+    }
+
+    @Transactional
+    public void updateFundingOrderStateComplete(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        funding.updateOrderStateComplete();
+    }
+    @Transactional
+    public void updateFundingOrderStateCancled(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        funding.updateOrderStateCancled();
+    }
+    @Transactional
+    public void updateFundingOrderStateFailed(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        funding.updateOrderStateFailed();
     }
 }

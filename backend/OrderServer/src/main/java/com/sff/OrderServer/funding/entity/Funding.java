@@ -69,4 +69,21 @@ public class Funding {
         this.fundingState = FundingState.WAITING;
         this.orderState = FundToOrderState.BEFORE_ORDER;
     }
+
+    public void updateFundingStateFailure(){
+        this.fundingState = FundingState.FAILURE;
+    }
+    public void updateFundingStateSuccess(){
+        this.fundingState = FundingState.SUCCESS;
+    }
+
+    public void updateOrderStateComplete(){
+        this.orderState = FundToOrderState.ORDER_COMPLETED;
+    }
+    public void updateOrderStateCancled(){
+        this.orderState = FundToOrderState.CANCLED;
+    }
+    public void updateOrderStateFailed(){
+        this.orderState = FundToOrderState.FAILED;
+    }
 }
