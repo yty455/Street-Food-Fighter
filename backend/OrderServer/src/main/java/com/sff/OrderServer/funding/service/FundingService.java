@@ -82,7 +82,9 @@ public class FundingService {
         Bucket bucket = funding.getBucket();
         List<FundingItem> fundingItems = getFundingItems(orderMenuRepository.findAllByBucket(bucket));
 
-        return FundingDetailResponse.builder().state(funding.getFundingState())
+        return FundingDetailResponse.builder()
+                .state(funding.getFundingState())
+                .orderState(funding.getOrderState())
                 .storeId(funding.getStoreId())
                 .storeName(storeName)
                 .storeUrl(storeUrl)
