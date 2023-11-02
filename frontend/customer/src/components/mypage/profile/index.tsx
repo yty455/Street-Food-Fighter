@@ -1,7 +1,7 @@
 import Level from '../level';
 import { RowDisplay, ProfileContainer, List, StyledButton, Airfont, LevelList, Nickname, ProfileList } from './Profile.styled';
 
-const Profile = () => {
+const Profile = ({ toggleModal }: any) => {
   return (
     <ProfileContainer>
       <ProfileList>
@@ -10,8 +10,8 @@ const Profile = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <Nickname>붕어빵 조아</Nickname>
             <LevelList>
-              <Level level="light"></Level>
-              <img src="/images/mypage/quest.png" style={{ height: '20px' }} />
+              <Level level="LIGHT"></Level>
+              <img src="/images/mypage/quest.png" style={{ height: '20px' }} onClick={toggleModal} />
             </LevelList>
           </div>
         </RowDisplay>
