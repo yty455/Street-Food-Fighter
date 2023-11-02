@@ -41,7 +41,7 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response").value("가게 등록 성공"));
     }
 
-    @DisplayName("가게를 저장하고 ")
+    @DisplayName("가게번호로 가게를 불러온다.")
     @Test
     void getStore() throws Exception {
         // given
@@ -67,16 +67,19 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response.businessCategory").value("포장마차"))
                 .andExpect(jsonPath("$.response.information").value("붕어빵집입니다."))
                 .andExpect(jsonPath("$.response.introduction").value("붕어빵집 입니다! 어서오세요."))
-                .andExpect(jsonPath("$.response.openTime").value(storeInfo.getOpenTime()))
-                .andExpect(jsonPath("$.response.closeTime").value(storeInfo.getCloseTime()))
+                .andExpect(jsonPath("$.response.openTime").value("09:00:00"))
+                .andExpect(jsonPath("$.response.closeTime").value("11:00:00"))
                 .andExpect(jsonPath("$.response.activeArea").value("강서구"))
                 .andExpect(jsonPath("$.response.lati").value(48.87373649724122))
                 .andExpect(jsonPath("$.response.longi").value(2.2954639195323967))
                 .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"))
-                .andExpect(jsonPath("$.response.state").value("생성"));
+                .andExpect(jsonPath("$.response.state").value("영업중"));
     }
 
     StoreInfo createStore(Long ownerId) {
+        // 고정된 시간 값 사용
+        LocalTime fixedOpenTime = LocalTime.of(9, 0); // 오전 9시
+        LocalTime fixedCloseTime = LocalTime.of(11, 0); // 오전 11시
         return StoreInfo.builder()
                 .ownerId(ownerId)
                 .name("붕어빵집 1")
@@ -86,13 +89,13 @@ class StoreControllerTest extends ControllerTestSupport {
                 .businessCategory("포장마차")
                 .information("붕어빵집입니다.")
                 .introduction("붕어빵집 입니다! 어서오세요.")
-                .openTime(LocalTime.now())
-                .closeTime(LocalTime.now().plusHours(2L))
+                .openTime(fixedOpenTime)
+                .closeTime(fixedCloseTime)
                 .activeArea("강서구")
                 .lati(48.87373649724122)
                 .longi(2.2954639195323967)
                 .storeUrl("www.naver.com")
-                .state("생성")
+                .state("영업중")
                 .build();
     }
 }
