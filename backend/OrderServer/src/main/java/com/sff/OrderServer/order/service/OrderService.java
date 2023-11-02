@@ -46,7 +46,7 @@ public class OrderService {
 
     public List<OrderRecordResponse> getOrderRecords(Long userId) {
         List<OrderRecordResponse> orderResponseList = new ArrayList<>();
-        List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByOrderDateDesc(
+        List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
         for (OrderRecord orderRecord : orderRecordList) {
             Bucket bucket = orderRecord.getBucket();
@@ -135,6 +135,18 @@ public class OrderService {
             completedOrderList.add(orderRecordOfState);
         }
         return completedOrderList;
+    }
+
+    public List<OrderRecordOfState> getAllOrders(Long storeId) {
+        List<OrderRecordOfState> allOrderList = new ArrayList<>();
+        List<OrderRecord> allOrderRecordList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId);
+        for (OrderRecord orderRecord : allOrderRecordList) {
+            Bucket bucket = orderRecord.getBucket();
+            OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
+                    getOrderMenus(bucket));
+            allOrderList.add(orderRecordOfState);
+        }
+        return allOrderList;
     }
 
     private Bucket getBucket(Long bucketId) {

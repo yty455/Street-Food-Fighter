@@ -50,7 +50,7 @@ public class OrderRecord {
     private Long storeId;
 
     @Column(nullable = false)
-    private LocalDateTime orderDate;
+    private LocalDateTime createdAt;
 
     public OrderRecord(OrderCreateRequest orderCreateRequest, Integer orderCount, Bucket bucket,
             Long userId) {
@@ -62,7 +62,7 @@ public class OrderRecord {
         this.bucket = bucket;
         this.userId = userId;
         this.storeId = orderCreateRequest.getStoreId();
-        this.orderDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

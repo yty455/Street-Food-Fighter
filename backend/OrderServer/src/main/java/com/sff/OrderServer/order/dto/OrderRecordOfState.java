@@ -23,7 +23,7 @@ public class OrderRecordOfState {
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.state = orderRecord.getState();
         this.requirement = orderRecord.getRequirement();
-        this.orderDate = orderRecord.getOrderDate();
+        this.orderDate = orderRecord.getCreatedAt();
         this.orderMenuResponseList = orderMenuResponseList;
         this.totalPrice = orderRecord.getBucket().getTotalPrice();
         this.totalMenuCount = orderMenuResponseList.size();
