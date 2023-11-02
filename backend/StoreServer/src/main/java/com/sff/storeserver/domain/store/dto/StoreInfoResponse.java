@@ -48,6 +48,7 @@ public class StoreInfoResponse {
                 .information(store.getInformation())
                 .introduction(store.getIntroduction())
                 .storeUrl(store.getStoreUrl())
+                .state(store.getState())
                 .build();
 
     }
