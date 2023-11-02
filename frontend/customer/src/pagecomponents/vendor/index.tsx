@@ -9,10 +9,11 @@ import { useVendorStore } from '@/stores/curvendoridStore';
 
 const VendorPage = ({ id }: { id: string }) => {
   const router = useRouter();
-  const index = parseInt(id, 10) - 1;
-  const vendor = vendordata[index];
+  const index = parseInt(id, 10);
+  const vendor = vendordata.find((v) => v.id === index);
 
   const reviewImages = () => {
+    if (!vendor) return [];
     const fullStars = Math.floor(vendor.review);
     const halfStar = vendor.review % 1 !== 0 ? 1 : 0;
     const emptyStars = 5 - fullStars - halfStar;
@@ -45,6 +46,9 @@ const VendorPage = ({ id }: { id: string }) => {
     setVendorId(index);
   }, [index, setVendorId, clearOrder]);
 
+  if (!vendor) {
+    return <div>가게가 없어졌어요 🥺</div>;
+  }
   return (
     <VendorContainer>
       <TopBox>

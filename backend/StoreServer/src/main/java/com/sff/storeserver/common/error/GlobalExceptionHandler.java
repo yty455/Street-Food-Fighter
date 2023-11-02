@@ -1,25 +1,27 @@
 package com.sff.storeserver.common.error;
 
 import com.sff.storeserver.common.error.type.BaseException;
-import com.sff.storeserver.common.error.type.ValidationException;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     @ResponseBody
-    public ApiResult<?> handleAllExceptions(BaseException be){
+    public ApiResult<?> handleAllExceptions(BaseException be) {
         return ApiUtils.error(be.getApiError());
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ApiResult<?> handleAllExceptions(ValidationException ex) {
+    public ApiResult<?> handleAllExceptions(MethodArgumentNotValidException ex) {
         for (FieldError fieldError : ex.getFieldErrors()) {
             String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage();

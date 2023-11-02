@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class StoreInfo {
     private String ownerName;
     private String phone;
     private String businessCategory;
-    private String category;
+    private CategoryType category;
     private String information;
     private String introduction;
     //    @NotNull(message = "마감 시간은 필수입니다.")

@@ -2,6 +2,7 @@ package com.sff.OrderServer.funding.entity;
 
 
 import com.sff.OrderServer.bucket.entity.Bucket;
+import com.sff.OrderServer.funding.dto.FundingRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +28,7 @@ public class Funding {
     private Long fundingId;
 
     @OneToOne
-    @Column(name = "BUCKET_ID", nullable = false)
+    @JoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
     @Column(nullable = false)
@@ -40,9 +42,23 @@ public class Funding {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private FundingState fundingState;
+    @Builder.Default
+    private FundingState fundingState = FundingState.WAITING;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private FundToOrderState orderState;
+    @Builder.Default
+    private FundToOrderState orderState = FundToOrderState.BEFORE_ORDER;
+
+    private String requirement;
+
+    public Funding(Bucket bucket, FundingRequest fundingRequest, Long userId){
+        this.bucket = bucket;
+        this.storeId = fundingRequest.getStoreId();
+        this.flagId = fundingRequest.getFlagId();
+        this.userId = userId;
+        this.requirement = fundingRequest.getRequirement();
+        this.fundingState = FundingState.WAITING;
+        this.orderState = FundToOrderState.BEFORE_ORDER;
+    }
 }

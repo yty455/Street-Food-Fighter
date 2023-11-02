@@ -8,9 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Store findByOwnerId(Long ownerId);
+    Optional<Store> findByOwnerId(Long ownerId);
 
     //    @Query(value = "SELECT * FROM store s WHERE ST_DISTANCE(ST_PointFromText(CONCAT('POINT(', s.lati, ' ', s.longi, ')')), ST_GeomFromText('POINT(:lati',' ',':longi)')) <= 1600", nativeQuery = true)
 //    @Query(value = "SELECT * FROM store WHERE SQRT(POWER(lati - :lati, 2) + POWER(longi - longi, 2)) * 111.045 <= 1.6\n", nativeQuery = true)
