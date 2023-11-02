@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.dto;
 
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class StoreInfoResponse {
     private String name;
     private String ownerName;
     private String phone;
-    private String category;
+    private CategoryType category;
     private String businessCategory;
 
     private LocalTime openTime;
@@ -35,6 +36,7 @@ public class StoreInfoResponse {
         return StoreInfoResponse.builder()
                 .ownerId(store.getOwnerId())
                 .name(store.getName())
+                .ownerName(store.getOwnerName())
                 .phone(store.getPhone())
                 .category(store.getCategory())
                 .businessCategory(store.getBusinessCategory())
