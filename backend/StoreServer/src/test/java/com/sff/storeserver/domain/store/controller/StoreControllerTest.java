@@ -5,6 +5,7 @@ import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
 import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
+import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import org.junit.jupiter.api.DisplayName;
@@ -15,15 +16,14 @@ import java.time.LocalTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class StoreControllerTest extends ControllerTestSupport {
 
-    @DisplayName("가게를 저장하고 성공을 반환 받는다..")
+    @DisplayName("가게를 저장하고 성공을 반환 받는다.")
     @Test
     void storeAdd() throws Exception {
         // given
@@ -75,6 +75,47 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"))
                 .andExpect(jsonPath("$.response.state").value("영업중"));
     }
+
+    @DisplayName("가게 정보를 수정하고 성공을 반환 받는다.")
+    @Test
+    void updateStore() throws Exception {
+        // given
+        StoreInfo storeInfo = createStore(1L);
+        ApiResult<String> result = ApiUtils.success("가게 정보 수정을 성공했습니다.");
+        // when // then
+        mockMvc.perform(
+                        patch("/api/store-service/stores/1")
+                                .content(objectMapper.writeValueAsString(storeInfo))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.response").value("가게 정보 수정을 성공했습니다."));
+    }
+
+    @DisplayName("가제 카테고리,업태를 수정하고 성공을 반환받는다.")
+    @Test
+    void updateStoreCategory() throws Exception {
+        // given
+        StoreUpdateCategory storeUpdateCategory = StoreUpdateCategory.builder()
+                .category(CategoryType.CHICKEN)
+                .businessCategory("포장마차")
+                .build();
+        ApiResult<String> result = ApiUtils.success("가게 카테고리 수정을 성공했습니다.");
+
+        // when // then
+        mockMvc.perform(
+                        patch("/api/store-service/stores/categories/1")
+                                .content(objectMapper.writeValueAsString(storeUpdateCategory))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.response").value("가게 카테고리 수정을 성공했습니다."));
+    }
+
 
     StoreInfo createStore(Long ownerId) {
         // 고정된 시간 값 사용
