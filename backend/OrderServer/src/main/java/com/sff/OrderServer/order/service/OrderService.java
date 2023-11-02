@@ -14,6 +14,7 @@ import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderResponse;
+import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.repository.OrderRecordRepository;
@@ -24,6 +25,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -162,6 +164,20 @@ public class OrderService {
             allOrderList.add(orderRecordOfState);
         }
         return allOrderList;
+    }
+
+    public OwnerOrderDetailResponse getOwnerOrderDetail(Long orderId) {
+        // 주문 ID 를 가게 서비스 에 보내서 리뷰 ID/ 리뷰 내용/ 별점 받기
+        Long reviewId = 1L;
+        String content = "리뷰 내용";
+        Integer score = 5;
+        // 회원 ID 를 회원 서비스 에 보내서 회원 이름, 등급, 연락처 받기
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        Long userId = orderRecord.getUserId();
+        String userNickName = "쿠배숑";
+        String userGrade = "동메달";
+        String userPhone = "01088888888";
+        return new OwnerOrderDetailResponse(orderRecord, userId, userNickName, userGrade, userPhone, reviewId, content, score, getOrderMenusDetail(orderRecord.getBucket()));
     }
 
     private Bucket getBucket(Long bucketId) {

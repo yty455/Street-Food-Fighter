@@ -68,6 +68,6 @@ public class FundingService {
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
 
-
+        return null;
     }
 }
