@@ -9,11 +9,15 @@ import lombok.NoArgsConstructor;
 public class BaseException extends RuntimeException {
     private ApiError apiError;
 
-    public BaseException(String message){
+    public BaseException(String message) {
         super(message);
     }
 
-    public BaseException(ApiError apiError){
+    public BaseException(ApiError apiError) {
         this.apiError = apiError;
+    }
+
+    public BaseException(ServiceError serviceError) {
+        this.apiError = new ApiError(serviceError.getMessage(), serviceError.getCode());
     }
 }
