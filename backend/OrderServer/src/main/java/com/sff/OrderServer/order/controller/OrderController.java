@@ -18,7 +18,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/api/order-server/user/order")
+    @PostMapping("/api/order-server/user/orders")
     public ApiResult<?> createOrder(@RequestHeader("userId") Long userId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
         orderService.createOrder(orderCreateRequest, userId);
@@ -30,8 +30,28 @@ public class OrderController {
         return ApiUtils.success(orderService.getOrderRecords(userId));
     }
 
-    @GetMapping("/api/order-server/user/order/{orderId}")
+    @GetMapping("/api/order-server/user/orders/{orderId}")
     public ApiResult<?> getOrder(@PathVariable Long orderId) {
         return ApiUtils.success(orderService.getOrderRecordDetail(orderId));
+    }
+
+    @GetMapping("/api/order-server/owner/waitings/{storeId}")
+    public ApiResult<?> getWaitingOrders(@PathVariable Long storeId) {
+        return ApiUtils.success(orderService.getWaitingOrders(storeId));
+    }
+
+    @GetMapping("/api/order-server/owner/processings/{storeId}")
+    public ApiResult<?> getProcessingOrders(@PathVariable Long storeId) {
+        return ApiUtils.success(orderService.getProcessingOrders(storeId));
+    }
+
+    @GetMapping("/api/order-server/owner/completions/{storeId}")
+    public ApiResult<?> getCompletedOrders(@PathVariable Long storeId) {
+        return ApiUtils.success(orderService.getCompletedOrders(storeId));
+    }
+
+    @GetMapping("/api/order-server/owner/orders/{storeId}")
+    public ApiResult<?> getAllOrders(@PathVariable Long storeId) {
+        return ApiUtils.success(orderService.getAllOrders(storeId));
     }
 }

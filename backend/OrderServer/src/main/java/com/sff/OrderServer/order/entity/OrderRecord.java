@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +39,7 @@ public class OrderRecord {
 
     private String requirement;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUCKET_ID")
     private Bucket bucket;
 
@@ -49,7 +50,7 @@ public class OrderRecord {
     private Long storeId;
 
     @Column(nullable = false)
-    private LocalDateTime orderDate;
+    private LocalDateTime createdAt;
 
     public OrderRecord(OrderCreateRequest orderCreateRequest, Integer orderCount, Bucket bucket,
             Long userId) {
@@ -61,7 +62,7 @@ public class OrderRecord {
         this.bucket = bucket;
         this.userId = userId;
         this.storeId = orderCreateRequest.getStoreId();
-        this.orderDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }
