@@ -4,7 +4,7 @@ import com.sff.userserver.domain.point.dto.PointAmountResponse;
 import com.sff.userserver.domain.point.dto.PointUpdateRequest;
 
 public interface PointService {
-    public PointAmountResponse getMyPoint(Long memberId);
+    PointAmountResponse getMyPoint(Long memberId);
 
     void updatePoint(Long memberId, PointUpdateRequest pointUpdateRequest);
 }
