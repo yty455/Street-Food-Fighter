@@ -9,10 +9,12 @@ import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -34,10 +36,11 @@ public class ReviewService {
         reviewRepository.save(reviewRequest.toEntity(store));
     }
 
-    public List<MyReviewResponse> getMyReviews(Long userId) {
+    public Page<MyReviewResponse> getMyReviews(Long userId, int page, int size) {
 
-        // TODO - 페이지네이션 적용( 무한 스크롤 ) 대비 하기
-        List<MyReviewResponse> myReviewResponseList = reviewRepository.findByUserId(userId);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        Page<MyReviewResponse> myReviewResponseList = reviewRepository.findByUserId(userId, pageRequest);
 
         // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
 
@@ -46,11 +49,13 @@ public class ReviewService {
 
     }
 
-    public List<StoreReviewResponse> getStoreReviews(Long storeId) {
+    public Slice<StoreReviewResponse> getStoreReviews(Long storeId, int page, int size) {
 
-        List<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
-        // 유저 아이디 리스트 -> 회원 서비스에 보내서 회원 정보 받아오기 (userName, userProfileUrl)
+        Slice<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId, pageRequest);
+
+        // 유저 아이디 리스트 -> 회원 서비스에 보내서 s회원 정보 받아오기 (userName, userProfileUrl)
 
         // 합쳐서 내려주기
         return storeReviewResponseList;
