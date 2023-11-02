@@ -1,17 +1,17 @@
 export const levels = {
-  champion: {
+  CHAMPION: {
     image: '/images/level/champion.png',
     label: '챔피언',
   },
-  heavy: {
+  HEAVY: {
     image: '/images/level/heavy.png',
     label: '헤비',
   },
-  light: {
+  LIGHT: {
     image: '/images/level/light.png',
     label: '라이트',
   },
-  middle: {
+  MIDDLE: {
     image: '/images/level/middle.png',
     label: '미들',
   },

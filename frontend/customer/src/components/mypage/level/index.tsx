@@ -1,7 +1,7 @@
 import levels from '@/assets/level';
 import { LevelContainer, LevelText } from './Level.styled';
 
-type LevelType = 'champion' | 'heavy' | 'light' | 'middle';
+type LevelType = 'CHAMPION' | 'HEAVY' | 'LIGHT' | 'MIDDLE';
 
 interface LevelProps {
   level: LevelType;
