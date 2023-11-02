@@ -113,25 +113,85 @@ public class FundingService {
         }
     }
 
+    // funding state 변경
+    @Transactional
+    public void updateFundingStateWaiting(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        try {
+            funding.updateFundingStateWaitting();
+        }catch (Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
+        }
+    }
+    @Transactional
+    public void updateFundingStateSuccess(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        try {
+            funding.updateFundingStateSuccess();
+        }catch (Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
+        }
+    }
+    @Transactional
+    public void updateFundingStateFailure(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        try {
+            funding.updateFundingStateFailure();
+        }catch (Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
+        }
+        updateFundingOrderStateFailed(userId, fundingId); // 펀딩 실패에 따른 주문 상태 - 실패 변경
+    }
+
+    // funding orderState 변경
+    @Transactional
+    public void updateFundingOrderStateBefore(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
+        );
+        try{
+            funding.updateOrderStateBefore();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
+        }
+    }
     @Transactional
     public void updateFundingOrderStateComplete(Long userId, Long fundingId){
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
-        funding.updateOrderStateComplete();
+        try {
+            funding.updateOrderStateComplete();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
+        }
     }
     @Transactional
     public void updateFundingOrderStateCancled(Long userId, Long fundingId){
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
-        funding.updateOrderStateCancled();
+        try{
+            funding.updateOrderStateCancled();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
+        }
     }
     @Transactional
     public void updateFundingOrderStateFailed(Long userId, Long fundingId){
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
-        funding.updateOrderStateFailed();
+        try{
+            funding.updateOrderStateFailed();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
+        }
     }
 }
