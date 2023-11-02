@@ -13,7 +13,7 @@ public class OrderItem {
     private int count;
 
     private List<Option> orderOptionList;
-    private int menuTotalPrice;
+    private Integer menuTotalPrice;
 
     public OrderItem(OrderMenu orderMenu, List<Option> orderOptionList, int menuTotalPrice) {
         this.name = orderMenu.getName();

@@ -13,13 +13,13 @@ public class OrderDetailResponse {
     private Long storeId;
     private String storeName;
     private String storeUrl;
-    private String storeAddress;;
+    private String storeAddress;
     private LocalDateTime createAt;
     private String receiptNumber;
     private Long orderId;
     private String requirement;
     private List<OrderItem> orderItemList;
-    private int totalPrice;
+    private Integer totalPrice;
 
     public OrderDetailResponse(OrderRecord orderRecord, List<OrderItem> orderItemList) {
         this.state = orderRecord.getState();
