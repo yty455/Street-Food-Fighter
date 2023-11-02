@@ -7,6 +7,7 @@ import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.dto.FundingDetailResponse;
 import com.sff.OrderServer.funding.dto.FundingRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
 import com.sff.OrderServer.funding.entity.Funding;
@@ -35,8 +36,13 @@ public class FundingService {
             // 이런 경우 결제 시 중복 요청의 가능성.
             throw new BaseException(new ApiError(FundingError.EXIST_FUNDING_FOR_BUCKET));
         }
-        Funding funding = new Funding(bucket,fundingRequest, userId);
-        fundingRepository.save(funding);
+        try{
+            Funding funding = new Funding(bucket,fundingRequest, userId);
+            fundingRepository.save(funding);
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.FAIL_TO_CREATE_FUNDING));
+        }
+
     }
 
     public List<FundingResponse> getFundings(Long userId){
@@ -44,20 +50,24 @@ public class FundingService {
         List<FundingResponse> fundingResponses = new ArrayList<>();
         for(Funding funding : fundings){
             Long storeId = funding.getStoreId();
-            // storeId로 가게 이름 가져와야함.(MSA)
+            // storeId로 가게 이름, 이미지 URL 가져와야함.(MSA)
             String storeName = "temp";
             String storeUrl = "url";
 
             Bucket bucket = funding.getBucket();
-            Integer totalPrice = bucket.getTotalPrice();
-
             List<OrderMenu> menus = orderMenuRepository.findAllByBucket(bucket);
             OrderMenu menu = menus.get(0);
             Integer restCount = menus.size()-1;
 
-            fundingResponses.add(new FundingResponse(funding, storeName, storeUrl, totalPrice, menu, restCount));
+            fundingResponses.add(new FundingResponse(funding, storeName, storeUrl, bucket.getTotalPrice(), menu, restCount));
         }
         return fundingResponses;
     }
 
+    public FundingDetailResponse getFunding(Long userId, Long fundingId){
+        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
+                ()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+
+
+    }
 }
