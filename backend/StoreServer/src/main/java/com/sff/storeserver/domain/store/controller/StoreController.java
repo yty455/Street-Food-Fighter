@@ -1,6 +1,5 @@
 package com.sff.storeserver.domain.store.controller;
 
-import com.sff.storeserver.common.BasicResponse;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
@@ -8,14 +7,11 @@ import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
 import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
 import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import com.sff.storeserver.domain.store.entity.CategoryType;
-import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.geo.Point;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -60,23 +56,20 @@ public class StoreController {
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near/{lati}/{longi}")
     public ApiResult<List<StoreInfoResponse>> getNearStore(@PathVariable double lati,
-            @PathVariable double longi,
-            @RequestParam("categories") List<CategoryType> categories) {
+                                                           @PathVariable double longi,
+                                                           @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
         return ApiUtils.success(stores);
     }
 
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
     @GetMapping("/funding/near")
-    public ResponseEntity<BasicResponse> getNearFlag(@RequestParam("date") Date date,
-            @RequestParam("latitude") double latitude,
-            @RequestParam("longitude") double longitude,
-            @RequestParam("categories") List<String> categories) {
-        List<Store> stores = storeService.getNearFlag(date, new Point(latitude, longitude), categories);
-        BasicResponse basicResponse = BasicResponse.builder()
-                .message("내 근처 펀딩 조회 성공")
-                .build();
-        return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
+    public ApiResult<?> getNearFlag(@RequestParam("date") Date date,
+                                    @RequestParam("lati") double lati,
+                                    @RequestParam("longi") double longi,
+                                    @RequestParam("categories") List<CategoryType> categories) {
+        List<StoreInfoResponse> stores = storeService.getNearFlag(date, lati, longi, categories);
+        return ApiUtils.success(stores);
     }
 
 }

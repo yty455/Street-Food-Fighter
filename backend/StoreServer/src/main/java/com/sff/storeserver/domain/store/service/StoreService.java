@@ -11,7 +11,6 @@ import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,16 +60,16 @@ public class StoreService {
 
     }
 
-    public List<Store> getNearFlag(Date date, Point point, List<String> categories) {
-        List<Store> nearbyFlags = storeRepository.findNearFlag(point, date);
+    public List<StoreInfoResponse> getNearFlag(Date date, double lati, double longi, List<CategoryType> categories) {
+        List<Store> nearbyFlags = storeRepository.findNearFlag(lati, longi, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        List<Store> filteredFlags = nearbyFlags
+
+        return nearbyFlags
                 .stream()
                 .filter(store -> categories.contains(store.getCategory()))
+                .map(StoreInfoResponse::fromEntity)
                 .toList();
-
-        return filteredFlags;
     }
 
 
