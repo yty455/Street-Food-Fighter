@@ -6,6 +6,7 @@ import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -25,6 +26,11 @@ public class FundingController {
     @GetMapping("/api/order-server/user/fundings")
     public ApiResult<?> getFundings(@RequestHeader("userId") Long userId){
         return ApiUtils.success(fundingService.getFundings(userId));
+    }
+
+    @GetMapping("/api/order-server/user/fundings/{fundingId}")
+    public ApiResult<?> getFunding(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
+        return ApiUtils.success(fundingService.getFunding(userId, fundingId));
     }
 
 }
