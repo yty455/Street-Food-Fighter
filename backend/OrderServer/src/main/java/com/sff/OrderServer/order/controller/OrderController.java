@@ -54,4 +54,9 @@ public class OrderController {
     public ApiResult<?> getAllOrders(@PathVariable Long storeId) {
         return ApiUtils.success(orderService.getAllOrders(storeId));
     }
+
+    @GetMapping("/api/order-server/owner/order/{orderId}")
+    public ApiResult<?> getOrderDetail(@PathVariable Long orderId) {
+        return ApiUtils.success(orderService.getOwnerOrderDetail(orderId));
+    }
 }

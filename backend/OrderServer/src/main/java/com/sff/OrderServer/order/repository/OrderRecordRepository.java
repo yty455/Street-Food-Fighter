@@ -18,8 +18,6 @@ public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> 
 
     List<OrderRecord> findAllByUserIdOrderByCreatedAtDesc(Long userId);
 
-    List<OrderRecord> findByStoreIdAndStateOrderByCreatedAtDesc(Long storeId, OrderState state);
-
     @Query("SELECT o FROM OrderRecord o WHERE o.storeId = :storeId AND o.state = :state AND o.createdAt >= :currentDate ORDER BY o.createdAt DESC")
     List<OrderRecord> findCurrentOrders(@Param("storeId") Long storeId,
             @Param("state") OrderState state, @Param("currentDate") LocalDateTime currentDate);
