@@ -22,7 +22,7 @@ public class OrderDetailResponse {
     private Integer totalPrice;
 
     public OrderDetailResponse(OrderRecord orderRecord, List<OrderItem> orderItemList) {
-        this.state = orderRecord.getState();
+        this.state = orderRecord.getOrderState();
         this.storeId = 1L;
         this.storeName = "가게 이름";
         this.storeUrl = "가게 이미지 url";

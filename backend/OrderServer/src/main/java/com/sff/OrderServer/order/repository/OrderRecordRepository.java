@@ -18,17 +18,17 @@ public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> 
 
     List<OrderRecord> findAllByUserIdOrderByCreatedAtDesc(Long userId);
 
-    @Query("SELECT o FROM OrderRecord o WHERE o.storeId = :storeId AND o.state = :state AND o.createdAt >= :currentDate ORDER BY o.createdAt DESC")
+    @Query("SELECT o FROM OrderRecord o WHERE o.storeId = :storeId AND o.orderState = :orderState AND o.createdAt >= :currentDate ORDER BY o.createdAt DESC")
     List<OrderRecord> findCurrentOrders(@Param("storeId") Long storeId,
-            @Param("state") OrderState state, @Param("currentDate") LocalDateTime currentDate);
+            @Param("orderState") OrderState orderState, @Param("currentDate") LocalDateTime currentDate);
 
-    @Query("SELECT o FROM OrderRecord o WHERE o.storeId = :storeId AND o.state = :state " +
+    @Query("SELECT o FROM OrderRecord o WHERE o.storeId = :storeId AND o.orderState = :orderState " +
             "AND FUNCTION('YEAR', o.createdAt) = FUNCTION('YEAR', :date) " +
             "AND FUNCTION('MONTH', o.createdAt) = FUNCTION('MONTH', :date) " +
             "AND FUNCTION('DAY', o.createdAt) = FUNCTION('DAY', :date) " +
             "ORDER BY o.createdAt DESC")
     List<OrderRecord> findCurrentOrdersByDate(@Param("storeId") Long storeId,
-            @Param("state") OrderState state, @Param("date") LocalDateTime date);
+            @Param("orderState") OrderState orderState, @Param("date") LocalDateTime date);
 
     List<OrderRecord> findAllByStoreIdOrderByCreatedAtDesc(Long storeId);
 }

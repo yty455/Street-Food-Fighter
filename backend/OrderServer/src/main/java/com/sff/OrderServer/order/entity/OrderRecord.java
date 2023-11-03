@@ -35,7 +35,8 @@ public class OrderRecord {
 
     @Column(nullable = false) // not null 설정
     @Enumerated(EnumType.STRING)
-    private OrderState state;
+    @Builder.Default
+    private OrderState orderState = OrderState.PAYMENT_IN_PROGRESS;
 
     private String requirement;
 
@@ -52,12 +53,18 @@ public class OrderRecord {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false) // not null 설정
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ReviewState reviewState = ReviewState.NONE;
+
     public OrderRecord(OrderCreateRequest orderCreateRequest, Integer orderCount, Bucket bucket,
             Long userId) {
         String receiptNumber = orderCreateRequest.getStoreId() + "_" + LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("yyyyMMdd")) + "-" + (orderCount + 1);
         this.receiptNumber = receiptNumber;
-        this.state = OrderState.WAITING;
+        this.orderState = OrderState.PAYMENT_IN_PROGRESS;
+        this.reviewState = ReviewState.NONE;
         this.requirement = orderCreateRequest.getRequirement();
         this.bucket = bucket;
         this.userId = userId;
@@ -65,4 +72,11 @@ public class OrderRecord {
         this.createdAt = LocalDateTime.now();
     }
 
+    public void updateOrderState(OrderState orderState) {
+        this.orderState = orderState;
+    }
+
+    public void updateReviewState(ReviewState reviewState) {
+        this.reviewState = reviewState;
+    }
 }
