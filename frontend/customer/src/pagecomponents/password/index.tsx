@@ -17,7 +17,7 @@ const Password = () => {
   return (
     <Container>
       <Title>{msg}</Title>
-      <div> 비밀번호 :{currentPassword} </div>
+      {/* <div> 비밀번호 :{currentPassword} </div> */}
       <State currentLength={currentPassword.length} />
       <Keypad onPasswordChange={handlePasswordChange} />
     </Container>

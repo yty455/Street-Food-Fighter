@@ -11,7 +11,7 @@ const State = ({ currentLength }: any) => {
         const isLogo = i < currentLength;
         const src = isLogo ? '/images/circlelogo.png' : '/images/signup/circle.png';
         const style = {
-          width: isLogo ? '28px' : '12px',
+          width: isLogo ? '35px' : '12px',
           height: 'auto',
         };
 

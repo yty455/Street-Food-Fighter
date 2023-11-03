@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { KeypadContainer, Key, StyleImage } from './Keypad.styled';
+import usePasswordStore from '@/stores/passwordStore';
 
 const Keypad = ({ onPasswordChange }: any) => {
   const [keys, setKeys] = useState<number[]>([]);
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [lastKey, setLastKey] = useState<number>(0); // 마지막 키 상태 추가
+  const { setPassword } = usePasswordStore();
+
   useEffect(() => {
     onPasswordChange(currentPassword);
   }, [currentPassword, onPasswordChange]);
@@ -21,6 +24,7 @@ const Keypad = ({ onPasswordChange }: any) => {
 
       const newPass = prev.length < 6 ? prev + key.toString() : prev;
       if (isFullPassword) {
+        setPassword(currentPassword);
         console.log('비밀번호 6자리 입력 완료: ', newPass);
       }
       return newPass;
