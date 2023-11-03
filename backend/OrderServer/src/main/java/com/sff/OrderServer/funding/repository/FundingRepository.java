@@ -15,6 +15,5 @@ import org.springframework.stereotype.Repository;
 public interface FundingRepository extends JpaRepository<Funding, Long> {
     List<Funding> findAllByUserId(Long userId);
     Optional<Funding> findByFundingIdAndUserId(Long fundingId, Long userId);
-    Optional<Funding> findByBucket(Bucket bucket);
 
 }

@@ -19,8 +19,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Builder
 @Getter
@@ -87,7 +85,7 @@ public class Funding {
         this.orderState = FundToOrderState.ORDER_COMPLETED;
     }
     public void updateOrderStateCancled(){
-        this.orderState = FundToOrderState.CANCLED;
+        this.orderState = FundToOrderState.CANCEL;
     }
     public void updateOrderStateFailed(){
         this.orderState = FundToOrderState.FAILED;
