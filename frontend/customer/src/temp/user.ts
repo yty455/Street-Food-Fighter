@@ -11,4 +11,5 @@ export const user = {
   region2: '강서구',
   region3: '신호동',
   region4: '',
+  paymentPassword: '123456',
 };
