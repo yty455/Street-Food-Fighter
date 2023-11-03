@@ -1,5 +1,15 @@
 import Level from '@/components/mypage/level';
-import { TopContent, Topbar, UserInfoContainer } from './Userinfo.styled';
+import {
+  TopContent,
+  Topbar,
+  UserInfoContainer,
+  ContentContainer,
+  LogoutBox,
+  LogoutText,
+  ImageContainer,
+  CameraIcon,
+  ProfileImage,
+} from './Userinfo.styled';
 import { useRouter } from 'next/navigation';
 import { user } from '@/temp/user';
 import { LevelType } from '@/types/level.type';
@@ -23,12 +33,19 @@ const UserInfo = () => {
           <div> 회원 정보</div>
         </TopContent>
       </Topbar>
-      <div>
-        <div>프로필 이미지 수정</div>
+      <ContentContainer>
+        <ImageContainer>
+          <ProfileImage src="/images/common/profile.png" />
+          <CameraIcon src="/images/mypage/camera.png" />
+        </ImageContainer>
         <Level level={curuser.grade as LevelType}></Level>
-
         <InfoBox></InfoBox>
-      </div>
+      </ContentContainer>
+      <LogoutBox>
+        <LogoutText> 로그아웃</LogoutText>
+        <LogoutText> |</LogoutText>
+        <LogoutText> 탈퇴하기</LogoutText>
+      </LogoutBox>
     </UserInfoContainer>
   );
 };

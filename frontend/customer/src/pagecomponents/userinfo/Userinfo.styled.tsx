@@ -35,4 +35,46 @@ const TopContent = styled.div`
   width: 62%;
   justify-content: space-between;
 `;
-export { UserInfoContainer, Topbar, TopContent };
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const LogoutBox = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 50px;
+`;
+const LogoutText = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const gray = props.theme.colors.gray;
+    const font = props.theme.fonts.air;
+
+    return css`
+      display: flex;
+      color: ${gray};
+      font-family: ${font};
+    `;
+  }};
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const CameraIcon = styled.img`
+  position: absolute;
+  right: 3px;
+  bottom: 4px;
+  height: 25px;
+`;
+
+const ProfileImage = styled.img`
+  height: 80px;
+`;
+
+export { ImageContainer, CameraIcon, ProfileImage, UserInfoContainer, Topbar, TopContent, ContentContainer, LogoutBox, LogoutText };

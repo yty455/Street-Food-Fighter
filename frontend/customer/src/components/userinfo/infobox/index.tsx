@@ -30,8 +30,7 @@ const InfoBox = () => {
         <InfoTitle>내 동네</InfoTitle>
         <Right>
           <Content>
-            {curuser.region1} {curuser.region2}
-            {curuser.region3} {curuser.region4}
+            {curuser.region1} {curuser.region2} {curuser.region3} {curuser.region4}
           </Content>
           <img src="/images/common/right.png" style={{ height: '20px' }} />
         </Right>

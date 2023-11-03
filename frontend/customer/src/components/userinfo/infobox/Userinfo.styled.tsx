@@ -13,6 +13,7 @@ const BoxContainer = styled.div.attrs<any>((props) => ({}))`
       border-radius: 10px;
       width: 90vw;
       border: 0.5px solid ${gray};
+      margin-top: 40px;
     `;
   }};
 `;
