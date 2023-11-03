@@ -21,7 +21,7 @@ const List = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 240px;
+  width: 270px;
 `;
 const ProfileList = styled.div`
   display: flex;

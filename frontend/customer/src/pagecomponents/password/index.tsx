@@ -1,6 +1,9 @@
+import { PwdPageKey, passwordMessages } from '@/assets/pwdmsg';
 import Keypad from '@/components/password/keypad';
 import State from '@/components/password/state';
+import usePwdpageStore from '@/stores/pwdpageStore';
 import { useState } from 'react';
+import { Container, Title } from './Password.styled';
 
 const Password = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -9,13 +12,15 @@ const Password = () => {
     setCurrentPassword(value);
   };
 
+  const { curPwdPage } = usePwdpageStore();
+  const msg = passwordMessages[curPwdPage as PwdPageKey];
   return (
-    <div>
-      <div> 비밀번호를 입력해주세요 </div>
+    <Container>
+      <Title>{msg}</Title>
       <div> 비밀번호 :{currentPassword} </div>
       <State currentLength={currentPassword.length} />
       <Keypad onPasswordChange={handlePasswordChange} />
-    </div>
+    </Container>
   );
 };
 
