@@ -6,9 +6,13 @@ const KeypadContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 20px;
       background-color: ${gray};
       width: 100%;
+      position: fixed;
+      bottom: 0;
+      padding-top: 23px;
+      padding-bottom: 23px;
     `;
   }};
 `;
@@ -30,10 +34,6 @@ const Key = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-const CurrentPassword = styled.div`
-  font-size: 24px;
-  margin-bottom: 20px;
-`;
 
 const StyleImage = styled.img`
   position: fixed;
@@ -41,4 +41,4 @@ const StyleImage = styled.img`
   width: 50px;
 `;
 
-export { KeypadContainer, Key, CurrentPassword, StyleImage };
+export { KeypadContainer, Key, StyleImage };

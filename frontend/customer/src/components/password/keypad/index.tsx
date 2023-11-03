@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CurrentPassword, KeypadContainer, Key, StyleImage } from './Keypad.styled';
+import { KeypadContainer, Key, StyleImage } from './Keypad.styled';
 
 const Keypad = ({ onPasswordChange }: any) => {
   const [keys, setKeys] = useState<number[]>([]);
