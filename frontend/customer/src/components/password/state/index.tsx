@@ -4,7 +4,6 @@ import { List } from '@/components/mypage/profile/Profile.styled';
 
 const State = ({ currentLength }: any) => {
   const totalLength = 6;
-  console.log(currentLength);
   return (
     <List>
       {Array.from({ length: totalLength }, (_, i) => {
