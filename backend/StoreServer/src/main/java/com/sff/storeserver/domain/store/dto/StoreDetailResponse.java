@@ -33,9 +33,9 @@ public class StoreDetailResponse {
     private String storeUrl;
 
     private List<MenuInfoResponse> menuInfoResponseList;
-    private int score;
+    private Double score;
 
-    public static StoreDetailResponse fromEntity(Store store, List<MenuInfoResponse> menuInfoResponseList, int score) {
+    public static StoreDetailResponse fromEntity(Store store, List<MenuInfoResponse> menuInfoResponseList, Double score) {
         return StoreDetailResponse.builder()
                 .name(store.getName())
                 .ownerName(store.getOwnerName())

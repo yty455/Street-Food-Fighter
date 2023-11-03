@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "가게 API", description = "가게 관련 API")
@@ -68,17 +68,17 @@ public class StoreController {
 
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
-    @GetMapping("/stores/near/{lati}/{longi}")
-    public ApiResult<List<StoreInfoResponse>> getNearStore(@PathVariable double lati,
-                                                           @PathVariable double longi,
-                                                           @RequestParam("categories") List<CategoryType> categories) {
+    @GetMapping("/stores/near")
+    public ApiResult<?> getNearStore(@RequestParam("lati") double lati,
+                                     @RequestParam("longi") double longi,
+                                     @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
         return ApiUtils.success(stores);
     }
 
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
-    @GetMapping("/funding/near")
-    public ApiResult<?> getNearFlag(@RequestParam("date") Date date,
+    @GetMapping("/flag/near")
+    public ApiResult<?> getNearFlag(@RequestParam("date") LocalDate date,
                                     @RequestParam("lati") double lati,
                                     @RequestParam("longi") double longi,
                                     @RequestParam("categories") List<CategoryType> categories) {

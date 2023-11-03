@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +48,7 @@ public class StoreService {
         // 메뉴 정보
         List<MenuInfoResponse> menuInfoResponseList = menuRepository.findByStoreId(storeId).stream().map(MenuInfoResponse::fromEntity).toList();
         // 리뷰 점수
-        int score = reviewRepository.getAverageScoreByStoreId(storeId);
+        Double score = reviewRepository.getAverageScoreByStoreId(storeId);
         return StoreDetailResponse.fromEntity(store, menuInfoResponseList, score);
     }
 
@@ -84,7 +83,7 @@ public class StoreService {
 
     }
 
-    public List<StoreInfoResponse> getNearFlag(Date date, double lati, double longi, List<CategoryType> categories) {
+    public List<StoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
         List<Store> nearbyFlags = storeRepository.findNearFlag(lati, longi, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
