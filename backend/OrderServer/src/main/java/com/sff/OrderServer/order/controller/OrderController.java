@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -89,5 +90,11 @@ public class OrderController {
     public ApiResult<?> updateOrderRefused(@PathVariable Long orderId) {
         orderService.updateOrderRefused(orderId);
         return ApiUtils.success("주문을 거절 하였습니다.");
+    }
+
+    @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
+    public ApiResult<?> createOrderAboutFunding(@RequestHeader("userId") Long userId, @PathVariable Long fundingId) {
+        orderService.createOrderAboutFunding(fundingId);
+        return ApiUtils.success("성공적으로 주문을 등록하였습니다.");
     }
 }

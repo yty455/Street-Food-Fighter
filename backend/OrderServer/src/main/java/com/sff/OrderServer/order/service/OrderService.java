@@ -7,8 +7,11 @@ import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
+import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.entity.Funding;
+import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
@@ -35,6 +38,7 @@ public class OrderService {
     private final OrderRecordRepository orderRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
+    private final FundingRepository fundingRepository;
 
     @Transactional
     public void createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
@@ -237,7 +241,20 @@ public class OrderService {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REFUSED));
         }
         Long userId = orderRecord.getUserId();
-        // 가게 서비스에 userId, orderId 넘기면서 "거절" 알림 보내달라 하기
+    }
+
+    @Transactional
+    public void createOrderAboutFunding(Long fundingId) {
+        Funding funding = fundingRepository.findById(fundingId).orElseThrow(
+                () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
+                LocalDateTime.now());
+        Bucket bucket = funding.getBucket();
+        try {
+            orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
+        }
     }
 
     private Bucket getBucket(Long bucketId) {
