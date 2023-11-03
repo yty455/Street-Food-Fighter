@@ -1,25 +1,25 @@
-import { PwdPageKey, passwordMessages } from '@/assets/pwdmsg';
+import { useState, useEffect } from 'react';
+import { Container, Title } from './Password.styled';
 import Keypad from '@/components/password/keypad';
 import State from '@/components/password/state';
-import usePwdpageStore from '@/stores/pwdpageStore';
-import { useState } from 'react';
-import { Container, Title } from './Password.styled';
+import usePwdPageStore from '@/stores/pwdpageStore';
+import { passwordMessages } from '@/assets/pwdmsg';
+import useCurPasswordStore from '@/stores/curpwdStore';
 
 const Password = () => {
-  const [currentPassword, setCurrentPassword] = useState('');
+  const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { curPwdPage } = usePwdPageStore();
+  const msg = passwordMessages[curPwdPage];
 
-  const handlePasswordChange = (value: any) => {
-    setCurrentPassword(value);
-  };
+  useEffect(() => {
+    resetCurrentPassword();
+  }, [curPwdPage, resetCurrentPassword]);
 
-  const { curPwdPage } = usePwdpageStore();
-  const msg = passwordMessages[curPwdPage as PwdPageKey];
   return (
     <Container>
       <Title>{msg}</Title>
-      {/* <div> 비밀번호 :{currentPassword} </div> */}
       <State currentLength={currentPassword.length} />
-      <Keypad onPasswordChange={handlePasswordChange} />
+      <Keypad />
     </Container>
   );
 };

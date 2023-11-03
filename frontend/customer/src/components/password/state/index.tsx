@@ -4,7 +4,7 @@ import { List } from '@/components/mypage/profile/Profile.styled';
 
 const State = ({ currentLength }: any) => {
   const totalLength = 6;
-
+  console.log(currentLength);
   return (
     <List>
       {Array.from({ length: totalLength }, (_, i) => {
@@ -16,8 +16,8 @@ const State = ({ currentLength }: any) => {
         };
 
         return (
-          <div style={{ width: '30px' }}>
-            <img key={i} src={src} style={style} alt={isLogo ? 'Logo' : 'Circle'} />
+          <div key={i} style={{ width: '30px' }}>
+            <img src={src} style={style} alt={isLogo ? 'Logo' : 'Circle'} />
           </div>
         );
       })}
