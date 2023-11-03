@@ -4,7 +4,7 @@ const VendorContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow-y: hidden;
-  height: 100%;
+  height: 93vh;
 `;
 const TopBox = styled.div`
   width: 100%;

@@ -1,11 +1,6 @@
 import levels from '@/assets/level';
 import { LevelContainer, LevelText } from './Level.styled';
-
-type LevelType = 'CHAMPION' | 'HEAVY' | 'LIGHT' | 'MIDDLE';
-
-interface LevelProps {
-  level: LevelType;
-}
+import { LevelProps } from '@/types/level.type';
 
 const Level = ({ level }: LevelProps) => {
   const levelInfo = levels[level];

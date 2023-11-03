@@ -4,10 +4,11 @@ import '../styles/globals.css';
 import { ThemeProvider } from 'styled-components';
 import theme from '../styles/DefaultTheme';
 import Navbar from '@/components/common/navbar';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo'];
 
   return (
     <html>
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body style={{ height: '100vh' }}>
           <StyledComponentsRegistry>
             {children}
-            {!pathname.includes('/vendor') && pathname != '/topurchase' && <Navbar />}
+            {!excludedPaths.includes(pathname) && <Navbar />}
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>
