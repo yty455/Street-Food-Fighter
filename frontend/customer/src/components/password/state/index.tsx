@@ -11,11 +11,15 @@ const State = ({ currentLength }: any) => {
         const isLogo = i < currentLength;
         const src = isLogo ? '/images/circlelogo.png' : '/images/signup/circle.png';
         const style = {
-          width: isLogo ? '18px' : '12px',
+          width: isLogo ? '28px' : '12px',
           height: 'auto',
         };
 
-        return <img key={i} src={src} style={style} alt={isLogo ? 'Logo' : 'Circle'} />;
+        return (
+          <div style={{ width: '30px' }}>
+            <img key={i} src={src} style={style} alt={isLogo ? 'Logo' : 'Circle'} />
+          </div>
+        );
       })}
     </List>
   );
