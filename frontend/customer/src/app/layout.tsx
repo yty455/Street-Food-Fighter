@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const excludedPaths = ['/vendor', '/topurchase', '/userinfo'];
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password'];
 
   return (
     <html>
