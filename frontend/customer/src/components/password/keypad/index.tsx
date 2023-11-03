@@ -41,10 +41,11 @@ const Keypad = ({ slug }: { slug: string }) => {
         if (wantPwd === currentPassword) {
           resetPasswords();
           alert('Password changed successfully.');
+          router.back();
+          setCurPwdPage(1);
         } else {
           resetCurrentPassword();
           // 변경 비밀번호로 api호출 (이후 코드 추가)
-          router.back();
         }
       }
     }
@@ -67,6 +68,7 @@ const Keypad = ({ slug }: { slug: string }) => {
 
   const handleReset = () => {
     const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    setLastKey(shuffledKeys[shuffledKeys.length - 1]);
     setKeys(shuffledKeys.slice(0, -1));
     setCurrentPassword('');
   };
