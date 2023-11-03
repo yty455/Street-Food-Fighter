@@ -31,22 +31,22 @@ public class FundingService {
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
 
+    // 펀딩 정보 저장 - 초기 상태 : 결제 중
     @Transactional
     public void createFunding(Long userId, FundingRequest fundingRequest){
         Bucket bucket = bucketRepository.findByBucketIdAndUserId(fundingRequest.getBucketId(), userId).orElseThrow(()->
                 new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER)));
-        if(fundingRepository.findByBucket(bucket).isPresent()){
-            // 바구니와 펀딩은 1대1 관계인데 이미 바구니에 해당하는 펀딩 정보가 존재할 경우 예외 처리
-            // 이런 경우 결제 시 중복 요청의 가능성.
-            throw new BaseException(new ApiError(FundingError.EXIST_FUNDING_FOR_BUCKET));
-        }
+//        if(fundingRepository.findByBucket(bucket).isPresent()){
+//            // 바구니와 펀딩은 1대1 관계인데 이미 바구니에 해당하는 펀딩 정보가 존재할 경우 예외 처리
+//            // 이런 경우 결제 시 중복 요청의 가능성.
+//            throw new BaseException(new ApiError(FundingError.EXIST_FUNDING_FOR_BUCKET));
+//        }
         try{
             Funding funding = new Funding(bucket,fundingRequest, userId);
             fundingRepository.save(funding);
         }catch(Exception e){
             throw new BaseException(new ApiError(FundingError.FAIL_TO_CREATE_FUNDING));
         }
-
     }
 
     public List<FundingResponse> getFundings(Long userId){
@@ -119,10 +119,18 @@ public class FundingService {
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
+        // 결제 완료에 따른 펀딩 대기 상태로 변경
         try {
             funding.updateFundingStateWaitting();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
+        }
+
+        // 바구니 결제 상태 true로 변경
+        try{
+            funding.getBucket().updateState();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(BucketError.UPDATE_BUCKET_STATE_ERROR));
         }
     }
     @Transactional
