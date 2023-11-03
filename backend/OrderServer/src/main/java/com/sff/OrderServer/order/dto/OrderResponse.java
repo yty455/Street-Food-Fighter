@@ -23,7 +23,7 @@ public class OrderResponse {
     public OrderResponse(OrderRecord orderRecord, String storeName, String storeUrl, Integer bucketTotalPrice, OrderMenu orderMenu, Integer restCount) {
         this.orderId = orderRecord.getOrderId();
         this.createdAt = orderRecord.getCreatedAt();
-        this.orderState = orderRecord.getState();
+        this.orderState = orderRecord.getOrderState();
         this.storeId = orderRecord.getStoreId();
         this.storeName = storeName;
         this.storeUrl = storeUrl;
