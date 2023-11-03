@@ -1,11 +1,13 @@
-// components/Keypad.tsx
 import { useState, useEffect } from 'react';
 import { CurrentPassword, KeypadContainer, Key, StyleImage } from './Keypad.styled';
 
-const Keypad = () => {
+const Keypad = ({ onPasswordChange }: any) => {
   const [keys, setKeys] = useState<number[]>([]);
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [lastKey, setLastKey] = useState<number>(0); // 마지막 키 상태 추가
+  useEffect(() => {
+    onPasswordChange(currentPassword);
+  }, [currentPassword, onPasswordChange]);
 
   useEffect(() => {
     const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -14,7 +16,15 @@ const Keypad = () => {
   }, []);
 
   const handleKeyPress = (key: number) => {
-    setCurrentPassword((prev) => prev + key.toString());
+    setCurrentPassword((prev) => {
+      const isFullPassword = prev.length === 5;
+
+      const newPass = prev.length < 6 ? prev + key.toString() : prev;
+      if (isFullPassword) {
+        console.log('비밀번호 6자리 입력 완료: ', newPass);
+      }
+      return newPass;
+    });
   };
 
   const handleErase = () => {
@@ -30,7 +40,6 @@ const Keypad = () => {
 
   return (
     <>
-      <CurrentPassword>현재비밀번호: {currentPassword}</CurrentPassword>
       <KeypadContainer>
         {keys.map((number) => (
           <Key key={number} onClick={() => handleKeyPress(number)}>
