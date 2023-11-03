@@ -12,9 +12,20 @@ const ModalOverlay = styled.div.attrs<any>((props) => ({}))`
       height: 100vh;
       z-index: 1000;
       background-color: ${white};
-
-      /* padding: 20px; */
     `;
   }};
 `;
-export { ModalOverlay };
+
+const ContentBox = styled.div`
+  display: flex;
+  padding: 50px 30px;
+  flex-direction: column;
+`;
+
+const TopContent = styled.div`
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+export { ModalOverlay, ContentBox, TopContent };
