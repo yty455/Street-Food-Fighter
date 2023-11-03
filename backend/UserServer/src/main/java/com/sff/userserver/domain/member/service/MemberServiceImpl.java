@@ -78,14 +78,14 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    private Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
-    }
-
     @Transactional
     public void updateMember(Long memberId, MyInfoRequest myInfoRequest) {
         Member member = findMember(memberId);
         member.update(myInfoRequest);
+    }
+
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
     }
 }

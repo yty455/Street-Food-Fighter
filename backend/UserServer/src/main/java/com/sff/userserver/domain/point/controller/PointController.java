@@ -17,7 +17,7 @@ public class PointController {
 
     @GetMapping("/me/points")
     public ApiResult<?> getMyPoint() {
-        PointAmountResponse myPoint = pointService.getMyPoint(1L);// TODO: 실제 인증된 회원의 ID 넣기
+        PointAmountResponse myPoint = pointService.getMyPoint(1L); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success(myPoint);
     }
 
