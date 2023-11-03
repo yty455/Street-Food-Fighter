@@ -69,4 +69,8 @@ public class Funding {
         this.fundingState = FundingState.WAITING;
         this.orderState = FundToOrderState.BEFORE_ORDER;
     }
+
+    public void updateFundToOrderState(FundToOrderState fundToOrderState) {
+        this.orderState = fundToOrderState;
+    }
 }

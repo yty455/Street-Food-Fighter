@@ -10,6 +10,7 @@ import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.entity.FundToOrderState;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
@@ -193,7 +194,6 @@ public class OrderService {
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
         }
-
     }
 
     @Transactional
@@ -254,6 +254,23 @@ public class OrderService {
             orderRepository.save(new OrderRecord(funding, orderCount, bucket));
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
+        }
+    }
+
+    @Transactional
+    public void updateOrderAboutFunding(Long fundingId, Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        Funding funding = fundingRepository.findById(fundingId).orElseThrow(
+                () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        try {
+            orderRecord.updateOrderState(OrderState.WAITING);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
+        }
+        try {
+            funding.updateFundToOrderState(FundToOrderState.ORDER_COMPLETED);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_ORDER_COMPLETED));
         }
     }
 

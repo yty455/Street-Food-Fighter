@@ -97,4 +97,10 @@ public class OrderController {
         orderService.createOrderAboutFunding(fundingId);
         return ApiUtils.success("성공적으로 주문을 등록하였습니다.");
     }
+
+    @PutMapping("/api/order-server/funding-to-order/{fundingId}/state-waiting/{orderId}")
+    public ApiResult<?> updateOrderAboutFunding(@PathVariable Long fundingId, @PathVariable Long orderId) {
+        orderService.updateOrderAboutFunding(fundingId, orderId);
+        return ApiUtils.success("펀딩에 대한 주문 상태를 변경하였습니다.");
+    }
 }
