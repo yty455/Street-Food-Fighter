@@ -41,7 +41,7 @@ public class Store extends BaseEntity {
     private double lati;
     private double longi;
     private String storeUrl;
-    private String state;
+    private BusinessType state;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus;
@@ -79,5 +79,8 @@ public class Store extends BaseEntity {
         menus.forEach(Menu::delete);
         flags.forEach(Flag::delete);
     }
+
+    public void startBusiness(){state=BusinessType.OPEN;}
+    public void closeBusiness(){state=BusinessType.CLOSE;}
 
 }

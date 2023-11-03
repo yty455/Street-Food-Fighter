@@ -72,4 +72,22 @@ public class StoreController {
         return ApiUtils.success(stores);
     }
 
+    @Operation(summary = "사장 - 가게 영업 시작", description = "가게 영업을 시작합니다. (깃발 선택 가능)")
+    @PostMapping("/store/{ownerId}/business")
+    public ApiResult<String> startBusiness(@PathVariable Long ownerId, @RequestParam Long flagId) {
+
+        storeService.startBusiness(ownerId, flagId);
+
+        return ApiUtils.success("가게 영업 시작");
+    }
+
+    @Operation(summary = "사장 - 가게 영업 종료", description = "가게 영업을 종료합니다.")
+    @DeleteMapping("/store/{ownerId}/business")
+    public ApiResult<String> closeBusiness(@PathVariable Long ownerId) {
+
+        storeService.closeBusiness(ownerId);
+
+        return ApiUtils.success("가게 영업 종료");
+    }
+
 }

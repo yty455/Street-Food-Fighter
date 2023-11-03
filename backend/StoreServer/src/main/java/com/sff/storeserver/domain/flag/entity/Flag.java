@@ -41,7 +41,11 @@ public class Flag extends BaseEntity {
         this.deleteStatus();
     }
 
-    public void fundingFailed(){
+    public void fundingFailed() {
         this.state = FlagType.FAILURE;
+    }
+
+    public void fundingSuccess() {
+        this.state = FlagType.SUCCESS;
     }
 }
