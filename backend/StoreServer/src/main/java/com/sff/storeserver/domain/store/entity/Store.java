@@ -10,7 +10,6 @@ import org.hibernate.annotations.Where;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Entity
 @Getter
@@ -41,7 +40,8 @@ public class Store extends BaseEntity {
     private double lati;
     private double longi;
     private String storeUrl;
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private BusinessType state;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus;
@@ -59,16 +59,6 @@ public class Store extends BaseEntity {
         this.introduction = storeInfo.getIntroduction();
     }
 
-    private <T> void updateIfNotNull(Consumer<T> updater, T newValue) {
-        if (newValue != null) {
-            updater.accept(newValue);
-        }
-    }
-
-    public void updateName(String name) {
-        updateIfNotNull(newValue -> this.name = newValue, name);
-    }
-
     public void updateCategory(StoreUpdateCategory storeUpdateCategory) {
         this.category = storeUpdateCategory.getCategory();
         this.businessCategory = storeUpdateCategory.getBusinessCategory();
@@ -78,6 +68,14 @@ public class Store extends BaseEntity {
         this.deleteStatus();
         menus.forEach(Menu::delete);
         flags.forEach(Flag::delete);
+    }
+
+    public void startBusiness() {
+        state = BusinessType.OPEN;
+    }
+
+    public void closeBusiness() {
+        state = BusinessType.CLOSE;
     }
 
 }

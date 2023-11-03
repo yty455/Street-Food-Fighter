@@ -26,7 +26,6 @@ public class Flag extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "STORE_ID")
     private Store store;
-
     private LocalDate date;
     private LocalTime openTime;
     private LocalTime closeTime;
@@ -35,13 +34,18 @@ public class Flag extends BaseEntity {
     private double lati;
     private double longi;
 
+    @Enumerated(EnumType.STRING)
     private FlagType state;
 
     public void delete() {
         this.deleteStatus();
     }
 
-    public void fundingFailed(){
+    public void fundingFailed() {
         this.state = FlagType.FAILURE;
+    }
+
+    public void fundingSuccess() {
+        this.state = FlagType.SUCCESS;
     }
 }

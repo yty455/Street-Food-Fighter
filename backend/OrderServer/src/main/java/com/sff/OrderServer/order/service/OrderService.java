@@ -7,8 +7,12 @@ import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
+import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.entity.FundToOrderState;
+import com.sff.OrderServer.funding.entity.Funding;
+import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
@@ -17,6 +21,7 @@ import com.sff.OrderServer.order.dto.OrderResponse;
 import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
+import com.sff.OrderServer.order.entity.ReviewState;
 import com.sff.OrderServer.order.repository.OrderRecordRepository;
 import com.sff.OrderServer.utils.ApiError;
 import java.time.LocalDateTime;
@@ -25,7 +30,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +39,7 @@ public class OrderService {
     private final OrderRecordRepository orderRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
+    private final FundingRepository fundingRepository;
 
     @Transactional
     public void createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
@@ -177,7 +182,96 @@ public class OrderService {
         String userNickName = "쿠배숑";
         String userGrade = "동메달";
         String userPhone = "01088888888";
-        return new OwnerOrderDetailResponse(orderRecord, userId, userNickName, userGrade, userPhone, reviewId, content, score, getOrderMenusDetail(orderRecord.getBucket()));
+        return new OwnerOrderDetailResponse(orderRecord, userId, userNickName, userGrade, userPhone,
+                reviewId, content, score, getOrderMenusDetail(orderRecord.getBucket()));
+    }
+
+    @Transactional
+    public void updateOrderWaiting(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        try {
+            orderRecord.updateOrderState(OrderState.WAITING);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
+        }
+    }
+
+    @Transactional
+    public void updateOrderProcessing(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        try {
+            orderRecord.updateOrderState(OrderState.PROCESSING);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_PROCESSING));
+        }
+        Long userId = orderRecord.getUserId();
+        // 가게 서비스에 userId, orderId 넘기면서 "조리중" 알림 보내달라 하기
+    }
+
+    @Transactional
+    public void updateOrderCompleted(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        try {
+            orderRecord.updateOrderState(OrderState.COMPLETED);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_COMPLETED));
+        }
+        Long userId = orderRecord.getUserId();
+        // 가게 서비스에 userId, orderId 넘기면서 "조리 완료" 알림 보내달라 하기
+    }
+
+    @Transactional
+    public void updateOrderRequest(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        try {
+            orderRecord.updateReviewState(ReviewState.REQUEST);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REQUEST));
+        }
+        Long userId = orderRecord.getUserId();
+        // 가게 서비스에 userId, orderId 넘기면서 "리뷰 요청" 알림 보내달라 하기
+    }
+
+    @Transactional
+    public void updateOrderRefused(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        try {
+            orderRecord.updateOrderState(OrderState.REFUSED);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REFUSED));
+        }
+        Long userId = orderRecord.getUserId();
+    }
+
+    @Transactional
+    public void createOrderAboutFunding(Long fundingId) {
+        Funding funding = fundingRepository.findById(fundingId).orElseThrow(
+                () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
+                LocalDateTime.now());
+        Bucket bucket = funding.getBucket();
+        try {
+            orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
+        }
+    }
+
+    @Transactional
+    public void updateOrderAboutFunding(Long fundingId, Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        Funding funding = fundingRepository.findById(fundingId).orElseThrow(
+                () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        try {
+            orderRecord.updateOrderState(OrderState.WAITING);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
+        }
+        try {
+            funding.updateOrderStateComplete();
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_ORDER_COMPLETED));
+        }
     }
 
     private Bucket getBucket(Long bucketId) {
