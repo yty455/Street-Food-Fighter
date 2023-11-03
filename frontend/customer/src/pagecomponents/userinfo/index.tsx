@@ -3,6 +3,7 @@ import { TopContent, Topbar, UserInfoContainer } from './Userinfo.styled';
 import { useRouter } from 'next/navigation';
 import { user } from '@/temp/user';
 import { LevelType } from '@/types/level.type';
+import InfoBox from '@/components/userinfo/infobox';
 const UserInfo = () => {
   const router = useRouter();
 
@@ -26,7 +27,7 @@ const UserInfo = () => {
         <div>프로필 이미지 수정</div>
         <Level level={curuser.grade as LevelType}></Level>
 
-        <div>회원정보 박스</div>
+        <InfoBox></InfoBox>
       </div>
     </UserInfoContainer>
   );
