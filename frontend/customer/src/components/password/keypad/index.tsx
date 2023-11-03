@@ -1,0 +1,106 @@
+import { useState, useEffect } from 'react';
+import { KeypadContainer, Key, StyleImage } from './Keypad.styled';
+import { useRouter } from 'next/navigation';
+import usePwdPageStore from '@/stores/pwdpageStore';
+import usePasswordStore from '@/stores/passwordStore';
+import useCurPasswordStore from '@/stores/curpwdStore';
+import { user } from '@/temp/user';
+
+const Keypad = ({ slug }: { slug: string }) => {
+  const [keys, setKeys] = useState<number[]>([]);
+  const { currentPassword, setCurrentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { curPwdPage, setCurPwdPage } = usePwdPageStore();
+  const [lastKey, setLastKey] = useState<number>(0);
+  const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    setKeys(shuffledKeys.slice(0, -1));
+    setLastKey(shuffledKeys[shuffledKeys.length - 1]);
+  }, []);
+
+  const handleComplete = () => {
+    const currentPassword = useCurPasswordStore.getState().currentPassword;
+
+    if (slug == 'change') {
+      if (curPwdPage === 1) {
+        if (currentPassword === user.paymentPassword) {
+          setCurPwdPage(2);
+          setPassword(1, currentPassword);
+        } else {
+          alert('Incorrect password.');
+          resetCurrentPassword();
+        }
+      } else if (curPwdPage === 2) {
+        setCurPwdPage(3);
+        setPassword(2, currentPassword);
+      } else if (curPwdPage === 3) {
+        setPassword(3, currentPassword);
+        if (wantPwd === currentPassword) {
+          resetPasswords();
+          alert('Password changed successfully.');
+          router.back();
+          setCurPwdPage(1);
+        } else {
+          resetCurrentPassword();
+          // 변경 비밀번호로 api호출 (이후 코드 추가)
+        }
+      }
+    }
+  };
+
+  const handleKeyPress = (key: number) => {
+    const newPass = currentPassword.length < 6 ? currentPassword + key.toString() : currentPassword;
+
+    setCurrentPassword(newPass);
+
+    if (newPass.length === 6) {
+      handleComplete();
+      handleReset();
+    }
+  };
+
+  const handleErase = () => {
+    setCurrentPassword(currentPassword.slice(0, -1));
+  };
+
+  const handleReset = () => {
+    const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    setLastKey(shuffledKeys[shuffledKeys.length - 1]);
+    setKeys(shuffledKeys.slice(0, -1));
+    setCurrentPassword('');
+  };
+
+  return (
+    <KeypadContainer>
+      {keys.map((number) => (
+        <Key key={number} onClick={() => handleKeyPress(number)}>
+          {number}
+        </Key>
+      ))}
+      <Key onClick={handleReset}>
+        <StyleImage src="/images/signup/reset.png" alt="Reset" />
+      </Key>
+      <Key onClick={() => handleKeyPress(lastKey)}>{lastKey}</Key>
+      <Key onClick={handleErase}>
+        <StyleImage src="/images/signup/erase.png" alt="Erase" />
+      </Key>
+    </KeypadContainer>
+  );
+};
+function shuffleArray(array: number[]): number[] {
+  let currentIndex = array.length,
+    randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+export default Keypad;
