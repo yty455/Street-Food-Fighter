@@ -15,7 +15,7 @@ const ReviewCard = ({ vendorid, reviewid }: any) => {
     <CardContainer>
       <div>
         <Profile>
-          <img src="/images/orderfunding/profile.png" style={{ width: '50px' }} />
+          <img src="/images/common/profile.png" style={{ width: '50px' }} />
           <TitleList>
             <Name> {reviewdata.username}</Name>
             <Starlist>

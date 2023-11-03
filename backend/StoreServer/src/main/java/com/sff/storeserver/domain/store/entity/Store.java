@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.store.entity;
 
 import com.sff.storeserver.common.BaseEntity;
+import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
 import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import jakarta.persistence.*;
@@ -45,6 +46,9 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus;
 
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flag> flags;
+
     public void update(StoreUpdateInfo storeInfo) {
         this.name = storeInfo.getName();
         this.ownerName = storeInfo.getOwnerName();
@@ -73,6 +77,7 @@ public class Store extends BaseEntity {
     public void delete() {
         this.deleteStatus();
         menus.forEach(Menu::delete);
+        flags.forEach(Flag::delete);
     }
 
 }

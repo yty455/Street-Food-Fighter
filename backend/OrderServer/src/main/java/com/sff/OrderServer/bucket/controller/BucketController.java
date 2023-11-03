@@ -24,9 +24,10 @@ public class BucketController {
         return ApiUtils.success(bucketService.createBucket(userId, items));
     }
 
-    @PutMapping("/api/order-server/user/buckets") // msa
+    // 주문, 펀딩과 통합 처리하도록 수정
+    /*@PutMapping("/api/order-server/user/buckets") // msa
     public ApiResult<?> updateBucket(@RequestHeader("userId") Long userId, @RequestParam Long bucketId){
         bucketService.updateBucketPaymentState(userId, bucketId);
         return ApiUtils.success("bucket 결제 상태로 변경 완료");
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 package com.sff.OrderServer.funding.dto;
 
+import com.sff.OrderServer.funding.entity.FundToOrderState;
 import com.sff.OrderServer.funding.entity.FundingState;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FundingDetailResponse {
     private FundingState state;
+    private FundToOrderState orderState;
     private Long storeId;
 
     private String storeName;
