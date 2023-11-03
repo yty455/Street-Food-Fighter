@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useCurPasswordStore from '@/stores/curpwdStore';
+import { user } from '@/temp/user';
 
 const Keypad = ({ slug }: { slug: string }) => {
   const [keys, setKeys] = useState<number[]>([]);
@@ -21,22 +22,31 @@ const Keypad = ({ slug }: { slug: string }) => {
   }, []);
 
   const handleComplete = () => {
-    const { setPassword, resetPasswords } = usePasswordStore.getState();
+    const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore.getState();
     const currentPassword = useCurPasswordStore.getState().currentPassword;
 
     if (slug == 'change') {
       if (curPwdPage === 1) {
-        setCurPwdPage(2);
-        setPassword(1, currentPassword);
+        if (currentPassword === user.paymentPassword) {
+          setCurPwdPage(2);
+          setPassword(1, currentPassword);
+        } else {
+          alert('Incorrect password.');
+          resetCurrentPassword();
+        }
       } else if (curPwdPage === 2) {
         setCurPwdPage(3);
         setPassword(2, currentPassword);
       } else if (curPwdPage === 3) {
+        console.log(againPwd);
         setPassword(3, currentPassword);
-        // 비밀번호 검증 로직 수행 예정
-
-        resetPasswords();
-        console.log('비밀번호 변경 완료');
+        if (wantPwd === currentPassword) {
+          resetPasswords();
+          alert('Password changed successfully.');
+        } else {
+          resetCurrentPassword();
+          alert('The new passwords do not match.');
+        }
       }
     }
   };
@@ -48,6 +58,7 @@ const Keypad = ({ slug }: { slug: string }) => {
 
     if (newPass.length === 6) {
       handleComplete();
+      handleReset();
     }
   };
 
