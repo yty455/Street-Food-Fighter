@@ -12,6 +12,7 @@ import com.sff.OrderServer.funding.dto.FundingDetailResponse;
 import com.sff.OrderServer.funding.dto.FundingItem;
 import com.sff.OrderServer.funding.dto.FundingRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
+import com.sff.OrderServer.funding.dto.StoreFlag;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.utils.ApiError;
@@ -52,6 +53,7 @@ public class FundingService {
     public List<FundingResponse> getFundings(Long userId){
         List<Funding> fundings = fundingRepository.findAllByUserId(userId);
         List<FundingResponse> fundingResponses = new ArrayList<>();
+        List<Long> storeIdList = fundings.stream().map(Funding::getStoreId).toList();
         for(Funding funding : fundings){
             Long storeId = funding.getStoreId();
             // storeId로 가게 이름, 이미지 URL 가져와야함.(MSA)
