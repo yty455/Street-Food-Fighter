@@ -2,6 +2,7 @@ package com.sff.OrderServer.order.dto;
 
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
+import com.sff.OrderServer.order.entity.ReviewState;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -11,7 +12,8 @@ public class OrderRecordOfState {
 
     private Long orderId;
     private String receiptNumber;
-    private OrderState state;
+    private OrderState orderState;
+    private ReviewState reviewState;
     private String requirement;
     private LocalDateTime orderDate;
     private List<OrderItem> orderMenuResponseList;
@@ -21,7 +23,8 @@ public class OrderRecordOfState {
     public OrderRecordOfState(OrderRecord orderRecord, List<OrderItem> orderMenuResponseList) {
         this.orderId = orderRecord.getOrderId();
         this.receiptNumber = orderRecord.getReceiptNumber();
-        this.state = orderRecord.getState();
+        this.orderState = orderRecord.getOrderState();
+        this.reviewState = orderRecord.getReviewState();
         this.requirement = orderRecord.getRequirement();
         this.orderDate = orderRecord.getCreatedAt();
         this.orderMenuResponseList = orderMenuResponseList;
