@@ -5,7 +5,7 @@ import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useCurPasswordStore from '@/stores/curpwdStore';
 
-const Keypad = () => {
+const Keypad = ({ slug }: { slug: string }) => {
   const [keys, setKeys] = useState<number[]>([]);
   const { currentPassword, setCurrentPassword, resetCurrentPassword } = useCurPasswordStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
@@ -24,17 +24,20 @@ const Keypad = () => {
     const { setPassword, resetPasswords } = usePasswordStore.getState();
     const currentPassword = useCurPasswordStore.getState().currentPassword;
 
-    if (curPwdPage === 1) {
-      setCurPwdPage(2);
-      setPassword(1, currentPassword);
-    } else if (curPwdPage === 2) {
-      setCurPwdPage(3);
-      setPassword(2, currentPassword);
-    } else if (curPwdPage === 3) {
-      setPassword(3, currentPassword);
-      // 비밀번호 검증 로직 수행 예정
-      resetPasswords();
-      console.log('비밀번호 변경 완료');
+    if (slug == 'change') {
+      if (curPwdPage === 1) {
+        setCurPwdPage(2);
+        setPassword(1, currentPassword);
+      } else if (curPwdPage === 2) {
+        setCurPwdPage(3);
+        setPassword(2, currentPassword);
+      } else if (curPwdPage === 3) {
+        setPassword(3, currentPassword);
+        // 비밀번호 검증 로직 수행 예정
+
+        resetPasswords();
+        console.log('비밀번호 변경 완료');
+      }
     }
   };
 
@@ -44,7 +47,6 @@ const Keypad = () => {
     setCurrentPassword(newPass);
 
     if (newPass.length === 6) {
-      console.log('비밀번호 6자리 입력 완료: ', newPass);
       handleComplete();
     }
   };

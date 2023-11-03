@@ -6,7 +6,7 @@ import usePwdPageStore from '@/stores/pwdpageStore';
 import { passwordMessages } from '@/assets/pwdmsg';
 import useCurPasswordStore from '@/stores/curpwdStore';
 
-const Password = () => {
+const PasswordPage = ({ slug }: { slug: string }) => {
   const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
   const { curPwdPage } = usePwdPageStore();
   const msg = passwordMessages[curPwdPage];
@@ -19,9 +19,9 @@ const Password = () => {
     <Container>
       <Title>{msg}</Title>
       <State currentLength={currentPassword.length} />
-      <Keypad />
+      <Keypad slug={slug} />
     </Container>
   );
 };
 
-export default Password;
+export default PasswordPage;

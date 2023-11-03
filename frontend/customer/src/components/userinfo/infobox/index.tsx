@@ -39,7 +39,7 @@ const InfoBox = ({ onEditClick }: any) => {
       </ContentBox>
       <ContentBox
         onClick={() => {
-          router.push('/password');
+          router.push('/password/change');
         }}
       >
         <InfoTitle>결제 비밀번호 변경</InfoTitle>
