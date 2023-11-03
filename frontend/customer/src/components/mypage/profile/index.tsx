@@ -1,7 +1,8 @@
 import Level from '../level';
 import { RowDisplay, ProfileContainer, List, StyledButton, Airfont, LevelList, Nickname, ProfileList } from './Profile.styled';
-
+import { useRouter } from 'next/navigation';
 const Profile = ({ toggleModal }: any) => {
+  const router = useRouter();
   return (
     <ProfileContainer>
       <ProfileList>
@@ -15,7 +16,13 @@ const Profile = ({ toggleModal }: any) => {
             </LevelList>
           </div>
         </RowDisplay>
-        <img src="/images/common/right.png" style={{ height: '30px' }} />
+        <img
+          src="/images/common/right.png"
+          style={{ height: '30px' }}
+          onClick={() => {
+            router.push('/userinfo');
+          }}
+        />
       </ProfileList>
 
       <List>
