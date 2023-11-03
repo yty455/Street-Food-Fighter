@@ -65,6 +65,7 @@ public class BucketService {
         return orderMenus;
     }
 
+    // Not using
     @Transactional
     public void updateBucketPaymentState(Long userId, Long bucketId){
         bucketRepository.findByBucketIdAndUserId(bucketId, userId).orElseThrow(

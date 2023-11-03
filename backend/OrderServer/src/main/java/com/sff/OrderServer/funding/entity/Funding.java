@@ -48,7 +48,7 @@ public class Funding {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private FundingState fundingState = FundingState.WAITING;
+    private FundingState fundingState = FundingState.PAYMENT_IN_PROGRESS;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -66,7 +66,7 @@ public class Funding {
         this.flagId = fundingRequest.getFlagId();
         this.userId = userId;
         this.requirement = fundingRequest.getRequirement();
-        this.fundingState = FundingState.WAITING;
+        this.fundingState = FundingState.PAYMENT_IN_PROGRESS;
         this.orderState = FundToOrderState.BEFORE_ORDER;
     }
 

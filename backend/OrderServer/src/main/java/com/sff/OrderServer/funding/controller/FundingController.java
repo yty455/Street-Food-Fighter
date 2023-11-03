@@ -74,7 +74,7 @@ public class FundingController {
     @PutMapping("/api/order-server/fundings/funding-state/waiting/{fundingId}")
     public ApiResult<?> updateFundingWaiting(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
         fundingService.updateFundingStateWaiting(userId, fundingId);
-        return ApiUtils.success("펀딩 상태 대기로 변경 완료");
+        return ApiUtils.success("펀딩 상태 대기 중으로 변경 및 바구니 결제 상태 true로 변경 완료");
     }
 
 }
