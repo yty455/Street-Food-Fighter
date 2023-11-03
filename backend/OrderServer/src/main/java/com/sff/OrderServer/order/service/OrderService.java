@@ -268,7 +268,7 @@ public class OrderService {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
         }
         try {
-            funding.updateFundToOrderState(FundToOrderState.ORDER_COMPLETED);
+            funding.updateOrderStateComplete();
         } catch (Exception e) {
             throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_ORDER_COMPLETED));
         }
