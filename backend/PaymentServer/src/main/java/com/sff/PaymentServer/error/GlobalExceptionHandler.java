@@ -1,9 +1,10 @@
 package com.sff.PaymentServer.error;
 
-import com.sff.OrderServer.error.type.BaseException;
-import com.sff.OrderServer.error.type.ValidationException;
-import com.sff.OrderServer.utils.ApiResult;
-import com.sff.OrderServer.utils.ApiUtils;
+
+import com.sff.PaymentServer.error.type.BaseException;
+import com.sff.PaymentServer.error.type.ValidationException;
+import com.sff.PaymentServer.utils.ApiResult;
+import com.sff.PaymentServer.utils.ApiUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,6 @@
 package com.sff.PaymentServer.utils;
 
-import com.sff.OrderServer.error.type.ServiceError;
+import com.sff.PaymentServer.error.type.ServiceError;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

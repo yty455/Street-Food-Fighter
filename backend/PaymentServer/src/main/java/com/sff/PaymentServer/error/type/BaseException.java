@@ -1,6 +1,6 @@
 package com.sff.PaymentServer.error.type;
 
-import com.sff.OrderServer.utils.ApiError;
+import com.sff.PaymentServer.utils.ApiError;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
