@@ -55,6 +55,9 @@ dependencies {
     // springdoc swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
 
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
