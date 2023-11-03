@@ -1,9 +1,10 @@
 import { user } from '@/temp/user';
 import { BoxContainer, Content, ContentBox, InfoTitle, Right } from './Userinfo.styled';
+import { useRouter } from 'next/navigation';
 
 const InfoBox = ({ onEditClick }: any) => {
   const curuser = user;
-
+  const router = useRouter();
   return (
     <BoxContainer>
       <ContentBox onClick={() => onEditClick('email')}>
@@ -36,7 +37,11 @@ const InfoBox = ({ onEditClick }: any) => {
           <img src="/images/common/right.png" style={{ height: '20px' }} />
         </Right>
       </ContentBox>
-      <ContentBox onClick={() => onEditClick('paymentPassword')}>
+      <ContentBox
+        onClick={() => {
+          router.push('/password/change');
+        }}
+      >
         <InfoTitle>결제 비밀번호 변경</InfoTitle>
         <img src="/images/common/right.png" style={{ height: '20px' }} />
       </ContentBox>
