@@ -1,7 +1,10 @@
+import { user } from '@/temp/user';
+import { LevelType } from '@/types/level.type';
 import Level from '../level';
 import { RowDisplay, ProfileContainer, List, StyledButton, Airfont, LevelList, Nickname, ProfileList } from './Profile.styled';
-
+import { useRouter } from 'next/navigation';
 const Profile = ({ toggleModal }: any) => {
+  const router = useRouter();
   return (
     <ProfileContainer>
       <ProfileList>
@@ -10,12 +13,18 @@ const Profile = ({ toggleModal }: any) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <Nickname>붕어빵 조아</Nickname>
             <LevelList>
-              <Level level="LIGHT"></Level>
+              <Level level={user.grade as LevelType}></Level>
               <img src="/images/mypage/quest.png" style={{ height: '20px' }} onClick={toggleModal} />
             </LevelList>
           </div>
         </RowDisplay>
-        <img src="/images/common/right.png" style={{ height: '30px' }} />
+        <img
+          src="/images/common/right.png"
+          style={{ height: '30px' }}
+          onClick={() => {
+            router.push('/userinfo');
+          }}
+        />
       </ProfileList>
 
       <List>
