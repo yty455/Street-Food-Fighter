@@ -11,10 +11,10 @@ const Keypad = ({ slug }: { slug: string }) => {
   const { currentPassword, setCurrentPassword, resetCurrentPassword } = useCurPasswordStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const [lastKey, setLastKey] = useState<number>(0);
+  const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore();
 
   const router = useRouter();
 
-  // 컴포넌트가 마운트될 때 키패드를 섞습니다.
   useEffect(() => {
     const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     setKeys(shuffledKeys.slice(0, -1));
@@ -22,7 +22,6 @@ const Keypad = ({ slug }: { slug: string }) => {
   }, []);
 
   const handleComplete = () => {
-    const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore.getState();
     const currentPassword = useCurPasswordStore.getState().currentPassword;
 
     if (slug == 'change') {
@@ -38,14 +37,14 @@ const Keypad = ({ slug }: { slug: string }) => {
         setCurPwdPage(3);
         setPassword(2, currentPassword);
       } else if (curPwdPage === 3) {
-        console.log(againPwd);
         setPassword(3, currentPassword);
         if (wantPwd === currentPassword) {
           resetPasswords();
           alert('Password changed successfully.');
         } else {
           resetCurrentPassword();
-          alert('The new passwords do not match.');
+          // 변경 비밀번호로 api호출 (이후 코드 추가)
+          router.back();
         }
       }
     }
