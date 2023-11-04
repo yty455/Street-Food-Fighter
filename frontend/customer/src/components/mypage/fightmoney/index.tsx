@@ -1,7 +1,7 @@
 import Button from '@/components/common/button';
 import { ChargeBox, Point, PointContainer, TitleBox } from './Fightmoney.styled';
 
-const Fightmoney = () => {
+const Fightmoney = ({ toggleCharge }: any) => {
   const userpoint = 10000;
   return (
     <PointContainer>
@@ -12,7 +12,7 @@ const Fightmoney = () => {
       <ChargeBox>
         <Point>총 {Number(userpoint).toLocaleString()} F</Point>
         <div style={{ height: '40px' }}>
-          <Button text="충전하기" fontsize="18px" />
+          <Button text="충전하기" fontsize="18px" onClick={toggleCharge} />
         </div>
       </ChargeBox>
     </PointContainer>
