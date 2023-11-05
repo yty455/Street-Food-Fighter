@@ -34,7 +34,7 @@ const ItemBox = ({ item }: ItemBoxProps) => {
         </MenuContentBox>
         <ButtonList>
           <div>
-            <Button text="수정" color="main"></Button>
+            <Button text="수정"></Button>
           </div>
           <div>
             <Button text="삭제" color="red"></Button>
