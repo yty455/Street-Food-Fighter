@@ -8,6 +8,7 @@ const Container = styled.div.attrs<any>((props) => ({}))`
       flex-direction: column;
       background-color: ${lightgray};
       height: 100vh;
+      gap: 15px;
     `;
   }};
 `;
