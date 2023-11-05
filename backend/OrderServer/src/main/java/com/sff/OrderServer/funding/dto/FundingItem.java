@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FundingItem {
     private String name;
-    private int price;
-    private int count;
+    private Integer price;
+    private Integer count;
     private List<Option> orderOptionList;
-    private int menuTotalPrice;
+    private Integer menuTotalPrice;
 
     public FundingItem(OrderMenu orderMenu, List<Option> options, Integer menuTotalPrice){
         this.name = orderMenu.getName();

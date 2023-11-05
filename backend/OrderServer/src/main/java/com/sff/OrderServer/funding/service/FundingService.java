@@ -8,12 +8,16 @@ import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.dto.FundingChosen;
 import com.sff.OrderServer.funding.dto.FundingDetailResponse;
 import com.sff.OrderServer.funding.dto.FundingItem;
+import com.sff.OrderServer.funding.dto.FundingPerFlag;
 import com.sff.OrderServer.funding.dto.FundingRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
+import com.sff.OrderServer.funding.dto.FundingUser;
 import com.sff.OrderServer.funding.dto.StoreFlag;
 import com.sff.OrderServer.funding.entity.Funding;
+import com.sff.OrderServer.funding.entity.FundingState;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.utils.ApiError;
 import java.time.LocalDateTime;
@@ -115,7 +119,6 @@ public class FundingService {
         }
     }
 
-    // funding state 변경
     @Transactional
     public void updateFundingStateWaiting(Long userId, Long fundingId){
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
@@ -135,73 +138,54 @@ public class FundingService {
             throw new BaseException(new ApiError(BucketError.UPDATE_BUCKET_STATE_ERROR));
         }
     }
+
     @Transactional
-    public void updateFundingStateSuccess(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
-        try {
+    public void updateFundingStates(FundingChosen fundingChosen){
+        Long pickedFlagId = fundingChosen.getPickedFlagId();
+        List<Long> unpickedFlagIds = fundingChosen.getUnpickedFlagIds();
+
+        // picked Flag state update
+        updatePickedFundingState(pickedFlagId);
+
+        // unpicked Flags state update
+        updateUnpickedFundingState(unpickedFlagIds);
+
+        // 알림 요청 보내기 : KAFKA
+
+    }
+
+    @Transactional
+    private void updatePickedFundingState(Long flagId){
+        Funding funding = fundingRepository.findById(flagId).orElseThrow(()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        try{
             funding.updateFundingStateSuccess();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
     }
+
     @Transactional
-    public void updateFundingStateFailure(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
+    private void updateUnpickedFundingState(List<Long> flagIds){
+        List<Funding> fundings = fundingRepository.findAllById(flagIds);
         try {
-            funding.updateFundingStateFailure();
+            for (Funding funding : fundings) {
+                funding.updateFundingStateFailure();
+                funding.updateOrderStateFailed();
+            }
+            fundingRepository.saveAll(fundings);
         }catch (Exception e){
-            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
+            throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_AND_ORDER_STATE));
         }
-        updateFundingOrderStateFailed(userId, fundingId); // 펀딩 실패에 따른 주문 상태 - 실패 변경
     }
 
-    // funding orderState 변경
-    @Transactional
-    public void updateFundingOrderStateBefore(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
-        try{
-            funding.updateOrderStateBefore();
-        }catch(Exception e){
-            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
-        }
+    public List<FundingPerFlag> getFundingPerFlag(List<Long> flags){
+        List<Object[]> totalPricePerFlags = fundingRepository.sumBucketTotalPriceByFlagIdsAndWaitingState(flags);
+        return totalPricePerFlags.stream().map(totalPricePerFlag -> new FundingPerFlag((Long)totalPricePerFlag[0], ((Long)totalPricePerFlag[1]).intValue())).collect(Collectors.toList());
     }
-    @Transactional
-    public void updateFundingOrderStateComplete(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
-        try {
-            funding.updateOrderStateComplete();
-        }catch(Exception e){
-            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
-        }
-    }
-    @Transactional
-    public void updateFundingOrderStateCancled(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
-        try{
-            funding.updateOrderStateCancled();
-        }catch(Exception e){
-            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
-        }
-    }
-    @Transactional
-    public void updateFundingOrderStateFailed(Long userId, Long fundingId){
-        Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
-                ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
-        );
-        try{
-            funding.updateOrderStateFailed();
-        }catch(Exception e){
-            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
-        }
+
+    public List<FundingUser> getFundingPerUsers(Long flagId){
+        List<Long> users = fundingRepository.findUserIdsByFlagId(flagId);
+        // 펀딩한 회원별
+        return null;
     }
 }
