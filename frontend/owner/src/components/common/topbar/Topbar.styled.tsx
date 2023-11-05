@@ -18,6 +18,7 @@ const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
       justify-content: flex-start;
 
       font-size: 24px;
+      width: 100%;
 
       box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.05);
     `;
