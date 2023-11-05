@@ -4,7 +4,8 @@ export const items = [
     id: 1,
     name: '세계 최강 초코 붕어빵',
     price: 8000,
-    menuUrl: '이미지URL',
+    menuUrl:
+      'https://firebasestorage.googleapis.com/v0/b/street-food-fighter.appspot.com/o/images%2F1018fab6-1c6a-4b5f-8f77-c3283b23da95?alt=media&token=a3d81131-8a86-417a-ab69-67f03a149e89',
     optionInfoList: [
       {
         id: 2,
@@ -22,7 +23,8 @@ export const items = [
     id: 4,
     name: '세계 최강 팥 붕어빵',
     price: 6000,
-    menuUrl: '이미지URL',
+    menuUrl:
+      'https://firebasestorage.googleapis.com/v0/b/street-food-fighter.appspot.com/o/images%2F1018fab6-1c6a-4b5f-8f77-c3283b23da95?alt=media&token=a3d81131-8a86-417a-ab69-67f03a149e89',
     optionInfoList: [
       {
         id: 5,
