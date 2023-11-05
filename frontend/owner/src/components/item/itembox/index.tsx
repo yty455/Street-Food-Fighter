@@ -29,7 +29,7 @@ const ItemBox = ({ item }: ItemBoxProps) => {
           </div>
           <div>
             <LittleTitle> 가격</LittleTitle>
-            <Content>{item.price}원</Content>
+            <Content>{Number(item.price).toLocaleString()}원</Content>
           </div>
         </MenuContentBox>
         <ButtonList>
@@ -47,7 +47,7 @@ const ItemBox = ({ item }: ItemBoxProps) => {
             <OptionBox key={option.id}>
               <LittleTitle>옵션 {optionIndex + 1}</LittleTitle>
               <OptionContent>{option.name}</OptionContent>
-              <LittleTitle>{option.price}원</LittleTitle>
+              <LittleTitle>{Number(option.price).toLocaleString()}원</LittleTitle>
             </OptionBox>
           ))}
       </OptionContainer>
