@@ -42,7 +42,7 @@ public class OrderService {
     private final FundingRepository fundingRepository;
 
     @Transactional
-    public void createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
+    public Integer createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
         Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
@@ -51,6 +51,7 @@ public class OrderService {
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
+        return bucket.getTotalPrice();
     }
 
     public List<OrderResponse> getOrderRecords(Long userId) {

@@ -23,8 +23,7 @@ public class OrderController {
     @PostMapping("/api/order-server/user/orders")
     public ApiResult<?> createOrder(@RequestHeader("userId") Long userId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
-        orderService.createOrder(orderCreateRequest, userId);
-        return ApiUtils.success("성공적으로 주문을 등록하였습니다.");
+        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId));
     }
 
     @GetMapping("/api/order-server/user/orders")
