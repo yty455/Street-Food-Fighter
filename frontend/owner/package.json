@@ -14,15 +14,18 @@
     "@types/react-dom": "18.2.6",
     "axios": "^1.4.0",
     "eslint-config-next": "13.4.8",
+    "firebase": "^10.5.2",
     "moment": "^2.29.4",
     "next": "13.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^6.0.2",
     "typescript": "5.1.6",
+    "uuid": "^9.0.1",
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
