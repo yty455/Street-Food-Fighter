@@ -26,6 +26,7 @@ dependencies {
 	// 서버간 통신을 위한 openfeign
 	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 }
 
 tasks.named('test') {
