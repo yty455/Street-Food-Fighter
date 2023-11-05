@@ -1,38 +1,41 @@
 import { Item, ItemOptionInfo } from '@/types/item.type';
+import { Container, MenuBox, MenuContentBox, MenuImage, LittleTitle, Content, OptionContainer, OptionBox, OptionContent } from './Itembox.styled';
 
 interface ItemBoxProps {
   item: Item;
-  index: number;
 }
 
-const ItemBox = ({ item }: any) => {
+const ItemBox = ({ item }: ItemBoxProps) => {
   return (
-    <div>
-      <div>
-        <img src={item.menuUrl} style={{ width: '70px' }} />
-        <div>
-          <div>상품명</div>
-          <div>{item.name}</div>
-        </div>
-        <div>
-          <div> 가격</div>
-          <div>{item.price}원</div>
-        </div>
+    <Container>
+      <MenuBox>
+        <MenuImage src={item.menuUrl} />
+        <MenuContentBox>
+          <div>
+            <LittleTitle>상품명</LittleTitle>
+            <Content>{item.name}</Content>
+          </div>
+          <div>
+            <LittleTitle> 가격</LittleTitle>
+            <Content>{item.price}원</Content>
+          </div>
+        </MenuContentBox>
         <div>
           <div> 수정</div>
           <div> 삭제</div>
         </div>
-      </div>
-      <div>
-        {item.optionInfoList.map((option: ItemOptionInfo, optionIndex: number) => (
-          <div key={option.id}>
-            <div>옵션 {optionIndex + 1}</div>
-            <div>{option.name}</div>
-            <div>{option.price}원</div>
-          </div>
-        ))}
-      </div>
-    </div>
+      </MenuBox>
+      <OptionContainer>
+        {item.optionInfoList &&
+          item.optionInfoList.map((option: ItemOptionInfo, optionIndex: number) => (
+            <OptionBox key={option.id}>
+              <LittleTitle>옵션 {optionIndex + 1}</LittleTitle>
+              <OptionContent>{option.name}</OptionContent>
+              <LittleTitle>{option.price}원</LittleTitle>
+            </OptionBox>
+          ))}
+      </OptionContainer>
+    </Container>
   );
 };
 
