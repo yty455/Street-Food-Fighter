@@ -1,9 +1,12 @@
+import Topbar from '@/app/components/common/topbar';
+import { Container } from './Item.styled';
+
 const ItemPage = () => {
   return (
-    <div>
-      <div> 상품 관리</div>
+    <Container>
+      <Topbar text="상품 관리"></Topbar>
       <div>상품리스트</div>
-    </div>
+    </Container>
   );
 };
 
