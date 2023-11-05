@@ -16,4 +16,9 @@ public class ApiError {
         this.message = error.getMessage();
         this.status = error.getCode();
     }
+
+    public ApiError(ApiError error){
+        this.message = error.getMessage();
+        this.status = error.getStatus();
+    }
 }
