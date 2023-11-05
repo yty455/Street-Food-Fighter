@@ -2,6 +2,6 @@
 
 import MainPage from '@/pagecomponents/main';
 
-export default function Home() {
+export default function Main() {
   return <MainPage />;
 }
