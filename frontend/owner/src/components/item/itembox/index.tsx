@@ -1,5 +1,17 @@
 import { Item, ItemOptionInfo } from '@/types/item.type';
-import { Container, MenuBox, MenuContentBox, MenuImage, LittleTitle, Content, OptionContainer, OptionBox, OptionContent } from './Itembox.styled';
+import {
+  ButtonList,
+  Container,
+  MenuBox,
+  MenuContentBox,
+  MenuImage,
+  LittleTitle,
+  Content,
+  OptionContainer,
+  OptionBox,
+  OptionContent,
+} from './Itembox.styled';
+import Button from '@/components/common/button';
 
 interface ItemBoxProps {
   item: Item;
@@ -20,10 +32,14 @@ const ItemBox = ({ item }: ItemBoxProps) => {
             <Content>{item.price}원</Content>
           </div>
         </MenuContentBox>
-        <div>
-          <div> 수정</div>
-          <div> 삭제</div>
-        </div>
+        <ButtonList>
+          <div>
+            <Button text="수정" color="main"></Button>
+          </div>
+          <div>
+            <Button text="삭제" color="red"></Button>
+          </div>
+        </ButtonList>
       </MenuBox>
       <OptionContainer>
         {item.optionInfoList &&

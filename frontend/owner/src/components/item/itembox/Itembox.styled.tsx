@@ -21,7 +21,7 @@ const MenuBox = styled.div`
 const MenuContentBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50vw;
+  width: 47vw;
   gap: 10px;
 `;
 
@@ -101,4 +101,10 @@ const OptionContent = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { Container, MenuBox, MenuContentBox, MenuImage, LittleTitle, Content, OptionContainer, OptionBox, OptionContent };
+const ButtonList = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+`;
+export { ButtonList, Container, MenuBox, MenuContentBox, MenuImage, LittleTitle, Content, OptionContainer, OptionBox, OptionContent };
