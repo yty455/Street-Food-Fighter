@@ -1,7 +1,9 @@
 import React from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
+import { useRouter } from 'next/navigation';
 
 const MainPage = () => {
+  const router = useRouter();
   return (
     <MainContainer>
       <OperButtonList>
@@ -17,7 +19,11 @@ const MainPage = () => {
           <img src="/images/common/vendor.png" style={{ width: '75px' }} />
           <div>가게 정보 관리</div>
         </Menu>
-        <Menu>
+        <Menu
+          onClick={() => {
+            router.push('/item');
+          }}
+        >
           <img src="/images/common/item.png" style={{ width: '75px' }} />
           <div>상품 관리</div>
         </Menu>
