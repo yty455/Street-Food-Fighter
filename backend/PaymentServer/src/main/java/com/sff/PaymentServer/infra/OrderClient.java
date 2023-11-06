@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "orderClient", url = "${spring.data.Order_Server}")
 public interface OrderClient {
 
-    @PostMapping(value = "/api/order-server/user/orders")
+    @PostMapping(value = "/api/order-server/orders")
     ApiResult<OrderCreateResponse> createOrderRecord(@RequestBody OrderCreateRequest orderCreateRequest);
 
     @PutMapping(value = "/api/order-server/state-waiting/{orderId}")
