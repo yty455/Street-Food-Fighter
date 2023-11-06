@@ -1,4 +1,6 @@
-export const user = {
+import { User } from '@/types/usertype';
+
+export const user: User = {
   points: 20000,
   email: 'test@test.com',
   nickname: '테스터',
@@ -12,4 +14,5 @@ export const user = {
   region3: '신호동',
   region4: '',
   paymentPassword: '123456',
+  id: '',
 };

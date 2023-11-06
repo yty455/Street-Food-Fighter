@@ -10,13 +10,14 @@ import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
-import com.sff.OrderServer.funding.entity.FundToOrderState;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
+import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderResponse;
 import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
@@ -25,10 +26,13 @@ import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
 import com.sff.OrderServer.order.repository.OrderRecordRepository;
 import com.sff.OrderServer.utils.ApiError;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -247,6 +251,8 @@ public class OrderService {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REFUSED));
         }
         Long userId = orderRecord.getUserId();
+        // 가게 서비스에 orderId, userId 넘기면서 "주문 거절" 알림 보내달라하기
+        // 결제 서버에 환불 요청 보내기
     }
 
     @Transactional
@@ -278,6 +284,48 @@ public class OrderService {
         } catch (Exception e) {
             throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_ORDER_COMPLETED));
         }
+    }
+
+    public Long getStoreId(Long orderId) {
+        Long storeId = orderRepository.findById(orderId).get().getStoreId();
+        return storeId;
+    }
+
+    @Transactional
+    public List<MenuPerOrderResponse> getMenusPerOrders(List<Long> orders) {
+        List<MenuPerOrderResponse> menuPerOderResponseList = new ArrayList<>();
+
+        for (Long orderId : orders) {
+            OrderRecord orderRecord = getOrderRecord(orderId);
+            Bucket bucket = orderRecord.getBucket();
+            List<String> menuList = getOrderMenus(bucket);
+            menuPerOderResponseList.add(new MenuPerOrderResponse(orderId, menuList));
+        }
+        return menuPerOderResponseList;
+    }
+
+    // 바구니에 들은 주문 메뉴, 옵션
+    private List<String> getOrderMenus(Bucket bucket) {
+        List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
+        List<String> menuList = new ArrayList<>();
+        for (OrderMenu orderMenu : orderMenuList) {
+            menuList.add(orderMenu.getName());
+        }
+        return menuList;
+    }
+
+    // 매월 1일 00:00에 구동
+    @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
+    public void ren() {
+        List<OrderPerUser> orderPerUserResponseList = getOrderPerUser();
+    }
+
+    public List<OrderPerUser> getOrderPerUser() {
+        int previousMonth = LocalDate.now().minusMonths(1).getMonthValue();
+        List<Object[]> orderPerUserList = orderRepository.countOrdersByUserId(previousMonth);
+        return orderPerUserList.stream()
+                .map(orderPerUser -> new OrderPerUser((Long) orderPerUser[0],
+                        ((Long) orderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
     private Bucket getBucket(Long bucketId) {

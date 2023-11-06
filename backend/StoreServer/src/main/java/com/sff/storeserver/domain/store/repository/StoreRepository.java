@@ -18,4 +18,5 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query(value = "SELECT s.* FROM flag f join store s on f.store_id = s.store_id WHERE ST_DISTANCE(ST_PointFromText(CONCAT('POINT(', CAST(f.lati AS CHAR), ' ', CAST(f.longi AS CHAR), ')')), ST_GeomFromText(CONCAT('POINT(', :lati, ' ', :longi, ')'))) <= 1500 and f.date = :date and f.state = 'WAITING' ", nativeQuery = true)
     List<Store> findNearFlag(@Param("lati") double lati, @Param("longi") double longi, @Param("date") LocalDate date);
 
+    List<Store> findAllByIdIn(List<Long> storeList);
 }
