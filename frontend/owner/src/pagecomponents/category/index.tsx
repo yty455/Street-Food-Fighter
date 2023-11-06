@@ -4,10 +4,13 @@ import { Container, SettingBox, TypeBox, Title, CategoriesContainer, CategoryIma
 import { categories } from '@/assets/category';
 import { useState } from 'react';
 import BottomBtn from '@/components/common/bottombtn';
+import { vendorcat } from '@/temp/category';
 
 const CategoryPage = () => {
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const initialCategoryName = categories.find((cat) => cat.type === vendorcat.category)?.name || null;
+
+  const [selectedType, setSelectedType] = useState(vendorcat.businessCategory);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategoryName);
 
   const selectCategory = (categoryName: string) => {
     setSelectedCategory(categoryName);
@@ -28,7 +31,7 @@ const CategoryPage = () => {
       <SettingBox>
         <TypeBox>
           <Title>업태</Title>
-          <Select a="포장마차" b="푸드트럭" onSelect={handleTypeSelection} />
+          <Select a="포장마차" b="푸드트럭" selected={selectedType} onSelect={handleTypeSelection} />
         </TypeBox>
         <TypeBox>
           <Title>대표 카테고리</Title>
@@ -36,7 +39,6 @@ const CategoryPage = () => {
             {categories.map((category: any) => (
               <CategoryItem key={category.id} onClick={() => selectCategory(category.name)} selected={selectedCategory === category.name}>
                 <CategoryImage src={`/images/category/${category.image}`} alt={category.name} />
-
                 <CategoryName>{category.name}</CategoryName>
               </CategoryItem>
             ))}
