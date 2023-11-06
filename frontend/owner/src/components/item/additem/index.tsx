@@ -9,9 +9,8 @@ import useImageUploader from '@/hooks/common/imageUpload.hook';
 import useOptionsHook from '@/hooks/item/option.hook.';
 
 const AddItem = ({ closeModal, type, item }: any) => {
-  console.log(item);
-  const [productName, setProductName] = useState(item?.name || '');
-  const [productPrice, setProductPrice] = useState(item?.price || '');
+  const [name, setName] = useState(item?.name || '');
+  const [price, setPrice] = useState(item?.price || '');
   const [menuUrl, setMenuUrl] = useState(item?.menuUrl || '/images/common/defaultmenuimg.png');
 
   const topbarText = type === 'modify' ? '상품 수정' : '상품 추가';
@@ -22,15 +21,14 @@ const AddItem = ({ closeModal, type, item }: any) => {
   // 옵션 관련
   const { options, addOption, handleOptionChange, removeOption } = useOptionsHook(item?.optionInfoList || []);
 
-  console.log('add item options', options);
   // 저장로직
   const saveItem = () => {
     const optionsWithoutIds = options.map(({ id, ...rest }) => rest);
     const itemData = {
-      productName,
-      productPrice,
+      name,
+      price,
       menuUrl,
-      options: optionsWithoutIds,
+      optionInfoList: optionsWithoutIds,
     };
     console.log(JSON.stringify(itemData, null, 2));
 
@@ -50,11 +48,11 @@ const AddItem = ({ closeModal, type, item }: any) => {
         <MenuContentBox>
           <div>
             <LittleTitle>상품명</LittleTitle>
-            <Input value={productName} onChange={(e: any) => setProductName(e.target.value)} placeholder="상품 이름을 입력해주세요" />
+            <Input value={name} onChange={(e: any) => setName(e.target.value)} placeholder="상품 이름을 입력해주세요" />
           </div>
           <div>
             <LittleTitle> 가격</LittleTitle>
-            <Input value={productPrice} onChange={(e: any) => setProductPrice(e.target.value)} placeholder="가격을 입력해주세요" />
+            <Input value={price} onChange={(e: any) => setPrice(e.target.value)} placeholder="가격을 입력해주세요" />
           </div>
         </MenuContentBox>
       </MenuBox>
