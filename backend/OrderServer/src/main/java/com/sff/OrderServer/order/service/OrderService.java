@@ -12,6 +12,7 @@ import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
@@ -122,6 +123,16 @@ public class OrderService {
         return (menuTotalPrice + orderMenu.getPrice()) * orderMenu.getCount();
     }
 
+    // 바구니에 들은 주문 메뉴/메뉴 개수, 옵션 x
+    private List<MenuItem> getOrderMenuAndCount(Bucket bucket) {
+        List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
+        List<MenuItem> menuList = new ArrayList<>();
+        for (OrderMenu orderMenu : orderMenuList) {
+            menuList.add(new MenuItem(orderMenu));
+        }
+        return menuList;
+    }
+
     public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
         List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
         List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
@@ -129,7 +140,7 @@ public class OrderService {
         for (OrderRecord orderRecord : watingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             waitingOrderList.add(orderRecordOfState);
         }
         return waitingOrderList;
@@ -143,7 +154,7 @@ public class OrderService {
         for (OrderRecord orderRecord : processingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             processingOrderList.add(orderRecordOfState);
         }
         return processingOrderList;
@@ -157,7 +168,7 @@ public class OrderService {
         for (OrderRecord orderRecord : completedOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             completedOrderList.add(orderRecordOfState);
         }
         return completedOrderList;
@@ -170,7 +181,7 @@ public class OrderService {
         for (OrderRecord orderRecord : allOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             allOrderList.add(orderRecordOfState);
         }
         return allOrderList;
@@ -198,6 +209,11 @@ public class OrderService {
             orderRecord.updateOrderState(OrderState.WAITING);
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
+        }
+        try {
+            orderRecord.getBucket().updateState();
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(BucketError.UPDATE_BUCKET_STATE_ERROR));
         }
     }
 
@@ -299,7 +315,7 @@ public class OrderService {
         return menuPerOderResponseList;
     }
 
-    // 바구니에 들은 주문 메뉴, 옵션
+    // 바구니에 들은 주문 메뉴
     private List<String> getOrderMenus(Bucket bucket) {
         List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
         List<String> menuList = new ArrayList<>();
