@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class OrderCreateRequest {
-
-    private Long bucketId;
-    private Long storeId;
-    private String requirement;
+@NoArgsConstructor
+public class OrderCreateResponse {
+    private Long orderId;
+    private Integer totalPrice;
 }

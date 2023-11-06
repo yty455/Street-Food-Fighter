@@ -14,6 +14,7 @@ import com.sff.OrderServer.funding.entity.FundToOrderState;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
+import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
@@ -42,16 +43,20 @@ public class OrderService {
     private final FundingRepository fundingRepository;
 
     @Transactional
-    public Integer createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
+    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {;
         Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
+        if(orderRepository.findByBucket(bucket).isPresent()){
+            throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
+        }
         try {
-            orderRepository.save(new OrderRecord(orderCreateRequest, orderCount, bucket, userId));
+            Long orderId = orderRepository.save(new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
+            return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
-        return bucket.getTotalPrice();
+
     }
 
     public List<OrderResponse> getOrderRecords(Long userId) {

@@ -1,9 +1,11 @@
 package com.sff.OrderServer.order.repository;
 
+import com.sff.OrderServer.bucket.entity.Bucket;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,4 +33,6 @@ public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> 
             @Param("orderState") OrderState orderState, @Param("date") LocalDateTime date);
 
     List<OrderRecord> findAllByStoreIdOrderByCreatedAtDesc(Long storeId);
+
+    Optional<OrderRecord> findByBucket(Bucket bucket);
 }
