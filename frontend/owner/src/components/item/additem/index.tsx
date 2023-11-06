@@ -8,17 +8,21 @@ import BottomBtn from '@/components/common/bottombtn';
 import useImageUploader from '@/hooks/common/imageUpload.hook';
 import useOptionsHook from '@/hooks/item/option.hook.';
 
-const AddItem = ({ closeModal }: any) => {
-  const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [menuUrl, setMenuUrl] = useState('/images/common/defaultmenuimg.png');
+const AddItem = ({ closeModal, type, item }: any) => {
+  console.log(item);
+  const [productName, setProductName] = useState(item?.name || '');
+  const [productPrice, setProductPrice] = useState(item?.price || '');
+  const [menuUrl, setMenuUrl] = useState(item?.menuUrl || '/images/common/defaultmenuimg.png');
+
+  const topbarText = type === 'modify' ? '상품 수정' : '상품 추가';
 
   //Firebase에 이미지 업로드
   const handleImageUpload = useImageUploader('menu_images', setMenuUrl);
 
   // 옵션 관련
-  const { options, addOption, handleOptionChange, removeOption } = useOptionsHook();
+  const { options, addOption, handleOptionChange, removeOption } = useOptionsHook(item?.optionInfoList || []);
 
+  console.log('add item options', options);
   // 저장로직
   const saveItem = () => {
     const optionsWithoutIds = options.map(({ id, ...rest }) => rest);
@@ -35,7 +39,8 @@ const AddItem = ({ closeModal }: any) => {
 
   return (
     <Container>
-      <Topbar text="상품 추가" type="close" closeModal={closeModal}></Topbar>
+      <Topbar text={topbarText} type="close" closeModal={closeModal}></Topbar>
+
       <MenuBox>
         <ImageBox onClick={() => document.getElementById('imageUpload')?.click()}>
           <MenuImage src={menuUrl} />
@@ -58,6 +63,8 @@ const AddItem = ({ closeModal }: any) => {
         <OptionBox
           key={option.id}
           optionid={option.id}
+          name={option.name}
+          price={option.price}
           onNameChange={(name: any) => handleOptionChange(option.id, 'name', name)}
           onPriceChange={(price: any) => handleOptionChange(option.id, 'price', price)}
           onRemove={() => removeOption(option.id)}

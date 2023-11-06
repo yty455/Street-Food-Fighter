@@ -9,7 +9,14 @@ import AddItem from '@/components/item/additem';
 const ItemPage = () => {
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
 
+  const [currentItem, setCurrentItem] = useState(null);
+
   const openAddItemModal = () => {
+    setIsAddItemOpen(true);
+  };
+
+  const openModifyItemModal = (item: any) => {
+    setCurrentItem(item);
     setIsAddItemOpen(true);
   };
 
@@ -20,10 +27,10 @@ const ItemPage = () => {
     <Container>
       <Topbar text="상품 관리"></Topbar>
       {items.map((item) => (
-        <ItemBox key={item.id} item={item} />
+        <ItemBox key={item.id} item={item} onEdit={() => openModifyItemModal(item)} />
       ))}
       <BottomBtn text="상품 추가" onClick={openAddItemModal} />
-      {isAddItemOpen && <AddItem closeModal={closeAddItemModal} />}
+      {isAddItemOpen && <AddItem type={currentItem ? 'modify' : 'add'} item={currentItem} closeModal={closeAddItemModal} />}
     </Container>
   );
 };

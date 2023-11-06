@@ -6,9 +6,15 @@ interface Option {
   price: string;
 }
 
-const useOptionsHook = () => {
-  const [options, setOptions] = useState<Option[]>([]);
+const useOptionsHook = (initialOptions: []) => {
+  console.log(initialOptions);
+  const convertedInitialOptions = initialOptions.map((option: Option) => ({
+    ...option,
+    price: option.price.toString(), // 숫자를 문자열로 변환
+  }));
 
+  const [options, setOptions] = useState<Option[]>(convertedInitialOptions);
+  console.log('option', options);
   const addOption = () => {
     const newId = options.length > 0 ? Math.max(...options.map((o) => o.id)) + 1 : 1;
     setOptions((options) => [...options, { id: newId, name: '', price: '' }]);

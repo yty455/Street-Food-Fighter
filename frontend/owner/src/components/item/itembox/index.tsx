@@ -15,9 +15,10 @@ import Button from '@/components/common/button';
 
 interface ItemBoxProps {
   item: Item;
+  onEdit: (item: Item) => void;
 }
 
-const ItemBox = ({ item }: ItemBoxProps) => {
+const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
   return (
     <Container>
       <MenuBox>
@@ -34,7 +35,7 @@ const ItemBox = ({ item }: ItemBoxProps) => {
         </MenuContentBox>
         <ButtonList>
           <div>
-            <Button text="수정"></Button>
+            <Button text="수정" onClick={() => onEdit(item)}></Button>
           </div>
           <div>
             <Button text="삭제" color="red"></Button>
