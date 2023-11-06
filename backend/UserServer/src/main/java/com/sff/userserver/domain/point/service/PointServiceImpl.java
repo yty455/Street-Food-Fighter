@@ -21,7 +21,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public PointAmountResponse getMyPoint(Long memberId) {
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberRepository.findByIdWithPoint(memberId)
                 .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
         return new PointAmountResponse(member.getPoint().getAmount());
     }
@@ -29,7 +29,7 @@ public class PointServiceImpl implements PointService {
     @Transactional
     @Override
     public void updatePoint(Long memberId, PointUpdateRequest pointUpdateRequest) {
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberRepository.findByIdWithPoint(memberId)
                 .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
         Point point = member.getPoint();
         if (pointUpdateRequest.getIsCharge()) {
