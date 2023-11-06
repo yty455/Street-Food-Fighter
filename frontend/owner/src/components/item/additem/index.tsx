@@ -2,41 +2,23 @@ import Topbar from '@/components/common/topbar';
 import { ImageBox, Container, Edit, LittleTitle, MenuBox, MenuContentBox, MenuImage } from './Additem.styled';
 import Input from '@/components/common/input';
 import { useState } from 'react';
+import OptionBox from '../optionbox';
+import Button from '@/components/common/button';
+import BottomBtn from '@/components/common/bottombtn';
+import useImageUploader from '@/hooks/imageUpload.hook';
 
 interface Option {
   id: number;
   name: string;
   price: string;
 }
-
-// firebase
-import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
-import { imgstorage } from '@/firebase/firebasedb';
-import OptionBox from '../optionbox';
-import Button from '@/components/common/button';
-import BottomBtn from '@/components/common/bottombtn';
-
 const AddItem = ({ closeModal }: any) => {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [menuUrl, setMenuUrl] = useState('/images/common/defaultmenuimg.png');
 
-  const handleImageUpload = async (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      // const fileName = uuid();
-      const storageRef = ref(imgstorage, `menu_images/${file.name}`);
-
-      try {
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        setMenuUrl(url);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      } finally {
-      }
-    }
-  };
+  //Firebase에 이미지 업로드
+  const handleImageUpload = useImageUploader('menu_images', setMenuUrl);
 
   // 옵션 관련
   const [options, setOptions] = useState<Option[]>([]);
