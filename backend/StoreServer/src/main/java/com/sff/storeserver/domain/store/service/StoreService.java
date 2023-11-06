@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.domain.store.dto.StoreInfo;
@@ -12,9 +13,14 @@ import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.geo.Point;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +31,15 @@ import java.util.List;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
+    @Transactional
+    public void consume(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+//        StoreInfo createStoreInfo = objectMapper.readValue(storeInfo, StoreInfo.class);
+//        storeRepository.save(createStoreInfo.toEntity());
+        log.info("메시지입니다 : {}", storeInfo);
+    }
 
     @Transactional
     public void createStore(StoreInfo storeInfo) {
@@ -35,6 +50,12 @@ public class StoreService {
         return StoreInfoResponse.fromEntity(storeRepository.findByOwnerId(ownerId)
                 .orElseThrow(() ->
                         new BaseException(StoreError.NOT_FOUND_STORE)));
+    }
+
+    public List<StoreInfoResponse> getStores(List<Long> ids) {
+        return storeRepository.findAllById(ids).stream()
+                .map(StoreInfoResponse::fromEntity)
+                .toList();
     }
 
     public void updateStore(StoreUpdateInfo storeUpdateInfo, Long ownerId) {
@@ -72,6 +93,5 @@ public class StoreService {
 
         return filteredFlags;
     }
-
 
 }

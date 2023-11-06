@@ -43,6 +43,11 @@ public class StoreController {
         return ApiUtils.success(storeInfoResponse);
     }
 
+    @GetMapping("/stores")
+    public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
+        return ApiUtils.success(storeService.getStores(ids));
+    }
+
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
     @PatchMapping("/stores/{ownerId}")
     public ApiResult<String> updateStore(@PathVariable Long ownerId, @RequestBody StoreUpdateInfo storeUpdateInfo) {
