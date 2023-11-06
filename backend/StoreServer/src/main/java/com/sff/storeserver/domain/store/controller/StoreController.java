@@ -36,6 +36,11 @@ public class StoreController {
         return ApiUtils.success(storeInfoResponse);
     }
 
+
+    @GetMapping("/stores")
+    public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
+        return ApiUtils.success(storeService.getStores(ids));
+
     @Operation(summary = "손님 - 가게 정보 상세 조회", description = "손님이 가게 정보를 상세 조회합니다.")
     @GetMapping("/stores/{storeId}/detail")
     public ApiResult<StoreDetailResponse> getStoreDetail(@PathVariable Long storeId) {
