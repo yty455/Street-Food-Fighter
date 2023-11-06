@@ -5,13 +5,9 @@ import { useState } from 'react';
 import OptionBox from '../optionbox';
 import Button from '@/components/common/button';
 import BottomBtn from '@/components/common/bottombtn';
-import useImageUploader from '@/hooks/imageUpload.hook';
+import useImageUploader from '@/hooks/common/imageUpload.hook';
+import useOptionsHook from '@/hooks/item/option.hook.';
 
-interface Option {
-  id: number;
-  name: string;
-  price: string;
-}
 const AddItem = ({ closeModal }: any) => {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -21,17 +17,7 @@ const AddItem = ({ closeModal }: any) => {
   const handleImageUpload = useImageUploader('menu_images', setMenuUrl);
 
   // 옵션 관련
-  const [options, setOptions] = useState<Option[]>([]);
-  const addOption = () => {
-    const newId = options.length > 0 ? Math.max(...options.map((o) => o.id)) + 1 : 1;
-    setOptions((options) => [...options, { id: newId, name: '', price: '' }]);
-  };
-  const handleOptionChange = (id: number, field: string, value: any) => {
-    setOptions((options) => options.map((option) => (option.id === id ? { ...option, [field]: value } : option)));
-  };
-  const removeOption = (optionId: number) => {
-    setOptions((options) => options.filter((option) => option.id !== optionId));
-  };
+  const { options, addOption, handleOptionChange, removeOption } = useOptionsHook();
 
   // 저장로직
   const saveItem = () => {

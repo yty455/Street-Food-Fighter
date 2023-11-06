@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { OptionContainer, Price, PriceBox } from './Optionbox.styled';
 import Input from '@/components/common/input';
 
-const OptionBox = ({ optionid, onNameChange, onPriceChange, onRemove }: any) => {
+const OptionBox = ({ onNameChange, onPriceChange, onRemove }: any) => {
   const [optionName, setOptionName] = useState('');
   const [optionPrice, setOptionPrice] = useState('');
 
