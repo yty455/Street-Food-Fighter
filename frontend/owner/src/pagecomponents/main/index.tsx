@@ -35,9 +35,13 @@ const MainPage = () => {
           <img src="/images/main/category.png" style={{ width: '75px' }} />
           <div>카테고리 설정</div>
         </Menu>
-        <Menu>
+        <Menu
+          onClick={() => {
+            router.push('/flag');
+          }}
+        >
           <img src="/images/common/flag.png" style={{ width: '75px' }} />
-          <div>깃발 등록</div>
+          <div>깃발 관리</div>
         </Menu>
         <Menu>
           <img src="/images/main/list.png" style={{ width: '75px' }} />
