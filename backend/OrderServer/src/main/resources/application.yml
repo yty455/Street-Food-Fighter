@@ -21,6 +21,8 @@ spring:
     open-in-view: false
   mvc:
     static-path-pattern: /static/**
+  data:
+    Notification_Server: "http://localhost:8080"
 
 logging:
   level:
