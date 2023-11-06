@@ -15,11 +15,5 @@ public interface Svc1FeignClient {
 
     @PostMapping(value = "/api/user-server/members")
     ApiResult<List<ReviewUserInfo>> getUserInfo(@RequestBody ReviewUserInfoRequest reviewUserInfoRequest);
-//
-//    @GetMapping(value = "/objects")
-//    ObjectDto getReview(@RequestBody ObjectReqDto objectReqDto);
-//
-//    @GetMapping(value = "/objects/{objId}")
-//    Response getFlag(@PathVariable(value = "objId") String objId,
-//                    @RequestBody ObjectReqDto objectReqDto);
+
 }

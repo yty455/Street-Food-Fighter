@@ -1,11 +1,13 @@
 package com.sff.notificationserver.domain.notification.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.sff.notificationserver.domain.notification.controller.Svc1FeignClient;
 import com.sff.notificationserver.domain.notification.dto.FCMNotificationRequest;
 import com.sff.notificationserver.domain.notification.dto.NotificationInfo;
 import com.sff.notificationserver.domain.notification.dto.NotificationResponse;
@@ -13,6 +15,7 @@ import com.sff.notificationserver.domain.notification.repository.NotificationRep
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +47,13 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
+
+    @Autowired
+    private Svc1FeignClient svc1FeignClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public NotificationResponse getNotifications(Long userId, int page, int size) {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
@@ -53,7 +63,7 @@ public class NotificationService {
         // 환불 수수료 정책 도입시 변경
         double refundFee = getRefundFee;
         // 유저 포인트 받아오기
-        int userPoint = 5000;
+        int userPoint = svc1FeignClient.getUserPoint(userId).getResponse();
 
         return NotificationResponse.builder()
                 .refundFee(refundFee)
@@ -61,6 +71,16 @@ public class NotificationService {
                 .notificationInfos(notificationInfos)
                 .build();
     }
+
+        /*
+    알림 종류 6가지
+    펀딩성공 - SUCCESS
+    펀딩실패 - FAILURE
+    주문접수 - PROCESSING
+    음식준비 - COMPLETED
+    주문거절 - REFUSED
+    리뷰요청 - REQUEST
+     */
 
 //    @Transactional
 //    public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {

@@ -6,18 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserNotificationInfo {
-
-    private Long storeId;
-    private String storeName;
-
-    private List<UserInfo> userList;
-    private NotificationType type;
-
+public class UserInfo {
+    private Long userId;
+    private Long orderId;
+    private int amount;
 }
