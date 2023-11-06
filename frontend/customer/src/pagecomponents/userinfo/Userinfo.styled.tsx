@@ -75,6 +75,8 @@ const CameraIcon = styled.img`
 
 const ProfileImage = styled.img`
   height: 80px;
+  width: 80px;
+  border-radius: 10px;
 `;
 
 export { ImageContainer, CameraIcon, ProfileImage, UserInfoContainer, Topbar, TopContent, ContentContainer, LogoutBox, LogoutText };
