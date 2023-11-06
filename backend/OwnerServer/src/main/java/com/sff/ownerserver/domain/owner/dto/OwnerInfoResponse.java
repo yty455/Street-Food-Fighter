@@ -14,6 +14,7 @@ public class OwnerInfoResponse {
     private String name;
     private String bank;
     private String accountNumber;
+    private Long amount;
 
     @Builder
     public OwnerInfoResponse(Owner owner) {
@@ -22,5 +23,6 @@ public class OwnerInfoResponse {
         this.name = owner.getName();
         this.bank = owner.getBank();
         this.accountNumber = owner.getAccountNumber();
+        this.amount = owner.getAmount();
     }
 }

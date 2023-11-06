@@ -44,6 +44,7 @@ public class SignupRequest {
                 .phone(phone)
                 .bank(bank)
                 .accountNumber(accountNumber)
+                .amount(0L)
                 .build();
     }
 }

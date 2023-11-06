@@ -1,6 +1,8 @@
 package com.sff.ownerserver.domain.owner.entity;
 
 import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
+import com.sff.ownerserver.global.error.type.BaseException;
+import com.sff.ownerserver.global.utils.ApiError;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,16 +27,18 @@ public class Owner {
     private String phone;
     private String bank;
     private String accountNumber;
+    private Long amount;
     private String refreshToken;
 
     @Builder
-    public Owner(String email, String password, String name, String phone, String bank, String accountNumber, String refreshToken) {
+    public Owner(String email, String password, String name, String phone, String bank, String accountNumber, Long amount, String refreshToken) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.amount = amount;
         this.refreshToken = refreshToken;
     }
 
@@ -81,4 +85,13 @@ public class Owner {
         }
     }
 
+    public void addPoints(Long amount) {
+        this.amount += amount;
+    }
+
+    public void deductPoints(Long amount) {
+        if (this.amount < amount) {
+            throw new BaseException(new ApiError("보유 포인트가 결제 포인트보다 적습니다.", 1221));
+        }
+    }
 }

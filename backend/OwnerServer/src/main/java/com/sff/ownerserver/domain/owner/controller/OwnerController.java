@@ -2,6 +2,7 @@ package com.sff.ownerserver.domain.owner.controller;
 
 import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
 import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
+import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
 import com.sff.ownerserver.domain.owner.dto.SignupRequest;
 import com.sff.ownerserver.domain.owner.service.OwnerService;
 import com.sff.ownerserver.global.utils.ApiResult;
@@ -38,6 +39,12 @@ public class OwnerController {
     public ApiResult<?> updateOwner(@RequestBody MyInfoRequest myInfoRequest) {
         ownerService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success("내 정보 수정 성공");
+    }
+
+    @PutMapping("/{ownerId}/points")
+    public ApiResult<?> updatePoint(@PathVariable Long ownerId, @RequestBody PointUpdateRequest pointUpdateRequest) {
+        ownerService.updatePoint(ownerId, pointUpdateRequest);
+        return ApiUtils.success("포인트 업데이트 성공");
     }
 
 }

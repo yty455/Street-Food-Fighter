@@ -2,6 +2,7 @@ package com.sff.ownerserver.domain.owner.service;
 
 import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
 import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
+import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
 import com.sff.ownerserver.domain.owner.dto.SignupRequest;
 import com.sff.ownerserver.domain.owner.entity.Owner;
 import com.sff.ownerserver.domain.owner.repository.OwnerRepository;
@@ -49,6 +50,17 @@ public class OwnerServiceImpl implements OwnerService {
     public void updateMember(Long ownerId, MyInfoRequest myInfoRequest) {
         Owner owner = findOwner(ownerId);
         owner.update(myInfoRequest);
+    }
+
+    @Override
+    @Transactional
+    public void updatePoint(Long ownerId, PointUpdateRequest pointUpdateRequest) {
+        Owner owner = findOwner(ownerId);
+        if (pointUpdateRequest.isCharge()) {
+            owner.addPoints(pointUpdateRequest.getAmount());
+        } else {
+            owner.deductPoints(pointUpdateRequest.getAmount());
+        }
     }
 
     private Owner findOwner(Long ownerId) {
