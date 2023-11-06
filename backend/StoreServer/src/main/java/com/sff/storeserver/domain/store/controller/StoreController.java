@@ -40,6 +40,7 @@ public class StoreController {
     @GetMapping("/stores")
     public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
         return ApiUtils.success(storeService.getStores(ids));
+    }
 
     @Operation(summary = "손님 - 가게 정보 상세 조회", description = "손님이 가게 정보를 상세 조회합니다.")
     @GetMapping("/stores/{storeId}/detail")
@@ -75,8 +76,8 @@ public class StoreController {
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near")
     public ApiResult<?> getNearStore(@RequestParam("lati") double lati,
-                                     @RequestParam("longi") double longi,
-                                     @RequestParam("categories") List<CategoryType> categories) {
+            @RequestParam("longi") double longi,
+            @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
         return ApiUtils.success(stores);
     }
@@ -84,9 +85,9 @@ public class StoreController {
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
     @GetMapping("/flag/near")
     public ApiResult<?> getNearFlag(@RequestParam("date") LocalDate date,
-                                    @RequestParam("lati") double lati,
-                                    @RequestParam("longi") double longi,
-                                    @RequestParam("categories") List<CategoryType> categories) {
+            @RequestParam("lati") double lati,
+            @RequestParam("longi") double longi,
+            @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearFlag(date, lati, longi, categories);
         return ApiUtils.success(stores);
     }

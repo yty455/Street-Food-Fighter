@@ -13,8 +13,6 @@ import com.sff.storeserver.domain.store.repository.MenuRepository;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< backend/StoreServer/src/main/java/com/sff/storeserver/domain/store/service/StoreService.java
-import org.springframework.data.geo.Point;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -23,10 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Date;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -65,6 +59,7 @@ public class StoreService {
         return storeRepository.findAllById(ids).stream()
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
+    }
 
     public StoreDetailResponse getStoreDetail(Long storeId) {
 
