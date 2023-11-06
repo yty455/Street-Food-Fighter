@@ -137,7 +137,6 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .lati(48.87373649724122)
                 .longi(2.2954639195323967)
                 .storeUrl("www.naver.com")
-                .state("생성")
                 .build();
     }
 
@@ -158,7 +157,6 @@ class StoreServiceTest extends IntegrationTestSupport {
                 .lati(lati)
                 .longi(longi)
                 .storeUrl("www.naver.com")
-                .state("생성")
                 .build();
     }
 

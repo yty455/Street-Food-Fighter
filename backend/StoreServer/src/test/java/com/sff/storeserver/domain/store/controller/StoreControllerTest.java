@@ -72,8 +72,7 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response.activeArea").value("강서구"))
                 .andExpect(jsonPath("$.response.lati").value(48.87373649724122))
                 .andExpect(jsonPath("$.response.longi").value(2.2954639195323967))
-                .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"))
-                .andExpect(jsonPath("$.response.state").value("영업중"));
+                .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"));
     }
 
     @DisplayName("가게 정보를 수정하고 성공을 반환 받는다.")
@@ -136,7 +135,6 @@ class StoreControllerTest extends ControllerTestSupport {
                 .lati(48.87373649724122)
                 .longi(2.2954639195323967)
                 .storeUrl("www.naver.com")
-                .state("영업중")
                 .build();
     }
 }
