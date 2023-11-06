@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const InputContainer = styled.div`
-  margin: 10px 0;
+  margin: 3px 0;
 `;
 
 const StyledInput = styled.input.attrs<any>((props) => ({}))`

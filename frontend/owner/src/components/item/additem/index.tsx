@@ -6,6 +6,7 @@ import { useState } from 'react';
 // firebase
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 import { imgstorage } from '@/firebase/firebasedb';
+import OptionBox from '../optionbox';
 
 const AddItem = ({ closeModal }: any) => {
   const [productName, setProductName] = useState('');
@@ -49,6 +50,7 @@ const AddItem = ({ closeModal }: any) => {
           </div>
         </MenuContentBox>
       </MenuBox>
+      <OptionBox id="1" />
     </Container>
   );
 };
