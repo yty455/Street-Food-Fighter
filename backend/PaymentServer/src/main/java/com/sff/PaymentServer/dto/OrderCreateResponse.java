@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCreateRequest {
-
-    private Long bucketId;
-    private Long storeId;
-    private String requirement;
+public class OrderCreateResponse {
+    private Long orderId;
+    private Integer totalPrice;
 }
