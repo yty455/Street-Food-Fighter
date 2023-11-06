@@ -5,6 +5,7 @@ import { categories } from '@/assets/category';
 import { useState } from 'react';
 import BottomBtn from '@/components/common/bottombtn';
 import { vendorcat } from '@/temp/category';
+import CategorySelector from '@/components/common/categoryselector';
 
 const CategoryPage = () => {
   const initialCategoryName = categories.find((cat) => cat.type === vendorcat.category)?.name || null;
@@ -35,14 +36,7 @@ const CategoryPage = () => {
         </TypeBox>
         <TypeBox>
           <Title>대표 카테고리</Title>
-          <CategoriesContainer>
-            {categories.map((category: any) => (
-              <CategoryItem key={category.id} onClick={() => selectCategory(category.name)} selected={selectedCategory === category.name}>
-                <CategoryImage src={`/images/category/${category.image}`} alt={category.name} />
-                <CategoryName>{category.name}</CategoryName>
-              </CategoryItem>
-            ))}
-          </CategoriesContainer>
+          <CategorySelector categories={categories} selectedCategory={selectedCategory} selectCategory={selectCategory} />
         </TypeBox>
       </SettingBox>
       <BottomBtn text="수정 하기" onClick={handleSave} />

@@ -1,44 +1,5 @@
 import styled, { css } from 'styled-components';
 
-const Container = styled.div.attrs<any>((props) => ({}))`
-  ${(props) => {
-    const light = props.theme.colors.light;
-
-    return css`
-      height: 100vh;
-      background-color: ${light};
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    `;
-  }};
-`;
-
-const SettingBox = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  margin-top: 40px;
-  gap: 40px;
-
-  width: 90vw;
-  overflow-y: auto;
-
-  padding-bottom: 70px;
-`;
-
-const Title = styled.div`
-  font-size: 20px;
-`;
-
-const TypeBox = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-`;
-
 const CategoryItem = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const bgcolor = props.selected ? props.theme.colors.main : props.theme.colors.white;
@@ -71,6 +32,8 @@ const CategoriesContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-between;
+
+  height: 400px;
 `;
 
-export { Container, SettingBox, TypeBox, Title, CategoriesContainer, CategoryImage, CategoryName, CategoryItem };
+export { CategoriesContainer, CategoryImage, CategoryName, CategoryItem };
