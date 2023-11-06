@@ -3,18 +3,3 @@ spring:
     import: optional:configserver:${CONFIG_SERVER}
   application:
     name: storeserver
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_SERVER}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_ID}
-    password: ${DB_PASSWORD}
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-logging:
-  config: classpath:logback.xml
-  level:
-    root: info
-server:
-  port: 8080
