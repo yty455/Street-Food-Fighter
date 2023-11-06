@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 const BackButton = styled.div`
   display: flex;
-  width: 40%;
+  width: 35%;
   padding-left: 20px;
 `;
 const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
