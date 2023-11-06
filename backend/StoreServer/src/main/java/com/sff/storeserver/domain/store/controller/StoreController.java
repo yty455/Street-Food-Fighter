@@ -1,24 +1,17 @@
 package com.sff.storeserver.domain.store.controller;
 
-import com.sff.storeserver.common.BasicResponse;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
-import com.sff.storeserver.domain.store.dto.StoreInfo;
-import com.sff.storeserver.domain.store.dto.StoreInfoResponse;
-import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
-import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
+import com.sff.storeserver.domain.store.dto.*;
 import com.sff.storeserver.domain.store.entity.CategoryType;
-import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.geo.Point;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "가게 API", description = "가게 관련 API")
@@ -43,9 +36,16 @@ public class StoreController {
         return ApiUtils.success(storeInfoResponse);
     }
 
+
     @GetMapping("/stores")
     public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
         return ApiUtils.success(storeService.getStores(ids));
+
+    @Operation(summary = "손님 - 가게 정보 상세 조회", description = "손님이 가게 정보를 상세 조회합니다.")
+    @GetMapping("/stores/{storeId}/detail")
+    public ApiResult<StoreDetailResponse> getStoreDetail(@PathVariable Long storeId) {
+        StoreDetailResponse storeDetailResponse = storeService.getStoreDetail(storeId);
+        return ApiUtils.success(storeDetailResponse);
     }
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
@@ -62,26 +62,51 @@ public class StoreController {
         return ApiUtils.success("가게 카테고리 수정을 성공했습니다.");
     }
 
+    @Operation(summary = "사장 - 사장님 회원 탈퇴", description = "사장님 회원 탈퇴")
+    @DeleteMapping("/stores/{ownerId}")
+    public ApiResult<String> deleteStore(@PathVariable Long ownerId) {
+
+        storeService.deleteStore(ownerId);
+
+        return ApiUtils.success("가게 정보 삭제 완료");
+    }
+
+
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
-    @GetMapping("/stores/near/{lati}/{longi}")
-    public ApiResult<List<StoreInfoResponse>> getNearStore(@PathVariable double lati,
-            @PathVariable double longi,
-            @RequestParam("categories") List<CategoryType> categories) {
+    @GetMapping("/stores/near")
+    public ApiResult<?> getNearStore(@RequestParam("lati") double lati,
+                                     @RequestParam("longi") double longi,
+                                     @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
         return ApiUtils.success(stores);
     }
 
     @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
-    @GetMapping("/funding/near")
-    public ResponseEntity<BasicResponse> getNearFlag(@RequestParam("date") Date date,
-            @RequestParam("latitude") double latitude,
-            @RequestParam("longitude") double longitude,
-            @RequestParam("categories") List<String> categories) {
-        List<Store> stores = storeService.getNearFlag(date, new Point(latitude, longitude), categories);
-        BasicResponse basicResponse = BasicResponse.builder()
-                .message("내 근처 펀딩 조회 성공")
-                .build();
-        return new ResponseEntity<>(basicResponse, basicResponse.getHttpStatus());
+    @GetMapping("/flag/near")
+    public ApiResult<?> getNearFlag(@RequestParam("date") LocalDate date,
+                                    @RequestParam("lati") double lati,
+                                    @RequestParam("longi") double longi,
+                                    @RequestParam("categories") List<CategoryType> categories) {
+        List<StoreInfoResponse> stores = storeService.getNearFlag(date, lati, longi, categories);
+        return ApiUtils.success(stores);
+    }
+
+    @Operation(summary = "사장 - 가게 영업 시작", description = "가게 영업을 시작합니다. (깃발 선택 가능)")
+    @PostMapping("/store/{ownerId}/business")
+    public ApiResult<String> startBusiness(@PathVariable Long ownerId, @RequestParam Long flagId) {
+
+        storeService.startBusiness(ownerId, flagId);
+
+        return ApiUtils.success("가게 영업 시작");
+    }
+
+    @Operation(summary = "사장 - 가게 영업 종료", description = "가게 영업을 종료합니다.")
+    @DeleteMapping("/store/{ownerId}/business")
+    public ApiResult<String> closeBusiness(@PathVariable Long ownerId) {
+
+        storeService.closeBusiness(ownerId);
+
+        return ApiUtils.success("가게 영업 종료");
     }
 
 }

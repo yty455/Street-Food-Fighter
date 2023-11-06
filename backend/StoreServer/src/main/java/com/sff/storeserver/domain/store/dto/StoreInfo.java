@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sff.storeserver.domain.store.entity.BusinessType;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,6 @@ public class StoreInfo {
     private double lati;
     private double longi;
     private String storeUrl;
-    private String state;
 
     public Store toEntity() {
         return Store.builder()
@@ -53,6 +53,6 @@ public class StoreInfo {
                 .lati(lati)
                 .longi(longi)
                 .storeUrl(storeUrl)
-                .state(state).build();
+                .state(BusinessType.CLOSE).build();
     }
 }

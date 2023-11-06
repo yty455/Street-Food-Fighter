@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.dto;
 
+import com.sff.storeserver.domain.store.entity.BusinessType;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class StoreInfoResponse {
     private String introduction;
     //    private Point areaPoint;
     private String storeUrl;
-    private String state;
+    private BusinessType state;
 
     public static StoreInfoResponse fromEntity(Store store) {
         return StoreInfoResponse.builder()
