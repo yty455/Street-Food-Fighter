@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @Builder
@@ -87,5 +89,13 @@ public class MemberServiceImpl implements MemberService {
     public Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
+    }
+
+    @Override
+    public List<MemberInfoResponse> getMembers(List<Long> memberIds) {
+        List<Member> members = memberRepository.findAllById(memberIds);
+        return members.stream()
+                .map(member -> MemberInfoResponse.builder().member(member).build())
+                .toList();
     }
 }

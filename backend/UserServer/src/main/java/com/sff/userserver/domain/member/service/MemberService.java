@@ -4,6 +4,8 @@ import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.entity.Member;
 
+import java.util.List;
+
 public interface MemberService {
     void signUp(SignupRequest signupRequest);
 
@@ -12,4 +14,6 @@ public interface MemberService {
     MemberInfoResponse getMember(Long memberId);
 
     Member findMember(Long memberId);
+
+    List<MemberInfoResponse> getMembers(List<Long> memberIds);
 }

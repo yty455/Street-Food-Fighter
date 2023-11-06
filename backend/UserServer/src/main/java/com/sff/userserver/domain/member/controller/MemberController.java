@@ -1,6 +1,7 @@
 package com.sff.userserver.domain.member.controller;
 
 import com.sff.userserver.domain.member.dto.MemberInfoResponse;
+import com.sff.userserver.domain.member.dto.MembersInfoRequest;
 import com.sff.userserver.domain.member.dto.MyInfoRequest;
 import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.service.MemberServiceImpl;
@@ -9,6 +10,8 @@ import com.sff.userserver.global.utils.ApiUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +41,12 @@ public class MemberController {
     public ApiResult<?> updateMember(@RequestBody MyInfoRequest myInfoRequest) {
         memberService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success("내 정보 수정 성공");
+    }
+
+    @PostMapping("/members")
+    public ApiResult<?> getMembers(@RequestBody MembersInfoRequest membersInfoRequest) {
+        List<MemberInfoResponse> members = memberService.getMembers(membersInfoRequest.getMemberIds());
+        return ApiUtils.success(members);
     }
 
     @GetMapping("jwt-test")
