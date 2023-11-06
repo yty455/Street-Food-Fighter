@@ -6,6 +6,7 @@ const Container = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
+      align-items: center;
 
       background-color: ${gray};
 
@@ -91,4 +92,5 @@ const LittleTitle = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
+
 export { ImageBox, Container, MenuBox, Edit, MenuContentBox, MenuImage, LittleTitle };

@@ -10,7 +10,7 @@ const StyledButton = styled.div.attrs<any>((props) => ({}))`
     return css`
       padding: 5px 15px;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       background-color: ${bgcolor};
       color: ${color};
       text-align: center;
