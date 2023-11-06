@@ -22,4 +22,9 @@ public class OrderItem {
         this.orderOptionList = orderOptionList;
         this.menuTotalPrice = menuTotalPrice;
     }
+
+    public OrderItem(OrderMenu orderMenu) {
+        this.name = orderMenu.getName();
+        this.count = orderMenu.getCount();
+    }
 }
