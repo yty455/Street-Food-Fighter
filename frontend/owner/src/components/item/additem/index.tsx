@@ -1,9 +1,11 @@
 import Topbar from '@/components/common/topbar';
-import { ImageBox, Container, Content, Edit, LittleTitle, MenuBox, MenuContentBox, MenuImage } from './Additem.styled';
+import { ImageBox, Container, Edit, LittleTitle, MenuBox, MenuContentBox, MenuImage } from './Additem.styled';
+import Input from '@/components/common/input';
+import { useState } from 'react';
 
 const AddItem = ({ closeModal }: any) => {
-  const name = '쫀득 쫀득 팥 붕어빵';
-  const price = 10000;
+  const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState();
   const menuUrl = '/images/common/defaultmenuimg.png';
   return (
     <Container>
@@ -16,11 +18,11 @@ const AddItem = ({ closeModal }: any) => {
         <MenuContentBox>
           <div>
             <LittleTitle>상품명</LittleTitle>
-            <Content>name</Content>
+            <Input value={productName} onChange={(e: any) => setProductName(e.target.value)} placeholder="상품 이름을 입력해주세요" />
           </div>
           <div>
             <LittleTitle> 가격</LittleTitle>
-            <Content>{price}원</Content>
+            <Input value={productPrice} onChange={(e: any) => setProductPrice(e.target.value)} placeholder="가격을 입력해주세요" />
           </div>
         </MenuContentBox>
       </MenuBox>

@@ -91,18 +91,4 @@ const LittleTitle = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-
-const Content = styled.div.attrs<any>((props) => ({}))`
-  ${(props) => {
-    const air = props.theme.fonts.air;
-    const black = props.theme.colors.black;
-    return css`
-      font-family: ${air};
-      font-size: 18px;
-      width: 100%;
-      text-align: right;
-      border-bottom: 1px solid ${black};
-    `;
-  }};
-`;
-export { ImageBox, Container, MenuBox, Edit, MenuContentBox, MenuImage, LittleTitle, Content };
+export { ImageBox, Container, MenuBox, Edit, MenuContentBox, MenuImage, LittleTitle };
