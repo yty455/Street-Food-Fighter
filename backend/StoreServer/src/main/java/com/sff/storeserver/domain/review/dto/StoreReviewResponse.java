@@ -29,4 +29,9 @@ public class StoreReviewResponse {
         this.content = content;
         this.userId = userId;
     }
+
+    public void updateUserInfo(String userName, String userProfileUrl){
+        this.userName = userName;
+        this.userProfileUrl = userProfileUrl;
+    }
 }
