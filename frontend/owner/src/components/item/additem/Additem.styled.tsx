@@ -67,12 +67,12 @@ const Edit = styled.div.attrs<any>((props) => ({}))`
     const lightgray = props.theme.colors.lightgray;
     const font = props.theme.fonts.air;
     return css`
-      background-color: ${gray};
+      background-color: #4d4c49d1;
       border-radius: 0px 0px 14px 14px;
       color: ${lightgray};
 
       position: absolute;
-      bottom: 0;
+      bottom: -0.5px;
       width: 100%;
       text-align: center;
       padding: 3px 0px;

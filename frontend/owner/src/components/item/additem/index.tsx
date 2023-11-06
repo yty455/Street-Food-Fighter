@@ -3,17 +3,40 @@ import { ImageBox, Container, Edit, LittleTitle, MenuBox, MenuContentBox, MenuIm
 import Input from '@/components/common/input';
 import { useState } from 'react';
 
+// firebase
+import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
+import { imgstorage } from '@/firebase/firebasedb';
+
 const AddItem = ({ closeModal }: any) => {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState();
-  const menuUrl = '/images/common/defaultmenuimg.png';
+  const [menuUrl, setMenuUrl] = useState('/images/common/defaultmenuimg.png');
+
+  const handleImageUpload = async (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      // const fileName = uuid();
+      const storageRef = ref(imgstorage, `menu_images/${file.name}`);
+
+      try {
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+        setMenuUrl(url);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      } finally {
+      }
+    }
+  };
+
   return (
     <Container>
       <Topbar text="상품 추가" type="close" closeModal={closeModal}></Topbar>
       <MenuBox>
-        <ImageBox>
+        <ImageBox onClick={() => document.getElementById('imageUpload')?.click()}>
           <MenuImage src={menuUrl} />
           <Edit>Edit</Edit>
+          <input id="imageUpload" type="file" hidden onChange={handleImageUpload} />
         </ImageBox>
         <MenuContentBox>
           <div>
