@@ -4,6 +4,7 @@ import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.flag.dto.FlagMSAResponse;
 import com.sff.storeserver.domain.review.dto.ReviewMSAResponse;
+import com.sff.storeserver.domain.store.dto.StoreMSARequest;
 import com.sff.storeserver.domain.store.dto.StoreMSAResponse;
 import com.sff.storeserver.domain.store.service.StoreMSAService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +23,9 @@ public class StoreMSAController {
     private final StoreMSAService storeMSAService;
 
     @Operation(summary = "가게 정보 조회", description = "가게 ID로 가게 정보를 조회합니다.")
-    @GetMapping("/store")
-    public ApiResult<?> getStores(@RequestBody List<Long> storeId) {
-        List<StoreMSAResponse> storeMSAResponses = storeMSAService.getStores(storeId);
+    @PostMapping("/store")
+    public ApiResult<?> getStores(@RequestBody StoreMSARequest storeMSARequest) {
+        List<StoreMSAResponse> storeMSAResponses = storeMSAService.getStores(storeMSARequest.getStoreIds());
         return ApiUtils.success(storeMSAResponses);
     }
 

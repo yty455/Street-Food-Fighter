@@ -1,20 +1,24 @@
 package com.sff.storeserver.domain.review.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.storeserver.common.error.type.BaseException;
-import com.sff.storeserver.domain.review.dto.MyReviewResponse;
-import com.sff.storeserver.domain.review.dto.ReviewRequest;
-import com.sff.storeserver.domain.review.dto.StoreReviewResponse;
+import com.sff.storeserver.common.utils.ApiResult;
+import com.sff.storeserver.domain.review.dto.*;
 import com.sff.storeserver.domain.review.repository.ReviewRepository;
+import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,6 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
+
+    @Autowired
+    private Svc1FeignClient svc1FeignClient;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Transactional
     public void createReview(ReviewRequest reviewRequest) {
@@ -56,7 +65,10 @@ public class ReviewService {
         Slice<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId, pageRequest);
 
         // 유저 아이디 리스트 -> 회원 서비스에 보내서 s회원 정보 받아오기 (userName, userProfileUrl)
-
+        ApiResult<List<ReviewUserInfo>> userInfo = svc1FeignClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
+        for (int idx = 0; idx < storeReviewResponseList.getContent().size(); idx++) {
+            storeReviewResponseList.getContent().get(idx).updateUserInfo(userInfo.getResponse().get(idx).getNickname(), userInfo.getResponse().get(idx).getImageUrl());
+        }
         // 합쳐서 내려주기
         return storeReviewResponseList;
     }
