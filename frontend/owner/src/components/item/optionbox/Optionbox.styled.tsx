@@ -10,7 +10,7 @@ const OptionContainer = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: 20px;
+      padding: 10px 20px;
       gap: 25px;
 
       margin-top: 15px;

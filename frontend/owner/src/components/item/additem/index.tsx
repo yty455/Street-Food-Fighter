@@ -38,22 +38,27 @@ const AddItem = ({ closeModal }: any) => {
     }
   };
 
+  // 옵션 관련
   const [options, setOptions] = useState<Option[]>([]);
-
   const addOption = () => {
-    setOptions((options) => [...options, { id: options.length + 1, name: '', price: '' }]);
+    const newId = options.length > 0 ? Math.max(...options.map((o) => o.id)) + 1 : 1;
+    setOptions((options) => [...options, { id: newId, name: '', price: '' }]);
   };
-
   const handleOptionChange = (id: number, field: string, value: any) => {
     setOptions((options) => options.map((option) => (option.id === id ? { ...option, [field]: value } : option)));
   };
+  const removeOption = (optionId: number) => {
+    setOptions((options) => options.filter((option) => option.id !== optionId));
+  };
 
+  // 저장로직
   const saveItem = () => {
+    const optionsWithoutIds = options.map(({ id, ...rest }) => rest);
     const itemData = {
       productName,
       productPrice,
-      options,
       menuUrl,
+      options: optionsWithoutIds,
     };
     console.log(JSON.stringify(itemData, null, 2));
 
@@ -87,6 +92,7 @@ const AddItem = ({ closeModal }: any) => {
           optionid={option.id}
           onNameChange={(name: any) => handleOptionChange(option.id, 'name', name)}
           onPriceChange={(price: any) => handleOptionChange(option.id, 'price', price)}
+          onRemove={() => removeOption(option.id)}
         />
       ))}
 
