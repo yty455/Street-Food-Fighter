@@ -31,4 +31,12 @@ public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> 
             @Param("orderState") OrderState orderState, @Param("date") LocalDateTime date);
 
     List<OrderRecord> findAllByStoreIdOrderByCreatedAtDesc(Long storeId);
+
+    // 사용자(User)당 이전달 주문 횟수를 조회하는 메소드
+//    @Query("SELECT o.userId, COUNT(o) FROM OrderRecord o GROUP BY o.userId")
+//    List<Object[]> countOrdersByUserId();
+
+    @Query("SELECT o.userId, COUNT(o) FROM OrderRecord o WHERE MONTH(o.createdAt) = :previousMonth GROUP BY o.userId")
+    List<Object[]> countOrdersByUserId(@Param("previousMonth") int previousMonth);
+
 }
