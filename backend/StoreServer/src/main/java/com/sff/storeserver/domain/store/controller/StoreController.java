@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/api/store-service")
 @RequiredArgsConstructor
 public class StoreController {
-
     private final StoreService storeService;
 
     @Operation(summary = "사장 - 가게 등록", description = "사장 회원가입시 가게를 등록합니다.")
@@ -108,6 +107,13 @@ public class StoreController {
         storeService.closeBusiness(ownerId);
 
         return ApiUtils.success("가게 영업 종료");
+    }
+
+    @Operation(summary = "사장 - 사장ID 찾기", description = "가게 ID로 사장 ID를 찾습니다..")
+    @GetMapping("/store/{storeId}/owner")
+    public ApiResult<?> getOwnerId(@PathVariable Long storeId) {
+        Long ownerId = storeService.getOwnerId(storeId);
+        return ApiUtils.success(ownerId);
     }
 
 }

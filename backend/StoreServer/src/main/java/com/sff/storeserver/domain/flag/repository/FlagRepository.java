@@ -2,6 +2,7 @@ package com.sff.storeserver.domain.flag.repository;
 
 import com.sff.storeserver.domain.flag.dto.FlagMSAResponse;
 import com.sff.storeserver.domain.flag.entity.Flag;
+import com.sff.storeserver.domain.flag.entity.FlagType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +17,5 @@ public interface FlagRepository extends JpaRepository<Flag, Long> {
 
     List<Flag> findByStoreIdAndDate(Long storeId, LocalDate date);
 
-    List<Flag> findByDate(LocalDate date);
+    List<Flag> findByDateAndState(LocalDate date, FlagType state);
 }

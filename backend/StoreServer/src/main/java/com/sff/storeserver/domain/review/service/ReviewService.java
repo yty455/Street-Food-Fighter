@@ -37,7 +37,7 @@ public class ReviewService {
     public void createReview(ReviewRequest reviewRequest) {
 
         // 주문 아이디 -> 주문 서비스에 보내서 가게 아이디 받아오기 (Long)
-        Long storeId = 1L;
+        Long storeId = svc1FeignClient.getStoreId(reviewRequest.getOrderId()).getResponse();
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(BaseException::new);
@@ -52,8 +52,11 @@ public class ReviewService {
         Page<MyReviewResponse> myReviewResponseList = reviewRepository.findByUserId(userId, pageRequest);
 
         // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
-
+        List<ReviewMenuInfo> reviewMenuInfos = svc1FeignClient.getMenus(myReviewResponseList.getContent().stream().map(MyReviewResponse::getOrderId).toList()).getResponse();
         // 합쳐서 내려주기
+        for (int idx = 0; idx < reviewMenuInfos.size(); idx++) {
+            myReviewResponseList.getContent().get(idx).updateMenu(reviewMenuInfos.get(idx).getMenuList());
+        }
         return myReviewResponseList;
 
     }
@@ -66,10 +69,10 @@ public class ReviewService {
 
         // 유저 아이디 리스트 -> 회원 서비스에 보내서 s회원 정보 받아오기 (userName, userProfileUrl)
         ApiResult<List<ReviewUserInfo>> userInfo = svc1FeignClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
+        // 합쳐서 내려주기
         for (int idx = 0; idx < storeReviewResponseList.getContent().size(); idx++) {
             storeReviewResponseList.getContent().get(idx).updateUserInfo(userInfo.getResponse().get(idx).getNickname(), userInfo.getResponse().get(idx).getImageUrl());
         }
-        // 합쳐서 내려주기
         return storeReviewResponseList;
     }
 }
