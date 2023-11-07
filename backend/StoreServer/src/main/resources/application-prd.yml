@@ -1,4 +1,7 @@
 spring:
+  cloud:
+    config:
+      enabled: true
   config:
     import: optional:configserver:${CONFIG_SERVER}
   application:

@@ -8,16 +8,16 @@ import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.funding.dto.FlagList;
 import com.sff.OrderServer.funding.dto.FundingChosen;
+import com.sff.OrderServer.funding.dto.FundingCreateResponse;
 import com.sff.OrderServer.funding.dto.FundingDetailResponse;
 import com.sff.OrderServer.funding.dto.FundingItem;
 import com.sff.OrderServer.funding.dto.FundingPerFlag;
-import com.sff.OrderServer.funding.dto.FundingRequest;
+import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
 import com.sff.OrderServer.funding.dto.FundingUser;
-import com.sff.OrderServer.funding.dto.StoreFlag;
 import com.sff.OrderServer.funding.entity.Funding;
-import com.sff.OrderServer.funding.entity.FundingState;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.utils.ApiError;
 import java.time.LocalDateTime;
@@ -38,20 +38,22 @@ public class FundingService {
 
     // 펀딩 정보 저장 - 초기 상태 : 결제 중
     @Transactional
-    public void createFunding(Long userId, FundingRequest fundingRequest){
-        Bucket bucket = bucketRepository.findByBucketIdAndUserId(fundingRequest.getBucketId(), userId).orElseThrow(()->
+    public FundingCreateResponse createFunding(Long userId, FundingCreateRequest fundingCreateRequest){
+        Bucket bucket = bucketRepository.findByBucketIdAndUserId(fundingCreateRequest.getBucketId(), userId).orElseThrow(()->
                 new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER)));
 //        if(fundingRepository.findByBucket(bucket).isPresent()){
 //            // 바구니와 펀딩은 1대1 관계인데 이미 바구니에 해당하는 펀딩 정보가 존재할 경우 예외 처리
 //            // 이런 경우 결제 시 중복 요청의 가능성.
 //            throw new BaseException(new ApiError(FundingError.EXIST_FUNDING_FOR_BUCKET));
 //        }
+        Funding funding;
         try{
-            Funding funding = new Funding(bucket,fundingRequest, userId);
+            funding = new Funding(bucket, fundingCreateRequest, userId);
             fundingRepository.save(funding);
         }catch(Exception e){
             throw new BaseException(new ApiError(FundingError.FAIL_TO_CREATE_FUNDING));
         }
+        return new FundingCreateResponse(funding.getFundingId(), bucket.getTotalPrice());
     }
 
     public List<FundingResponse> getFundings(Long userId){
@@ -126,7 +128,7 @@ public class FundingService {
         );
         // 결제 완료에 따른 펀딩 대기 상태로 변경
         try {
-            funding.updateFundingStateWaitting();
+            funding.updateStateWaitting();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -142,13 +144,16 @@ public class FundingService {
     @Transactional
     public void updateFundingStates(FundingChosen fundingChosen){
         Long pickedFlagId = fundingChosen.getPickedFlagId();
-        List<Long> unpickedFlagIds = fundingChosen.getUnpickedFlagIds();
-
         // picked Flag state update
-        updatePickedFundingState(pickedFlagId);
+        if(pickedFlagId!=null) {
+            updatePickedFundingState(pickedFlagId);
+        }
 
+        List<Long> unpickedFlagIds = fundingChosen.getUnpickedFlagIds();
         // unpicked Flags state update
-        updateUnpickedFundingState(unpickedFlagIds);
+        if(unpickedFlagIds!=null) {
+            updateUnpickedFundingState(unpickedFlagIds);
+        }
 
         // 알림 요청 보내기 : KAFKA
 
@@ -158,7 +163,7 @@ public class FundingService {
     private void updatePickedFundingState(Long flagId){
         Funding funding = fundingRepository.findById(flagId).orElseThrow(()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         try{
-            funding.updateFundingStateSuccess();
+            funding.updateStateSuccess();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -169,7 +174,7 @@ public class FundingService {
         List<Funding> fundings = fundingRepository.findAllById(flagIds);
         try {
             for (Funding funding : fundings) {
-                funding.updateFundingStateFailure();
+                funding.updateStateFailure();
                 funding.updateOrderStateFailed();
             }
             fundingRepository.saveAll(fundings);
@@ -178,8 +183,8 @@ public class FundingService {
         }
     }
 
-    public List<FundingPerFlag> getFundingPerFlag(List<Long> flags){
-        List<Object[]> totalPricePerFlags = fundingRepository.sumBucketTotalPriceByFlagIdsAndWaitingState(flags);
+    public List<FundingPerFlag> getFundingPerFlag(FlagList flags){
+        List<Object[]> totalPricePerFlags = fundingRepository.sumBucketTotalPriceByFlagIdsAndWaitingState(flags.getFlags());
         return totalPricePerFlags.stream().map(totalPricePerFlag -> new FundingPerFlag((Long)totalPricePerFlag[0], ((Long)totalPricePerFlag[1]).intValue())).collect(Collectors.toList());
     }
 

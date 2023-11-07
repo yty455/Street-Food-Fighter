@@ -108,8 +108,7 @@ public class OrderController {
     @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
     public ApiResult<?> createOrderAboutFunding(@RequestHeader("userId") Long userId,
             @PathVariable Long fundingId) {
-        orderService.createOrderAboutFunding(fundingId);
-        return ApiUtils.success("성공적으로 주문을 등록하였습니다.");
+        return ApiUtils.success(orderService.createOrderAboutFunding(fundingId));
     }
 
     // 주문 상태 변경 + 펀딩 주문 상태 변경
@@ -127,7 +126,7 @@ public class OrderController {
     }
 
     // 주문별 메뉴 목록
-    @GetMapping("/api/order-server/menus")
+    @PostMapping("/api/order-server/menus")
     public ApiResult<?> getMenusPerOrders(@RequestBody List<Long> orders) {
         return ApiUtils.success(orderService.getMenusPerOrders(orders));
     }

@@ -2,7 +2,7 @@ package com.sff.OrderServer.funding.entity;
 
 
 import com.sff.OrderServer.bucket.entity.Bucket;
-import com.sff.OrderServer.funding.dto.FundingRequest;
+import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,25 +58,26 @@ public class Funding {
 
     private String requirement;
 
-    public Funding(Bucket bucket, FundingRequest fundingRequest, Long userId){
+    public Funding(Bucket bucket, FundingCreateRequest fundingCreateRequest, Long userId){
         this.bucket = bucket;
-        this.storeId = fundingRequest.getStoreId();
-        this.flagId = fundingRequest.getFlagId();
+        this.storeId = fundingCreateRequest.getStoreId();
+        this.flagId = fundingCreateRequest.getFlagId();
         this.userId = userId;
-        this.requirement = fundingRequest.getRequirement();
+        this.requirement = fundingCreateRequest.getRequirement();
         this.fundingState = FundingState.PAYMENT_IN_PROGRESS;
         this.orderState = FundToOrderState.BEFORE_ORDER;
     }
 
-    public void updateFundingStateWaitting(){
+    public void updateStateWaitting(){
         this.fundingState = FundingState.WAITING;
     }
-    public void updateFundingStateFailure(){
+    public void updateStateFailure(){
         this.fundingState = FundingState.FAILURE;
     }
-    public void updateFundingStateSuccess(){
+    public void updateStateSuccess(){
         this.fundingState = FundingState.SUCCESS;
     }
+    public void updateStateCancel(){ this.fundingState = FundingState.CANCEL;}
 
     public void updateOrderStateBefore(){
         this. orderState = FundToOrderState.BEFORE_ORDER;
@@ -84,7 +85,7 @@ public class Funding {
     public void updateOrderStateComplete(){
         this.orderState = FundToOrderState.ORDER_COMPLETED;
     }
-    public void updateOrderStateCancled(){
+    public void updateOrderStateCancel(){
         this.orderState = FundToOrderState.CANCEL;
     }
     public void updateOrderStateFailed(){

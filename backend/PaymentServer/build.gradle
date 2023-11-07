@@ -15,6 +15,10 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	springCloudVersion = '2022.0.3'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -23,10 +27,26 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// 서버간 통신을 위한 openfeign
-	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	// Openfeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
+
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	// config-server
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+	// logstash
+	implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
+
+	// kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {

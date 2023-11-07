@@ -1,6 +1,5 @@
 package com.sff.OrderServer.funding.service;
 
-import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
@@ -23,7 +22,7 @@ public class FundingUpdateService {
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
         try {
-            funding.updateFundingStateSuccess();
+            funding.updateStateSuccess();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -34,7 +33,7 @@ public class FundingUpdateService {
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
         try {
-            funding.updateFundingStateFailure();
+            funding.updateStateFailure();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -70,9 +69,15 @@ public class FundingUpdateService {
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
         try{
-            funding.updateOrderStateCancled();
+            funding.updateOrderStateCancel();
         }catch(Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDING_ORDERSTATE_ERROR));
+        }
+
+        try{
+            funding.updateStateCancel();
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
     }
     @Transactional

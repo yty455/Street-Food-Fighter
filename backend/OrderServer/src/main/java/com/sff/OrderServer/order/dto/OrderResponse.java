@@ -1,12 +1,17 @@
 package com.sff.OrderServer.order.dto;
 
 import com.sff.OrderServer.bucket.entity.OrderMenu;
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderResponse {
 
     private Long orderId;
@@ -20,13 +25,13 @@ public class OrderResponse {
     private Integer restCount;
     private Integer bucketTotalPrice;
 
-    public OrderResponse(OrderRecord orderRecord, String storeName, String storeUrl, Integer bucketTotalPrice, OrderMenu orderMenu, Integer restCount) {
+    public OrderResponse(OrderRecord orderRecord, StoreMSAResponse store, Integer bucketTotalPrice, OrderMenu orderMenu, Integer restCount) {
         this.orderId = orderRecord.getOrderId();
         this.createdAt = orderRecord.getCreatedAt();
         this.orderState = orderRecord.getOrderState();
         this.storeId = orderRecord.getStoreId();
-        this.storeName = storeName;
-        this.storeUrl = storeUrl;
+        this.storeName = store.getName();
+        this.storeUrl = store.getStoreUrl();
         this.bucketTotalPrice = bucketTotalPrice;
         this.menuName = orderMenu.getName();
         this.menuCount = orderMenu.getCount();

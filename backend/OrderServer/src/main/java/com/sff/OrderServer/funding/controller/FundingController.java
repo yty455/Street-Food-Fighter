@@ -1,12 +1,12 @@
 package com.sff.OrderServer.funding.controller;
 
+import com.sff.OrderServer.funding.dto.FlagList;
 import com.sff.OrderServer.funding.dto.FundingChosen;
-import com.sff.OrderServer.funding.dto.FundingRequest;
+import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import com.sff.OrderServer.funding.service.FundingService;
 import com.sff.OrderServer.funding.service.FundingUpdateService;
 import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +24,8 @@ public class FundingController {
 
     // 펀딩 추가
     @PostMapping("/api/order-server/fundings")
-    public ApiResult<?> createFunding(@RequestHeader("userId") Long userId, @RequestBody FundingRequest fundingRequest){
-        fundingService.createFunding(userId, fundingRequest);
-        return ApiUtils.success("펀딩 정보 저장");
+    public ApiResult<?> createFunding(@RequestHeader("userId") Long userId, @RequestBody FundingCreateRequest fundingCreateRequest){
+        return ApiUtils.success(fundingService.createFunding(userId, fundingCreateRequest));
     }
 
     // 펀딩 내역 조회
@@ -41,14 +40,15 @@ public class FundingController {
         return ApiUtils.success(fundingService.getFunding(userId, fundingId));
     }
 
-    // 펀딩 주문 상태 변경 - 취소
+    // -------msa--------
+
+    // 펀딩 주문 상태 변경 - 취소 : 선택된 펀딩이 주문을 하지 않고 취소한 경우
     @PutMapping("/api/order-server/fundings/{fundingId}/order-state/cancel")
     public ApiResult<?> updateFundingCancel(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
         fundingUpdateService.updateFundingOrderStateCancled(userId, fundingId);
         return ApiUtils.success("펀딩 주문 상태 취소로 변경 완료");
     }
 
-    // -------msa--------
     // 펀딩 주문 상태 변경 - 주문 완료
     @PutMapping("/api/order-server/fundings/{fundingId}/order-state/complete")
     public ApiResult<?> updateFundingComplete(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
@@ -89,8 +89,8 @@ public class FundingController {
     }
 
     // 깃발 별 펀딩 총 금액 요청
-    @GetMapping("/api/order-server/fundings/flags")
-    public ApiResult<?> getFundingAmountPerFlag(@RequestBody List<Long> flags){
+    @PostMapping("/api/order-server/fundings/flags")
+    public ApiResult<?> getFundingAmountPerFlag(@RequestBody FlagList flags){
         return ApiUtils.success(fundingService.getFundingPerFlag(flags));
     }
 

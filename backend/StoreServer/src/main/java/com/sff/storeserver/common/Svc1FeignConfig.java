@@ -17,4 +17,6 @@ public class Svc1FeignConfig {
             requestTemplate.header("Accept", "application/json");
         };
     }
+
+
 }

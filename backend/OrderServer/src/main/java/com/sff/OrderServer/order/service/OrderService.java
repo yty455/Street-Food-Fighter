@@ -6,14 +6,20 @@ import com.sff.OrderServer.bucket.entity.OrderMenu;
 import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
+import com.sff.OrderServer.dto.StoreMSARequest;
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
+import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.infra.StoreClient;
+import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
+import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
 import com.sff.OrderServer.order.dto.OrderPerUser;
@@ -25,10 +31,14 @@ import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
 import com.sff.OrderServer.order.repository.OrderRecordRepository;
 import com.sff.OrderServer.utils.ApiError;
+import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,29 +54,39 @@ public class OrderService {
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
     private final FundingRepository fundingRepository;
+    private final StoreClient storeClient;
 
     @Transactional
-    public Integer createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
+    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
         Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
+        if (orderRepository.findByBucket(bucket).isPresent()) {
+            throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
+        }
         try {
-            orderRepository.save(new OrderRecord(orderCreateRequest, orderCount, bucket, userId));
+            Long orderId = orderRepository.save(
+                    new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
+            return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
-        return bucket.getTotalPrice();
+
     }
 
+    // msa
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
+        System.out.println(orderRecordList.size());
         List<OrderResponse> orderResponseList = new ArrayList<>();
+        List<Long> storeIds = new ArrayList<>();
         for (OrderRecord orderRecord : orderRecordList) {
-            Long storeId = orderRecord.getStoreId();
-            // storeId로 가게 이름 가져와야함.(MSA)
-            String storeName = "temp";
-            String storeUrl = "url";
+            storeIds.add(orderRecord.getStoreId());
+        }
+        List<StoreMSAResponse> storeMSAResponseList = getStoreMSAResponses(storeIds);
+        for (OrderRecord orderRecord : orderRecordList) {
+            StoreMSAResponse store = getStoreInfo(storeMSAResponseList, orderRecord.getStoreId());
 
             Bucket bucket = orderRecord.getBucket();
             Integer totalPrice = bucket.getTotalPrice();
@@ -76,17 +96,21 @@ public class OrderService {
             Integer restCount = menus.size() - 1;
 
             orderResponseList.add(
-                    new OrderResponse(orderRecord, storeName, storeUrl, totalPrice, menu,
-                            restCount));
+                    new OrderResponse(orderRecord, store, totalPrice, menu, restCount));
         }
         return orderResponseList;
     }
 
+    // msa
     public OrderDetailResponse getOrderRecordDetail(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         Bucket bucket = orderRecord.getBucket();
-        // 가게 정보(가게 이름, 가게 이미지, 가게 주소) 요청 후 밑으로 넘겨주기 필요
-        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket));
+        List<Long> storeIds = new ArrayList<>();
+        storeIds.add(orderRecord.getStoreId());
+        List<StoreMSAResponse> storeMSAResponseList = getStoreMSAResponses(storeIds);
+
+        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket),
+                getStoreInfo(storeMSAResponseList, orderRecord.getStoreId()));
     }
 
     // 바구니에 들은 주문 메뉴, 옵션
@@ -122,6 +146,16 @@ public class OrderService {
         return (menuTotalPrice + orderMenu.getPrice()) * orderMenu.getCount();
     }
 
+    // 바구니에 들은 주문 메뉴/메뉴 개수, 옵션 x
+    private List<MenuItem> getOrderMenuAndCount(Bucket bucket) {
+        List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
+        List<MenuItem> menuList = new ArrayList<>();
+        for (OrderMenu orderMenu : orderMenuList) {
+            menuList.add(new MenuItem(orderMenu));
+        }
+        return menuList;
+    }
+
     public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
         List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
         List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
@@ -129,7 +163,7 @@ public class OrderService {
         for (OrderRecord orderRecord : watingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             waitingOrderList.add(orderRecordOfState);
         }
         return waitingOrderList;
@@ -143,7 +177,7 @@ public class OrderService {
         for (OrderRecord orderRecord : processingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             processingOrderList.add(orderRecordOfState);
         }
         return processingOrderList;
@@ -157,7 +191,7 @@ public class OrderService {
         for (OrderRecord orderRecord : completedOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             completedOrderList.add(orderRecordOfState);
         }
         return completedOrderList;
@@ -170,7 +204,7 @@ public class OrderService {
         for (OrderRecord orderRecord : allOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
-                    getOrderMenusDetail(bucket));
+                    getOrderMenuAndCount(bucket));
             allOrderList.add(orderRecordOfState);
         }
         return allOrderList;
@@ -198,6 +232,11 @@ public class OrderService {
             orderRecord.updateOrderState(OrderState.WAITING);
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
+        }
+        try {
+            orderRecord.getBucket().updateState();
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(BucketError.UPDATE_BUCKET_STATE_ERROR));
         }
     }
 
@@ -251,14 +290,15 @@ public class OrderService {
     }
 
     @Transactional
-    public void createOrderAboutFunding(Long fundingId) {
+    public Long createOrderAboutFunding(Long fundingId) {
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(
                 () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = funding.getBucket();
         try {
-            orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+            OrderRecord orderRecord = orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+            return orderRecord.getOrderId();
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
@@ -299,7 +339,7 @@ public class OrderService {
         return menuPerOderResponseList;
     }
 
-    // 바구니에 들은 주문 메뉴, 옵션
+    // 바구니에 들은 주문 메뉴
     private List<String> getOrderMenus(Bucket bucket) {
         List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(bucket);
         List<String> menuList = new ArrayList<>();
@@ -311,7 +351,7 @@ public class OrderService {
 
     // 매월 1일 00:00에 구동
     @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
-    public void ren() {
+    public void run() {
         List<OrderPerUser> orderPerUserResponseList = getOrderPerUser();
     }
 
@@ -335,4 +375,26 @@ public class OrderService {
         );
     }
 
+    private List<StoreMSAResponse> getStoreMSAResponses(List<Long> storeIds) {
+        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
+        ApiResult<List<StoreMSAResponse>> result;
+        try {
+            result = storeClient.getStores(storeMSARequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
+
+    public StoreMSAResponse getStoreInfo(List<StoreMSAResponse> storeMSAResponseList, Long storeId) {
+        return storeMSAResponseList.stream()
+                .filter(response -> response.getStoreId().equals(storeId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(new ApiError(OrderError.NON_EXIST_STORE)));
+    }
 }

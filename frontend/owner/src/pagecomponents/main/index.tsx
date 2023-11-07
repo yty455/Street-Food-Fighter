@@ -27,7 +27,11 @@ const MainPage = () => {
           <img src="/images/main/item.png" style={{ width: '75px' }} />
           <div>상품 관리</div>
         </Menu>
-        <Menu>
+        <Menu
+          onClick={() => {
+            router.push('/category');
+          }}
+        >
           <img src="/images/main/category.png" style={{ width: '75px' }} />
           <div>카테고리 설정</div>
         </Menu>
