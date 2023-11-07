@@ -1,8 +1,10 @@
 package com.sff.userserver.domain.member.service;
 
+import com.sff.userserver.domain.member.dto.GradeUpdateRequest;
 import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.MyInfoRequest;
 import com.sff.userserver.domain.member.dto.SignupRequest;
+import com.sff.userserver.domain.member.entity.Grade;
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.entity.Role;
 import com.sff.userserver.domain.member.entity.SocialType;
@@ -13,16 +15,22 @@ import com.sff.userserver.global.error.type.BaseException;
 import com.sff.userserver.global.utils.ApiError;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 @Builder
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PointRepository pointRepository;
@@ -86,6 +94,7 @@ public class MemberServiceImpl implements MemberService {
         member.update(myInfoRequest);
     }
 
+    @Override
     public Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
@@ -97,5 +106,42 @@ public class MemberServiceImpl implements MemberService {
         return members.stream()
                 .map(member -> MemberInfoResponse.builder().member(member).build())
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateGrade(List<GradeUpdateRequest> gradeUpdateRequests) {
+        Map<Long, Member> memberMap = memberRepository.findAllById(
+                        gradeUpdateRequests.stream()
+                                .map(GradeUpdateRequest::getMemberId)
+                                .collect(Collectors.toSet()))
+                .stream()
+                .collect(Collectors.toMap(Member::getId, Function.identity()));
+
+        List<Long> missingMemberIds = new ArrayList<>();
+        gradeUpdateRequests.forEach(gradeUpdateRequest -> {
+            Member member = memberMap.get(gradeUpdateRequest.getMemberId());
+            if (member == null) {
+                missingMemberIds.add(gradeUpdateRequest.getMemberId());
+            } else {
+                member.updateGrade(determineGrade(gradeUpdateRequest.getOrderCount()));
+            }
+        });
+
+        if (!missingMemberIds.isEmpty()) {
+            log.error("Member not found for IDs: {}", missingMemberIds);
+        }
+    }
+
+    private Grade determineGrade(int orderCount) {
+        if (orderCount < 5) {
+            return Grade.LIGHT;
+        } else if (orderCount < 10) {
+            return Grade.MIDDLE;
+        } else if (orderCount < 20) {
+            return Grade.HEAVY;
+        } else {
+            return Grade.CHAMPION;
+        }
     }
 }

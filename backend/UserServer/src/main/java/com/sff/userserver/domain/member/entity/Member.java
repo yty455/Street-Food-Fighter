@@ -121,4 +121,7 @@ public class Member {
         }
     }
 
+    public void updateGrade(Grade grade) {
+        this.grade = grade;
+    }
 }
