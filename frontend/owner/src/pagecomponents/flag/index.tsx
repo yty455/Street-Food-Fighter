@@ -5,18 +5,20 @@ import { PageTitle, TabBox, FlagList, NoFlag } from './Flag.styled';
 import FlagCard from '@/components/flag/flagcard';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import BottomBtn from '@/components/common/bottombtn';
+import { useRouter } from 'next/navigation';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
 
 const FlagPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const curflag = Flag3;
+  const curflag = Flag2;
   const selectTab = (date: any) => {
     setSelectedDate(date);
     // 선택된 요일에 따라 API 호출
   };
 
+  const router = useRouter();
   // 오늘 날짜로부터 일주일간의 날짜 계산
   const generateWeekTabs = () => {
     const today = new Date();
@@ -60,7 +62,13 @@ const FlagPage = () => {
           <FlagCard key={index} flag={flagItem} />
         ))}
       </FlagList>
-      {curflag.length === 3 ? <BottomBtn text="깃발 추가" disabled={true}></BottomBtn> : <BottomBtn text="깃발 추가"></BottomBtn>}
+      <BottomBtn
+        text="깃발 추가"
+        disabled={curflag.length === 3}
+        onClick={() => {
+          router.push('/flagset');
+        }}
+      ></BottomBtn>
     </div>
   );
 };
