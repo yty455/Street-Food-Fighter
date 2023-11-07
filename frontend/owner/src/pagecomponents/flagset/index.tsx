@@ -19,9 +19,34 @@ const FlagSetPage = () => {
 
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
+  const [markerPosition, setMarkerPosition] = useState(null);
+
   return (
     <div>
-      <Map center={position} style={{ width: '100vw', height: 'calc(100vh - 60px)' }} ref={mapRef}></Map>
+      <Map
+        center={position}
+        style={{ width: '100vw', height: 'calc(100vh - 60px)' }}
+        ref={mapRef}
+        onClick={(_t, mouseEvent) =>
+          setMarkerPosition({
+            lat: mouseEvent.latLng.getLat(),
+            lng: mouseEvent.latLng.getLng(),
+          })
+        }
+      >
+        {markerPosition && (
+          <MapMarker
+            position={markerPosition}
+            image={{
+              src: '/images/common/flag.png',
+              size: {
+                width: 30,
+                height: 40,
+              },
+            }}
+          />
+        )}
+      </Map>
       <StyledTop>
         <Topbar>
           <img
