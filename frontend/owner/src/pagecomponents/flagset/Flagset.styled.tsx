@@ -42,7 +42,7 @@ const Curpos = styled.div`
   z-index: 3;
   position: fixed;
   right: 10px;
-  bottom: 180px;
+  bottom: 280px;
 `;
 
 const SettingBox = styled.div.attrs<any>((props) => ({}))`
@@ -50,16 +50,34 @@ const SettingBox = styled.div.attrs<any>((props) => ({}))`
     const white = props.theme.colors.white;
     return css`
       background-color: ${white};
-
       position: fixed;
       right: 0;
       bottom: 60px;
       z-index: 3;
-
       width: 100%;
-      height: 120px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
     `;
   }};
 `;
 
-export { StyledTop, Topbar, Position, Curpos, SettingBox };
+const Title = styled.div`
+  font-size: 20px;
+`;
+const Content = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const lightgray = props.theme.colors.lightgray;
+    const font = props.theme.fonts.air;
+    return css`
+      border: 3px solid ${lightgray};
+      font-size: 18px;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: ${font};
+    `;
+  }};
+`;
+export { StyledTop, Topbar, Position, Curpos, SettingBox, Title, Content };

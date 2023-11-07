@@ -3,7 +3,7 @@ import useCurrentLocation from '@/hooks/flagset/currentHook';
 import useSetPlaceHook from '@/hooks/flagset/setplaceHook';
 import { useState, useRef } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { Position, StyledTop, Topbar, Curpos, SettingBox } from './Flagset.styled';
+import { Position, StyledTop, Topbar, Curpos, SettingBox, Title, Content } from './Flagset.styled';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 
@@ -65,10 +65,10 @@ const FlagSetPage = () => {
         <img src="/images/common/curpos.png" style={{ width: '50px' }} />
       </Curpos>
       <SettingBox>
-        <div>영업날짜</div>
-        <div> 날짜</div>
-        <div>영업시간</div>
-        <div>영업 시간을 선택해 주세요</div>
+        <Title>영업날짜</Title>
+        <Content> 2023 / 11 / 07</Content>
+        <Title>영업시간</Title>
+        <Content>영업 시간을 선택해 주세요</Content>
       </SettingBox>
       <BottomBtn text="깃발 추가" />
     </div>
