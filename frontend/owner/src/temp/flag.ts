@@ -1,4 +1,15 @@
-export const Flag1110 = [
+export const Flag0 = [];
+export const Flag1 = [
+  {
+    flagId: 1,
+    date: '2023-11-10',
+    openTime: '10:00',
+    closeTime: '20:00',
+    address: '부산시 강서구 녹산산단 335로 7',
+    fundingAmount: 36500,
+  },
+];
+export const Flag2 = [
   {
     flagId: 1,
     date: '2023-11-10',
@@ -17,7 +28,7 @@ export const Flag1110 = [
   },
 ];
 
-export const Flag1111 = [
+export const Flag3 = [
   {
     flagId: 1,
     date: '2023-11-11',

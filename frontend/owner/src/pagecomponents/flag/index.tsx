@@ -1,7 +1,10 @@
 import Topbar from '@/components/common/topbar';
 import Tab from '@/components/flag/tab';
 import { useState } from 'react';
-import { TabBox } from './Flag.styled';
+import { PageTitle, TabBox, FlagList } from './Flag.styled';
+import FlagCard from '@/components/flag/flagcard';
+import { Flag3 } from '@/temp/flag';
+import BottomBtn from '@/components/common/bottombtn';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -39,14 +42,18 @@ const FlagPage = () => {
   return (
     <div>
       <Topbar text="깃발 관리" />
-      <div>
-        <img src="/images/common/flag.png" style={{ width: '40px' }} />
-        <div> 남은 깃발 1/3 </div>
-      </div>
+      <PageTitle>
+        <img src="/images/common/flag.png" style={{ width: '30px' }} />
+        <div> 남은 깃발 1 / 3 </div>
+      </PageTitle>
       <TabBox>{generateWeekTabs()}</TabBox>
-      <div>
-        <h3>선택된 날짜: {selectedDate.toDateString()}</h3>
-      </div>
+      <FlagList>
+        {/* <h3>선택된 날짜: {selectedDate.getDate()}</h3> */}
+        {Flag3.map((flagItem, index) => (
+          <FlagCard key={index} flag={flagItem} />
+        ))}
+      </FlagList>
+      <BottomBtn text="깃발 꽂기"></BottomBtn>
     </div>
   );
 };
