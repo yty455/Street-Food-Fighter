@@ -190,7 +190,24 @@ public class FundingService {
 
     public List<FundingUser> getFundingPerUsers(Long flagId){
         List<Long> users = fundingRepository.findUserIdsByFlagId(flagId);
+
+        List<FundingUser> result = new ArrayList<>();
         // 펀딩한 회원별
-        return null;
+        for(Long userId : users) {
+            // funding 리스트를 찾고
+            List<Funding> fundings = fundingRepository.findAllByUserId(userId);
+
+            Integer totalPrice = 0;
+            List<OrderMenu> totalMenues = new ArrayList<>();
+            // 각 펀딩의 메뉴 리스트를 찾고
+            for(Funding funding : fundings){
+                totalMenues.addAll(orderMenuRepository.findAllByBucket(funding.getBucket()));
+                totalPrice+=funding.getBucket().getTotalPrice();
+            }
+            result.add(new FundingUser(userId, totalPrice, totalMenues.get(0).getName(), totalMenues.get(0).getCount(), totalMenues.size()-1));
+
+        }
+
+        return result;
     }
 }
