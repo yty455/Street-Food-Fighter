@@ -1,10 +1,15 @@
-import { InputContainer, StyledInput, InfoInput } from './Input.styled';
+import { InputContainer, StyledInput, InfoInput, InfoLabel } from './Input.styled';
 
-const Input = ({ value, onChange, placeholder, ...props }: any) => {
+const Input = ({ value, onChange, placeholder, label, ...props }: any) => {
   return (
     <InputContainer>
       {props.use === 'info' ? (
-        <InfoInput value={value} onChange={onChange} placeholder={placeholder} {...props}></InfoInput>
+        <>
+          {label &&
+            <InfoLabel>{label}</InfoLabel>
+          }
+          <InfoInput value={value} onChange={onChange} placeholder={placeholder} {...props}></InfoInput>
+        </>
       ) : (
         <StyledInput value={value} onChange={onChange} placeholder={placeholder} {...props} />
       )}
