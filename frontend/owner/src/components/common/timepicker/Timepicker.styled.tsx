@@ -20,6 +20,7 @@ const TimePickerInput = styled.input.attrs<any>((props) => ({}))`
         font-size: 18px;
         font-family: ${font};
       }
+
       &:focus {
         outline: none;
       }

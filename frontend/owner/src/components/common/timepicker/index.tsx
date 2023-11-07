@@ -10,7 +10,15 @@ const TimePicker = ({ label, value, onChange }: TimePickerProps) => {
   return (
     <TimePickerContainer>
       <Label>{label}</Label>
-      <TimePickerInput type="time" style={{ color: 'black' }} value={value} onChange={(e: any) => onChange(e.target.value)} />
+      <TimePickerInput
+        type="time"
+        style={{ color: 'black' }}
+        value={value}
+        onChange={(e: any) => {
+          onChange(e.target.value);
+          e.target.blur();
+        }}
+      />
     </TimePickerContainer>
   );
 };
