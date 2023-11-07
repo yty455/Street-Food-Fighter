@@ -39,7 +39,7 @@ const Title = styled.div`
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const ContentBox = styled.div`

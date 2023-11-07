@@ -26,7 +26,7 @@ const FlagList = styled.div`
   gap: 20px;
 
   padding-bottom: 60px;
-  height: calc(100vh - 210px);
+  height: calc(100vh - 230px);
   overflow-y: auto;
 `;
 
