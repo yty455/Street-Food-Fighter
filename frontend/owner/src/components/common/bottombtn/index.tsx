@@ -7,8 +7,14 @@ interface Props {
 }
 
 const BottomBtn = ({ text, onClick, disabled = false }: Props) => {
+  const handleClick = () => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
+
   return (
-    <ButtonBox onClick={() => !disabled && onClick()} disabled={disabled}>
+    <ButtonBox onClick={handleClick} disabled={disabled}>
       {text}
     </ButtonBox>
   );
