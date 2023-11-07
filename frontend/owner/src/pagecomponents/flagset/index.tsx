@@ -3,18 +3,17 @@ import useCurrentLocation from '@/hooks/flagset/currentHook';
 import useSetPlaceHook from '@/hooks/flagset/setplaceHook';
 import { useState, useRef } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { Position, StyledTop, Topbar, Curpos, SettingBox, Title, Content, DayContent, Text } from './Flagset.styled';
+import { Position, StyledTop, Topbar, Curpos } from './Flagset.styled';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 import { MarkerPosition } from '@/types/map.type';
-import useSelectedDateStore from '@/stores/flag/selectedDateStore';
-import useFormatDate from '@/hooks/common/formatDate.hook';
+import SettingBox from '@/components/flagset/settingbox';
 
 const FlagSetPage = () => {
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
-
   const router = useRouter();
+
   // position
   const { position, updateLocation } = useCurrentLocation(setAddressName, mapRef);
   const [isPositionVisible, setPositionVisible] = useState(false);
@@ -23,10 +22,6 @@ const FlagSetPage = () => {
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
   const [markerPosition, setMarkerPosition] = useState<MarkerPosition>(null);
-
-  // 선택한 날짜와 포맷
-  const { selectedDate } = useSelectedDateStore();
-  const formatDate = useFormatDate();
 
   return (
     <div>
@@ -77,17 +72,8 @@ const FlagSetPage = () => {
       <Curpos onClick={updateLocation}>
         <img src="/images/common/curpos.png" style={{ width: '50px' }} />
       </Curpos>
-      <SettingBox>
-        <Title>영업날짜</Title>
-        <Content>
-          <Text>{formatDate(selectedDate)}</Text>
-        </Content>
-        <Title>영업시간</Title>
-        <DayContent>
-          <Text>영업 시간을 선택해 주세요</Text>
-          <img src="/images/common/right.png" style={{ width: '20px' }} />
-        </DayContent>
-      </SettingBox>
+
+      <SettingBox />
       <BottomBtn text="깃발 추가" />
     </div>
   );
