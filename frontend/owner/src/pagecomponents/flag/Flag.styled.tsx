@@ -26,8 +26,18 @@ const FlagList = styled.div`
   gap: 20px;
 
   padding-bottom: 60px;
-  /* max-height: 800px; */
   height: calc(100vh - 210px);
   overflow-y: auto;
 `;
-export { TabBox, PageTitle, FlagList };
+
+const NoFlag = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  gap: 20px;
+  height: 400px;
+  text-align: center;
+`;
+export { TabBox, PageTitle, FlagList, NoFlag };
