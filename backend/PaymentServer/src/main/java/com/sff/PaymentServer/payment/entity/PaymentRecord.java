@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Builder
 @Getter
@@ -49,7 +50,14 @@ public class PaymentRecord {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     public void updateState(PaymentState paymentState){
         this.state = paymentState;
+    }
+
+    public void updateOrderId(Long orderId){
+        this.orderId = orderId;
     }
 }

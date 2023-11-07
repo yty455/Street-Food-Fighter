@@ -3,6 +3,7 @@ package com.sff.PaymentServer.payment.controller;
 import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.payment.service.FundingPaymentService;
+import com.sff.PaymentServer.payment.service.OrderFromFundingService;
 import com.sff.PaymentServer.payment.service.OrderPaymentService;
 import com.sff.PaymentServer.utils.ApiResult;
 import com.sff.PaymentServer.utils.ApiUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentController {
     private final OrderPaymentService orderPaymentService;
     private final FundingPaymentService fundingPaymentService;
+    private final OrderFromFundingService orderFromFundingService;
 
     @PostMapping("/api/payment-server/orders")
     public ApiResult<?> createOrderPayment(@RequestHeader("userId") Long userId, @RequestBody
@@ -35,15 +37,15 @@ public class PaymentController {
     }
 
     @PostMapping("/api/payment-server/orders/funding/{fundingId}")
-    public ApiResult<?> createFundingToOrder(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
-
+    public ApiResult<?> createFundingToOrder(@PathVariable Long fundingId){
+        orderFromFundingService.orderFromFunding(fundingId);
         return ApiUtils.success("펀딩을 통한 주문 성공");
     }
 
     @PutMapping("/api/payment_server/fundings/{fundingId}/cancel")
-    public ApiResult<?> updateFundingCancel(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
-
-        return ApiUtils.success("펀딩을 통한 주문 성공");
+    public ApiResult<?> updateFundingCancel(@PathVariable Long fundingId){
+        orderFromFundingService.cancelFromFunding(fundingId);
+        return ApiUtils.success("90퍼센트 환불의 펀딩 취소 성공");
     }
 
     @PutMapping("/api/payment_server/orders/{orderId}/reject")

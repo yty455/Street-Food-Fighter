@@ -27,9 +27,16 @@ public interface OrderClient {
     ApiResult<FundingCreateResponse> createFunding(@RequestBody FundingCreateRequest fundingCreateRequest);
 
     @PutMapping("/api/order-server/fundings/{fundingId}/funding-state/waiting")
-    ApiResult<?> updateFundingWaiting(@PathVariable Long fundingId);
+    ApiResult updateFundingWaiting(@PathVariable Long fundingId);
 
     // ---펀딩 -> 주문---
     @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
-    ApiResult<?> createOrderRecordFromFunding(@PathVariable Long fundingId);
+    ApiResult<Long> createOrderRecordFromFunding(@PathVariable Long fundingId);
+
+    @PutMapping("/api/order-server/funding-to-order/{fundingId}/state-waiting/{orderId}")
+    ApiResult updateFundingAndOrderState(@PathVariable Long fundingId, @PathVariable Long orderId);
+
+    // ---펀딩 -> 주문 취소---
+    @PutMapping("/api/order-server/fundings/{fundingId}/order-state/cancel")
+    ApiResult updateFundingCancel(@PathVariable Long fundingId);
 }
