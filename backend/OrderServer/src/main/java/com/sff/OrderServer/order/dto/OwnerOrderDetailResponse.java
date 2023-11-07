@@ -3,9 +3,13 @@ package com.sff.OrderServer.order.dto;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OwnerOrderDetailResponse {
 
     private Long orderId;
