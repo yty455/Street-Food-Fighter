@@ -116,6 +116,14 @@ public class StoreService {
                 .toList();
     }
 
+    public Long getOwnerId(Long storeId) {
+
+        Store store = storeRepository.findById(storeId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+
+        return store.getOwnerId();
+    }
+
     public void startBusiness(Long ownerId, Long flagId) {
 
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->

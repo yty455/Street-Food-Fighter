@@ -36,4 +36,8 @@ public class MyReviewResponse {
         this.orderId = orderId;
     }
 
+    public void updateMenu(List<String> menu) {
+        this.menu = menu;
+    }
+
 }
