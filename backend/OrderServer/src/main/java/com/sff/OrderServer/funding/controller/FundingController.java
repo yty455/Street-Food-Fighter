@@ -40,14 +40,15 @@ public class FundingController {
         return ApiUtils.success(fundingService.getFunding(userId, fundingId));
     }
 
-    // 펀딩 주문 상태 변경 - 취소
+    // -------msa--------
+
+    // 펀딩 주문 상태 변경 - 취소 : 선택된 펀딩이 주문을 하지 않고 취소한 경우
     @PutMapping("/api/order-server/fundings/{fundingId}/order-state/cancel")
     public ApiResult<?> updateFundingCancel(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
         fundingUpdateService.updateFundingOrderStateCancled(userId, fundingId);
         return ApiUtils.success("펀딩 주문 상태 취소로 변경 완료");
     }
 
-    // -------msa--------
     // 펀딩 주문 상태 변경 - 주문 완료
     @PutMapping("/api/order-server/fundings/{fundingId}/order-state/complete")
     public ApiResult<?> updateFundingComplete(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){

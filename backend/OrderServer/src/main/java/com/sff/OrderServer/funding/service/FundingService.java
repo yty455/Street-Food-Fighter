@@ -128,7 +128,7 @@ public class FundingService {
         );
         // 결제 완료에 따른 펀딩 대기 상태로 변경
         try {
-            funding.updateFundingStateWaitting();
+            funding.updateStateWaitting();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -163,7 +163,7 @@ public class FundingService {
     private void updatePickedFundingState(Long flagId){
         Funding funding = fundingRepository.findById(flagId).orElseThrow(()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         try{
-            funding.updateFundingStateSuccess();
+            funding.updateStateSuccess();
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -174,7 +174,7 @@ public class FundingService {
         List<Funding> fundings = fundingRepository.findAllById(flagIds);
         try {
             for (Funding funding : fundings) {
-                funding.updateFundingStateFailure();
+                funding.updateStateFailure();
                 funding.updateOrderStateFailed();
             }
             fundingRepository.saveAll(fundings);
