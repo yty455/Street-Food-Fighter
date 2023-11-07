@@ -44,7 +44,7 @@ const FlagPage = () => {
       <Topbar text="깃발 관리" />
       <PageTitle>
         <img src="/images/common/flag.png" style={{ width: '30px' }} />
-        <div> 남은 깃발 1 / 3 </div>
+        <div> {Flag3.length} / 3 </div>
       </PageTitle>
       <TabBox>{generateWeekTabs()}</TabBox>
       <FlagList>
