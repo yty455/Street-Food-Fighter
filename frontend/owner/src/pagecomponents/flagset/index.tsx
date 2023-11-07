@@ -3,10 +3,11 @@ import useCurrentLocation from '@/hooks/flagset/currentHook';
 import useSetPlaceHook from '@/hooks/flagset/setplaceHook';
 import { useState, useRef } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { Position, StyledTop, Topbar, Curpos, SettingBox, Title, Content } from './Flagset.styled';
+import { Position, StyledTop, Topbar, Curpos, SettingBox, Title, Content, DayContent, Text } from './Flagset.styled';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 import { MarkerPosition } from '@/types/map.type';
+import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 
 const FlagSetPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -21,6 +22,14 @@ const FlagSetPage = () => {
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
   const [markerPosition, setMarkerPosition] = useState<MarkerPosition>(null);
+
+  const { selectedDate } = useSelectedDateStore();
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year} / ${month} / ${day}`;
+  };
 
   return (
     <div>
@@ -43,6 +52,12 @@ const FlagSetPage = () => {
               size: {
                 width: 30,
                 height: 40,
+              },
+              options: {
+                offset: {
+                  x: 5,
+                  y: 40,
+                },
               },
             }}
           />
@@ -67,9 +82,14 @@ const FlagSetPage = () => {
       </Curpos>
       <SettingBox>
         <Title>영업날짜</Title>
-        <Content> 2023 / 11 / 07</Content>
+        <Content>
+          <Text>{formatDate(selectedDate)}</Text>
+        </Content>
         <Title>영업시간</Title>
-        <Content>영업 시간을 선택해 주세요</Content>
+        <DayContent>
+          <Text>영업 시간을 선택해 주세요</Text>
+          <img src="/images/common/right.png" style={{ width: '20px' }} />
+        </DayContent>
       </SettingBox>
       <BottomBtn text="깃발 추가" />
     </div>

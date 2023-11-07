@@ -70,14 +70,38 @@ const Title = styled.div`
 const Content = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const lightgray = props.theme.colors.lightgray;
-    const font = props.theme.fonts.air;
     return css`
-      border: 3px solid ${lightgray};
-      font-size: 18px;
-      padding: 10px;
+      border: 2px solid ${lightgray};
+      padding: 10px 20px;
       border-radius: 10px;
-      font-family: ${font};
+
+      width: 160px;
     `;
   }};
 `;
-export { StyledTop, Topbar, Position, Curpos, SettingBox, Title, Content };
+const DayContent = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const lightgray = props.theme.colors.lightgray;
+    return css`
+      border: 3px solid ${lightgray};
+      padding: 10px 20px;
+      border-radius: 10px;
+
+      display: flex;
+      justify-content: space-between;
+
+      width: 250px;
+    `;
+  }};
+`;
+const Text = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    return css`
+      font-family: ${font};
+      font-size: 18px;
+    `;
+  }};
+`;
+
+export { StyledTop, Topbar, Position, Curpos, SettingBox, Title, Content, DayContent, Text };

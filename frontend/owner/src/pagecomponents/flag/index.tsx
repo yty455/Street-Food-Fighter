@@ -6,13 +6,14 @@ import FlagCard from '@/components/flag/flagcard';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import BottomBtn from '@/components/common/bottombtn';
 import { useRouter } from 'next/navigation';
+import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
 
 const FlagPage = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const { selectedDate, setSelectedDate } = useSelectedDateStore();
   const curflag = Flag2;
+
   const selectTab = (date: any) => {
     setSelectedDate(date);
     // 선택된 요일에 따라 API 호출
