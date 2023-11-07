@@ -7,7 +7,16 @@ const useFormatDate = () => {
     return `${year} / ${month} / ${day}`;
   };
 
-  return formatDate;
+  // 24시간 형식의 시간을 받아서 AM/PM 형식으로 변환하는 함수
+  const formatTime24To12 = (time24: string): string => {
+    const [hours24, minutes] = time24.split(':');
+    const hours = parseInt(hours24, 10);
+    const suffix = hours >= 12 ? '오후' : '오전';
+    const hours12 = ((hours + 11) % 12) + 1;
+    return `${suffix} ${hours12.toString().padStart(2, '0')}:${minutes}`;
+  };
+
+  return { formatDate, formatTime24To12 };
 };
 
 export default useFormatDate;
