@@ -1,7 +1,6 @@
 import { CardWrapper, Row, Title, Content, ContentBox } from './Flagcard.styled';
 
 const FlagCard = ({ flag }: any) => {
-  console.log(flag);
   return (
     <CardWrapper>
       <img src={`/images/flag/flag${flag.flagId}.png`} style={{ width: '40px' }} />

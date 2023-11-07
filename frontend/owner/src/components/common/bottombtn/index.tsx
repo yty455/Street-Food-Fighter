@@ -6,7 +6,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const BottomBtn = ({ text, onClick, disabled }: Props) => {
+const BottomBtn = ({ text, onClick, disabled = false }: Props) => {
   return (
     <ButtonBox onClick={() => !disabled && onClick()} disabled={disabled}>
       {text}

@@ -5,7 +5,7 @@ const ButtonBox = styled.div.attrs<any>((props) => ({}))`
     const light = props.theme.colors.light;
     const gray = props.theme.colors.gray;
 
-    const bgcolor = props.disabled === 'true' ? gray : main;
+    const bgcolor = props.disabled ? gray : main;
     return css`
       display: flex;
       align-items: center;

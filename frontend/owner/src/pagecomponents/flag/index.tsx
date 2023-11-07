@@ -11,7 +11,7 @@ const days = ['일', '월', '화', '수', '목', '금', '토'];
 const FlagPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const curflag = Flag0;
+  const curflag = Flag3;
   const selectTab = (date: any) => {
     setSelectedDate(date);
     // 선택된 요일에 따라 API 호출
@@ -60,7 +60,7 @@ const FlagPage = () => {
           <FlagCard key={index} flag={flagItem} />
         ))}
       </FlagList>
-      <BottomBtn text="깃발 추가"></BottomBtn>
+      {curflag.length === 3 ? <BottomBtn text="깃발 추가" disabled={true}></BottomBtn> : <BottomBtn text="깃발 추가"></BottomBtn>}
     </div>
   );
 };
