@@ -8,9 +8,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.sff.notificationserver.domain.notification.controller.Svc1FeignClient;
-import com.sff.notificationserver.domain.notification.dto.FCMNotificationRequest;
-import com.sff.notificationserver.domain.notification.dto.NotificationInfo;
-import com.sff.notificationserver.domain.notification.dto.NotificationResponse;
+import com.sff.notificationserver.domain.notification.dto.*;
+import com.sff.notificationserver.domain.notification.entity.Notification;
+import com.sff.notificationserver.domain.notification.entity.NotificationType;
 import com.sff.notificationserver.domain.notification.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -54,6 +55,35 @@ public class NotificationService {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    /*
+    알림 종류 6가지
+    펀딩성공 - SUCCESS
+    펀딩실패 - FAILURE
+    주문접수 - PROCESSING
+    음식준비 - COMPLETED
+    주문거절 - REFUSED
+    리뷰요청 - REQUEST
+     */
+    private final Map<NotificationType, String> titleMaker = Map.of(
+            NotificationType.SUCCESS, "펀딩이 성공했어요",
+            NotificationType.FAILURE, "펀딩이 실패했어요",
+            NotificationType.PROCESSING, "주문이 접수 되었어요",
+            NotificationType.COMPLETED, "음식이 준비 되었어요",
+            NotificationType.REFUSED, "주문이 거절 되었어요",
+            NotificationType.REQUEST, "리뷰를 남겨주세요!"
+    );
+
+    private final Map<NotificationType, String> contentMaker = Map.of(
+            NotificationType.SUCCESS, "이 오픈했어요! 먹으러 슝~!",
+            NotificationType.FAILURE, "의 선택을 받지 못했어요... 아쉽지만 다음 기회를 노려보아요",
+            NotificationType.PROCESSING, " 사장님이 맛있게 드실수 있도록 메뉴를 조리하고 있어요",
+            NotificationType.COMPLETED, " 사장님이 빨리 안오면 다 먹어버린대요",
+            NotificationType.REFUSED, " 사장님이 집 가고 싶대요... 다음에 주문해줘요",
+            NotificationType.REQUEST, "에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!"
+    );
+
+
     public NotificationResponse getNotifications(Long userId, int page, int size) {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
@@ -72,72 +102,32 @@ public class NotificationService {
                 .build();
     }
 
-        /*
-    알림 종류 6가지
-    펀딩성공 - SUCCESS
-    펀딩실패 - FAILURE
-    주문접수 - PROCESSING
-    음식준비 - COMPLETED
-    주문거절 - REFUSED
-    리뷰요청 - REQUEST
-     */
+    @Transactional
+    public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {
+        // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
 
-//    @Transactional
-//    public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {
-//        // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
-//
-//        String title = null;
-//        String content = null;
-//        String url = null;
-//
-//        switch (userNotificationInfo.getRecipient_type()) {
-//            case "주문성공":
-//                title = "주문이 접수 되었어요";
-//                content = userNotificationInfo.getStoreName() + " 사장님이 맛있게 드실수 있도록 메뉴를 조리하고 있어요";
-//                break;
-//            case "주문거절":
-//                title = "주문이 거절 되었어요";
-//                content = userNotificationInfo.getStoreName() + " 사장님이 집 가고 싶대요... 다음에 주문해줘요";
-//                break;
-//            case "조리완료":
-//                title = "음식이 준비 되었어요";
-//                content = userNotificationInfo.getStoreName() + " 사장님이 빨리 안오면 다 먹어버린대요";
-//                break;
-//            case "펀딩성공":
-//                title = "펀딩이 성공했어요";
-//                content = userNotificationInfo.getStoreName() + "이 오픈했어요! 먹으러 슝~!";
-//                break;
-//            case "펀딩실패":
-//                title = "펀딩이 실패했어요";
-//                content = userNotificationInfo.getStoreName() + "의 선택을 받지 못했어요... 아쉽지만 다음 기회를 노려보아요";
-//                break;
-//            case "리뷰요청":
-//                title = "리뷰를 남겨주세요!";
-//                content = userNotificationInfo.getStoreName() + "에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!";
-//                break;
-//        }
-//
-//        String finalTitle = title;
-//        String finalContent = content;
-//
-//        userNotificationInfo.getRecipients().forEach(id -> sendNotification(id, finalTitle, finalContent, url, userNotificationInfo.getRecipient_type()));
-//    }
-//
-//    @Transactional
-//    public void sendNotificationToOwner(NotificationRequest notificationRequest) {
-//        // TODO - 사장 알림 추가 하기
-//
-//    }
-//
-//    @Transactional
-//    public void sendNotification(Long userId, String title, String content, String url, NotificationType type) {
-//        log.info(sendNotificationByToken(new FCMNotificationRequest(userId, title, content)));
-//        notificationRepository.save(Notification.builder()
-//                .userId(userId)
-//                .type(type)
-//                .content(content)
-//                .url(url).build());
-//    }
+        String title = titleMaker.get(userNotificationInfo.getType());
+        String content = userNotificationInfo.getStoreName() + contentMaker.get(userNotificationInfo.getType());
+
+        userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType()));
+    }
+
+
+    public void sendNotificationToOwner(NotificationRequest notificationRequest) {
+
+        log.info(sendNotificationByToken(new FCMNotificationRequest(notificationRequest.getOwnerId(), "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
+
+    }
+
+    @Transactional
+    public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type) {
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), title, content)));
+        notificationRepository.save(Notification.builder()
+                .userId(userInfo.getUserId())
+                .type(type)
+                .targetId(userInfo.getOrderId())
+                .totalPrice(userInfo.getAmount()).build());
+    }
 
     @PostConstruct
     public void firebaseSetting() throws IOException {
@@ -166,7 +156,7 @@ public class NotificationService {
                 .build();
 
         Message message = Message.builder()
-                .setToken(tokenf)
+                .setToken(tokenf) // 토큰 넣어주세요
                 .setNotification(notification)
                 .build();
 

@@ -11,7 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NotificationRequest {
     private Long ownerId;
-    private String name;
-    private String ownerName;
-    private String phone;
+    private Long storeId;
 }
