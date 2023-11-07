@@ -35,7 +35,10 @@ import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -55,7 +58,6 @@ public class OrderService {
 
     @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
-        ;
         Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
@@ -71,38 +73,20 @@ public class OrderService {
         }
 
     }
+
     // msa
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
+        System.out.println(orderRecordList.size());
         List<OrderResponse> orderResponseList = new ArrayList<>();
         List<Long> storeIds = new ArrayList<>();
         for (OrderRecord orderRecord : orderRecordList) {
-            storeIds.add(orderRecord.getOrderId());
+            storeIds.add(orderRecord.getStoreId());
         }
-
-        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
-        ApiResult<List<StoreMSAResponse>> result;
-        try {
-            result = storeClient.getStores(storeMSARequest);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
-        }
-        if(result.getSuccess() == false){
-            throw new BaseException(result.getApiError());
-        }
-        List<StoreMSAResponse> storeMSAResponseList = result.getResponse();
-        System.out.println(storeMSAResponseList.size());
-        for (int i = 0; i < orderRecordList.size(); i++) {
-            OrderRecord orderRecord = orderRecordList.get(i);
-            StoreMSAResponse store = storeMSAResponseList.stream()
-                    .filter(response -> response.getStoreId().equals(orderRecord.getStoreId()))
-                    .findFirst()
-                    .orElseThrow(
-                    () -> new BaseException(new ApiError(OrderError.NON_EXIST_STORE))
-            );
+        List<StoreMSAResponse> storeMSAResponseList = getStoreMSAResponses(storeIds);
+        for (OrderRecord orderRecord : orderRecordList) {
+            StoreMSAResponse store = getStoreInfo(storeMSAResponseList, orderRecord.getStoreId());
 
             Bucket bucket = orderRecord.getBucket();
             Integer totalPrice = bucket.getTotalPrice();
@@ -116,23 +100,17 @@ public class OrderService {
         }
         return orderResponseList;
     }
+
     // msa
     public OrderDetailResponse getOrderRecordDetail(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         Bucket bucket = orderRecord.getBucket();
         List<Long> storeIds = new ArrayList<>();
         storeIds.add(orderRecord.getStoreId());
-        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
-        ApiResult<List<StoreMSAResponse>> result;
-        try {
-            result = storeClient.getStores(storeMSARequest);
+        List<StoreMSAResponse> storeMSAResponseList = getStoreMSAResponses(storeIds);
 
-        } catch (Exception e) {
-            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
-        }
-        List<StoreMSAResponse> storeMSAResponseList = result.getResponse();
-
-        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket), storeMSAResponseList.get(0));
+        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket),
+                getStoreInfo(storeMSAResponseList, orderRecord.getStoreId()));
     }
 
     // 바구니에 들은 주문 메뉴, 옵션
@@ -373,7 +351,7 @@ public class OrderService {
 
     // 매월 1일 00:00에 구동
     @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
-    public void ren() {
+    public void run() {
         List<OrderPerUser> orderPerUserResponseList = getOrderPerUser();
     }
 
@@ -397,8 +375,26 @@ public class OrderService {
         );
     }
 
-    private List<StoreMSAResponse> getStoreMSAResponses(){
+    private List<StoreMSAResponse> getStoreMSAResponses(List<Long> storeIds) {
+        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
+        ApiResult<List<StoreMSAResponse>> result;
+        try {
+            result = storeClient.getStores(storeMSARequest);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
     }
 
+    public StoreMSAResponse getStoreInfo(List<StoreMSAResponse> storeMSAResponseList, Long storeId) {
+        return storeMSAResponseList.stream()
+                .filter(response -> response.getStoreId().equals(storeId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(new ApiError(OrderError.NON_EXIST_STORE)));
+    }
 }
