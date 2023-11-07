@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum NetworkError implements ServiceError {
-    NETWORK_ERROR_ORDER(4000, "주문 서버와 통신 에러"),
-    NETWORK_ERROR_USER(4001, "회원 서버와 통신 에러"),
-    NETWORK_ERROR_STORE(4002, "가게 서버와 통신 에러")
+public enum PaymentError implements ServiceError {
+    ERROR_SAVE_PAYEMNTRECORD(4100, "결제 정보 저장 에러"),
+    ERROR_PAYMENT_STATE_CHANGE(4101, "결제 상태 변경 에러"),
+    NOT_EXIST_PAYMENTRECORD(4102, "존재하지 않는 결제 정보")
     ;
 
     private final int code;

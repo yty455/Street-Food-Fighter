@@ -1,5 +1,7 @@
 package com.sff.PaymentServer.payment.service;
 
+import com.sff.PaymentServer.dto.FundingCreateRequest;
+import com.sff.PaymentServer.dto.FundingCreateResponse;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateResponse;
 import com.sff.PaymentServer.dto.PurposeCreateRequest;
@@ -21,35 +23,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class OrderPaymentService {
+public class FundingPaymentService {
     private final PaymentRecordRepository paymentRecordRepository;
     private final OrderClient orderClient;
     private final UserClient userClient;
     private final StoreClient storeClient;
-    public void createOrderPayment(Long userId, OrderCreateRequest orderCreateRequest){
-        // 주문 정보 추가 -> OrderServer
-        OrderCreateResponse orderCreateResponse = createOrderRecord(orderCreateRequest);
 
-        // 회원 포인트 차감 -> UserServer
-        subtractUser(userId, orderCreateResponse.getTotalPrice());
+    public void createFundingPayment(Long userId, FundingCreateRequest fundingCreateRequest){
+        // 펀딩 정보 추가 - 상태 : 결제중
+        FundingCreateResponse fundingCreateResponse = createFundingRecord(fundingCreateRequest);
+
+        // 결제 (회원 포인트 차감)
+        subtractUser(userId, fundingCreateResponse.getTotalPrice());
 
         // 결제 정보 저장
-        savePaymentRecord(userId, orderCreateRequest.getStoreId(), orderCreateResponse);
+        savePaymentRecord(userId, fundingCreateRequest.getStoreId(), fundingCreateResponse);
 
-        // 주문 정보 변경 - 주문 성공 + 바구니 상태 변경 -> OrderServer
-        updateOrderState(orderCreateResponse.getOrderId());
-
-        // 주문 결제 완료 알림(to 고객) -> NotificationServer
-
-        // 주문 접수 대기 알림(to 사장) -> NotificationServer
+        // 펀딩 상태 변경 - 펀딩 대기 상태 + 바구니 상태 변경
+        updateFundingState(fundingCreateResponse.getFundingId());
 
     }
 
-    // 총액을 알아내는 것과 주문 정보 저장 동작을 한 번의 요청으로 할지 분리할지 고민.
-    private OrderCreateResponse createOrderRecord(OrderCreateRequest orderCreateRequest){
-        ApiResult<OrderCreateResponse> result;
+    private FundingCreateResponse createFundingRecord(FundingCreateRequest fundingCreateRequest){
+        ApiResult<FundingCreateResponse> result;
         try{
-            result = orderClient.createOrderRecord(orderCreateRequest);
+            result = orderClient.createFunding(fundingCreateRequest);
         }catch (Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
         }
@@ -75,7 +73,7 @@ public class OrderPaymentService {
     }
 
     @Transactional
-    private void savePaymentRecord(Long userId, Long storeId, OrderCreateResponse orderCreateResponse){
+    private void savePaymentRecord(Long userId, Long storeId, FundingCreateResponse fundingCreateResponse){
         // paymentId, userId, ownerId, price, state, fundingId, orderId
 
         // storeId로 ownerId 찾기
@@ -92,12 +90,12 @@ public class OrderPaymentService {
 
         // 결제 기록 저장
         PaymentRecord paymentRecord = PaymentRecord.builder()
-                .paymentId(userId+"order"+ orderCreateResponse.getOrderId()) // 임시 : 회원ID + order + orderId
+                .paymentId(userId+"funding"+ fundingCreateResponse.getFundingId()) // 임시 : 회원ID + funding + fundingId
                 .userId(userId)
                 .ownerId(ownerId)
-                .price(orderCreateResponse.getTotalPrice())
-                .state(PaymentState.ORDER)
-                .orderId(orderCreateResponse.getOrderId()).build();
+                .price(fundingCreateResponse.getTotalPrice())
+                .state(PaymentState.FUNDING)
+                .fundingId(fundingCreateResponse.getFundingId()).build();
         try {
             paymentRecordRepository.save(paymentRecord);
         }catch (Exception e){
@@ -105,10 +103,10 @@ public class OrderPaymentService {
         }
     }
 
-    private void updateOrderState(Long orderId){
+    private void updateFundingState(Long fundingId){
         ApiResult result;
         try{
-            result = orderClient.updateOrderState(orderId);
+            result = orderClient.updateFundingWaiting(fundingId);
         }catch (Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
         }
