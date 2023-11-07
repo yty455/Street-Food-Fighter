@@ -6,7 +6,7 @@ const CardBox = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       justify-content: center;
-      gap: 25px;
+      gap: 20px;
       align-items: center;
       border: 3px solid ${main};
       min-width: 225px;

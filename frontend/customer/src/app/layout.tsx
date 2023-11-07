@@ -4,9 +4,12 @@ import '../styles/globals.css';
 import { ThemeProvider } from 'styled-components';
 import theme from '../styles/DefaultTheme';
 import Navbar from '@/components/common/navbar';
-import Script from 'next/script';
+import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password'];
+
   return (
     <html>
       <head>
@@ -14,13 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <ThemeProvider theme={theme}>
         <body style={{ height: '100vh' }}>
-          {/* <Script
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JS_KEY}&autoload=false`}
-            strategy="beforeInteractive"
-          /> */}
           <StyledComponentsRegistry>
             {children}
-            <Navbar />
+            {!excludedPaths.includes(pathname) && <Navbar />}
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>

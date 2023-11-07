@@ -41,13 +41,13 @@ const Research = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       align-items: center;
-      justify-content: space-around;
 
       padding: 10px 20px;
       background-color: ${main};
       border-radius: 10px;
 
       font-size: 14px;
+      height: 35px;
     `;
   }};
 `;
@@ -81,12 +81,10 @@ const Curpos = styled.div`
 
 const CardList = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const light = props.theme.colors.light;
-    const font = props.theme.fonts.air;
     return css`
       position: fixed;
       bottom: 70px;
-      z-index: 3; 
+      z-index: 3;
       display: flex;
       gap: 20px;
       width: 100vw;
@@ -96,6 +94,5 @@ const CardList = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-
 
 export { CardList, StyledTop, Topbar, Filter, Research, Position, Curpos };
