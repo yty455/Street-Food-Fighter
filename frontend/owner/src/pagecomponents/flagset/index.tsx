@@ -6,6 +6,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { Position, StyledTop, Topbar, Curpos, SettingBox, Title, Content } from './Flagset.styled';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
+import { MarkerPosition } from '@/types/map.type';
 
 const FlagSetPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -19,7 +20,7 @@ const FlagSetPage = () => {
 
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
-  const [markerPosition, setMarkerPosition] = useState(null);
+  const [markerPosition, setMarkerPosition] = useState<MarkerPosition>(null);
 
   return (
     <div>
