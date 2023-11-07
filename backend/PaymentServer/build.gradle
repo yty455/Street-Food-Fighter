@@ -27,9 +27,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// 서버간 통신을 위한 openfeign
-	implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	// Openfeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
 
 	// Eureka
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -39,6 +38,9 @@ dependencies {
 
 	// logstash
 	implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
+
+	// kafka
+	implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {
