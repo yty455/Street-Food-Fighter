@@ -17,7 +17,7 @@ public class UserNotificationInfo {
     private Long storeId;
     private String storeName;
 
-    private List<Long> userList;
+    private List<UserInfo> userList;
     private NotificationType type;
 
 }
