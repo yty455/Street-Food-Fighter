@@ -167,6 +167,7 @@ public class StoreService {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
 
+        // TODO - 영업 종료 후 주문 서비스에 보내서 정산 금액 받기
         store.closeBusiness();
 
     }
