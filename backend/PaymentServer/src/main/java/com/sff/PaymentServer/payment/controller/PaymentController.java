@@ -1,6 +1,8 @@
 package com.sff.PaymentServer.payment.controller;
 
+import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
+import com.sff.PaymentServer.payment.service.FundingPaymentService;
 import com.sff.PaymentServer.payment.service.OrderPaymentService;
 import com.sff.PaymentServer.utils.ApiResult;
 import com.sff.PaymentServer.utils.ApiUtils;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PaymentController {
     private final OrderPaymentService orderPaymentService;
+    private final FundingPaymentService fundingPaymentService;
 
     @PostMapping("/api/payment-server/orders")
     public ApiResult<?> createOrderPayment(@RequestHeader("userId") Long userId, @RequestBody
@@ -25,9 +28,9 @@ public class PaymentController {
         return ApiUtils.success("주문 결제 성공");
     }
 
-    @PostMapping("/api/payment-server/fundings/{fundingId}")
-    public ApiResult<?> createFundingPayment(@RequestHeader("userId") Long userId, @PathVariable Long fundingId){
-
+    @PostMapping("/api/payment-server/fundings")
+    public ApiResult<?> createFundingPayment(@RequestHeader("userId") Long userId, @RequestBody FundingCreateRequest fundingCreateRequest){
+        fundingPaymentService.createFundingPayment(userId, fundingCreateRequest);
         return ApiUtils.success("펀딩 결제 성공");
     }
 
