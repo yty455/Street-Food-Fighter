@@ -6,12 +6,16 @@ import com.sff.OrderServer.bucket.entity.OrderMenu;
 import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
+import com.sff.OrderServer.dto.StoreMSARequest;
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
+import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
@@ -27,6 +31,7 @@ import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
 import com.sff.OrderServer.order.repository.OrderRecordRepository;
 import com.sff.OrderServer.utils.ApiError;
+import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,33 +51,58 @@ public class OrderService {
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
     private final FundingRepository fundingRepository;
+    private final StoreClient storeClient;
 
     @Transactional
-    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {;
+    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
+        ;
         Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
-        if(orderRepository.findByBucket(bucket).isPresent()){
+        if (orderRepository.findByBucket(bucket).isPresent()) {
             throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
         }
         try {
-            Long orderId = orderRepository.save(new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
+            Long orderId = orderRepository.save(
+                    new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
             return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
 
     }
-
+    // msa
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
         List<OrderResponse> orderResponseList = new ArrayList<>();
+        List<Long> storeIds = new ArrayList<>();
         for (OrderRecord orderRecord : orderRecordList) {
-            Long storeId = orderRecord.getStoreId();
-            // storeId로 가게 이름 가져와야함.(MSA)
-            String storeName = "temp";
-            String storeUrl = "url";
+            storeIds.add(orderRecord.getOrderId());
+        }
+
+        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
+        ApiResult<List<StoreMSAResponse>> result;
+        try {
+            result = storeClient.getStores(storeMSARequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if(result.getSuccess() == false){
+            throw new BaseException(result.getApiError());
+        }
+        List<StoreMSAResponse> storeMSAResponseList = result.getResponse();
+        System.out.println(storeMSAResponseList.size());
+        for (int i = 0; i < orderRecordList.size(); i++) {
+            OrderRecord orderRecord = orderRecordList.get(i);
+            StoreMSAResponse store = storeMSAResponseList.stream()
+                    .filter(response -> response.getStoreId().equals(orderRecord.getStoreId()))
+                    .findFirst()
+                    .orElseThrow(
+                    () -> new BaseException(new ApiError(OrderError.NON_EXIST_STORE))
+            );
 
             Bucket bucket = orderRecord.getBucket();
             Integer totalPrice = bucket.getTotalPrice();
@@ -82,17 +112,27 @@ public class OrderService {
             Integer restCount = menus.size() - 1;
 
             orderResponseList.add(
-                    new OrderResponse(orderRecord, storeName, storeUrl, totalPrice, menu,
-                            restCount));
+                    new OrderResponse(orderRecord, store, totalPrice, menu, restCount));
         }
         return orderResponseList;
     }
-
+    // msa
     public OrderDetailResponse getOrderRecordDetail(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         Bucket bucket = orderRecord.getBucket();
-        // 가게 정보(가게 이름, 가게 이미지, 가게 주소) 요청 후 밑으로 넘겨주기 필요
-        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket));
+        List<Long> storeIds = new ArrayList<>();
+        storeIds.add(orderRecord.getStoreId());
+        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
+        ApiResult<List<StoreMSAResponse>> result;
+        try {
+            result = storeClient.getStores(storeMSARequest);
+
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        List<StoreMSAResponse> storeMSAResponseList = result.getResponse();
+
+        return new OrderDetailResponse(orderRecord, getOrderMenusDetail(bucket), storeMSAResponseList.get(0));
     }
 
     // 바구니에 들은 주문 메뉴, 옵션
@@ -354,6 +394,10 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new BaseException(new ApiError(OrderError.NON_EXIST_ORDER))
         );
+    }
+
+    private List<StoreMSAResponse> getStoreMSAResponses(){
+
     }
 
 }
