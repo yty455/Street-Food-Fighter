@@ -6,10 +6,12 @@ import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.domain.flag.dto.*;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
+import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,9 @@ public class FlagService {
     private final FlagRepository flagRepository;
     private final StoreRepository storeRepository;
 
+    @Autowired
+    private Svc1FeignClient svc1FeignClient;
+
     @Transactional
     public Long createFlag(FlagRequest flagRequest) {
         Store findStore = storeRepository.findById(flagRequest.getStoreId())
@@ -40,10 +45,11 @@ public class FlagService {
         List<Long> flagIdList = flagList.stream()
                 .map(Flag::getId)
                 .toList();
-        // TODO - 깃발 ID를 주문 서비스에 보내서 깃발의 펀딩 금액 받아 오기
+        // 깃발 ID를 주문 서비스에 보내서 깃발의 펀딩 금액 받아 오기
+        List<FlagFundingInfo> flagFundingInfos = svc1FeignClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
         List<FlagResponse> flagResponses = new ArrayList<>();
         for (int idx = 0; idx < flagList.size(); idx++) {
-            flagResponses.add(FlagResponse.fromEntity(flagList.get(idx), 36500));
+            flagResponses.add(FlagResponse.fromEntity(flagList.get(idx), flagFundingInfos.get(idx).getAmount()));
         }
 
         return flagResponses;
