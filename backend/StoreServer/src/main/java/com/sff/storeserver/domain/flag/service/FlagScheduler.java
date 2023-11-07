@@ -26,14 +26,12 @@ public class FlagScheduler {
     private Svc1FeignClient svc1FeignClient;
 
     // TODO - 어제 사용 안한 깃발들 전부 펀딩 실패, 펀딩 3개중 1개 사용하면 나머지 2개 바로 펀딩 실패(영업시작에서 처리하기)
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     @Transactional
     public void flagManager() {
-        System.out.println("스케쥴러 실행");
         // 어제 날짜 펀딩 모두 불러 와서 사용안한 애들 펀딩 실패 처리
         LocalDate yesterday = LocalDate.now().minusDays(1);
         List<Flag> flagList = flagRepository.findByDateAndState(yesterday, FlagType.WAITING);
-        System.out.println("스케쥴러 실행 결과 " + flagList.size());
         svc1FeignClient.notifyFlag(FlagNotificationInfo.builder().unpickedFlagIds(flagList.stream().map(Flag::getId).toList()).build());
         flagList.forEach(Flag::fundingFailed);
     }

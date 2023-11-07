@@ -3,9 +3,11 @@ package com.sff.storeserver.domain.store.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
+import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
 import com.sff.storeserver.domain.review.repository.ReviewRepository;
+import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.dto.*;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
@@ -13,6 +15,7 @@ import com.sff.storeserver.domain.store.repository.MenuRepository;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -34,6 +37,9 @@ public class StoreService {
     private final MenuRepository menuRepository;
     private final FlagRepository flagRepository;
     private final ReviewRepository reviewRepository;
+
+    @Autowired
+    private Svc1FeignClient svc1FeignClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
@@ -73,18 +79,21 @@ public class StoreService {
         return StoreDetailResponse.fromEntity(store, menuInfoResponseList, score);
     }
 
+    @Transactional
     public void updateStore(StoreUpdateInfo storeUpdateInfo, Long ownerId) {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
         store.update(storeUpdateInfo);
     }
 
+    @Transactional
     public void updateStoreCategory(StoreUpdateCategory storeUpdateCategory, Long ownerId) {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
         store.updateCategory(storeUpdateCategory);
     }
 
+    @Transactional
     public void deleteStore(Long ownerId) {
         Store store = storeRepository.findByOwnerId(ownerId)
                 .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
@@ -124,26 +133,35 @@ public class StoreService {
         return store.getOwnerId();
     }
 
+    @Transactional
     public void startBusiness(Long ownerId, Long flagId) {
 
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
 
+        // 깃발 선택 했으면 펀딩 성공!!!
         if (flagId != 0) {
+            FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
             flags.forEach(flag -> {
                 if (flagId == flag.getId()) {
-                    fundingSuccess(flag);
+                    flag.fundingSuccess();
+                    flagNotificationInfo.updatePicked(flag.getId());
                 } else {
-                    fundingFailure(flag);
+                    flag.fundingFailed();
+                    flagNotificationInfo.updateUnpicked(flag.getId());
                 }
             });
+
+            // 깃발에 펀딩한 유저에게 알림 전송
+            svc1FeignClient.notifyFlag(flagNotificationInfo);
         }
 
         store.startBusiness();
 
     }
 
+    @Transactional
     public void closeBusiness(Long ownerId) {
 
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
@@ -152,16 +170,4 @@ public class StoreService {
         store.closeBusiness();
 
     }
-
-
-    public void fundingSuccess(Flag flag) {
-        // 주문 서비스에 깃발ID 보내서 펀딩 성공 알림 보내기
-        flag.fundingSuccess();
-    }
-
-    public void fundingFailure(Flag flag) {
-        // 주문 서비스에 깃발ID 보내서 펀딩 실패 알림 보내기
-        flag.fundingFailed();
-    }
-
 }

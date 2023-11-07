@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,14 @@ import java.util.List;
 public class FlagNotificationInfo {
 
     private Long pickedFlagId;
-    private List<Long> unpickedFlagIds;
+    private List<Long> unpickedFlagIds = new ArrayList<>();
+
+    public void updatePicked(Long pickedFlagId) {
+        this.pickedFlagId = pickedFlagId;
+    }
+
+    public void updateUnpicked(Long unpickedFlagId) {
+        unpickedFlagIds.add(unpickedFlagId);
+    }
 
 }
