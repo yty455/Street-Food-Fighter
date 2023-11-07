@@ -126,7 +126,7 @@ public class OrderController {
     }
 
     // 주문별 메뉴 목록
-    @GetMapping("/api/order-server/menus")
+    @PostMapping("/api/order-server/menus")
     public ApiResult<?> getMenusPerOrders(@RequestBody List<Long> orders) {
         return ApiUtils.success(orderService.getMenusPerOrders(orders));
     }

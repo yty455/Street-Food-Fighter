@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   datasource:
@@ -13,7 +13,7 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -24,3 +24,4 @@ spring:
     Order_Server: "http://localhost:8080"
     Notification_Server: ""
     Store_Server: "http://192.168.30.215:8080"
+    Kafka_Server: "k9e205.p.ssafy.io:9092"

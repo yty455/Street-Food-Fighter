@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OrderError implements ServiceError {
-    NETWORK_ERROR_ORDER(4100, "주문 서버와 통신 에러")
     ;
 
     private final int code;

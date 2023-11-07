@@ -1,12 +1,17 @@
 package com.sff.OrderServer.order.dto;
 
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDetailResponse {
 
     private OrderState state;
@@ -21,12 +26,12 @@ public class OrderDetailResponse {
     private List<OrderItem> orderItemList;
     private Integer totalPrice;
 
-    public OrderDetailResponse(OrderRecord orderRecord, List<OrderItem> orderItemList) {
+    public OrderDetailResponse(OrderRecord orderRecord, List<OrderItem> orderItemList, StoreMSAResponse storeMSAResponse) {
         this.state = orderRecord.getOrderState();
-        this.storeId = 1L;
-        this.storeName = "가게 이름";
-        this.storeUrl = "가게 이미지 url";
-        this.storeAddress = "가게 주소";
+        this.storeId = storeMSAResponse.getStoreId();
+        this.storeName = storeMSAResponse.getName();
+        this.storeUrl = storeMSAResponse.getStoreUrl();
+        this.storeAddress = storeMSAResponse.getStoreUrl();
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.orderId = orderRecord.getOrderId();
         this.requirement = orderRecord.getRequirement();

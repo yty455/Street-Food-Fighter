@@ -3,9 +3,13 @@ package com.sff.OrderServer.order.dto;
 import com.sff.OrderServer.bucket.dto.Option;
 import com.sff.OrderServer.bucket.entity.OrderMenu;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
 
     private String name;
