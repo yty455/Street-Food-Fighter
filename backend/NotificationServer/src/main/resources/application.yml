@@ -1,7 +1,10 @@
 spring:
-  logging.level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace # ??? ?? 2.x, hibernate5
+  profiles:
+    active: local
+  cloud:
+    config:
+      enabled: false
+
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
@@ -24,7 +27,14 @@ project:
   properties:
     firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
     firebase-topic: "diet_record_notification"
----
-spring:
-  profiles:
-    active: local
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info # 이부분은 알아서 변경

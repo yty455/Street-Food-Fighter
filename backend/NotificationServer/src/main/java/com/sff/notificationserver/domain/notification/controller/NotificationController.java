@@ -34,34 +34,18 @@ public class NotificationController {
     @PostMapping("/api/notification-server/user/notification")
     public ApiResult<?> sendNotificationToUser(@RequestBody UserNotificationInfo userNotificationInfo) {
 
-//        notificationService.sendNotificationToUser(userNotificationInfo);
+        notificationService.sendNotificationToUser(userNotificationInfo);
 
-        return ApiUtils.success("성공");
+        return ApiUtils.success("손님 알림 발송 성공");
     }
 
     @Operation(summary = "사장님 - 알림 발송", description = "사장님에게 푸시 알림 쏘기.")
     @PostMapping("/api/notification-server/owner/notification")
     public ApiResult<?> sendNotificationToOwner(@RequestBody NotificationRequest notificationRequest) {
 
-//        notificationService.sendNotificationToOwner(notificationRequest);
+        notificationService.sendNotificationToOwner(notificationRequest);
 
-        return ApiUtils.success("성공");
+        return ApiUtils.success("사장님 알림 발송 성공");
     }
-
-//    // 성공 시 데이터 리턴
-//    public ApiResult<?> getTest() {
-//        return ApiUtils.success(recordService.getTest());
-//    }
-//
-//    // 실패 시 에러 코드, 메시지 리턴 (일반적으로 Service단에서 처리)
-//    throw new BaseException(new ApiError({에러 메시지},{에러 코드});
-//
-//    // valid 예외처리
-//    public ApiResult<> create(@Valid UserRequest userRequest , BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            throw new ValidationException(bindingResult.getFieldErrors());
-//        }
-//        return ApiUtils.success("성공");
-//    }
 
 }
