@@ -1,8 +1,6 @@
 package com.sff.storeserver.common;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -23,4 +21,11 @@ public abstract class BaseEntity {
     @Column(name = "UPDATED_AT")
     private LocalDateTime lastModifiedDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.ACTIVE;
+
+    public void deleteStatus() {
+        this.status = Status.INACTIVE;
+    }
 }
