@@ -2,7 +2,7 @@ package com.sff.OrderServer.funding.entity;
 
 
 import com.sff.OrderServer.bucket.entity.Bucket;
-import com.sff.OrderServer.funding.dto.FundingRequest;
+import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,12 +58,12 @@ public class Funding {
 
     private String requirement;
 
-    public Funding(Bucket bucket, FundingRequest fundingRequest, Long userId){
+    public Funding(Bucket bucket, FundingCreateRequest fundingCreateRequest, Long userId){
         this.bucket = bucket;
-        this.storeId = fundingRequest.getStoreId();
-        this.flagId = fundingRequest.getFlagId();
+        this.storeId = fundingCreateRequest.getStoreId();
+        this.flagId = fundingCreateRequest.getFlagId();
         this.userId = userId;
-        this.requirement = fundingRequest.getRequirement();
+        this.requirement = fundingCreateRequest.getRequirement();
         this.fundingState = FundingState.PAYMENT_IN_PROGRESS;
         this.orderState = FundToOrderState.BEFORE_ORDER;
     }

@@ -36,7 +36,7 @@ public class PaymentRecord {
     private Long ownerId;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private Integer price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -49,4 +49,7 @@ public class PaymentRecord {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    public void updateState(PaymentState paymentState){
+        this.state = paymentState;
+    }
 }

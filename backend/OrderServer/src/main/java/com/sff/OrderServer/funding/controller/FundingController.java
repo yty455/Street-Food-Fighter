@@ -1,12 +1,12 @@
 package com.sff.OrderServer.funding.controller;
 
+import com.sff.OrderServer.funding.dto.FlagList;
 import com.sff.OrderServer.funding.dto.FundingChosen;
-import com.sff.OrderServer.funding.dto.FundingRequest;
+import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import com.sff.OrderServer.funding.service.FundingService;
 import com.sff.OrderServer.funding.service.FundingUpdateService;
 import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +24,8 @@ public class FundingController {
 
     // 펀딩 추가
     @PostMapping("/api/order-server/fundings")
-    public ApiResult<?> createFunding(@RequestHeader("userId") Long userId, @RequestBody FundingRequest fundingRequest){
-        fundingService.createFunding(userId, fundingRequest);
-        return ApiUtils.success("펀딩 정보 저장");
+    public ApiResult<?> createFunding(@RequestHeader("userId") Long userId, @RequestBody FundingCreateRequest fundingCreateRequest){
+        return ApiUtils.success(fundingService.createFunding(userId, fundingCreateRequest));
     }
 
     // 펀딩 내역 조회
@@ -89,8 +88,8 @@ public class FundingController {
     }
 
     // 깃발 별 펀딩 총 금액 요청
-    @GetMapping("/api/order-server/fundings/flags")
-    public ApiResult<?> getFundingAmountPerFlag(@RequestBody List<Long> flags){
+    @PostMapping("/api/order-server/fundings/flags")
+    public ApiResult<?> getFundingAmountPerFlag(@RequestBody FlagList flags){
         return ApiUtils.success(fundingService.getFundingPerFlag(flags));
     }
 

@@ -23,4 +23,4 @@ spring:
     User_Server: "http://192.168.30.143:8080"
     Order_Server: "http://localhost:8080"
     Notification_Server: ""
-    Kafka_Server: "k9e205.p.ssafy.io:9092"
+    Store_Server: "http://192.168.30.215:8080"
