@@ -1,6 +1,7 @@
 package com.sff.OrderServer.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,4 +14,5 @@ public class StoreMSAResponse {
     private String name;
     private String activeArea;
     private String storeUrl;
+
 }

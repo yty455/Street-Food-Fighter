@@ -1,7 +1,9 @@
 package com.sff.OrderServer.infra;
 
 import com.sff.OrderServer.dto.StoreMSARequest;
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.utils.ApiResult;
+import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface StoreClient {
 
     @PostMapping("/api/store-service/msa/store")
-    ApiResult getStores(@RequestBody StoreMSARequest storeMSARequest);
+    ApiResult<List<StoreMSAResponse>> getStores(@RequestBody StoreMSARequest storeMSARequest);
 }
