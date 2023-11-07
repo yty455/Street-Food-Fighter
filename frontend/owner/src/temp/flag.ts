@@ -42,7 +42,7 @@ export const Flag3 = [
     date: '2023-11-11',
     openTime: '10:00',
     closeTime: '20:00',
-    address: '부산시 강서구 녹산산단 335로 1',
+    address: '서울시 성북구 보문로29다길 31',
     fundingAmount: 30500,
   },
   {
@@ -50,7 +50,7 @@ export const Flag3 = [
     date: '2023-11-11',
     openTime: '10:00',
     closeTime: '20:00',
-    address: '부산시 강서구 녹산산단 335로 1',
+    address: '부산 중구 광복중앙로 31',
     fundingAmount: 30500,
   },
 ];

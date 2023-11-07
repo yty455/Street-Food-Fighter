@@ -4,7 +4,7 @@ const TabBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 `;
 
 const PageTitle = styled.div`
