@@ -272,14 +272,15 @@ public class OrderService {
     }
 
     @Transactional
-    public void createOrderAboutFunding(Long fundingId) {
+    public Long createOrderAboutFunding(Long fundingId) {
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(
                 () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
                 LocalDateTime.now());
         Bucket bucket = funding.getBucket();
         try {
-            orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+            OrderRecord orderRecord = orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+            return orderRecord.getOrderId();
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
