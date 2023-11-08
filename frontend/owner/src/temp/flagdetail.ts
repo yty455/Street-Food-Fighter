@@ -1,8 +1,8 @@
 export const flagdetail = {
   date: '2023-11-02',
   openTime: '10:00',
-  closeTime: '10:00',
-  address: 'string',
+  closeTime: '17:00',
+  address: '부산시 강서구 녹산산단 335로 7',
   fundingAmount: 26500,
   fundingUserGrade: {
     // 없는건 0
