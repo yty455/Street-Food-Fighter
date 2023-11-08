@@ -1,7 +1,20 @@
 import Topbar from '@/components/common/topbar';
 import { flagdetail } from '@/temp/flagdetail';
 import { UserGrades } from '@/types/usergrade.type';
-import { Container, Content, BigContentBox, Title, UserGradeImage, ContentBox } from './Flagdetail.styled';
+import {
+  Container,
+  Content,
+  BigContentBox,
+  Title,
+  UserGradeImage,
+  ContentBox,
+  GradeList,
+  GradeNum,
+  UserList,
+  UserTitle,
+  UserMenu,
+  UserRight,
+} from './Flagdetail.styled';
 import { gradeMapping } from '@/assets/grade';
 
 const FlagDetail = ({ flag, closeModal }: any) => {
@@ -26,56 +39,54 @@ const FlagDetail = ({ flag, closeModal }: any) => {
         </ContentBox>
       </BigContentBox>
 
-      <div>
-        <div>
+      <BigContentBox>
+        <ContentBox>
           <Title>총 펀딩 금액</Title>
-          <div>{detail.fundingAmount}</div>
-        </div>
+          <Content>{Number(detail.fundingAmount).toLocaleString()}원</Content>
+        </ContentBox>
         <div>
           <Title>펀딩한 회원 등급</Title>
-          <div>
-            <div>
-              <img src="/images/grade/light.png" style={{ width: '20px' }} />
-              <div> {getGradeCount('LIGHT')}명</div>
-            </div>
-            <div>
-              <img src="/images/grade/middle.png" style={{ width: '20px' }} />
-              <div> {getGradeCount('MIDDLE')}명</div>
-            </div>
-            <div>
-              <img src="/images/grade/heavy.png" style={{ width: '20px' }} />
-              <div> {getGradeCount('HEAVY')}명</div>
-            </div>
-            <div>
-              <img src="/images/grade/champion.png" style={{ width: '20px' }} />
-              <div> {getGradeCount('CHAMPION')}명</div>
-            </div>
-          </div>
+          <GradeList>
+            <GradeNum>
+              <img src="/images/grade/light.png" style={{ width: '45px' }} />
+              <Content> {getGradeCount('LIGHT')}명</Content>
+            </GradeNum>
+            <GradeNum>
+              <img src="/images/grade/middle.png" style={{ width: '45px' }} />
+              <Content> {getGradeCount('MIDDLE')}명</Content>
+            </GradeNum>
+            <GradeNum>
+              <img src="/images/grade/heavy.png" style={{ width: '45px' }} />
+              <Content> {getGradeCount('HEAVY')}명</Content>
+            </GradeNum>
+            <GradeNum>
+              <img src="/images/grade/champion.png" style={{ width: '45px' }} />
+              <Content> {getGradeCount('CHAMPION')}명</Content>
+            </GradeNum>
+          </GradeList>
         </div>
-      </div>
+      </BigContentBox>
 
-      <div>
+      <BigContentBox>
         <Title>펀딩한 회원</Title>
         {detail.fundingUserInfoList.map((user, userIndex) => (
-          <div key={userIndex}>
+          <UserList key={userIndex}>
             <UserGradeImage src={gradeMapping[user.userGrade as UserGrades]} />
 
-            <div>
-              <div>
+            <UserRight>
+              <UserTitle>
                 {user.userName} / {Number(user.totalPrice).toLocaleString()}원
-              </div>
-              <div>
-                {user.fundingMenuInfoList.length > 0 && (
-                  <div>
-                    {user.fundingMenuInfoList[0].menuName} {user.fundingMenuInfoList[0].count}개
-                    {user.fundingMenuInfoList.length > 1 && ` 외 다른 메뉴${user.fundingMenuInfoList.length - 1}개`}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+              </UserTitle>
+              {user.fundingMenuInfoList.length > 0 && (
+                <UserMenu>
+                  {user.fundingMenuInfoList[0].menuName} {user.fundingMenuInfoList[0].count}개
+                  {user.fundingMenuInfoList.length > 1 && ` 외 다른 메뉴${user.fundingMenuInfoList.length - 1}개`}
+                </UserMenu>
+              )}
+            </UserRight>
+          </UserList>
         ))}
-      </div>
+      </BigContentBox>
     </Container>
   );
 };
