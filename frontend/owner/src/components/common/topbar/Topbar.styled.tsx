@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 const BackButton = styled.div`
   display: flex;
-  width: 35%;
+  width: 30%;
   padding-left: 20px;
 `;
 const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
@@ -24,5 +24,9 @@ const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
+const Text = styled.div`
+  width: 40%;
+  text-align: center;
+`;
 
-export { BackButton, StyledTopbar };
+export { BackButton, StyledTopbar, Text };
