@@ -1,6 +1,8 @@
 spring:
   profiles:
-    include: jwt, local
+    include: prd
+  kafka:
+    bootstrap-servers: k9e205.p.ssafy.io:9092
   cloud:
     config:
       enabled: false
@@ -14,6 +16,10 @@ eureka:
 logging:
   config: classpath:logback.xml
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+    root: info
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
 
