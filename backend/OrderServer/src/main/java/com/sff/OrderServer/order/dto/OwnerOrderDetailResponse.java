@@ -1,5 +1,8 @@
 package com.sff.OrderServer.order.dto;
 
+import com.sff.OrderServer.dto.Grade;
+import com.sff.OrderServer.dto.MemberInfoResponse;
+import com.sff.OrderServer.dto.ReviewMSAResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +19,7 @@ public class OwnerOrderDetailResponse {
     private Long userId;
     private LocalDateTime createAt;
     private String userNickName;
-    private String userGrade;
+    private Grade userGrade;
     private String userPhone;
     private String requirement;
     private List<OrderItem> orderItemList;
@@ -25,18 +28,20 @@ public class OwnerOrderDetailResponse {
     private String content;
     private Integer score;
 
-    public OwnerOrderDetailResponse(OrderRecord orderRecord, Long userId, String userNickName, String userGrade, String userPhone, Long reviewId, String content, Integer score, List<OrderItem> orderItemList) {
+    public OwnerOrderDetailResponse(OrderRecord orderRecord, MemberInfoResponse member,
+            ReviewMSAResponse review, List<OrderItem> orderItemList) {
         this.orderId = orderRecord.getOrderId();
-        this.userId = userId;
+        this.userId = orderRecord.getUserId();
         this.createAt = orderRecord.getCreatedAt();
-        this.userNickName = userNickName;
-        this.userGrade = userGrade;
-        this.userPhone = userPhone;
+        this.userNickName = member.getNickname();
+        this.userGrade = member.getGrade();
+        this.userPhone = member.getPhone();
         this.requirement = orderRecord.getRequirement();
         this.orderItemList = orderItemList;
         this.totalPrice = orderRecord.getBucket().getTotalPrice();
-        this.reviewId = reviewId;
-        this.content = content;
-        this.score = score;
+        this.reviewId = review.getReviewId();
+        this.content = review.getContent();
+        this.score = review.getScore();
     }
+
 }
