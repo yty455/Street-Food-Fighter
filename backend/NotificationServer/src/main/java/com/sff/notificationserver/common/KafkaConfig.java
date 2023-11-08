@@ -33,8 +33,13 @@ public class KafkaConfig {
 
     // ------------------------ Publish 설정 -------------------------------------
     @Bean
-    public NewTopic createStoreTopic() {
-        return new NewTopic("store-service-create-store", 1, (short) 1);
+    public NewTopic notifyUserTopic() {
+        return new NewTopic("notification-service-notify-user", 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic notifyStoreTopic() {
+        return new NewTopic("notification-service-notify-store", 1, (short) 1);
     }
 
     @Bean
@@ -57,7 +62,7 @@ public class KafkaConfig {
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "store-service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-service");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);

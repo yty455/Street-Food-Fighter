@@ -1,5 +1,6 @@
 package com.sff.notificationserver.domain.notification.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -19,6 +20,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +52,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     private final UserClient userClient;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
     알림 종류 6가지
@@ -93,6 +99,14 @@ public class NotificationService {
                 .notificationInfos(notificationInfos)
                 .build();
     }
+
+    @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")
+    @Transactional
+    public void notifyUser(@Payload String userNotificationInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+        UserNotificationInfo createUserInfo = objectMapper.readValue(userNotificationInfo, UserNotificationInfo.class);
+        log.info("메시지입니다 : {}", userNotificationInfo);
+    }
+
 
     @Transactional
     public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {
