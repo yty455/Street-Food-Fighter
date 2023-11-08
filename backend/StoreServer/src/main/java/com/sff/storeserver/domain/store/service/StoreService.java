@@ -132,7 +132,7 @@ public class StoreService {
     }
 
     @Transactional
-    public void startBusiness(Long ownerId, Long flagId) {
+    public void startBusiness(Long ownerId, Long flagId, double lati, double longi, String activeArea) {
 
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
@@ -154,8 +154,7 @@ public class StoreService {
             // 깃발에 펀딩한 유저에게 알림 전송
             orderClient.notifyFlag(flagNotificationInfo);
         }
-
-        store.startBusiness();
+        store.startBusiness(lati, longi, activeArea);
 
     }
 

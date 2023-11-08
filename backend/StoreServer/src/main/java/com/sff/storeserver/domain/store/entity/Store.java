@@ -70,8 +70,11 @@ public class Store extends BaseEntity {
         flags.forEach(Flag::delete);
     }
 
-    public void startBusiness() {
+    public void startBusiness(double lati, double longi, String activeArea) {
         state = BusinessType.OPEN;
+        this.lati = lati;
+        this.longi = longi;
+        this.activeArea = activeArea;
     }
 
     public void closeBusiness() {
