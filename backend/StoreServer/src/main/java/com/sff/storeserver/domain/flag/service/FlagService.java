@@ -6,6 +6,7 @@ import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.domain.flag.dto.*;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
+import com.sff.storeserver.domain.review.dto.ReviewUserInfoRequest;
 import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
@@ -65,34 +66,25 @@ public class FlagService {
             throw new BaseException(StoreError.NOT_FOUND_STORE);
         }
 
-        // 펀딩 서비스에 깃발 ID 보내서 총 얼마, 누구 모든 정보 받아오기
-//        int fundingAmount = 0;
-//        Map<UserGrade, Integer> fundingUserGrade = Arrays.stream(UserGrade.values())
-//                .collect(Collectors.toMap(grade -> grade, grade -> 0));
+        // 깃발 ID로 주문서비스에서 회원ID,주문정보 받아오기
+        List<FundingUserInfo> fundingUserInfoList = svc1FeignClient.getFundingUsers(flag.getId()).getResponse();
 
-        List<FundingUserInfo> fundingUserInfoList = new ArrayList<>();
-
-        // 테스트
-        List<FundingMenuInfo> fundingMenuInfoList1 = new ArrayList<>();
-        List<FundingMenuInfo> fundingMenuInfoList2 = new ArrayList<>();
-        fundingMenuInfoList1.add(FundingMenuInfo.builder().menuName("붕어빵").count(4).build());
-        fundingMenuInfoList1.add(FundingMenuInfo.builder().menuName("슈크림 붕어빵").count(2).build());
-        fundingMenuInfoList2.add(FundingMenuInfo.builder().menuName("와플").count(1).build());
-        fundingUserInfoList.add(FundingUserInfo.builder().userName("성인").userGrade(UserGrade.LIGHT).totalPrice(3000).fundingMenuInfoList(fundingMenuInfoList1).build());
-        fundingUserInfoList.add(FundingUserInfo.builder().userName("동윤").userGrade(UserGrade.MIDDLE).totalPrice(6500).fundingMenuInfoList(fundingMenuInfoList2).build());
-        fundingUserInfoList.add(FundingUserInfo.builder().userName("배성").userGrade(UserGrade.CHAMPION).totalPrice(8000).fundingMenuInfoList(fundingMenuInfoList2).build());
-        fundingUserInfoList.add(FundingUserInfo.builder().userName("재영").userGrade(UserGrade.CHAMPION).totalPrice(9000).fundingMenuInfoList(fundingMenuInfoList1).build());
+        // 회원ID List로 회원서비스에서 회원정보 받아오기
+        List<FundingUserDetailInfo> fundingUserDetailInfoList = svc1FeignClient.getUserFundingInfo(ReviewUserInfoRequest.builder()
+                .memberIds(fundingUserInfoList.stream().map(FundingUserInfo::getUserId).toList()).build()).getResponse();
+        // 합치기
+        for (int idx = 0; idx < fundingUserDetailInfoList.size(); idx++) {
+            fundingUserInfoList.get(idx).updateUserInfo(fundingUserDetailInfoList.get(idx).getNickname(), fundingUserDetailInfoList.get(idx).getGrade());
+        }
 
         int fundingAmount = fundingUserInfoList.stream()
                 .mapToInt(FundingUserInfo::getTotalPrice)
                 .sum();
 
+        // 등급 있는것 만 체크됨
         Map<UserGrade, Integer> fundingUserGrade = fundingUserInfoList.stream()
                 .collect(Collectors.groupingBy(FundingUserInfo::getUserGrade, Collectors.summingInt(u -> 1)));
 
-
         return FlagDetailResponse.fromEntity(flag, fundingAmount, fundingUserGrade, fundingUserInfoList);
     }
-
-
 }

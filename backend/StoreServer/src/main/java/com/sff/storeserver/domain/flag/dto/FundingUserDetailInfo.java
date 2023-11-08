@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FundingMenuInfo {
-    // 펀딩 메뉴 이름, 개수
-    private String menuName;
-    private int count;
+public class FundingUserDetailInfo {
+
+    // 회원정보
+    private String nickname;
+    private UserGrade grade;
 }
