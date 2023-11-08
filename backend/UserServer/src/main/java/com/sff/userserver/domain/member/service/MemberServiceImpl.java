@@ -1,9 +1,6 @@
 package com.sff.userserver.domain.member.service;
 
-import com.sff.userserver.domain.member.dto.GradeUpdateRequest;
-import com.sff.userserver.domain.member.dto.MemberInfoResponse;
-import com.sff.userserver.domain.member.dto.MyInfoRequest;
-import com.sff.userserver.domain.member.dto.SignupRequest;
+import com.sff.userserver.domain.member.dto.*;
 import com.sff.userserver.domain.member.entity.Grade;
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.entity.Role;
@@ -131,6 +128,14 @@ public class MemberServiceImpl implements MemberService {
         if (!missingMemberIds.isEmpty()) {
             log.error("Member not found for IDs: {}", missingMemberIds);
         }
+    }
+
+    @Override
+    public List<MemberFcmTokenResponse> getFcmTokens(List<Long> memberIds) {
+        List<Member> members = memberRepository.findAllById(memberIds);
+        return members.stream()
+                .map(member -> new MemberFcmTokenResponse(member.getId(), member.getFcmToken()))
+                .toList();
     }
 
     private Grade determineGrade(int orderCount) {

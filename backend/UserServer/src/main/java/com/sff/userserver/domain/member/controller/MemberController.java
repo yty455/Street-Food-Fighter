@@ -52,6 +52,12 @@ public class MemberController {
         return ApiUtils.success(members);
     }
 
+    @PostMapping("/members/tokens")
+    public ApiResult<?> getFcmTokens(@RequestBody MembersInfoRequest membersInfoRequest) {
+        List<MemberFcmTokenResponse> fcmTokens = memberService.getFcmTokens(membersInfoRequest.getMemberIds());
+        return ApiUtils.success(fcmTokens);
+    }
+
     @GetMapping("jwt-test")
     public String jwtTest() {
         return "jwtTest 요청 성공";

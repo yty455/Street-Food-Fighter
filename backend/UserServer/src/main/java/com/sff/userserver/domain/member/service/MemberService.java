@@ -1,6 +1,7 @@
 package com.sff.userserver.domain.member.service;
 
 import com.sff.userserver.domain.member.dto.GradeUpdateRequest;
+import com.sff.userserver.domain.member.dto.MemberFcmTokenResponse;
 import com.sff.userserver.domain.member.dto.MemberInfoResponse;
 import com.sff.userserver.domain.member.dto.SignupRequest;
 import com.sff.userserver.domain.member.entity.Member;
@@ -19,4 +20,6 @@ public interface MemberService {
     List<MemberInfoResponse> getMembers(List<Long> memberIds);
 
     void updateGrade(List<GradeUpdateRequest> gradeUpdateRequests);
+
+    List<MemberFcmTokenResponse> getFcmTokens(List<Long> memberIds);
 }
