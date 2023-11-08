@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: local
+    include: prd
   kafka:
     bootstrap-servers: k9e205.p.ssafy.io:9092
   cloud:
