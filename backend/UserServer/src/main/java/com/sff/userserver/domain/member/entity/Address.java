@@ -26,7 +26,7 @@ public class Address {
 	}
 
 	public Address(String region1, String region2, String region3, String region4) {
-		new Address(region1, region2, region3);
+		this(region1, region2, region3);
 		this.region4 = region4;
 	}
 }
