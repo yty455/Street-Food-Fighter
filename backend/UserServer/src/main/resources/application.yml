@@ -1,20 +1,15 @@
 spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/sff-user
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        #        show_sql: true
-        format_sql: true
-
   profiles:
-    include: jwt, oauth
+    include: prd
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
 
 logging.level:
   org.hibernate.SQL: debug
