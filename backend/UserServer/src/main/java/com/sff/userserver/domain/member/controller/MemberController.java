@@ -1,9 +1,6 @@
 package com.sff.userserver.domain.member.controller;
 
-import com.sff.userserver.domain.member.dto.MemberInfoResponse;
-import com.sff.userserver.domain.member.dto.MembersInfoRequest;
-import com.sff.userserver.domain.member.dto.MyInfoRequest;
-import com.sff.userserver.domain.member.dto.SignupRequest;
+import com.sff.userserver.domain.member.dto.*;
 import com.sff.userserver.domain.member.service.MemberServiceImpl;
 import com.sff.userserver.global.utils.ApiResult;
 import com.sff.userserver.global.utils.ApiUtils;
@@ -41,6 +38,12 @@ public class MemberController {
     public ApiResult<?> updateMember(@RequestBody MyInfoRequest myInfoRequest) {
         memberService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success("내 정보 수정 성공");
+    }
+
+    @PatchMapping("/members/grade")
+    public ApiResult<?> updateGrade(@RequestBody List<GradeUpdateRequest> gradeUpdateRequests) {
+        memberService.updateGrade(gradeUpdateRequests);
+        return ApiUtils.success("회원 등급 수정 완료");
     }
 
     @PostMapping("/members")

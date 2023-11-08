@@ -1,6 +1,7 @@
 package com.sff.userserver.domain.member.service;
 
 import com.sff.userserver.domain.member.dto.WishlistResponse;
+import com.sff.userserver.domain.member.dto.WishlistStatsResponse;
 import com.sff.userserver.domain.member.entity.FoodType;
 import com.sff.userserver.domain.member.entity.Wishlist;
 import com.sff.userserver.domain.member.repository.WishlistRepository;
@@ -48,5 +49,13 @@ public class WishlistServiceImpl implements WishlistService {
         Wishlist wishlist = wishlistRepository.findByMember_IdAndFoodType(memberId, foodType)
                 .orElseThrow(() -> new BaseException(new ApiError("삭제 요청한 음식 타입이 없습니다.", 1132)));
         wishlistRepository.delete(wishlist);
+    }
+
+    @Override
+    public List<WishlistStatsResponse> getWishlistStats(String region1, String region2, String region3, String region4) {
+        if (region4 == null || region4.equals("")) {
+            return wishlistRepository.findByMember_AddressWithoutRegion4(region1, region2, region3);
+        }
+        return wishlistRepository.findByMember_Address(region1, region2, region3, region4);
     }
 }
