@@ -36,9 +36,11 @@ public class SignupRequest {
     @Pattern(regexp = "^\\d{6}$", message = "결제 비밀번호는 숫자 6자리를 입력해주세요.")
     private String paymentPassword;
     private String socialId;
+    @NotBlank(message = "FCM 토큰값을 입력해주세요.")
+    private String fcmToken;
 
     @Builder
-    public SignupRequest(String email, String password, String nickname, String phone, String imageUrl, String region1, String region2, String region3, String region4, String paymentPassword, String socialId) {
+    public SignupRequest(String email, String password, String nickname, String phone, String imageUrl, String region1, String region2, String region3, String region4, String paymentPassword, String socialId, String fcmToken) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -50,6 +52,7 @@ public class SignupRequest {
         this.region4 = region4;
         this.paymentPassword = paymentPassword;
         this.socialId = socialId;
+        this.fcmToken = fcmToken;
     }
 
     public Member toEntity() {
@@ -64,6 +67,7 @@ public class SignupRequest {
                 .region2(region2)
                 .region3(region3)
                 .region4(region4)
-                .socialId(socialId).build();
+                .socialId(socialId)
+                .fcmToken(fcmToken).build();
     }
 }
