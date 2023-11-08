@@ -1,8 +1,8 @@
 import { CardWrapper, Row, Title, Content, ContentBox } from './Flagcard.styled';
 
-const FlagCard = ({ flag }: any) => {
+const FlagCard = ({ flag, onClick }: any) => {
   return (
-    <CardWrapper>
+    <CardWrapper onClick={onClick}>
       <img src={`/images/flag/flag${flag.flagId}.png`} style={{ width: '40px' }} />
       <ContentBox>
         <Row>
