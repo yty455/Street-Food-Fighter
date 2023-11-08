@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "storeClient", url = "${spring.data.Store_Server}")
+@FeignClient(name = "storeserver", url = "${spring.data.Store_Server}")
 public interface StoreClient {
 
     @GetMapping(value = "/api/store-service/store/{storeId}/owner")
