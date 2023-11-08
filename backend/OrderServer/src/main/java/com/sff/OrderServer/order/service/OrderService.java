@@ -6,6 +6,8 @@ import com.sff.OrderServer.bucket.entity.OrderMenu;
 import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
+import com.sff.OrderServer.dto.MemberInfoResponse;
+import com.sff.OrderServer.dto.ReviewMSAResponse;
 import com.sff.OrderServer.dto.StoreMSARequest;
 import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.error.code.BucketError;
@@ -16,6 +18,7 @@ import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.infra.StoreClient;
+import com.sff.OrderServer.infra.UserClient;
 import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
@@ -35,10 +38,7 @@ import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -55,6 +55,7 @@ public class OrderService {
     private final OrderMenuRepository orderMenuRepository;
     private final FundingRepository fundingRepository;
     private final StoreClient storeClient;
+    private final UserClient userClient;
 
     @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
@@ -74,7 +75,7 @@ public class OrderService {
 
     }
 
-    // msa
+    // msa  o
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
@@ -101,7 +102,7 @@ public class OrderService {
         return orderResponseList;
     }
 
-    // msa
+    // msa  o
     public OrderDetailResponse getOrderRecordDetail(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         Bucket bucket = orderRecord.getBucket();
@@ -210,19 +211,15 @@ public class OrderService {
         return allOrderList;
     }
 
+    // msa
     public OwnerOrderDetailResponse getOwnerOrderDetail(Long orderId) {
         // 주문 ID 를 가게 서비스 에 보내서 리뷰 ID/ 리뷰 내용/ 별점 받기
-        Long reviewId = 1L;
-        String content = "리뷰 내용";
-        Integer score = 5;
+        ReviewMSAResponse review = getReviewInfo(orderId);
         // 회원 ID 를 회원 서비스 에 보내서 회원 이름, 등급, 연락처 받기
         OrderRecord orderRecord = getOrderRecord(orderId);
-        Long userId = orderRecord.getUserId();
-        String userNickName = "쿠배숑";
-        String userGrade = "동메달";
-        String userPhone = "01088888888";
-        return new OwnerOrderDetailResponse(orderRecord, userId, userNickName, userGrade, userPhone,
-                reviewId, content, score, getOrderMenusDetail(orderRecord.getBucket()));
+        MemberInfoResponse member = getMemberInfo(orderRecord.getUserId());
+        return new OwnerOrderDetailResponse(orderRecord, member, review,
+                getOrderMenusDetail(orderRecord.getBucket()));
     }
 
     @Transactional
@@ -240,6 +237,7 @@ public class OrderService {
         }
     }
 
+    // msa
     @Transactional
     public void updateOrderProcessing(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
@@ -252,6 +250,7 @@ public class OrderService {
         // 가게 서비스에 userId, orderId 넘기면서 "조리중" 알림 보내달라 하기
     }
 
+    // msa
     @Transactional
     public void updateOrderCompleted(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
@@ -264,6 +263,7 @@ public class OrderService {
         // 가게 서비스에 userId, orderId 넘기면서 "조리 완료" 알림 보내달라 하기
     }
 
+    // msa
     @Transactional
     public void updateOrderRequest(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
@@ -276,6 +276,7 @@ public class OrderService {
         // 가게 서비스에 userId, orderId 넘기면서 "리뷰 요청" 알림 보내달라 하기
     }
 
+    // msa
     @Transactional
     public void updateOrderRefused(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
@@ -297,7 +298,8 @@ public class OrderService {
                 LocalDateTime.now());
         Bucket bucket = funding.getBucket();
         try {
-            OrderRecord orderRecord = orderRepository.save(new OrderRecord(funding, orderCount, bucket));
+            OrderRecord orderRecord = orderRepository.save(
+                    new OrderRecord(funding, orderCount, bucket));
             return orderRecord.getOrderId();
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
@@ -391,10 +393,40 @@ public class OrderService {
         return result.getResponse();
     }
 
-    public StoreMSAResponse getStoreInfo(List<StoreMSAResponse> storeMSAResponseList, Long storeId) {
+    public StoreMSAResponse getStoreInfo(List<StoreMSAResponse> storeMSAResponseList,
+            Long storeId) {
         return storeMSAResponseList.stream()
                 .filter(response -> response.getStoreId().equals(storeId))
                 .findFirst()
                 .orElseThrow(() -> new BaseException(new ApiError(OrderError.NON_EXIST_STORE)));
+    }
+
+    public ReviewMSAResponse getReviewInfo(Long orderId) {
+        ApiResult<ReviewMSAResponse> result;
+        try {
+            result = storeClient.getReview(orderId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
+
+    private MemberInfoResponse getMemberInfo(Long userId) {
+        ApiResult<MemberInfoResponse> result;
+        try {
+            result = userClient.getMember();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
     }
 }

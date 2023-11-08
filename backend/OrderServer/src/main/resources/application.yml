@@ -9,6 +9,7 @@ spring:
   mvc:
     static-path-pattern: /static/**
 
+
 eureka:
   client:
     enabled: false
