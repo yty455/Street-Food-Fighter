@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: jwt, oauth, local
+    include: jwt, oauth, prd
   cloud:
     config:
       enabled: false
@@ -10,8 +10,6 @@ eureka:
     enabled: false
     register-with-eureka: false
     fetch-registry: false
-
-
 
 logging.level:
   org.hibernate.SQL: debug
