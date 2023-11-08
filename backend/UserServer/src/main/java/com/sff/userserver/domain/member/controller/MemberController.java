@@ -35,7 +35,7 @@ public class MemberController {
     }
 
     @PatchMapping("/me")
-    public ApiResult<?> updateMember(@RequestBody MyInfoRequest myInfoRequest) {
+    public ApiResult<?> updateMember(@Valid @RequestBody MyInfoRequest myInfoRequest) {
         memberService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success("내 정보 수정 성공");
     }
