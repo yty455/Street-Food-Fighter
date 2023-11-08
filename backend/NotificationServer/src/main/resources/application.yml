@@ -42,3 +42,7 @@ logging:
   config: classpath:logback.xml
   level:
     root: info # 이부분은 알아서 변경
+
+feign:
+  userserver:
+    url: k9e205.p.ssafy.io:8100

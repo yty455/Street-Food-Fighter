@@ -1,13 +1,12 @@
 package com.sff.notificationserver.domain.notification.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.sff.notificationserver.domain.notification.controller.Svc1FeignClient;
+import com.sff.notificationserver.common.feignClient.UserClient;
 import com.sff.notificationserver.domain.notification.dto.*;
 import com.sff.notificationserver.domain.notification.entity.Notification;
 import com.sff.notificationserver.domain.notification.entity.NotificationType;
@@ -15,7 +14,6 @@ import com.sff.notificationserver.domain.notification.repository.NotificationRep
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
@@ -48,13 +46,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-
-    @Autowired
-    private Svc1FeignClient svc1FeignClient;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    private final UserClient userClient;
 
     /*
     알림 종류 6가지
@@ -93,7 +85,7 @@ public class NotificationService {
         // 환불 수수료 정책 도입시 변경
         double refundFee = getRefundFee;
         // 유저 포인트 받아오기
-        int userPoint = svc1FeignClient.getUserPoint(userId).getResponse();
+        int userPoint = userClient.getUserPoint(userId).getResponse();
 
         return NotificationResponse.builder()
                 .refundFee(refundFee)
