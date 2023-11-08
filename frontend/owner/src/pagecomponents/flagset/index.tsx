@@ -1,6 +1,6 @@
 import SearchPlace from '@/components/flagset/searchplace';
-import useCurrentLocation from '@/hooks/flagset/currentHook';
-import useSetPlaceHook from '@/hooks/flagset/setplaceHook';
+import useCurrentLocation from '@/hooks/flagset/current.hook';
+import useSetPlaceHook from '@/hooks/flagset/setplace.hook';
 import { useState, useRef } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { Position, StyledTop, Topbar, Curpos } from './Flagset.styled';
