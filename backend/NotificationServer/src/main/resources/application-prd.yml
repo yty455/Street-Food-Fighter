@@ -17,12 +17,12 @@ logging:
   level:
     root: info
 server:
-  port: 8090
+  port: 8120
 eureka:
   instance:
     prefer-ip-address: true
     ip-address: k9e205.p.ssafy.io
-    non-secure-port: 8090
+    non-secure-port: 8120
   client:
     enabled: true
     register-with-eureka: true
