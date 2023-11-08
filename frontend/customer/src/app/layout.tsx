@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login'];
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register'];
 
   return (
     <html>
@@ -19,7 +19,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body style={{ height: '100vh' }}>
           <StyledComponentsRegistry>
             {children}
-            {!excludedPaths.includes(pathname) && <Navbar />}
+            {/* {!excludedPaths.includes(pathname) && <Navbar />} */}
+            {!excludedPaths.some((path) => pathname.startsWith(path)) && <Navbar />}
           </StyledComponentsRegistry>
         </body>
       </ThemeProvider>

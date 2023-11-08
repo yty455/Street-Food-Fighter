@@ -36,9 +36,10 @@ const BodyStyle = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       width: 100%;
       height: 60%;
+      padding-top: 20%;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     `;
   }};
 `;

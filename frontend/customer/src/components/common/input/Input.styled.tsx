@@ -4,7 +4,9 @@ const InputContainer = styled.div`
   margin: 10px 0;
 `;
 
-const StyledInput = styled.input.attrs<any>((props) => ({}))`
+const StyledInput = styled.input.attrs<any>((props) => ({
+  type: props.type || 'text',
+}))`
   ${(props) => {
     const light = props.theme.colors.light;
     const main = props.theme.colors.main;
@@ -38,7 +40,7 @@ const InfoInput = styled.input.attrs<any>((props) => ({}))`
     const gray = props.theme.colors.gray;
     const black = props.theme.colors.black;
     const airfont = props.theme.fonts.air;
-    const fontSize = "20px";
+    const fontSize = '20px';
     return css`
       width: 100%;
       margin-top: 10px;
@@ -65,11 +67,12 @@ const InfoLabel = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     return css`
       width: 100%;
-      padding: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
       box-sizing: border-box;
       border: none;
       font-size: 16px;
-      margin-bottom : 16px;
+      /* margin-bottom: 16px; */
     `;
   }};
 `;

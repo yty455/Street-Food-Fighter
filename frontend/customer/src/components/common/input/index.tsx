@@ -5,9 +5,7 @@ const Input = ({ value, onChange, placeholder, label, ...props }: any) => {
     <InputContainer>
       {props.use === 'info' ? (
         <>
-          {label &&
-            <InfoLabel>{label}</InfoLabel>
-          }
+          {label && <InfoLabel>{label}</InfoLabel>}
           <InfoInput value={value} onChange={onChange} placeholder={placeholder} {...props}></InfoInput>
         </>
       ) : (
