@@ -6,3 +6,11 @@ spring:
     import: optional:configserver:${CONFIG_SERVER}
   application:
     name: userserver
+jwt:
+  secretKey: "lk2jelk32rjfo23ijrf091u013jnfoi431jt01h08ryh0193u45091fj09ew8rjodsajflkasdj120834uj309u450938509djfslkdfasjlakfdsjalks"
+  access:
+    expiration: 1209600000
+    header: Authorization
+  refresh:
+    expiration: 1209600000
+    header: Authorization-Refresh
