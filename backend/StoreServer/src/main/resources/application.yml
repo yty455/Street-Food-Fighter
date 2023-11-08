@@ -16,7 +16,7 @@ spring:
   cloud:
     config:
       enabled: false
-      
+
 eureka:
   client:
     enabled: false
@@ -37,3 +37,8 @@ logging:
   config: classpath:logback.xml
   level:
     root: info
+
+feign:
+  svc1:
+    name: svc1
+    url: k9e205.p.ssafy.io:8100
