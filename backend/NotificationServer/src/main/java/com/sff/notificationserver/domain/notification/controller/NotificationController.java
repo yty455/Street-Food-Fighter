@@ -48,4 +48,12 @@ public class NotificationController {
         return ApiUtils.success("사장님 알림 발송 성공");
     }
 
+
+    @GetMapping("/ka")
+    public ApiResult<?> ka() throws Exception{
+
+        notificationService.ka();
+
+        return ApiUtils.success("ka");
+    }
 }

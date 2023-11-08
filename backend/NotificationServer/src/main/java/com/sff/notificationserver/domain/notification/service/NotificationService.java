@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -28,7 +29,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -103,8 +106,28 @@ public class NotificationService {
     @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")
     @Transactional
     public void notifyUser(@Payload String userNotificationInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        UserNotificationInfo createUserInfo = objectMapper.readValue(userNotificationInfo, UserNotificationInfo.class);
         log.info("메시지입니다 : {}", userNotificationInfo);
+        UserNotificationInfo createUserInfo = objectMapper.readValue(userNotificationInfo, UserNotificationInfo.class);
+        System.out.println(createUserInfo.getStoreId());
+        System.out.println(createUserInfo.getUserList().size());
+        System.out.println(createUserInfo.getType());
+    }
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public void ka() throws IOException {
+
+        List<UserInfo> list = new ArrayList<>();
+        list.add(UserInfo.builder().userId(1L).amount(1).orderId(1L).build());
+        list.add(UserInfo.builder().userId(2L).amount(1).orderId(1L).build());
+        list.add(UserInfo.builder().userId(3L).amount(1).orderId(1L).build());
+
+        // 직렬화할 객체 생성
+        UserNotificationInfo userInfo = UserNotificationInfo.builder().storeId(1L).type(NotificationType.COMPLETED).storeName("메롱").userList(list).build();
+
+        // 객체를 JSON 문자열로 직렬화
+        String userInfoJson = objectMapper.writeValueAsString(userInfo);
+        kafkaTemplate.send("notification-service-notify-user", userInfoJson);
     }
 
 
