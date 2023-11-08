@@ -1,7 +1,7 @@
+server:
+  port: 8130
+
 spring:
-  cloud:
-    config:
-      enabled: true
   config:
     import: optional:configserver:${CONFIG_SERVER}
   application:
@@ -11,17 +11,24 @@ spring:
     url: jdbc:mysql://${DB_SERVER}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${DB_ID}
     password: ${DB_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-    open-in-view: false
-  data:
-    User_Server: "http://192.168.30.143:8080"
-    Order_Server: "http://localhost:8080"
-    Notification_Server: "http://192.168.30.215:8080"
-    Store_Server: "http://192.168.30.215:8080"
-    Kafka_Server: "k9e205.p.ssafy.io:9092"
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: k9e205.p.ssafy.io
+    non-secure-port: 8130
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:1234@k9e205.p.ssafy.io:8761/eureka/
