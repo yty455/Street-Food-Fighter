@@ -1,4 +1,4 @@
-package com.sff.storeserver.common;
+package com.sff.storeserver.common.feignClient;
 
 import feign.Logger;
 import feign.RequestInterceptor;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-public class Svc1FeignConfig {
+public class FeignConfig {
     @Bean
     Logger.Level feignLoggerLevel(){
         return Logger.Level.FULL;

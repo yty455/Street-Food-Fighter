@@ -1,25 +1,18 @@
-package com.sff.storeserver.domain.store.controller;
+package com.sff.storeserver.common.feignClient;
 
-import com.sff.storeserver.common.Svc1FeignConfig;
 import com.sff.storeserver.common.utils.ApiResult;
-import com.sff.storeserver.domain.flag.dto.*;
+import com.sff.storeserver.domain.flag.dto.FlagFundingInfo;
+import com.sff.storeserver.domain.flag.dto.FlagFundingRequest;
+import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
+import com.sff.storeserver.domain.flag.dto.FundingUserInfo;
 import com.sff.storeserver.domain.review.dto.ReviewMenuInfo;
-import com.sff.storeserver.domain.review.dto.ReviewUserInfo;
-import com.sff.storeserver.domain.review.dto.ReviewUserInfoRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "${feign.svc1.name}", url = "${feign.svc1.url}", configuration = Svc1FeignConfig.class)
-public interface Svc1FeignClient {
-
-    @PostMapping(value = "/api/user-server/members")
-    ApiResult<List<ReviewUserInfo>> getUserInfo(@RequestBody ReviewUserInfoRequest reviewUserInfoRequest);
-
-    @PostMapping(value = "/api/user-server/members")
-    ApiResult<List<FundingUserDetailInfo>> getUserFundingInfo(@RequestBody ReviewUserInfoRequest reviewUserInfoRequest);
-
+@FeignClient(name = "orderserver", url = "${feign.orderserver.url}")
+public interface OrderClient {
     @GetMapping(value = "/api/order-server/{orderId}")
     ApiResult<Long> getStoreId(@PathVariable Long orderId);
 

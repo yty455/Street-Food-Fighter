@@ -3,11 +3,11 @@ package com.sff.storeserver.domain.store.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
+import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
 import com.sff.storeserver.domain.review.repository.ReviewRepository;
-import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.dto.*;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
@@ -15,7 +15,6 @@ import com.sff.storeserver.domain.store.repository.MenuRepository;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -38,8 +37,7 @@ public class StoreService {
     private final FlagRepository flagRepository;
     private final ReviewRepository reviewRepository;
 
-    @Autowired
-    private Svc1FeignClient svc1FeignClient;
+    private final OrderClient orderClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
@@ -154,7 +152,7 @@ public class StoreService {
             });
 
             // 깃발에 펀딩한 유저에게 알림 전송
-            svc1FeignClient.notifyFlag(flagNotificationInfo);
+            orderClient.notifyFlag(flagNotificationInfo);
         }
 
         store.startBusiness();

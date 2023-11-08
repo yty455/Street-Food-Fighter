@@ -3,16 +3,16 @@ package com.sff.storeserver.domain.flag.service;
 import com.sff.storeserver.common.error.code.FlagError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
+import com.sff.storeserver.common.feignClient.OrderClient;
+import com.sff.storeserver.common.feignClient.UserClient;
 import com.sff.storeserver.domain.flag.dto.*;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
 import com.sff.storeserver.domain.review.dto.ReviewUserInfoRequest;
-import com.sff.storeserver.domain.store.controller.Svc1FeignClient;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +30,8 @@ public class FlagService {
     private final FlagRepository flagRepository;
     private final StoreRepository storeRepository;
 
-    @Autowired
-    private Svc1FeignClient svc1FeignClient;
+    private final UserClient userClient;
+    private final OrderClient orderClient;
 
     @Transactional
     public Long createFlag(FlagRequest flagRequest) {
@@ -47,7 +47,7 @@ public class FlagService {
                 .map(Flag::getId)
                 .toList();
         // 깃발 ID를 주문 서비스에 보내서 깃발의 펀딩 금액 받아 오기
-        List<FlagFundingInfo> flagFundingInfos = svc1FeignClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
+        List<FlagFundingInfo> flagFundingInfos = orderClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
         List<FlagResponse> flagResponses = new ArrayList<>();
         for (int idx = 0; idx < flagList.size(); idx++) {
             flagResponses.add(FlagResponse.fromEntity(flagList.get(idx), flagFundingInfos.get(idx).getAmount()));
@@ -67,10 +67,10 @@ public class FlagService {
         }
 
         // 깃발 ID로 주문서비스에서 회원ID,주문정보 받아오기
-        List<FundingUserInfo> fundingUserInfoList = svc1FeignClient.getFundingUsers(flag.getId()).getResponse();
+        List<FundingUserInfo> fundingUserInfoList = orderClient.getFundingUsers(flag.getId()).getResponse();
 
         // 회원ID List로 회원서비스에서 회원정보 받아오기
-        List<FundingUserDetailInfo> fundingUserDetailInfoList = svc1FeignClient.getUserFundingInfo(ReviewUserInfoRequest.builder()
+        List<FundingUserDetailInfo> fundingUserDetailInfoList = userClient.getUserFundingInfo(ReviewUserInfoRequest.builder()
                 .memberIds(fundingUserInfoList.stream().map(FundingUserInfo::getUserId).toList()).build()).getResponse();
         // 합치기
         for (int idx = 0; idx < fundingUserDetailInfoList.size(); idx++) {
