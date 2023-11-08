@@ -2,9 +2,7 @@ package com.sff.storeserver.domain.store.controller;
 
 import com.sff.storeserver.common.Svc1FeignConfig;
 import com.sff.storeserver.common.utils.ApiResult;
-import com.sff.storeserver.domain.flag.dto.FlagFundingInfo;
-import com.sff.storeserver.domain.flag.dto.FlagFundingRequest;
-import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
+import com.sff.storeserver.domain.flag.dto.*;
 import com.sff.storeserver.domain.review.dto.ReviewMenuInfo;
 import com.sff.storeserver.domain.review.dto.ReviewUserInfo;
 import com.sff.storeserver.domain.review.dto.ReviewUserInfoRequest;
@@ -19,6 +17,9 @@ public interface Svc1FeignClient {
     @PostMapping(value = "/api/user-server/members")
     ApiResult<List<ReviewUserInfo>> getUserInfo(@RequestBody ReviewUserInfoRequest reviewUserInfoRequest);
 
+    @PostMapping(value = "/api/user-server/members")
+    ApiResult<List<FundingUserDetailInfo>> getUserFundingInfo(@RequestBody ReviewUserInfoRequest reviewUserInfoRequest);
+
     @GetMapping(value = "/api/order-server/{orderId}")
     ApiResult<Long> getStoreId(@PathVariable Long orderId);
 
@@ -30,4 +31,7 @@ public interface Svc1FeignClient {
 
     @PutMapping(value = "/api/order-server/fundings/chosen")
     ApiResult<?> notifyFlag(@RequestBody FlagNotificationInfo flagNotificationInfo);
+
+    @GetMapping(value = "/api/order-server/fundings/flags/{flagId}/users")
+    ApiResult<List<FundingUserInfo>> getFundingUsers(@PathVariable Long flagId);
 }
