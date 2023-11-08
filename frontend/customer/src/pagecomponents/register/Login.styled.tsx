@@ -71,9 +71,9 @@ const ButtonWrapper = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const marginTop = props.marginTop || '0px';
     return css`
-      width: 80%;
+      width: 100%;
       height: 55px;
-      padding: 5px;
+      padding: 5px 30px;
     `;
   }};
 `;
