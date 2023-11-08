@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserInfo {
     private Long userId;
+    private String token;
     private Long orderId;
     private int amount;
 }

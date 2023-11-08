@@ -30,30 +30,22 @@ public class NotificationController {
         return ApiUtils.success(notificationResponse);
     }
 
-    @Operation(summary = "손님 - 알림 발송", description = "손님에게 푸시 알림 쏘기.")
-    @PostMapping("/api/notification-server/user/notification")
-    public ApiResult<?> sendNotificationToUser(@RequestBody UserNotificationInfo userNotificationInfo) {
+//    @Operation(summary = "손님 - 알림 발송", description = "손님에게 푸시 알림 쏘기.")
+//    @PostMapping("/api/notification-server/user/notification")
+//    public ApiResult<?> sendNotificationToUser(@RequestBody UserNotificationInfo userNotificationInfo) {
+//
+//        notificationService.sendNotificationToUser(userNotificationInfo);
+//
+//        return ApiUtils.success("손님 알림 발송 성공");
+//    }
+//
+//    @Operation(summary = "사장님 - 알림 발송", description = "사장님에게 푸시 알림 쏘기.")
+//    @PostMapping("/api/notification-server/owner/notification")
+//    public ApiResult<?> sendNotificationToOwner(@RequestBody NotificationRequest notificationRequest) {
+//
+//        notificationService.sendNotificationToOwner(notificationRequest);
+//
+//        return ApiUtils.success("사장님 알림 발송 성공");
+//    }
 
-        notificationService.sendNotificationToUser(userNotificationInfo);
-
-        return ApiUtils.success("손님 알림 발송 성공");
-    }
-
-    @Operation(summary = "사장님 - 알림 발송", description = "사장님에게 푸시 알림 쏘기.")
-    @PostMapping("/api/notification-server/owner/notification")
-    public ApiResult<?> sendNotificationToOwner(@RequestBody NotificationRequest notificationRequest) {
-
-        notificationService.sendNotificationToOwner(notificationRequest);
-
-        return ApiUtils.success("사장님 알림 발송 성공");
-    }
-
-
-    @GetMapping("/ka")
-    public ApiResult<?> ka() throws Exception{
-
-        notificationService.ka();
-
-        return ApiUtils.success("ka");
-    }
 }

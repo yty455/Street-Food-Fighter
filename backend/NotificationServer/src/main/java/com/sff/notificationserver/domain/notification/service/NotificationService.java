@@ -55,6 +55,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     private final UserClient userClient;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
@@ -105,52 +107,29 @@ public class NotificationService {
 
     @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")
     @Transactional
-    public void notifyUser(@Payload String userNotificationInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        log.info("메시지입니다 : {}", userNotificationInfo);
-        UserNotificationInfo createUserInfo = objectMapper.readValue(userNotificationInfo, UserNotificationInfo.class);
-        System.out.println(createUserInfo.getStoreId());
-        System.out.println(createUserInfo.getUserList().size());
-        System.out.println(createUserInfo.getType());
-    }
+    public void notifyUser(@Payload String stringUserInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+        log.info("메시지입니다 : {}", stringUserInfo);
+        UserNotificationInfo userNotificationInfo = objectMapper.readValue(stringUserInfo, UserNotificationInfo.class);
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-
-    public void ka() throws IOException {
-
-        List<UserInfo> list = new ArrayList<>();
-        list.add(UserInfo.builder().userId(1L).amount(1).orderId(1L).build());
-        list.add(UserInfo.builder().userId(2L).amount(1).orderId(1L).build());
-        list.add(UserInfo.builder().userId(3L).amount(1).orderId(1L).build());
-
-        // 직렬화할 객체 생성
-        UserNotificationInfo userInfo = UserNotificationInfo.builder().storeId(1L).type(NotificationType.COMPLETED).storeName("메롱").userList(list).build();
-
-        // 객체를 JSON 문자열로 직렬화
-        String userInfoJson = objectMapper.writeValueAsString(userInfo);
-        kafkaTemplate.send("notification-service-notify-user", userInfoJson);
-    }
-
-
-    @Transactional
-    public void sendNotificationToUser(UserNotificationInfo userNotificationInfo) {
         // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
 
         String title = titleMaker.get(userNotificationInfo.getType());
         String content = userNotificationInfo.getStoreName() + contentMaker.get(userNotificationInfo.getType());
-
+//        List<String>
         userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType()));
     }
 
-
-    public void sendNotificationToOwner(NotificationRequest notificationRequest) {
-
-        log.info(sendNotificationByToken(new FCMNotificationRequest(notificationRequest.getOwnerId(), "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
+    @KafkaListener(topics = "#{notifyStoreTopic.name}", groupId = "notification-service-notify-store")
+    public void notifyStore(@Payload String stringStoreId, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+        log.info("메시지입니다 : {}", stringStoreId);
+        log.info(sendNotificationByToken(new FCMNotificationRequest(Long.valueOf(stringStoreId), "x", "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
 
     }
 
+
     @Transactional
     public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type) {
-        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), title, content)));
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), "x",title, content)));
         notificationRepository.save(Notification.builder()
                 .userId(userInfo.getUserId())
                 .type(type)
@@ -172,12 +151,7 @@ public class NotificationService {
 
     public String sendNotificationByToken(FCMNotificationRequest fcmDto) {
 
-
-//            FcmToken fcmToken = fcmTokenRepository.findById(String.valueOf(fcmUserId))
-//                    .orElse(null);
-
-//        if (fcmToken != null && user.getNotificationSetting().equals("agree")) {
-//            String token = fcmToken.getValue(); //redis에서 토큰 읽어온거
+        // fcmDto 토큰 있는지 검사
 
         com.google.firebase.messaging.Notification notification = com.google.firebase.messaging.Notification.builder()
                 .setTitle(fcmDto.getTitle())
@@ -185,7 +159,7 @@ public class NotificationService {
                 .build();
 
         Message message = Message.builder()
-                .setToken(tokenf) // 토큰 넣어주세요
+                .setToken(fcmDto.getToken())
                 .setNotification(notification)
                 .build();
 
@@ -196,9 +170,6 @@ public class NotificationService {
             e.printStackTrace();
             return "알림 전송 실패 " + fcmDto.getRecipient();
         }
-//        } else {
-//            return "Redis에 유저 FCM token 없음 " + fcmDto.getUser();
-//        }
     }
 
 }
