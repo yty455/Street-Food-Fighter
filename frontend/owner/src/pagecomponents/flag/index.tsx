@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 import FlagDetail from '@/components/flag/flagdetail';
 import WeekTabs from '@/components/flag/weektabs';
+import useModal from '@/hooks/common/modal.hook';
 
 const FlagPage = () => {
   const { selectedDate, setSelectedDate } = useSelectedDateStore();
@@ -21,15 +22,9 @@ const FlagPage = () => {
   const router = useRouter();
 
   // flagdetail 모달
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [selectedFlag, setSelectedFlag] = useState(null);
+  const { isModalOpen, selectedItem, openModal, closeModal } = useModal();
   const handleFlagClick = (flag: any) => {
-    setIsDetailOpen(true);
-    setSelectedFlag(flag);
-  };
-
-  const closeFlagModal = () => {
-    setIsDetailOpen(false);
+    openModal(flag);
   };
 
   return (
@@ -61,7 +56,7 @@ const FlagPage = () => {
           router.push('/flagset');
         }}
       ></BottomBtn>
-      {isDetailOpen && <FlagDetail flag={selectedFlag} closeModal={closeFlagModal} />}
+      {isModalOpen && <FlagDetail flag={selectedItem} closeModal={closeModal} />}
     </div>
   );
 };
