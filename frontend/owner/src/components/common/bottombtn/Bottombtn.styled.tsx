@@ -3,12 +3,15 @@ const ButtonBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const main = props.theme.colors.main;
     const light = props.theme.colors.light;
+    const gray = props.theme.colors.gray;
+
+    const bgcolor = props.disabled ? gray : main;
     return css`
       display: flex;
       align-items: center;
       justify-content: center;
 
-      background-color: ${main};
+      background-color: ${bgcolor};
       color: ${light};
 
       position: fixed;

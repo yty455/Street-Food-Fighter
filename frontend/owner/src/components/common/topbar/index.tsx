@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { StyledTopbar, BackButton } from './Topbar.styled';
+import { StyledTopbar, BackButton, Text } from './Topbar.styled';
 
 const Topbar = ({ text, type, closeModal }: any) => {
   const router = useRouter();
@@ -17,7 +17,8 @@ const Topbar = ({ text, type, closeModal }: any) => {
       <BackButton onClick={handleClick}>
         <img src="/images/common/back.png" style={{ width: '30px', height: '30px' }} />
       </BackButton>
-      <div>{text}</div>
+      <Text>{text}</Text>
+      <div style={{ width: '30%' }}></div>
     </StyledTopbar>
   );
 };
