@@ -27,4 +27,6 @@ public interface FundingRepository extends JpaRepository<Funding, Long> {
     @Query("SELECT DISTINCT f.userId FROM Funding f WHERE f.flagId = :flagId")
     List<Long> findUserIdsByFlagId(@Param("flagId") Long flagId);
 
+    List<Funding> findAllByUserIdAndFlagId(Long userId, Long flagId);
+
 }

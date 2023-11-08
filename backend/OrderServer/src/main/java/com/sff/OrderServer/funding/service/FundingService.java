@@ -195,7 +195,7 @@ public class FundingService {
         // 펀딩한 회원별
         for(Long userId : users) {
             // funding 리스트를 찾고
-            List<Funding> fundings = fundingRepository.findAllByUserId(userId);
+            List<Funding> fundings = fundingRepository.findAllByUserIdAndFlagId(userId, flagId);
 
             Integer totalPrice = 0;
             List<OrderMenu> totalMenues = new ArrayList<>();
