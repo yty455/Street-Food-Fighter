@@ -27,7 +27,7 @@ const OperText = styled.div`
   display: flex;
   text-align: center;
   font-size: 40px;
-  width: 50%;
+  /* width: 50%; */
 `;
 
 const MainContainer = styled.div.attrs<any>((props) => ({}))`

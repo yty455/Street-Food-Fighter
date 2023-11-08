@@ -6,20 +6,15 @@ const MainPage = () => {
   const router = useRouter();
   const [isVendorOpen, setVendorOpen] = useState(false);
 
-  const openVendor = () => {
-    setVendorOpen(true);
-  };
-  const closeVendor = () => {
-    setVendorOpen(false);
+  const switchVendor = () => {
+    setVendorOpen(!isVendorOpen);
   };
   return (
     <MainContainer>
       <OperButtonList>
-        <OperButton type={isVendorOpen.toString()} onClick={openVendor}>
-          <OperText>영업 시작</OperText>
-        </OperButton>
-        <OperButton type={(!isVendorOpen).toString()} onClick={closeVendor}>
-          <OperText>영업 종료</OperText>
+        <OperButton type={false.toString()}>{isVendorOpen ? <OperText>영업 중</OperText> : <OperText>영업 전</OperText>}</OperButton>
+        <OperButton type={true.toString()} onClick={switchVendor}>
+          {!isVendorOpen ? <OperText>영업 시작</OperText> : <OperText>영업 종료</OperText>}
         </OperButton>
       </OperButtonList>
       <MenuList>
