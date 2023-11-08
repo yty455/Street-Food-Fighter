@@ -1,9 +1,12 @@
 spring:
   profiles:
     include: prd
+  kafka:
+    bootstrap-servers: k9e205.p.ssafy.io:9092
   cloud:
     config:
       enabled: false
+
 
 eureka:
   client:
@@ -11,6 +14,13 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+
+
