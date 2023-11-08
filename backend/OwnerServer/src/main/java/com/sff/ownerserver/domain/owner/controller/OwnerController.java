@@ -1,9 +1,6 @@
 package com.sff.ownerserver.domain.owner.controller;
 
-import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
-import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
-import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
-import com.sff.ownerserver.domain.owner.dto.SignupRequest;
+import com.sff.ownerserver.domain.owner.dto.*;
 import com.sff.ownerserver.domain.owner.service.OwnerService;
 import com.sff.ownerserver.global.utils.ApiResult;
 import com.sff.ownerserver.global.utils.ApiUtils;
@@ -23,7 +20,7 @@ public class OwnerController {
         return ApiUtils.success("회원 가입 성공");
     }
 
-    @DeleteMapping("/{ownerId}")
+    @DeleteMapping("/owners/{ownerId}")
     public ApiResult<?> deleteOwner(@PathVariable Long ownerId) {
         ownerService.deleteOwner(ownerId);
         return ApiUtils.success("회원 탈퇴 완료");
@@ -41,10 +38,15 @@ public class OwnerController {
         return ApiUtils.success("내 정보 수정 성공");
     }
 
-    @PutMapping("/{ownerId}/points")
+    @PutMapping("/owners/{ownerId}/points")
     public ApiResult<?> updatePoint(@PathVariable Long ownerId, @RequestBody PointUpdateRequest pointUpdateRequest) {
         ownerService.updatePoint(ownerId, pointUpdateRequest);
         return ApiUtils.success("포인트 업데이트 성공");
     }
 
+    @GetMapping("/owners/{ownerId}/fcm-token")
+    public ApiResult<?> getFcmToken(@PathVariable Long ownerId) {
+        OwnerFcmTokenResponse fcmToken = ownerService.getFcmToken(ownerId);
+        return ApiUtils.success(fcmToken);
+    }
 }

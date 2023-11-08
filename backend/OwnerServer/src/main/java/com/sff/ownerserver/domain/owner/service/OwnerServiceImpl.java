@@ -1,9 +1,6 @@
 package com.sff.ownerserver.domain.owner.service;
 
-import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
-import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
-import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
-import com.sff.ownerserver.domain.owner.dto.SignupRequest;
+import com.sff.ownerserver.domain.owner.dto.*;
 import com.sff.ownerserver.domain.owner.entity.Owner;
 import com.sff.ownerserver.domain.owner.repository.OwnerRepository;
 import com.sff.ownerserver.global.error.type.BaseException;
@@ -26,7 +23,6 @@ public class OwnerServiceImpl implements OwnerService {
         validateDuplicateMember(signupRequest);
         Owner owner = signupRequest.toEntity();
         owner.passwordEncode(passwordEncoder);
-        // TODO: 포인트 생성하기(결제 비밀번호, 금액)
         ownerRepository.save(owner);
     }
 
@@ -61,6 +57,13 @@ public class OwnerServiceImpl implements OwnerService {
         } else {
             owner.deductPoints(pointUpdateRequest.getAmount());
         }
+    }
+
+    @Override
+    public OwnerFcmTokenResponse getFcmToken(Long ownerId) {
+        Owner owner = findOwner(ownerId);
+        return new OwnerFcmTokenResponse(owner.getId(), owner.getFcmToken());
+
     }
 
     private Owner findOwner(Long ownerId) {

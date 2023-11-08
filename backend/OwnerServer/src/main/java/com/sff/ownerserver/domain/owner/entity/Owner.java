@@ -28,10 +28,11 @@ public class Owner {
     private String bank;
     private String accountNumber;
     private Long amount;
+    private String fcmToken;
     private String refreshToken;
 
     @Builder
-    public Owner(String email, String password, String name, String phone, String bank, String accountNumber, Long amount, String refreshToken) {
+    public Owner(String email, String password, String name, String phone, String bank, String accountNumber, Long amount, String fcmToken, String refreshToken) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -39,6 +40,7 @@ public class Owner {
         this.bank = bank;
         this.accountNumber = accountNumber;
         this.amount = amount;
+        this.fcmToken = fcmToken;
         this.refreshToken = refreshToken;
     }
 

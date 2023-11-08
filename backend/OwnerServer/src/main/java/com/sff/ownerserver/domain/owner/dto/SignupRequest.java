@@ -25,15 +25,17 @@ public class SignupRequest {
     private String phone;
     private String bank;
     private String accountNumber;
+    private String fcmToken;
 
     @Builder
-    public SignupRequest(String email, String password, String name, String phone, String bank, String accountNumber) {
+    public SignupRequest(String email, String password, String name, String phone, String bank, String accountNumber, String fcmToken) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.fcmToken = fcmToken;
     }
 
     public Owner toEntity() {
@@ -45,6 +47,6 @@ public class SignupRequest {
                 .bank(bank)
                 .accountNumber(accountNumber)
                 .amount(0L)
-                .build();
+                .fcmToken(fcmToken).build();
     }
 }
