@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,9 +82,10 @@ public class FlagService {
                 .mapToInt(FundingUserInfo::getTotalPrice)
                 .sum();
 
-        // 등급 있는것 만 체크됨
         Map<UserGrade, Integer> fundingUserGrade = fundingUserInfoList.stream()
                 .collect(Collectors.groupingBy(FundingUserInfo::getUserGrade, Collectors.summingInt(u -> 1)));
+        Arrays.stream(UserGrade.values())
+                .forEach(grade -> fundingUserGrade.putIfAbsent(grade, 0));
 
         return FlagDetailResponse.fromEntity(flag, fundingAmount, fundingUserGrade, fundingUserInfoList);
     }
