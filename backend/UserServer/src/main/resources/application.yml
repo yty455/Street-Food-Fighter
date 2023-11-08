@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: jwt, oauth, prd
+    include: prd
   cloud:
     config:
       enabled: false
