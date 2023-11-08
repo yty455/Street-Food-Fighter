@@ -7,9 +7,9 @@ const OperButtonList = styled.div`
 
 const OperButton = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const white = props.theme.colors.white;
+    const lightgray = props.theme.colors.lightgray;
     const main = props.theme.colors.main;
-    const bgcolor = props.type == 'start' ? main : white;
+    const bgcolor = props.type === 'true' ? main : lightgray;
     return css`
       display: flex;
       background-color: ${bgcolor};

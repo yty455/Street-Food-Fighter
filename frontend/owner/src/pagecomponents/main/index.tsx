@@ -1,16 +1,24 @@
-import React from 'react';
+import { useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
 
 const MainPage = () => {
   const router = useRouter();
+  const [isVendorOpen, setVendorOpen] = useState(false);
+
+  const openVendor = () => {
+    setVendorOpen(true);
+  };
+  const closeVendor = () => {
+    setVendorOpen(false);
+  };
   return (
     <MainContainer>
       <OperButtonList>
-        <OperButton type="start">
+        <OperButton type={isVendorOpen.toString()} onClick={openVendor}>
           <OperText>영업 시작</OperText>
         </OperButton>
-        <OperButton>
+        <OperButton type={(!isVendorOpen).toString()} onClick={closeVendor}>
           <OperText>영업 종료</OperText>
         </OperButton>
       </OperButtonList>
