@@ -42,7 +42,7 @@ public class StoreService {
 
     @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
     @Transactional
-    public void consume(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+    public void create(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
 //        StoreInfo createStoreInfo = objectMapper.readValue(storeInfo, StoreInfo.class);
 //        storeRepository.save(createStoreInfo.toEntity());
         log.info("메시지입니다 : {}", storeInfo);
@@ -82,6 +82,13 @@ public class StoreService {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
         store.update(storeUpdateInfo);
+    }
+
+    public StoreUpdateCategory getStoreCategory(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+        return StoreUpdateCategory.builder()
+                .category(store.getCategory()).businessCategory(store.getBusinessCategory()).build();
     }
 
     @Transactional
@@ -129,6 +136,14 @@ public class StoreService {
                 new BaseException(StoreError.NOT_FOUND_STORE));
 
         return store.getOwnerId();
+    }
+
+    public String getStoreName(Long storeId) {
+
+        Store store = storeRepository.findById(storeId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+
+        return store.getName();
     }
 
     @Transactional

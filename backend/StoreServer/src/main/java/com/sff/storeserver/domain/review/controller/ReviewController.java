@@ -25,7 +25,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @Operation(summary = "손님 - 리뷰 등록", description = "손님 - 리뷰를 등록 합니다.")
-    @PostMapping("/api/store-server/user/review")
+    @PostMapping("/api/store-server/review")
     public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest reviewRequest, BindingResult bindingResult) {
 
         // 예외처리
@@ -40,8 +40,7 @@ public class ReviewController {
     @GetMapping("/api/store-server/user/{userId}/review")
     public ApiResult<?> getMyReviews(@PathVariable("userId") Long userId,
                                      @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
-                                     @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size
-    ) {
+                                     @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
 
         Page<MyReviewResponse> myReviewResponseList = reviewService.getMyReviews(userId, page, size);
 
@@ -64,18 +63,5 @@ public class ReviewController {
             throw new ValidationException(bindingResult.getFieldErrors());
         }
     }
-
-
-//// 실패 시 에러 코드, 메시지 리턴 (일반적으로 Service단에서 처리)
-//throw new BaseException(new ApiError({에러 메시지},{에러 코드});
-//
-//    // valid 예외처리
-//    public ApiResult<> create(@Valid UserRequest userRequest , BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            throw new ValidationException(bindingResult.getFieldErrors());
-//        }
-//        return ApiUtils.success("성공");
-//    }
-
 
 }

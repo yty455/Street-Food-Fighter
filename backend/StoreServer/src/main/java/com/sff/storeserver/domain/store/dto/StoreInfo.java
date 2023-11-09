@@ -24,14 +24,11 @@ public class StoreInfo {
     private CategoryType category;
     private String information;
     private String introduction;
-    //    @NotNull(message = "마감 시간은 필수입니다.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime openTime;
-    //    @NotNull(message = "마감 시간은 필수입니다.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime closeTime;
     private String activeArea;
-    //    private Point areaPoint;
     private double lati;
     private double longi;
     private String storeUrl;
@@ -49,7 +46,6 @@ public class StoreInfo {
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .activeArea(activeArea)
-//                .areaPoint(areaPoint)
                 .lati(lati)
                 .longi(longi)
                 .storeUrl(storeUrl)

@@ -64,7 +64,7 @@ public class ReviewService {
 
         Slice<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId, pageRequest);
 
-        // 유저 아이디 리스트 -> 회원 서비스에 보내서 s회원 정보 받아오기 (userName, userProfileUrl)
+        // 유저 아이디 리스트 -> 회원 서비스에 보내서 회원 정보 받아오기 (userName, userProfileUrl)
         ApiResult<List<ReviewUserInfo>> userInfo = userClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
         // 합쳐서 내려주기
         for (int idx = 0; idx < storeReviewResponseList.getContent().size(); idx++) {
