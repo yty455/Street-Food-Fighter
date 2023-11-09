@@ -26,21 +26,23 @@ const TabBar = () => {
     <div>
       <TabContainer>
         <Tab active={(activeTab === 'waiting').toString()} onClick={() => handleTabClick('waiting')}>
-          접수대기
+          <div>접수대기</div>
+          <div>{orderwaiting.length}</div>
         </Tab>
         <Tab active={(activeTab === 'processing').toString()} onClick={() => handleTabClick('processing')}>
-          처리중
+          <div>처리중</div>
+          <div>{ordersprocessing.length}</div>
         </Tab>
         <Tab active={(activeTab === 'completion').toString()} onClick={() => handleTabClick('completion')}>
-          완료
+          <div>완료</div>
+          <div>{orderscompletion.length}</div>
         </Tab>
         <Tab active={(activeTab === 'all').toString()} onClick={() => handleTabClick('all')}>
-          전체
+          <div>전체</div>
+          <div>{orderservice.length}</div>
         </Tab>
       </TabContainer>
-      <div>
-        <TabContent activetab={activeTab} list={list} />
-      </div>
+      <TabContent activetab={activeTab} list={list} />
     </div>
   );
 };
