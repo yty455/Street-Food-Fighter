@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderPerUser {
 
-    private Long userId;
+    private Long memberId;
     private Integer orderCount;
 
-    public OrderPerUser(Long userId, Integer orderCount) {
-        this.userId = userId;
+    public OrderPerUser(Long memberId, Integer orderCount) {
+        this.memberId = memberId;
         this.orderCount = orderCount;
     }
 }
