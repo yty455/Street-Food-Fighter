@@ -31,9 +31,5 @@ const Tab = styled.button<any>`
     outline: none;
   }
 `;
-const Content = styled.div`
-  /* height: 100vh; */
-  background-color: ${(props) => props.theme.colors.lightgray};
-`;
 
-export { TabContainer, Tab, Content };
+export { TabContainer, Tab };
