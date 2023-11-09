@@ -15,18 +15,16 @@ const MainPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
+  const handleStartOperation = () => {
+    setModalContent(<StartPopup onClose={closeModal} />);
+  };
+
   const switchVendor = () => {
     if (!isVendorOpen) {
       if (todayflag.length === 0) {
         setModalContent(<StartPopup onClose={closeModal} />);
       } else {
-        setModalContent(
-          <SelectFlag
-            onClose={() => {
-              setModalContent(<StartPopup onClose={closeModal} />);
-            }}
-          />,
-        );
+        setModalContent(<SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} />);
       }
       openModal(); // 모달 열기
     } else {
