@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomProperties {
     private List<String> ignoreUrls;
 
-    public boolean isIgnorePath(String path) {
+    public boolean isCheckPath(String path) {
         return ignoreUrls.stream().noneMatch(path::startsWith);
     }
 }

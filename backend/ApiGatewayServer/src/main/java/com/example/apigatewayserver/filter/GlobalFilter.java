@@ -59,7 +59,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             serverName.append("]");
             log.info("{} IP : {}", serverName.toString(), clientIp);
 
-            if (ignoreUrl.isIgnorePath(path)) {
+            if (ignoreUrl.isCheckPath(path)) {
                 // JWT 검증 로직
                 String jwt = originalRequest.getHeaders().getFirst("Authorization");
                 try {
