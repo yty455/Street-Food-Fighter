@@ -5,6 +5,8 @@ import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useCurPasswordStore from '@/stores/curpwdStore';
 import { user } from '@/temp/user';
+import useRegisterPageStore from '@/stores/registerStore';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 const Keypad = ({ slug }: { slug: string }) => {
   const [keys, setKeys] = useState<number[]>([]);
@@ -12,6 +14,10 @@ const Keypad = ({ slug }: { slug: string }) => {
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const [lastKey, setLastKey] = useState<number>(0);
   const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore();
+
+  //회원가입
+  const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
+  const paypassword = useRegisterPageStore((state) => state.paypassword);
 
   const router = useRouter();
 
@@ -46,6 +52,25 @@ const Keypad = ({ slug }: { slug: string }) => {
         } else {
           resetCurrentPassword();
           // 변경 비밀번호로 api호출 (이후 코드 추가)
+        }
+      }
+    }
+
+    // 회원가입할때,
+    if (slug == 'register') {
+      if (curPwdPage === 1) {
+        setPassword(1, currentPassword);
+        setRegisterValue('paypassword', currentPassword);
+        setCurPwdPage(3);
+      } else if (curPwdPage === 3) {
+        setPassword(3, currentPassword);
+        if (paypassword === currentPassword) {
+          resetPasswords();
+          console.log('비밀번호 입력 성공.');
+          router.push('/');
+          setCurPwdPage(1);
+        } else {
+          resetCurrentPassword();
         }
       }
     }
