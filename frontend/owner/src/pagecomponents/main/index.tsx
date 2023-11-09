@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
+import SelectFlag from '@/components/main/seletflag';
 
 const MainPage = () => {
   const router = useRouter();
@@ -12,12 +13,24 @@ const MainPage = () => {
   const todayflag = Flag2;
 
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+
   const switchVendor = () => {
-    // if (!isVendorOpen && todayflag.length === 0) {
     if (!isVendorOpen) {
+      if (todayflag.length === 0) {
+        setModalContent(<StartPopup onClose={closeModal} />);
+      } else {
+        setModalContent(
+          <SelectFlag
+            onClose={() => {
+              setModalContent(<StartPopup onClose={closeModal} />);
+            }}
+          />,
+        );
+      }
       openModal(); // 모달 열기
-      console.log(isModalOpen);
     } else {
+      // 다른 작업 수행
     }
     setVendorOpen(!isVendorOpen);
   };
@@ -68,7 +81,7 @@ const MainPage = () => {
           <div>지역 통계</div>
         </Menu>
       </MenuList>
-      {isModalOpen && <StartPopup onClose={closeModal} />}
+      {isModalOpen && modalContent}
     </MainContainer>
   );
 };
