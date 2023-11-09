@@ -1,4 +1,5 @@
 import kakaomapApi from '@/apis/kakaoAPI';
+import kakaoAddressAPI from '@/apis/kakaoAddressAPI';
 import { useEffect, useState } from 'react';
 
 const useFindCurrentLoc = (setAddressName: any) => {
@@ -17,7 +18,7 @@ const useFindCurrentLoc = (setAddressName: any) => {
         setPosition(newPosition);
 
         try {
-          const address = await kakaomapApi({ latitude, longitude });
+          const address = await kakaoAddressAPI({ latitude, longitude });
           if (address) setAddressName(address);
         } catch (error) {
           console.error('주소를 불러오는 데 실패했습니다:', error);

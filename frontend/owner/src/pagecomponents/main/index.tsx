@@ -10,7 +10,7 @@ const MainPage = () => {
   const router = useRouter();
   const [isVendorOpen, setVendorOpen] = useState(false);
 
-  const todayflag = Flag2;
+  const todayflag = Flag0;
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
