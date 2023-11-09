@@ -413,15 +413,15 @@ public class OrderService {
     }
 
     // 매월 1일 00:00에 구동
-//    @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
-    // 1시간 마다 실행 ex) 01:00, 02:00, 03:00 ...
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 0 1 * ?", zone = "Asia/Seoul")
+//    //1분 마다 실행 ex) 00:01, 00:02 ...
+//    @Scheduled(cron = "0 0/1 * * * *")
     public void run() {
         List<OrderPerUser> orderPerUserList = getOrderPerUser();
         try {
             // 직렬화할 객체 생성
             GradeUpdateRequest gradeUpdateRequest = GradeUpdateRequest.builder()
-                    .orderPerUserList(orderPerUserList).build();
+                    .gradeUpdateRequests(orderPerUserList).build();
             // 객체를 JSON 문자열로 직렬화
             String gradeUpdateRequestJson = objectMapper.writeValueAsString(gradeUpdateRequest);
             kafkaTemplate.send("order-service-update-user", gradeUpdateRequestJson);
