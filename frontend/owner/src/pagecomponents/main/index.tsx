@@ -70,7 +70,11 @@ const MainPage = () => {
           <img src="/images/common/flag.png" style={{ width: '75px' }} />
           <div>깃발 관리</div>
         </Menu>
-        <Menu>
+        <Menu
+          onClick={() => {
+            router.push('/orderlist');
+          }}
+        >
           <img src="/images/main/list.png" style={{ width: '75px' }} />
           <div>주문 목록</div>
         </Menu>
