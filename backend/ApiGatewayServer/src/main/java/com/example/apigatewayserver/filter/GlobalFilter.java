@@ -59,17 +59,16 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             serverName.append("]");
             log.info("{} IP : {}", serverName.toString(), clientIp);
 
-
             if (ignoreUrl.isIgnorePath(path)) {
                 // JWT 검증 로직
                 String jwt = originalRequest.getHeaders().getFirst("Authorization");
                 try {
                     // jwt 추출
                     jwtUtils.validateJwtToken(jwt);
-//                String userId = jwtUtils.getSpecificClaimFromToken(jwt,"userId");
-//                ServerHttpRequest modifiedRequest = originalRequest.mutate()
-//                        .header("Userid", userId)
-//                        .build();
+                    Integer userId = jwtUtils.getSpecificClaimFromToken(jwt, "userId");
+                    ServerHttpRequest modifiedRequest = originalRequest.mutate()
+                            .header("Userid", userId.toString())
+                            .build();
                 } catch (BaseException e) {
                     byte[] bytes;
                     try {
@@ -87,7 +86,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
                 // JWT 로직 끝
             }
 
-            log.info("Global Filter baseMessage: request id -> {}", config.getBaseMessage());
+//            log.info("Global Filter baseMessage: request id -> {}", config.getBaseMessage());
 
             if (config.isPreLogger()) {
 //                log.info("Global Filter Start: request id -> {}",request.getId());
@@ -96,7 +95,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             // Custom Post Filter
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 if (config.isPostLogger()) {
-                    log.info("Global Filter End: response code -> {}", response.getStatusCode());
+//                    log.info("Global Filter End: response code -> {}", response.getStatusCode());
                 }
             }));
         });
