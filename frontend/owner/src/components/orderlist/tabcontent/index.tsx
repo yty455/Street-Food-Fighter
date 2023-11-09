@@ -1,13 +1,14 @@
 import OrderCard from '../ordercard';
+import { Container } from './Tabcontent.styled';
 
 const TabContent = ({ activetab, list }: any) => {
-  console.log(list);
+  // console.log(list);
   return (
-    <div>
+    <Container>
       {list.map((item: any) => (
         <OrderCard key={item.orderId} order={item} />
       ))}
-    </div>
+    </Container>
   );
 };
 

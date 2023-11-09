@@ -3,38 +3,49 @@ const TabContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  background-color: ${(props) => props.theme.colors.white};
   border-bottom: 4px solid ${(props) => props.theme.colors.lightgray};
 `;
 
-const Tab = styled.button<any>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
+const Tab = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const black = props.theme.colors.black;
+    const lightgray = props.theme.colors.lightgray;
 
-  width: 33.33%;
-  padding: 14px 0;
-  border: none;
-  background: none;
-  color: ${(props) => props.theme.colors.black};
-  font-size: 16px;
+    const bleft = props.active === 'true' ? `1px solid ${lightgray}` : 'none';
+    const bright = props.active === 'true' ? `1px solid ${lightgray}` : 'none';
+    const btop = props.active === 'true' ? `2px solid ${black}` : 'none';
 
-  border-left: ${(props) => (props.active == 'true' ? `1px solid ${props.theme.colors.lightgray}` : 'none')};
-  border-right: ${(props) => (props.active == 'true' ? `1px solid ${props.theme.colors.lightgray}` : 'none')};
-  border-top: ${(props) => (props.active == 'true' ? `2px solid ${props.theme.colors.black}` : 'none')};
+    return css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
 
-  &:first-child {
-    border-left: none;
-  }
+      width: 33.33%;
+      padding: 10px 0;
+      border: none;
+      background: none;
 
-  &:last-child {
-    border-right: none;
-  }
+      font-size: 18px;
 
-  &:focus {
-    outline: none;
-  }
+      border-left: ${bleft};
+      border-right: ${bright};
+
+      border-top: ${btop};
+
+      &:first-child {
+        border-left: none;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    `;
+  }};
 `;
 
 export { TabContainer, Tab };
