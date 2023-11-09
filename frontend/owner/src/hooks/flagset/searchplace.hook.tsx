@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import kakaosearchApi from '@/apis/kakaoSearchAPI';
+import kakaosearchApi from '@/apis/kakao/kakaoSearchAPI';
 
 type SearchResult = {
   place_name: string;

@@ -4,7 +4,7 @@ const useModal = (initialMode = false) => {
   const [isModalOpen, setIsModalOpen] = useState(initialMode);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const openModal = (item: any) => {
+  const openModal = (item?: any) => {
     setIsModalOpen(true);
     setSelectedItem(item);
   };
