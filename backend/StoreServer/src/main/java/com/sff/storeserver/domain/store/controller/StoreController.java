@@ -35,7 +35,6 @@ public class StoreController {
         return ApiUtils.success(storeInfoResponse);
     }
 
-
     @GetMapping("/stores")
     public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
         return ApiUtils.success(storeService.getStores(ids));

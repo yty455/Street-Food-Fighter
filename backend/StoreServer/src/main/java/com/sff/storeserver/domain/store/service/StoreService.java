@@ -42,7 +42,7 @@ public class StoreService {
 
     @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
     @Transactional
-    public void consume(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
+    public void create(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
 //        StoreInfo createStoreInfo = objectMapper.readValue(storeInfo, StoreInfo.class);
 //        storeRepository.save(createStoreInfo.toEntity());
         log.info("메시지입니다 : {}", storeInfo);
