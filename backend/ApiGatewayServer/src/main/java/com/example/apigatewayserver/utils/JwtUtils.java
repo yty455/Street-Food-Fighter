@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
 
 @Component
 @NoArgsConstructor
@@ -32,32 +31,35 @@ public class JwtUtils implements InitializingBean {
 
     // 토큰에서 모든 클레임을 추출합니다.
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(jwtSecret.getBytes()).parseClaimsJws(token).getBody();
     }
 
     // 토큰에서 특정 클레임을 추출합니다.
-    public String getSpecificClaimFromToken(String token, String claimKey) {
+    public Integer getSpecificClaimFromToken(String token, String claimKey) {
         Claims claims = getAllClaimsFromToken(token);
-        return claims.get(claimKey, String.class);
+        return claims.get(claimKey, Integer.class);
     }
 
     public void validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret.getBytes()).parseClaimsJws(authToken);
+            return;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
-            throw new BaseException(new ApiError("올바르지 않은 토큰 구조입니다.",300));
+            throw new BaseException(new ApiError("올바르지 않은 토큰 구조입니다.", 300));
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
-            throw new BaseException(new ApiError("만료된 토큰입니다.",300));
+            throw new BaseException(new ApiError("만료된 토큰입니다.", 300));
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
-            throw new BaseException(new ApiError("유효하지 않은 토큰입니다.",300));
+            throw new BaseException(new ApiError("유효하지 않은 토큰입니다.", 300));
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
-            throw new BaseException(new ApiError("빈 토큰입니다.",300));
+            throw new BaseException(new ApiError("빈 토큰입니다.", 300));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
         logger.error("JWT error");
-        throw new BaseException(new ApiError("유효하지 않은 토큰입니다.",300));
+        throw new BaseException(new ApiError("유효하지 않은 토큰입니다.", 300));
     }
 }
