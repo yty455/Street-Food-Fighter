@@ -2,7 +2,7 @@ import { CardWrapper, Row, Title, Content, ContentBox } from './Flagcard.styled'
 
 const FlagCard = ({ flag, onClick, selected }: any) => {
   return (
-    <CardWrapper onClick={() => onClick(flag.flagId)} selected={selected.toString()}>
+    <CardWrapper onClick={() => onClick(flag.flagId)} type={selected ? 'select' : 'noselect'}>
       <img src={`/images/flag/flag${flag.flagId}.png`} style={{ width: '40px' }} />
       <ContentBox>
         <Row>

@@ -17,12 +17,16 @@ const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
       onStartOperation();
     }
   };
+
+  const today = new Date();
+  const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+
   return (
     <Container>
       <Topbar text="영업 시작" type="close" closeModal={onClose} />
       <TitleBox>
         <Title> 깃발 선택</Title>
-        <Today>오늘 날짜</Today>
+        <Today>{formattedDate}</Today>
       </TitleBox>
       {flags.map((flagItem: any, index: any) => (
         <FlagCard key={index} flag={flagItem} selected={selectedFlagId === flagItem.flagId} onClick={() => handleFlagClick(flagItem.flagId)} />

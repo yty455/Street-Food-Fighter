@@ -41,7 +41,7 @@ const Today = styled.div.attrs<any>((props) => ({}))`
       color: ${light};
       font-size: 20px;
       border-radius: 10px;
-      padding: 10px;
+      padding: 10px 15px;
     `;
   }};
 `;

@@ -5,7 +5,7 @@ const CardWrapper = styled.div.attrs<any>((props) => ({}))`
     const lightgray = props.theme.colors.lightgray;
     const main = props.theme.colors.main;
     const bgcolor = props.theme.colors.white;
-    const bcolor = props.selected === 'true' ? main : lightgray;
+    const bcolor = props.type === 'select' ? main : lightgray;
 
     return css`
       display: flex;

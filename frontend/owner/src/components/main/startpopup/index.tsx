@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 const StartPopup = ({ onClose }: any) => {
   const [addressName, setAddressName] = useState('');
   const [currentTime, setCurrentTime] = useState('');
+
   useEffect(() => {
     setCurrentTime(new Date().toLocaleString());
   }, []);
