@@ -36,6 +36,7 @@ const useCompleteHandler = (slug: string) => {
           alert('Password changed successfully.');
         } else {
           resetCurrentPassword();
+          // 변경 비밀번호로 api호출 (이후 코드 추가)
         }
       }
     }
@@ -49,9 +50,9 @@ const useCompleteHandler = (slug: string) => {
       } else if (curPwdPage === 3) {
         setPassword(3, currentPassword);
         if (paypassword === currentPassword) {
+          router.push('/success');
           resetPasswords();
           console.log('비밀번호 입력 성공.');
-          router.push('/');
           setCurPwdPage(1);
         } else {
           resetCurrentPassword();
