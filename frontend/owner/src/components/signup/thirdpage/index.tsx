@@ -4,6 +4,7 @@ import Input from '@/components/common/input';
 import RoundButton from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
 import useSingUpPageStore from '@/stores/signUpStore';
+import TimeSelector from '@/components/timeselector';
 
 const SignUpThirdPage = ({ params, ...props }: any) => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
             ></Input>
           </InputWrapper>
           {/* 운영 시간 들어가야함 */}
+          <TimeSelector />
           <InputWrapper>
             <Input
               onChange={(e: any) => handleChange(e, 'passwordCheck')}
