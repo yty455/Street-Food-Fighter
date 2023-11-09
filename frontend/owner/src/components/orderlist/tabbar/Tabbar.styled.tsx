@@ -48,4 +48,17 @@ const Tab = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { TabContainer, Tab };
+const StyleDate = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const bgcolor = props.theme.colors.main;
+    return css`
+      background-color: ${bgcolor};
+
+      width: 100vw;
+      text-align: center;
+      padding: 5px;
+    `;
+  }};
+`;
+
+export { TabContainer, Tab, StyleDate };
