@@ -36,7 +36,7 @@ const BodyStyle = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       width: 100%;
       height: 60%;
-      padding-top: 20%;
+      padding-top: 10%;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
@@ -62,6 +62,7 @@ const InputWrapper = styled.div.attrs<any>((props) => ({}))`
     const marginTop = props.marginTop || '0px';
     return css`
       padding: 0px 30px;
+      width: 100%;
       margin-top: ${marginTop};
     `;
   }};
