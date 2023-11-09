@@ -131,6 +131,14 @@ public class StoreService {
         return store.getOwnerId();
     }
 
+    public String getStoreName(Long storeId) {
+
+        Store store = storeRepository.findById(storeId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+
+        return store.getName();
+    }
+
     @Transactional
     public void startBusiness(Long ownerId, Long flagId, double lati, double longi, String activeArea) {
 

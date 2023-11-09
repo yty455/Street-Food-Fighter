@@ -115,9 +115,16 @@ public class StoreController {
 
     @Operation(summary = "사장 - 사장ID 찾기", description = "가게 ID로 사장 ID를 찾습니다..")
     @GetMapping("/store/{storeId}/owner")
-    public ApiResult<?> getOwnerId(@PathVariable Long storeId) {
+    public ApiResult<Long> getOwnerId(@PathVariable Long storeId) {
         Long ownerId = storeService.getOwnerId(storeId);
         return ApiUtils.success(ownerId);
+    }
+
+    @Operation(summary = "사장 - 가게 이름 찾기", description = "가게 ID로 가게 이름을 찾습니다..")
+    @GetMapping("/store/{storeId}/name")
+    public ApiResult<String> getStoreName(@PathVariable Long storeId) {
+        String storeName = storeService.getStoreName(storeId);
+        return ApiUtils.success(storeName);
     }
 
 }
