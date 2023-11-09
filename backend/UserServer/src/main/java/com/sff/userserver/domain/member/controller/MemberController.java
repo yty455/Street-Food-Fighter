@@ -40,11 +40,11 @@ public class MemberController {
         return ApiUtils.success("내 정보 수정 성공");
     }
 
-    @PatchMapping("/members/grade")
-    public ApiResult<?> updateGrade(@RequestBody List<GradeUpdateRequest> gradeUpdateRequests) {
-        memberService.updateGrade(gradeUpdateRequests);
-        return ApiUtils.success("회원 등급 수정 완료");
-    }
+//    @PatchMapping("/members/grade")
+//    public ApiResult<?> updateGrade(@RequestBody GradeUpdateRequestList gradeUpdateRequestList) {
+//        memberService.updateGrade(gradeUpdateRequestList);
+//        return ApiUtils.success("회원 등급 수정 완료");
+//    }
 
     @PostMapping("/members")
     public ApiResult<?> getMembers(@RequestBody MembersInfoRequest membersInfoRequest) {

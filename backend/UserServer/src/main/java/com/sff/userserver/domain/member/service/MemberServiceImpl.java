@@ -1,5 +1,7 @@
 package com.sff.userserver.domain.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.userserver.domain.member.dto.*;
 import com.sff.userserver.domain.member.entity.Grade;
 import com.sff.userserver.domain.member.entity.Member;
@@ -13,6 +15,8 @@ import com.sff.userserver.global.utils.ApiError;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberServiceImpl implements MemberService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final MemberRepository memberRepository;
     private final PointRepository pointRepository;
     private final PasswordEncoder passwordEncoder;
@@ -106,8 +111,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @KafkaListener(topics = "order-service-update-user")
     @Transactional
-    public void updateGrade(List<GradeUpdateRequest> gradeUpdateRequests) {
+    public void updateGrade(@Payload String stringGradeUpdateRequest) throws JsonProcessingException {
+        log.info("Kafka - 회원 등급 수정 : {}", stringGradeUpdateRequest);
+        GradeUpdateRequestList gradeUpdateRequestList = objectMapper.readValue(stringGradeUpdateRequest, GradeUpdateRequestList.class);
+
+        List<GradeUpdateRequest> gradeUpdateRequests = gradeUpdateRequestList.getGradeUpdateRequests();
         Map<Long, Member> memberMap = memberRepository.findAllById(
                         gradeUpdateRequests.stream()
                                 .map(GradeUpdateRequest::getMemberId)
