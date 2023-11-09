@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.sff.notificationserver.common.feignClient.StoreClient;
 import com.sff.notificationserver.common.feignClient.UserClient;
 import com.sff.notificationserver.domain.notification.dto.*;
 import com.sff.notificationserver.domain.notification.entity.Notification;
@@ -21,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,21 +41,15 @@ public class NotificationService {
 
     @Value("${project.properties.firebase-create-scoped}")
     String fireBaseCreateScoped;
-
     @Value("${project.properties.firebase-topic}")
     String topic;
-
-    final double getRefundFee = 0.1; // 환불 수수료
-
-    String tokenf = "c1agebjUTSaN111v7igtKj:APA91bG744QXqT18Y7Vp_1QoqeXoC_PJ1JAQYstBgXtp6HrhoNrXyIwUXSvJ7roCWhgxhBOFph0x8AqwHs92kAN2FkM1TGNxYUAIgCRpfZjXs83dzMwHi15nMPaYT2r50ZS0m2wcTD1y";
-
     private FirebaseMessaging firebaseMessaging;
+    final double getRefundFee = 0.1; // 환불 수수료
 
     private final NotificationRepository notificationRepository;
 
     private final UserClient userClient;
-
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final StoreClient storeClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
@@ -108,28 +101,39 @@ public class NotificationService {
     @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")
     @Transactional
     public void notifyUser(@Payload String stringUserInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        log.info("메시지입니다 : {}", stringUserInfo);
+        log.info("Kafka - 유저 알림 : {}", stringUserInfo);
         UserNotificationInfo userNotificationInfo = objectMapper.readValue(stringUserInfo, UserNotificationInfo.class);
 
         // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
-
         String title = titleMaker.get(userNotificationInfo.getType());
         String content = userNotificationInfo.getStoreName() + contentMaker.get(userNotificationInfo.getType());
-//        List<String>
+
+        // 유저 ID List로 유저서비스에서 유저 Token List 받기
+        List<UserTokenInfo> userTokenInfos = userClient.getUserFCM(UserTokenRequest.builder()
+                .memberIds(userNotificationInfo.getUserList().stream().map(UserInfo::getUserId).toList()).build()).getResponse();
+        // 합치기
+        for (int idx = 0; idx < userTokenInfos.size(); idx++) {
+            userNotificationInfo.getUserList().get(idx).setToken(userTokenInfos.get(idx).getFcmToken());
+        }
+
         userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType()));
     }
 
     @KafkaListener(topics = "#{notifyStoreTopic.name}", groupId = "notification-service-notify-store")
     public void notifyStore(@Payload String stringStoreId, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        log.info("메시지입니다 : {}", stringStoreId);
-        log.info(sendNotificationByToken(new FCMNotificationRequest(Long.valueOf(stringStoreId), "x", "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
+        log.info("Kafka - 사장 알림 : {}", stringStoreId);
+
+        // 가게 ID 가게 서비스에서 사장 ID 받기
+        Long ownerId = storeClient.getOwnerId(Long.valueOf(stringStoreId)).getResponse();
+        // 사장 ID 사장 서비스에서 Token 받기
+        OwnerTokenInfo ownerTokenInfo = userClient.getStoreFCM(ownerId).getResponse();
+        log.info(sendNotificationByToken(new FCMNotificationRequest(Long.valueOf(stringStoreId), ownerTokenInfo.getFcmToken(), "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
 
     }
 
-
     @Transactional
     public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type) {
-        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), "x",title, content)));
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
         notificationRepository.save(Notification.builder()
                 .userId(userInfo.getUserId())
                 .type(type)
@@ -152,7 +156,6 @@ public class NotificationService {
     public String sendNotificationByToken(FCMNotificationRequest fcmDto) {
 
         // fcmDto 토큰 있는지 검사
-
         com.google.firebase.messaging.Notification notification = com.google.firebase.messaging.Notification.builder()
                 .setTitle(fcmDto.getTitle())
                 .setBody(fcmDto.getBody())
