@@ -8,6 +8,8 @@ const Container = styled.div.attrs<any>((props) => ({}))`
       flex-direction: column;
       align-items: center;
 
+      gap: 20px;
+
       background-color: ${white};
 
       width: 100vw;
@@ -19,4 +21,29 @@ const Container = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { Container };
+const Title = styled.div`
+  font-size: 24px;
+`;
+
+const TitleBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 90vw;
+  align-items: center;
+`;
+
+const Today = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const black = props.theme.colors.black;
+    const light = props.theme.colors.light;
+    return css`
+      background-color: ${black};
+      color: ${light};
+      font-size: 20px;
+      border-radius: 10px;
+      padding: 10px;
+    `;
+  }};
+`;
+
+export { Container, Title, TitleBox, Today };

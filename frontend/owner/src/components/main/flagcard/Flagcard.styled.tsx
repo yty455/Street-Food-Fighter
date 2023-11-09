@@ -17,7 +17,8 @@ const CardWrapper = styled.div.attrs<any>((props) => ({}))`
       background-color: ${bgcolor};
       border: 2px solid ${bcolor};
       border-radius: 10px;
-      padding: 20px 10px;
+      padding: 20px 15px;
+      gap: 20px;
     `;
   }};
 `;
@@ -29,7 +30,7 @@ const Content = styled.div.attrs<any>((props) => ({}))`
     return css`
       font-family: ${font};
       color: ${black};
-      width: 200px;
+      width: 175px;
     `;
   }};
 `;
