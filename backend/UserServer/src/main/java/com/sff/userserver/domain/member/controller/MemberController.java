@@ -1,5 +1,7 @@
 package com.sff.userserver.domain.member.controller;
 
+import com.sff.userserver.domain.common.annotation.UserIdRequired;
+import com.sff.userserver.domain.common.aspect.UserIdHolder;
 import com.sff.userserver.domain.member.dto.*;
 import com.sff.userserver.domain.member.service.MemberServiceImpl;
 import com.sff.userserver.global.utils.ApiResult;
@@ -23,20 +25,23 @@ public class MemberController {
     }
 
     @DeleteMapping("/me")
-    public ApiResult<?> deleteMember() {
-        memberService.deleteMember(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> deleteMember(UserIdHolder userIdHolder) {
+        memberService.deleteMember(userIdHolder.getUserId());
         return ApiUtils.success("회원 탈퇴 완료");
     }
 
     @GetMapping("/me")
-    public ApiResult<?> getMember() {
-        MemberInfoResponse member = memberService.getMember(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> getMember(UserIdHolder userIdHolder) {
+        MemberInfoResponse member = memberService.getMember(userIdHolder.getUserId());
         return ApiUtils.success(member);
     }
 
     @PatchMapping("/me")
-    public ApiResult<?> updateMember(@Valid @RequestBody MyInfoRequest myInfoRequest) {
-        memberService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> updateMember(@Valid @RequestBody MyInfoRequest myInfoRequest, UserIdHolder userIdHolder) {
+        memberService.updateMember(userIdHolder.getUserId(), myInfoRequest);
         return ApiUtils.success("내 정보 수정 성공");
     }
 

@@ -1,5 +1,7 @@
 package com.sff.userserver.domain.member.controller;
 
+import com.sff.userserver.domain.common.annotation.UserIdRequired;
+import com.sff.userserver.domain.common.aspect.UserIdHolder;
 import com.sff.userserver.domain.member.dto.WishlistRequest;
 import com.sff.userserver.domain.member.dto.WishlistResponse;
 import com.sff.userserver.domain.member.dto.WishlistStatsResponse;
@@ -18,20 +20,23 @@ public class WishlistController {
     private final WishlistServiceImpl wishlistService;
 
     @PostMapping("/wishlist/add")
-    public ApiResult<?> createWishlist(@RequestBody WishlistRequest wishlistRequest) {
-        wishlistService.createWishlist(1L, wishlistRequest.getFoodType()); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> createWishlist(@RequestBody WishlistRequest wishlistRequest, UserIdHolder userIdHolder) {
+        wishlistService.createWishlist(userIdHolder.getUserId(), wishlistRequest.getFoodType());
         return ApiUtils.success("카테고리 추가 성공");
     }
 
     @GetMapping("/wishlist")
-    public ApiResult<?> getWishlist() {
-        List<WishlistResponse> wishlist = wishlistService.getWishlist(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> getWishlist(UserIdHolder userIdHolder) {
+        List<WishlistResponse> wishlist = wishlistService.getWishlist(userIdHolder.getUserId());
         return ApiUtils.success(wishlist);
     }
 
     @PostMapping("/wishlist/remove")
-    public ApiResult<?> deleteWishlist(@RequestBody WishlistRequest wishlistRequest) {
-        wishlistService.deleteWishlist(1L, wishlistRequest.getFoodType()); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> deleteWishlist(@RequestBody WishlistRequest wishlistRequest, UserIdHolder userIdHolder) {
+        wishlistService.deleteWishlist(userIdHolder.getUserId(), wishlistRequest.getFoodType());
         return ApiUtils.success("카테고리 삭제 성공");
     }
 
