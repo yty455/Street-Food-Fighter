@@ -4,7 +4,9 @@ const InputContainer = styled.div`
   margin: 10px 0;
 `;
 
-const StyledInput = styled.input.attrs<any>((props) => ({}))`
+const StyledInput = styled.input.attrs<any>((props) => ({
+  type: props.type || 'text',
+}))`
   ${(props) => {
     const light = props.theme.colors.light;
     const main = props.theme.colors.main;
@@ -38,12 +40,12 @@ const InfoInput = styled.input.attrs<any>((props) => ({}))`
     const gray = props.theme.colors.gray;
     const black = props.theme.colors.black;
     const airfont = props.theme.fonts.air;
+    const fontSize = '20px';
     return css`
       width: 100%;
-      font-family: ${airfont};
-
-      padding: 10px;
-      font-size: 16px;
+      margin-top: 10px;
+      padding-bottom: 5px;
+      font-size: ${fontSize};
       background-color: ${white};
       box-sizing: border-box;
 
@@ -52,7 +54,7 @@ const InfoInput = styled.input.attrs<any>((props) => ({}))`
 
       &::placeholder {
         color: ${gray};
-        font-size: 14px;
+        font-size: ${fontSize};
       }
       &:focus {
         outline: none;
@@ -61,4 +63,18 @@ const InfoInput = styled.input.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { InputContainer, StyledInput, InfoInput };
+const InfoLabel = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    return css`
+      width: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      box-sizing: border-box;
+      border: none;
+      font-size: 16px;
+      /* margin-bottom: 16px; */
+    `;
+  }};
+`;
+
+export { InputContainer, StyledInput, InfoInput, InfoLabel };
