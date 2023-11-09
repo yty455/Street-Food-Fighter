@@ -1,5 +1,5 @@
-import kakaomapApi from '@/apis/kakaoAPI';
-import kakaoAddressAPI from '@/apis/kakaoAddressAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
+import kakaoAddressAPI from '@/apis/kakao/kakaoAddressAPI';
 import { useEffect, useState } from 'react';
 
 const useFindCurrentLoc = (setAddressName: any) => {
