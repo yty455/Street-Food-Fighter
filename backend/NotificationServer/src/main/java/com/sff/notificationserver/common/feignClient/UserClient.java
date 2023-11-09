@@ -16,7 +16,7 @@ import java.util.List;
 public interface UserClient {
 
     @GetMapping(value = "/api/user-server/user/{userId}/points")
-    ApiResult<Integer> getUserPoint(@PathVariable Long userId);
+    ApiResult<Integer> getUserPoint(@PathVariable("userId") Long userId);
 
     // 유지ID List -> 유저 FCM Token List
     @PostMapping(value = "/api/user-server/members/tokens")
@@ -24,6 +24,6 @@ public interface UserClient {
 
     // 사장ID List -> 사장 FCM Token
     @GetMapping(value = "/api/owner-server/owners/{ownerId}/fcm-token")
-    ApiResult<OwnerTokenInfo> getStoreFCM(@PathVariable Long ownerId);
+    ApiResult<OwnerTokenInfo> getStoreFCM(@PathVariable("ownerId") Long ownerId);
 
 }

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "storeserver", url = "${feign.storeserver.url}")
 public interface StoreClient {
     @GetMapping(value = "/api/store-service/store/{storeId}/owner")
-    ApiResult<Long> getOwnerId(@PathVariable Long storeId);
+    ApiResult<Long> getOwnerId(@PathVariable("storeId") Long storeId);
 
 }
