@@ -8,8 +8,13 @@ const TabContainer = styled.div`
 `;
 
 const Tab = styled.button<any>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+
   width: 33.33%;
-  padding: 16px 0;
+  padding: 14px 0;
   border: none;
   background: none;
   color: ${(props) => props.theme.colors.black};

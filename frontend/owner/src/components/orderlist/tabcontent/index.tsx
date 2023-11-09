@@ -1,5 +1,14 @@
+import OrderCard from '../ordercard';
+
 const TabContent = ({ activetab, list }: any) => {
-  return <div>TabContent</div>;
+  console.log(list);
+  return (
+    <div>
+      {list.map((item: any) => (
+        <OrderCard key={item.orderId} order={item} />
+      ))}
+    </div>
+  );
 };
 
 export default TabContent;
