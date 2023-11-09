@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class FCMNotificationRequest {
     private Long recipient;
+    private String token;
     private String title;
     private String body;
 }
