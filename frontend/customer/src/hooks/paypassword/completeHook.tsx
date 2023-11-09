@@ -1,0 +1,70 @@
+import { useRouter } from 'next/navigation';
+import useCurPasswordStore from '@/stores/curpwdStore';
+import usePwdPageStore from '@/stores/pwdpageStore';
+import usePasswordStore from '@/stores/passwordStore';
+import useRegisterPageStore from '@/stores/registerStore';
+import { user } from '@/temp/user';
+
+const useCompleteHandler = (slug: string) => {
+  const router = useRouter();
+  const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { curPwdPage, setCurPwdPage } = usePwdPageStore();
+  const { setPassword, resetPasswords, wantPwd } = usePasswordStore();
+  const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
+  const paypassword = useRegisterPageStore((state) => state.paypassword);
+
+  const handleComplete = () => {
+    // const currentPassword = useCurPasswordStore.getState().currentPassword;
+
+    if (slug == 'change') {
+      if (curPwdPage === 1) {
+        if (currentPassword === user.paymentPassword) {
+          setCurPwdPage(2);
+          setPassword(1, currentPassword);
+        } else {
+          alert('Incorrect password.');
+          resetCurrentPassword();
+        }
+      } else if (curPwdPage === 2) {
+        setCurPwdPage(3);
+        setPassword(2, currentPassword);
+      } else if (curPwdPage === 3) {
+        setPassword(3, currentPassword);
+        if (wantPwd === currentPassword) {
+          router.back();
+          resetPasswords();
+          alert('Password changed successfully.');
+        } else {
+          resetCurrentPassword();
+        }
+      }
+    }
+
+    // 회원가입할때,
+    if (slug == 'register') {
+      if (curPwdPage === 1) {
+        setPassword(1, currentPassword);
+        setRegisterValue('paypassword', currentPassword);
+        setCurPwdPage(3);
+      } else if (curPwdPage === 3) {
+        setPassword(3, currentPassword);
+        if (paypassword === currentPassword) {
+          resetPasswords();
+          console.log('비밀번호 입력 성공.');
+          router.push('/');
+          setCurPwdPage(1);
+        } else {
+          resetCurrentPassword();
+        }
+      }
+    }
+  };
+
+  const resetHandler = () => {
+    resetCurrentPassword();
+  };
+
+  return { handleComplete, resetHandler };
+};
+
+export default useCompleteHandler;

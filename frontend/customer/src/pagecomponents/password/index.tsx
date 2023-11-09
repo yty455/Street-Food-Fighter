@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Container, Title } from './Password.styled';
 import Keypad from '@/components/password/keypad';
 import State from '@/components/password/state';
