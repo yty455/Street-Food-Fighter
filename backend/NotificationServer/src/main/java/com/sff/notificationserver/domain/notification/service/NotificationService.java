@@ -104,9 +104,12 @@ public class NotificationService {
         log.info("Kafka - 유저 알림 : {}", stringUserInfo);
         UserNotificationInfo userNotificationInfo = objectMapper.readValue(stringUserInfo, UserNotificationInfo.class);
 
+        // 가게 ID로 가게 이름 받기
+        String storeName = storeClient.getStoreName(userNotificationInfo.getStoreId()).getResponse();
+
         // 손님 알림 종류 - 펀딩 성공, 실패 / 주문 접수 성공, 거절, 조리완료 / 리뷰
         String title = titleMaker.get(userNotificationInfo.getType());
-        String content = userNotificationInfo.getStoreName() + contentMaker.get(userNotificationInfo.getType());
+        String content = storeName + contentMaker.get(userNotificationInfo.getType());
 
         // 유저 ID List로 유저서비스에서 유저 Token List 받기
         List<UserTokenInfo> userTokenInfos = userClient.getUserFCM(UserTokenRequest.builder()

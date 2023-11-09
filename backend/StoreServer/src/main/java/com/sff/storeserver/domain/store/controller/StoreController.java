@@ -35,7 +35,6 @@ public class StoreController {
         return ApiUtils.success(storeInfoResponse);
     }
 
-
     @GetMapping("/stores")
     public ApiResult<List<StoreInfoResponse>> getStoreByStoreId(@RequestParam List<Long> ids) {
         return ApiUtils.success(storeService.getStores(ids));
@@ -55,6 +54,13 @@ public class StoreController {
         return ApiUtils.success("가게 정보 수정을 성공했습니다.");
     }
 
+    @Operation(summary = "사장 - 가게 카테고리, 업태 조회", description = "가게 카테고리, 업태를 조회합니다.")
+    @GetMapping("/stores/categories/{ownerId}")
+    public ApiResult<StoreUpdateCategory> getStoreCategory(@PathVariable Long ownerId) {
+        StoreUpdateCategory storeUpdateCategory = storeService.getStoreCategory(ownerId);
+        return ApiUtils.success(storeUpdateCategory);
+    }
+
     @Operation(summary = "사장 - 가게 카테고리, 업태 수정", description = "가게 카테고리, 업태를 수정합니다.")
     @PatchMapping("/stores/categories/{ownerId}")
     public ApiResult<String> updateStoreCategory(@PathVariable Long ownerId, @RequestBody StoreUpdateCategory storeUpdateCategory) {
@@ -70,7 +76,6 @@ public class StoreController {
 
         return ApiUtils.success("가게 정보 삭제 완료");
     }
-
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near")
@@ -115,9 +120,15 @@ public class StoreController {
 
     @Operation(summary = "사장 - 사장ID 찾기", description = "가게 ID로 사장 ID를 찾습니다..")
     @GetMapping("/store/{storeId}/owner")
-    public ApiResult<?> getOwnerId(@PathVariable Long storeId) {
+    public ApiResult<Long> getOwnerId(@PathVariable Long storeId) {
         Long ownerId = storeService.getOwnerId(storeId);
         return ApiUtils.success(ownerId);
     }
 
+    @Operation(summary = "사장 - 가게 이름 찾기", description = "가게 ID로 가게 이름을 찾습니다..")
+    @GetMapping("/store/{storeId}/name")
+    public ApiResult<String> getStoreName(@PathVariable Long storeId) {
+        String storeName = storeService.getStoreName(storeId);
+        return ApiUtils.success(storeName);
+    }
 }
