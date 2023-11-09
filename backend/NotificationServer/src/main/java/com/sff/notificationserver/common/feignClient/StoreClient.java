@@ -10,4 +10,6 @@ public interface StoreClient {
     @GetMapping(value = "/api/store-service/store/{storeId}/owner")
     ApiResult<Long> getOwnerId(@PathVariable("storeId") Long storeId);
 
+    @GetMapping(value = "/api/store-service/store/{storeId}/name")
+    ApiResult<String> getStoreName(@PathVariable("storeId") Long storeId);
 }
