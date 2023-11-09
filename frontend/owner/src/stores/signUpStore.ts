@@ -4,9 +4,10 @@ type RegisterState = {
   email: string;
   password: string;
   passwordCheck: string;
-  nickname: string;
+  name: string;
   phone: string;
-  paypassword: string;
+  bank: string;
+  accountNumber: string;
   setRegisterValue: <K extends keyof RegisterState>(field: K, value: RegisterState[K]) => void;
 };
 
@@ -14,9 +15,10 @@ const useRegisterPageStore = create<RegisterState>((set) => ({
   email: '',
   password: '',
   passwordCheck: '',
-  nickname: '',
+  name: '',
+  bank: '',
   phone: '',
-  paypassword: '',
+  accountNumber: '',
   setRegisterValue: (field, value) => set((state) => ({ ...state, [field]: value })),
 }));
 

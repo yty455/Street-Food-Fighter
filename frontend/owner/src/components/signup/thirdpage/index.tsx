@@ -5,9 +5,9 @@ import RoundButton from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
 import useSingUpPageStore from '@/stores/signUpStore';
 
-const SignUpFirstPage = ({ params, ...props }: any) => {
+const SignUpThirdPage = ({ params, ...props }: any) => {
   const router = useRouter();
-  const { email, name, phone, setRegisterValue } = useSingUpPageStore();
+  const { password, passwordCheck, setRegisterValue } = useSingUpPageStore();
 
   const moveNextPage = () => {
     // if (email == '' || password == '' || passwordCheck == '') {
@@ -21,16 +21,11 @@ const SignUpFirstPage = ({ params, ...props }: any) => {
     router.push('/singup/2');
   };
 
-  useEffect(() => {
-    console.log();
-  }, [email]);
-
-  const handleChange = (e: any, key: 'email' | 'name' | 'phone') => {
+  const handleChange = (e: any, key: 'password' | 'passwordCheck') => {
     const { name, value } = e.target;
     // 스토어의 setField 함수를 사용하여 스토어의 상태를 업데이트합니다.
     setRegisterValue(key, value);
   };
-
   return (
     <StyleSignUp>
       {/* header */}
@@ -40,29 +35,38 @@ const SignUpFirstPage = ({ params, ...props }: any) => {
         <BodyStyle>
           <InputWrapper>
             <Input
-              onChange={(e: any) => handleChange(e, 'email')}
+              onChange={(e: any) => handleChange(e, 'password')}
               use="info"
-              placeholder="이메일을 입력해주세요"
-              label="회원가입을 진행해볼까요?)"
-              value={email}
+              placeholder="가게 이름을 입력해주세요"
+              label="가게 정보"
+              value={password}
+            ></Input>
+          </InputWrapper>
+          {/* 운영 시간 들어가야함 */}
+          <InputWrapper>
+            <Input
+              onChange={(e: any) => handleChange(e, 'passwordCheck')}
+              use="info"
+              placeholder="은행을 입력해주세요"
+              label="정산 계좌"
+              value={passwordCheck}
             ></Input>
           </InputWrapper>
           <InputWrapper>
             <Input
-              onChange={(e: any) => handleChange(e, 'name')}
+              onChange={(e: any) => handleChange(e, 'passwordCheck')}
               use="info"
-              placeholder="이름을 알려주세요!"
-              label="이름을 입력해주세요"
-              value={name}
+              placeholder="계좌번호를 입력해주세요"
+              value={passwordCheck}
             ></Input>
           </InputWrapper>
           <InputWrapper>
             <Input
-              onChange={(e: any) => handleChange(e, 'phone')}
+              onChange={(e: any) => handleChange(e, 'passwordCheck')}
               use="info"
-              placeholder="전화번호를 입력해주세요"
-              label="손님이 전화할 수 있어요!"
-              value={phone}
+              placeholder="활동 지역을 선택해 주세요"
+              label="활동 지역"
+              value={passwordCheck}
             ></Input>
           </InputWrapper>
         </BodyStyle>
@@ -78,4 +82,4 @@ const SignUpFirstPage = ({ params, ...props }: any) => {
   );
 };
 
-export default SignUpFirstPage;
+export default SignUpThirdPage;

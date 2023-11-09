@@ -5,18 +5,10 @@ const StyleSignUp = styled.div.attrs<any>((props) => ({}))`
     return css`
       width: 100vw;
       height: 100vh;
-      /* position: fixed;
-      bottom: 70px;
-      z-index: 3;
-      display: flex;
-      gap: 20px;
-      width: 100vw;
-      overflow-x: scroll;
-      white-space: nowrap;
-      flex-direction: row; */
     `;
   }};
 `;
+
 const HeaderStyle = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     return css`
