@@ -54,6 +54,13 @@ public class StoreController {
         return ApiUtils.success("가게 정보 수정을 성공했습니다.");
     }
 
+    @Operation(summary = "사장 - 가게 카테고리, 업태 조회", description = "가게 카테고리, 업태를 조회합니다.")
+    @GetMapping("/stores/categories/{ownerId}")
+    public ApiResult<StoreUpdateCategory> getStoreCategory(@PathVariable Long ownerId) {
+        StoreUpdateCategory storeUpdateCategory = storeService.getStoreCategory(ownerId);
+        return ApiUtils.success(storeUpdateCategory);
+    }
+
     @Operation(summary = "사장 - 가게 카테고리, 업태 수정", description = "가게 카테고리, 업태를 수정합니다.")
     @PatchMapping("/stores/categories/{ownerId}")
     public ApiResult<String> updateStoreCategory(@PathVariable Long ownerId, @RequestBody StoreUpdateCategory storeUpdateCategory) {
@@ -69,7 +76,6 @@ public class StoreController {
 
         return ApiUtils.success("가게 정보 삭제 완료");
     }
-
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near")
@@ -125,5 +131,4 @@ public class StoreController {
         String storeName = storeService.getStoreName(storeId);
         return ApiUtils.success(storeName);
     }
-
 }

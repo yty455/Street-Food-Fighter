@@ -84,6 +84,13 @@ public class StoreService {
         store.update(storeUpdateInfo);
     }
 
+    public StoreUpdateCategory getStoreCategory(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+        return StoreUpdateCategory.builder()
+                .category(store.getCategory()).businessCategory(store.getBusinessCategory()).build();
+    }
+
     @Transactional
     public void updateStoreCategory(StoreUpdateCategory storeUpdateCategory, Long ownerId) {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
