@@ -1,19 +1,12 @@
 import { useState, useEffect } from 'react';
 import { KeypadContainer, Key, StyleImage } from './Keypad.styled';
-import { useRouter } from 'next/navigation';
-import usePwdPageStore from '@/stores/pwdpageStore';
-import usePasswordStore from '@/stores/passwordStore';
 import useCurPasswordStore from '@/stores/curpwdStore';
-import { user } from '@/temp/user';
+import useCompleteHandler from '@/hooks/paypassword/completeHook';
 
 const Keypad = ({ slug }: { slug: string }) => {
   const [keys, setKeys] = useState<number[]>([]);
-  const { currentPassword, setCurrentPassword, resetCurrentPassword } = useCurPasswordStore();
-  const { curPwdPage, setCurPwdPage } = usePwdPageStore();
+  const { currentPassword, setCurrentPassword } = useCurPasswordStore();
   const [lastKey, setLastKey] = useState<number>(0);
-  const { setPassword, resetPasswords, wantPwd, againPwd } = usePasswordStore();
-
-  const router = useRouter();
 
   useEffect(() => {
     const shuffledKeys = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -21,35 +14,8 @@ const Keypad = ({ slug }: { slug: string }) => {
     setLastKey(shuffledKeys[shuffledKeys.length - 1]);
   }, []);
 
-  const handleComplete = () => {
-    const currentPassword = useCurPasswordStore.getState().currentPassword;
-
-    if (slug == 'change') {
-      if (curPwdPage === 1) {
-        if (currentPassword === user.paymentPassword) {
-          setCurPwdPage(2);
-          setPassword(1, currentPassword);
-        } else {
-          alert('Incorrect password.');
-          resetCurrentPassword();
-        }
-      } else if (curPwdPage === 2) {
-        setCurPwdPage(3);
-        setPassword(2, currentPassword);
-      } else if (curPwdPage === 3) {
-        setPassword(3, currentPassword);
-        if (wantPwd === currentPassword) {
-          resetPasswords();
-          alert('Password changed successfully.');
-          router.back();
-          setCurPwdPage(1);
-        } else {
-          resetCurrentPassword();
-          // 변경 비밀번호로 api호출 (이후 코드 추가)
-        }
-      }
-    }
-  };
+  // slug 별 handler
+  const { handleComplete, resetHandler } = useCompleteHandler(slug);
 
   const handleKeyPress = (key: number) => {
     const newPass = currentPassword.length < 6 ? currentPassword + key.toString() : currentPassword;

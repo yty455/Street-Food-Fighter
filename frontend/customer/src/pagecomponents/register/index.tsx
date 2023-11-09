@@ -94,7 +94,12 @@ const RegisterPage = ({ params, ...props }: any) => {
           {/* footer */}
           <FooterStyle>
             <ButtonWrapper>
-              <RoundButton text="회원가입"></RoundButton>
+              <RoundButton
+                text="회원가입"
+                onClick={() => {
+                  router.push('/password/register');
+                }}
+              ></RoundButton>
             </ButtonWrapper>
           </FooterStyle>
         </>
