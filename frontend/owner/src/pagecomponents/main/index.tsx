@@ -1,17 +1,44 @@
-import React from 'react';
+import { useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
+import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
+import useModal from '@/hooks/common/modal.hook';
+import StartPopup from '@/components/main/startpopup';
+import SelectFlag from '@/components/main/seletflag';
 
 const MainPage = () => {
   const router = useRouter();
+  const [isVendorOpen, setVendorOpen] = useState(false);
+
+  const todayflag = Flag0;
+
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+
+  const handleStartOperation = () => {
+    setModalContent(<StartPopup onClose={closeModal} />);
+  };
+
+  const switchVendor = () => {
+    if (!isVendorOpen) {
+      if (todayflag.length === 0) {
+        setModalContent(<StartPopup onClose={closeModal} />);
+      } else {
+        setModalContent(<SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} />);
+      }
+      openModal(); // 모달 열기
+    } else {
+      // 다른 작업 수행
+    }
+    setVendorOpen(!isVendorOpen);
+  };
+
   return (
     <MainContainer>
       <OperButtonList>
-        <OperButton type="start">
-          <OperText>영업 시작</OperText>
-        </OperButton>
-        <OperButton>
-          <OperText>영업 종료</OperText>
+        <OperButton>{isVendorOpen ? <OperText>영업 중</OperText> : <OperText>영업 전</OperText>}</OperButton>
+        <OperButton type="btn" onClick={switchVendor}>
+          {!isVendorOpen ? <OperText>영업 시작</OperText> : <OperText>영업 종료</OperText>}
         </OperButton>
       </OperButtonList>
       <MenuList>
@@ -52,6 +79,7 @@ const MainPage = () => {
           <div>지역 통계</div>
         </Menu>
       </MenuList>
+      {isModalOpen && modalContent}
     </MainContainer>
   );
 };

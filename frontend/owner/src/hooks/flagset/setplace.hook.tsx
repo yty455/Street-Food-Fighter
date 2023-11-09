@@ -1,4 +1,4 @@
-import kakaomapApi from '@/apis/kakaoAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
 
 const useSetPlaceHook = (mapRef: any, setAddressName: any, setPositionVisible: any) => {
   const setPlace = async (x: any, y: any) => {
