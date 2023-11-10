@@ -1,6 +1,5 @@
 package com.sff.storeserver.domain.store.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
@@ -15,14 +14,9 @@ import com.sff.storeserver.domain.store.repository.MenuRepository;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,15 +32,6 @@ public class StoreService {
     private final ReviewRepository reviewRepository;
 
     private final OrderClient orderClient;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
-    @Transactional
-    public void create(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        StoreInfo createStoreInfo = objectMapper.readValue(storeInfo, StoreInfo.class);
-        storeRepository.save(createStoreInfo.toEntity());
-        log.info("[store-server] 사장 회원가입 OwnerId : {}", createStoreInfo.getOwnerId());
-    }
 
     @Transactional
     public void createStore(StoreInfo storeInfo) {

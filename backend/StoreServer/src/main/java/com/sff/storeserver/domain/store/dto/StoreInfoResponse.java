@@ -29,8 +29,6 @@ public class StoreInfoResponse {
     private double longi;
     private String information;
     private String introduction;
-    //    private Point areaPoint;
-    private String storeUrl;
     private BusinessType state;
 
     public static StoreInfoResponse fromEntity(Store store) {
@@ -48,7 +46,6 @@ public class StoreInfoResponse {
                 .longi(store.getLongi())
                 .information(store.getInformation())
                 .introduction(store.getIntroduction())
-                .storeUrl(store.getStoreUrl())
                 .state(store.getState())
                 .build();
 
