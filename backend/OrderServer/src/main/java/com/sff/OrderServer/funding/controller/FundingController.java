@@ -100,4 +100,11 @@ public class FundingController {
         return ApiUtils.success(fundingService.getFundingPerUsers(flagId));
     }
 
+    // 미선택 깃발의 펀딩 리스트 조회
+    @GetMapping("/api/order-server/fundings/chosen")
+    public ApiResult<?> getFundingPerFlags(@RequestBody FundingChosen fundingChosen){
+        return ApiUtils.success(fundingService.getUnpickedFlagFundings(fundingChosen));
+    }
+
+
 }
