@@ -17,7 +17,6 @@ public class OrderRecordOfState {
     private Long orderId;
     private String receiptNumber;
     private OrderState orderState;
-    private ReviewState reviewState;
     private String requirement;
     private LocalDateTime orderDate;
     private List<MenuItem> orderMenuList;
@@ -28,7 +27,6 @@ public class OrderRecordOfState {
         this.orderId = orderRecord.getOrderId();
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.orderState = orderRecord.getOrderState();
-        this.reviewState = orderRecord.getReviewState();
         this.requirement = orderRecord.getRequirement();
         this.orderDate = orderRecord.getCreatedAt();
         this.orderMenuList = orderMenuList;
