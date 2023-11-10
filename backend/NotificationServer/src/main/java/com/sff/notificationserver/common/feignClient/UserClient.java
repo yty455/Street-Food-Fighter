@@ -2,6 +2,7 @@ package com.sff.notificationserver.common.feignClient;
 
 import com.sff.notificationserver.common.utils.ApiResult;
 import com.sff.notificationserver.domain.notification.dto.OwnerTokenInfo;
+import com.sff.notificationserver.domain.notification.dto.UserPointInfo;
 import com.sff.notificationserver.domain.notification.dto.UserTokenInfo;
 import com.sff.notificationserver.domain.notification.dto.UserTokenRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,8 +16,8 @@ import java.util.List;
 @FeignClient(name = "userserver", url = "${feign.userserver.url}")
 public interface UserClient {
 
-    @GetMapping(value = "/api/user-server/user/{userId}/points")
-    ApiResult<Integer> getUserPoint(@PathVariable("userId") Long userId);
+    @GetMapping(value = "/api/user-server/me/points")
+    ApiResult<UserPointInfo> getUserPoint();
 
     // 유지ID List -> 유저 FCM Token List
     @PostMapping(value = "/api/user-server/members/tokens")
