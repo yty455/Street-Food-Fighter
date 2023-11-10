@@ -9,7 +9,7 @@ const LoginPage = () => {
   const router = useRouter();
 
   const moveRegisterPage = () => {
-    router.push('/register/1');
+    router.push('/signup/1');
   };
   return (
     <StyleLogin>

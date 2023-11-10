@@ -18,7 +18,7 @@ const SignUpSecondPage = ({ params, ...props }: any) => {
     //   alert('비밀번호가 같지 않습니다.');
     //   return;
     // }
-    router.push('/singup/3');
+    router.push('/signup/3');
   };
 
   const handleChange = (e: any, key: 'password' | 'passwordCheck') => {
@@ -32,35 +32,32 @@ const SignUpSecondPage = ({ params, ...props }: any) => {
       {/* header */}
       <HeaderStyle>회원가입</HeaderStyle>
       {/* body */}
-      <>
-        <BodyStyle>
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'password')}
-              use="info"
-              placeholder="비밀번호를 입력해주세요"
-              label="비밀번호를 입력해주세요!"
-              value={password}
-            ></Input>
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'passwordCheck')}
-              use="info"
-              placeholder="비밀번호를 한번 더 입력해주세요"
-              label="한번 더!"
-              value={passwordCheck}
-            ></Input>
-          </InputWrapper>
-        </BodyStyle>
-        {/* footer */}
-        <FooterStyle>
-          <ButtonWrapper>
-            <RoundButton onClick={moveNextPage} text="계속하기"></RoundButton>
-          </ButtonWrapper>
-        </FooterStyle>
-      </>
-      )
+      <BodyStyle>
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'password')}
+            use="info"
+            placeholder="비밀번호를 입력해주세요"
+            label="비밀번호를 입력해주세요!"
+            value={password}
+          ></Input>
+        </InputWrapper>
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'passwordCheck')}
+            use="info"
+            placeholder="비밀번호를 한번 더 입력해주세요"
+            label="한번 더!"
+            value={passwordCheck}
+          ></Input>
+        </InputWrapper>
+      </BodyStyle>
+      {/* footer */}
+      <FooterStyle>
+        <ButtonWrapper>
+          <RoundButton onClick={moveNextPage} text="계속하기"></RoundButton>
+        </ButtonWrapper>
+      </FooterStyle>
     </StyleSignUp>
   );
 };

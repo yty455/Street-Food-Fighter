@@ -19,7 +19,7 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
     //   alert('비밀번호가 같지 않습니다.');
     //   return;
     // }
-    router.push('/singup/2');
+    router.push('/signup/2');
   };
 
   const handleChange = (e: any, key: 'password' | 'passwordCheck') => {
@@ -32,54 +32,51 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
       {/* header */}
       <HeaderStyle>회원가입</HeaderStyle>
       {/* body */}
-      <>
-        <BodyStyle>
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'password')}
-              use="info"
-              placeholder="가게 이름을 입력해주세요"
-              label="가게 정보"
-              value={password}
-            ></Input>
-          </InputWrapper>
-          {/* 운영 시간 들어가야함 */}
-          <TimeSelector />
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'passwordCheck')}
-              use="info"
-              placeholder="은행을 입력해주세요"
-              label="정산 계좌"
-              value={passwordCheck}
-            ></Input>
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'passwordCheck')}
-              use="info"
-              placeholder="계좌번호를 입력해주세요"
-              value={passwordCheck}
-            ></Input>
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              onChange={(e: any) => handleChange(e, 'passwordCheck')}
-              use="info"
-              placeholder="활동 지역을 선택해 주세요"
-              label="활동 지역"
-              value={passwordCheck}
-            ></Input>
-          </InputWrapper>
-        </BodyStyle>
-        {/* footer */}
-        <FooterStyle>
-          <ButtonWrapper>
-            <RoundButton onClick={moveNextPage} text="계속하기"></RoundButton>
-          </ButtonWrapper>
-        </FooterStyle>
-      </>
-      )
+      <BodyStyle>
+        {/* 운영 시간 들어가야함 */}
+        <TimeSelector />
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'password')}
+            use="info"
+            placeholder="가게 이름을 입력해주세요"
+            label="가게 정보"
+            value={password}
+          ></Input>
+        </InputWrapper>
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'passwordCheck')}
+            use="info"
+            placeholder="은행을 입력해주세요"
+            label="정산 계좌"
+            value={passwordCheck}
+          ></Input>
+        </InputWrapper>
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'passwordCheck')}
+            use="info"
+            placeholder="계좌번호를 입력해주세요"
+            value={passwordCheck}
+          ></Input>
+        </InputWrapper>
+        <InputWrapper>
+          <Input
+            onChange={(e: any) => handleChange(e, 'passwordCheck')}
+            use="info"
+            placeholder="활동 지역을 선택해 주세요"
+            label="활동 지역"
+            value={passwordCheck}
+          ></Input>
+        </InputWrapper>
+      </BodyStyle>
+      {/* footer */}
+      <FooterStyle>
+        <ButtonWrapper>
+          <RoundButton onClick={moveNextPage} text="계속하기"></RoundButton>
+        </ButtonWrapper>
+      </FooterStyle>
     </StyleSignUp>
   );
 };
