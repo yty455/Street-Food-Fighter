@@ -9,6 +9,7 @@ const theme: DefaultTheme = {
     lightgray: '#EFEFEB',
     gray: '#807E77',
     red: '#FF3F33',
+    green: '#BDE34F',
   },
   fonts: {
     bold: 'BoldFont',
