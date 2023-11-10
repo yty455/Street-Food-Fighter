@@ -29,7 +29,7 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
           <div>{orderwaiting.length}</div>
         </Tab>
         <Tab active={(activeTab === 'processing').toString()} onClick={() => handleTabClick('processing')}>
-          <div>처리중</div>
+          <div>조리중</div>
           <div>{ordersprocessing.length}</div>
         </Tab>
         <Tab active={(activeTab === 'completion').toString()} onClick={() => handleTabClick('completion')}>
