@@ -29,6 +29,7 @@ import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
+import com.sff.OrderServer.order.dto.OrderFromFundingResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
 import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
@@ -352,7 +353,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Long createOrderAboutFunding(Long fundingId) {
+    public OrderFromFundingResponse createOrderAboutFunding(Long fundingId) {
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(
                 () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
@@ -361,7 +362,7 @@ public class OrderService {
         try {
             OrderRecord orderRecord = orderRepository.save(
                     new OrderRecord(funding, orderCount, bucket));
-            return orderRecord.getOrderId();
+            return new OrderFromFundingResponse(orderRecord.getOrderId(), funding.getStoreId());
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
