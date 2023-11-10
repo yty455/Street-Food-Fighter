@@ -51,7 +51,7 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
-    @PatchMapping("/stores")
+    @PatchMapping("/store")
     public ApiResult<String> updateStore(UserIdHolder userIdHolder, @RequestBody StoreUpdateInfo storeUpdateInfo) {
         storeService.updateStore(storeUpdateInfo, userIdHolder.getUserId());
         return ApiUtils.success("가게 정보 수정을 성공했습니다.");
