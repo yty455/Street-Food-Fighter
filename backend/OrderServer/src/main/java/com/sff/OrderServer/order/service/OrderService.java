@@ -86,7 +86,6 @@ public class OrderService {
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
-        System.out.println(orderRecordList.size());
         List<OrderResponse> orderResponseList = new ArrayList<>();
         List<Long> storeIds = new ArrayList<>();
         for (OrderRecord orderRecord : orderRecordList) {
@@ -324,30 +323,14 @@ public class OrderService {
         }
     }
 
-    // msa o kafka o
-    // 가게 서비스에 "주문 거절" 알림 요청
     @Transactional
-    public void updateOrderRefused(Long orderId) {
+    public Long updateOrderRefused(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         try {
             orderRecord.updateOrderState(OrderState.REFUSED);
+            return orderRecord.getStoreId();
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REFUSED));
-        }
-        try {
-            // 직렬화할 객체 생성
-            UserInfo userInfo = new UserInfo(orderRecord);
-            List<UserInfo> userInfoList = new ArrayList<>();
-            userInfoList.add(userInfo);
-            UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
-                    .storeId(orderRecord.getStoreId()).type(NotificationType.REFUSED)
-                    .storeName("").userList(userInfoList).build();
-            // 객체를 JSON 문자열로 직렬화
-            String userInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
-            kafkaTemplate.send("notification-service-notify-user", userInfoJson);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
         }
     }
 

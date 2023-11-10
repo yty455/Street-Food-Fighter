@@ -22,14 +22,14 @@ public class OrderController {
 
     // 주문 추가
     @PostMapping("/api/order-server/orders")
-    public ApiResult<?> createOrder(@RequestHeader("userId") Long userId,
+    public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
         return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId));
     }
 
     // 주문 내역 조회
     @GetMapping("/api/order-server/orders")
-    public ApiResult<?> getOrders(@RequestHeader("userId") Long userId) {
+    public ApiResult<?> getOrders(@RequestHeader("UserId") Long userId) {
         return ApiUtils.success(orderService.getOrderRecords(userId));
     }
 
@@ -100,14 +100,12 @@ public class OrderController {
     // 주문 상태 변경 - 거절됨
     @PutMapping("/api/order-server/state-refused/{orderId}")
     public ApiResult<?> updateOrderRefused(@PathVariable Long orderId) {
-        orderService.updateOrderRefused(orderId);
-        return ApiUtils.success("주문을 거절 하였습니다.");
+        return ApiUtils.success(orderService.updateOrderRefused(orderId));
     }
 
     // 펀딩 - 주문 추가
     @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
-    public ApiResult<?> createOrderAboutFunding(@RequestHeader("userId") Long userId,
-            @PathVariable Long fundingId) {
+    public ApiResult<?> createOrderAboutFunding(@PathVariable Long fundingId) {
         return ApiUtils.success(orderService.createOrderAboutFunding(fundingId));
     }
 
