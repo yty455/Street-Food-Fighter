@@ -66,7 +66,7 @@ public class OrderRecord {
         this.receiptNumber = receiptNumber;
         this.orderState = OrderState.PAYMENT_IN_PROGRESS;
         this.reviewState = ReviewState.NONE;
-        this.requirement = orderCreateRequest.getRequirement();
+        this.requirement = (orderCreateRequest.getRequirement() != null) ? orderCreateRequest.getRequirement() : "";
         this.bucket = bucket;
         this.userId = userId;
         this.storeId = orderCreateRequest.getStoreId();
@@ -79,7 +79,7 @@ public class OrderRecord {
         this.receiptNumber = receiptNumber;
         this.orderState = OrderState.PAYMENT_IN_PROGRESS;
         this.reviewState = ReviewState.NONE;
-        this.requirement = funding.getRequirement();
+        this.requirement = (funding.getRequirement() != null) ? funding.getRequirement() : "";
         this.bucket = bucket;
         this.userId = funding.getUserId();
         this.storeId = funding.getStoreId();
