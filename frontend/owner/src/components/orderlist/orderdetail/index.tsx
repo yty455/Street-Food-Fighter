@@ -3,6 +3,7 @@ import { orderdetail } from '@/temp/orderdetail';
 import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, RequestBox, Title } from './Orderdetail.styled';
 import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
+import Badge from '@/components/common/badge';
 
 const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
   const detail = orderdetail;
@@ -23,10 +24,16 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
     <Container>
       <Topbar text="주문상세" closeModal={closeModal} type="close" />
       <Content>
-        <div>
+        <FlexRow>
           <Title>{formattedDate}</Title>
-          <div> {ordermap[order.orderState]}</div>
-        </div>
+          <div style={{ width: '100px', height: '30px' }}>
+            <Badge
+              text={ordermap[order.orderState]}
+              color={order.orderState === 'REFUSED' ? 'red' : order.orderState === 'COMPLETED' ? 'green' : 'main'}
+              fontSize="18px"
+            ></Badge>
+          </div>
+        </FlexRow>
         <TableContainer>
           <tbody>
             <tr>

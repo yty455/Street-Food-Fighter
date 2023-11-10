@@ -34,7 +34,7 @@ const StateBox = styled.div.attrs<any>((props) => ({}))`
       height: 50px;
 
       border-radius: 10px;
-
+      font-size: 18px;
       display: flex;
       align-items: center;
       text-align: center;

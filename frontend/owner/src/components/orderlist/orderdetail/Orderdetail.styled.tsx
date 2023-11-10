@@ -21,7 +21,6 @@ const Container = styled.div.attrs<any>((props) => ({}))`
 const TableContainer = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
   font-size: 18px;
 `;
 
@@ -52,13 +51,18 @@ const TableCell = styled.td.attrs<any>((props) => ({}))`
 `;
 const Content = styled.div`
   width: 100%;
-  padding: 10px 20px;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  align-items: center;
 `;
 const RequestBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
@@ -76,6 +80,5 @@ const RequestBox = styled.div.attrs<any>((props) => ({}))`
 
 const Title = styled.div`
   font-size: 22px;
-  padding: 20px 0px 10px 0px;
 `;
 export { Title, FlexRow, Container, Content, TableContainer, TableHeader, TableCell, RequestBox };
