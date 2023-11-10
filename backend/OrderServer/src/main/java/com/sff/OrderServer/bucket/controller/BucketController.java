@@ -19,7 +19,7 @@ public class BucketController {
 
     private final BucketService bucketService;
 
-    @PostMapping("/api/order-server/user/buckets")
+    @PostMapping("/api/order-server/buckets")
     public ApiResult<?> createBucket(@RequestHeader("userId") Long userId, @RequestBody List<Item> items){
         return ApiUtils.success(bucketService.createBucket(userId, items));
     }
