@@ -11,4 +11,10 @@ public class ApiResult<T> {
     private final boolean success;
     private final T response;
     private final ApiError apiError;
+
+    public ApiResult() {
+        this.success = false;
+        this.response = null;
+        this.apiError = null;
+    }
 }

@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.sff.notificationserver.common.feignClient.StoreClient;
 import com.sff.notificationserver.common.feignClient.UserClient;
+import com.sff.notificationserver.common.utils.ApiResult;
 import com.sff.notificationserver.domain.notification.dto.*;
 import com.sff.notificationserver.domain.notification.entity.Notification;
 import com.sff.notificationserver.domain.notification.entity.NotificationType;
@@ -89,11 +90,11 @@ public class NotificationService {
         // 환불 수수료 정책 도입시 변경
         double refundFee = getRefundFee;
         // 유저 포인트 받아오기
-        int userPoint = userClient.getUserPoint(userId).getResponse();
+        ApiResult<UserPointInfo> userPoint = userClient.getUserPoint();
 
         return NotificationResponse.builder()
                 .refundFee(refundFee)
-                .userPoint(userPoint)
+                .userPoint(userPoint.getResponse().getAmount())
                 .notificationInfos(notificationInfos)
                 .build();
     }
