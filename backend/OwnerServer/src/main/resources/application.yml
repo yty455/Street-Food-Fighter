@@ -22,4 +22,8 @@ logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
 
+feign:
+  store-server:
+    url: k9e205.p.ssafy.io:8090/api/store-service
+
 

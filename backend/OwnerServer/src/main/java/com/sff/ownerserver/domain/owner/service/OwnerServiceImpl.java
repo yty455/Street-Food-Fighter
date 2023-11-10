@@ -4,8 +4,11 @@ import com.sff.ownerserver.domain.owner.dto.*;
 import com.sff.ownerserver.domain.owner.entity.Owner;
 import com.sff.ownerserver.domain.owner.repository.OwnerRepository;
 import com.sff.ownerserver.global.error.type.BaseException;
+import com.sff.ownerserver.global.openfeign.StoreClient;
 import com.sff.ownerserver.global.utils.ApiError;
+import com.sff.ownerserver.global.utils.ApiResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StoreClient storeClient;
 
     @Override
     @Transactional
@@ -23,7 +28,18 @@ public class OwnerServiceImpl implements OwnerService {
         validateDuplicateMember(signupRequest);
         Owner owner = signupRequest.toEntity();
         owner.passwordEncode(passwordEncoder);
-        ownerRepository.save(owner);
+        Owner saveOwner = ownerRepository.save(owner);
+        sendToStore(signupRequest, saveOwner);
+    }
+
+    private void sendToStore(SignupRequest signupRequest, Owner saveOwner) {
+        StoreSignUpRequest storeSignUpRequest = StoreSignUpRequest.builder().ownerId(saveOwner.getId()).signupRequest(signupRequest).build();
+        ApiResult<?> apiResult = storeClient.storeSignUp(storeSignUpRequest);
+        if (apiResult.getApiError() != null) {
+            log.error("회원가입 중 가게 정보 저장이 올바르지 않습니다. 에러 메세지 : {}", apiResult.getApiError().getMessage());
+            ownerRepository.deleteById(saveOwner.getId());
+            throw new BaseException(new ApiError("가게 정보가 저장되지 못했습니다.", 1101));
+        }
     }
 
     @Override
