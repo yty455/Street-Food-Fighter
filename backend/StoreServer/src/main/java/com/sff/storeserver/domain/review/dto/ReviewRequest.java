@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewRequest {
 
-    //    private Long storeId;
-    private Long userId;
     private Long orderId;
 
     private String content;
@@ -25,7 +23,7 @@ public class ReviewRequest {
     @Min(value = 0, message = "리뷰의 점수는 0~5사이의 정수만 가능합니다.")
     private int score;
 
-    public Review toEntity(Store store) {
+    public Review toEntity(Store store, Long userId) {
         return Review.builder()
                 .store(store)
                 .userId(userId)

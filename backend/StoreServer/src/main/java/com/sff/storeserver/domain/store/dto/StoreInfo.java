@@ -46,8 +46,8 @@ public class StoreInfo {
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .activeArea(activeArea)
-                .lati(lati)
-                .longi(longi)
+                .lati(0)
+                .longi(0)
                 .storeUrl(storeUrl)
                 .state(BusinessType.CLOSE).build();
     }

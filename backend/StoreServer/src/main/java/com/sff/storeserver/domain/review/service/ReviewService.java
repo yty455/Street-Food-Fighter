@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.review.service;
 
+import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.common.feignClient.UserClient;
@@ -31,15 +32,15 @@ public class ReviewService {
     private final OrderClient orderClient;
 
     @Transactional
-    public void createReview(ReviewRequest reviewRequest) {
+    public void createReview(ReviewRequest reviewRequest, Long userId) {
 
         // 주문 아이디 -> 주문 서비스에 보내서 가게 아이디 받아오기 (Long)
         Long storeId = orderClient.getStoreId(reviewRequest.getOrderId()).getResponse();
 
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(BaseException::new);
+                .orElseThrow(() -> (new BaseException(StoreError.NOT_FOUND_STORE)));
 
-        reviewRepository.save(reviewRequest.toEntity(store));
+        reviewRepository.save(reviewRequest.toEntity(store, userId));
     }
 
     public Page<MyReviewResponse> getMyReviews(Long userId, int page, int size) {
