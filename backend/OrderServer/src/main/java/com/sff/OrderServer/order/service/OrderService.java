@@ -29,6 +29,7 @@ import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
+import com.sff.OrderServer.order.dto.OrderFromFundingResponse;
 import com.sff.OrderServer.order.dto.OrderItem;
 import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
@@ -86,7 +87,6 @@ public class OrderService {
     public List<OrderResponse> getOrderRecords(Long userId) {
         List<OrderRecord> orderRecordList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(
                 userId);
-        System.out.println(orderRecordList.size());
         List<OrderResponse> orderResponseList = new ArrayList<>();
         List<Long> storeIds = new ArrayList<>();
         for (OrderRecord orderRecord : orderRecordList) {
@@ -324,35 +324,19 @@ public class OrderService {
         }
     }
 
-    // msa o kafka o
-    // 가게 서비스에 "주문 거절" 알림 요청
     @Transactional
-    public void updateOrderRefused(Long orderId) {
+    public Long updateOrderRefused(Long orderId) {
         OrderRecord orderRecord = getOrderRecord(orderId);
         try {
             orderRecord.updateOrderState(OrderState.REFUSED);
+            return orderRecord.getStoreId();
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REFUSED));
-        }
-        try {
-            // 직렬화할 객체 생성
-            UserInfo userInfo = new UserInfo(orderRecord);
-            List<UserInfo> userInfoList = new ArrayList<>();
-            userInfoList.add(userInfo);
-            UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
-                    .storeId(orderRecord.getStoreId()).type(NotificationType.REFUSED)
-                    .storeName("").userList(userInfoList).build();
-            // 객체를 JSON 문자열로 직렬화
-            String userInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
-            kafkaTemplate.send("notification-service-notify-user", userInfoJson);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
         }
     }
 
     @Transactional
-    public Long createOrderAboutFunding(Long fundingId) {
+    public OrderFromFundingResponse createOrderAboutFunding(Long fundingId) {
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(
                 () -> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
         Integer orderCount = orderRepository.countOrdersByStoreId(funding.getStoreId(),
@@ -361,7 +345,7 @@ public class OrderService {
         try {
             OrderRecord orderRecord = orderRepository.save(
                     new OrderRecord(funding, orderCount, bucket));
-            return orderRecord.getOrderId();
+            return new OrderFromFundingResponse(orderRecord.getOrderId(), funding.getStoreId());
         } catch (Exception e) {
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }

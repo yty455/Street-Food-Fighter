@@ -1,4 +1,4 @@
-package com.sff.notificationserver.common;
+package com.sff.notificationserver.common.config;
 
 import feign.Logger;
 import feign.RequestInterceptor;
@@ -31,14 +31,17 @@ public class FeignConfig {
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
                         .getRequestAttributes();
 
+                template.header("Content-Type", "application/json");
+                template.header("Accept", "application/json");
+
                 if (attributes == null) {
                     return;
                 }
 
-                String userId = attributes.getRequest().getHeader("userId");
+                String userId = attributes.getRequest().getHeader("UserId");
                 // jwt 토큰도 동일하게 추가 필요
                 if (userId != null) {
-                    template.header("userId", userId);
+                    template.header("UserId", userId);
                 }
             }
         };

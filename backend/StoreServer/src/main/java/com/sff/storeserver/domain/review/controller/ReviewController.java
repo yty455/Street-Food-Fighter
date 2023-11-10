@@ -1,5 +1,7 @@
 package com.sff.storeserver.domain.review.controller;
 
+import com.sff.storeserver.common.aop.UserIdHolder;
+import com.sff.storeserver.common.aop.UserIdRequired;
 import com.sff.storeserver.common.error.type.ValidationException;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
@@ -27,23 +29,25 @@ public class ReviewController {
 
     @Operation(summary = "손님 - 리뷰 등록", description = "손님 - 리뷰를 등록 합니다.")
     @PostMapping("/review")
-    public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest reviewRequest, BindingResult bindingResult) {
+    @UserIdRequired
+    public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest reviewRequest, BindingResult bindingResult, UserIdHolder userIdHolder) {
 
         // 예외처리
         validation(bindingResult);
 
-        reviewService.createReview(reviewRequest);
+        reviewService.createReview(reviewRequest, userIdHolder.getUserId());
 
         return ApiUtils.success("리뷰 등록 성공");
     }
 
     @Operation(summary = "손님 - 내가 쓴 리뷰 조회", description = "손님 - 내가 쓴 리뷰를 조회 합니다.")
-    @GetMapping("/user/{userId}/review")
-    public ApiResult<?> getMyReviews(@PathVariable("userId") Long userId,
-            @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
-            @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
+    @GetMapping("/review")
+    @UserIdRequired
+    public ApiResult<?> getMyReviews(UserIdHolder userIdHolder,
+                                     @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
+                                     @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
 
-        Page<MyReviewResponse> myReviewResponseList = reviewService.getMyReviews(userId, page, size);
+        Page<MyReviewResponse> myReviewResponseList = reviewService.getMyReviews(userIdHolder.getUserId(), page, size);
 
         return ApiUtils.success(myReviewResponseList);
     }
@@ -51,8 +55,8 @@ public class ReviewController {
     @Operation(summary = "손님 - 가게에 등록된 리뷰 조회", description = "손님 - 가게에 등록된 리뷰를 조회 합니다.")
     @GetMapping("/user/store/{storeId}/review")
     public ApiResult<?> getStoreReviews(@PathVariable("storeId") Long storeId,
-            @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
-            @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
+                                        @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
+                                        @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
 
         Slice<StoreReviewResponse> storeReviewResponseList = reviewService.getStoreReviews(storeId, page, size);
 

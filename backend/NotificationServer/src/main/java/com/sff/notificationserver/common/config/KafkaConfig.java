@@ -1,4 +1,4 @@
-package com.sff.notificationserver.common;
+package com.sff.notificationserver.common.config;
 
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
