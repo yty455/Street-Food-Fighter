@@ -47,7 +47,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
             </tr>
             <tr>
               <TableHeader>회원등급</TableHeader>
-              <TableCell>{detail.userGrade}</TableCell>
+              <TableCell>'{detail.userGrade}'급 파이터</TableCell>
             </tr>
             <tr>
               <TableHeader>연락처</TableHeader>

@@ -6,7 +6,7 @@ const StyledBadge = styled.div.attrs<any>((props) => ({}))`
     const black = props.theme.colors.black;
     const bgcolor = props.color ? props.theme.colors[props.color] : main;
     const color = props.color === 'red' ? props.theme.colors.light : black;
-    const size = props.fontsize || '16px';
+    const size = props.size || '16px';
     return css`
       padding: 5px 15px;
       border: none;
