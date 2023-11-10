@@ -3,11 +3,11 @@ import { StyleSignUp, HeaderStyle, InputWrapper, BodyStyle, FooterStyle, ButtonW
 import Input from '@/components/common/input';
 import RoundButton from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
-import useSingUpPageStore from '@/stores/signUpStore';
+import useSignUpPageStore from '@/stores/signUpStore';
 
 const SignUpFirstPage = ({ params, ...props }: any) => {
   const router = useRouter();
-  const { email, name, phone, setRegisterValue } = useSingUpPageStore();
+  const { email, name, phone, setRegisterValue } = useSignUpPageStore();
 
   const moveNextPage = () => {
     // if (email == '' || password == '' || passwordCheck == '') {

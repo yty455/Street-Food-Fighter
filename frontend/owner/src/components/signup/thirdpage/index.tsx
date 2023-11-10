@@ -19,7 +19,7 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
     //   alert('비밀번호가 같지 않습니다.');
     //   return;
     // }
-    router.push('/signup/2');
+    router.push('/signup/4');
   };
 
   const handleChange = (e: any, key: 'password' | 'passwordCheck') => {
