@@ -6,7 +6,7 @@ import useSignUpPageStore from '@/stores/signUpStore';
 import { categories } from '@/assets/category';
 import Select from '@/components/common/select';
 import CategorySelector from '@/components/common/categoryselector';
-
+import SignUpAPI from '@/apis/signup/SignUpAPI';
 const SignUpFourthPage = ({ params, ...props }: any) => {
   const router = useRouter();
   const { businessCategory, category, setRegisterValue } = useSignUpPageStore();
@@ -14,7 +14,10 @@ const SignUpFourthPage = ({ params, ...props }: any) => {
   const initialCategoryName = categories.find((cat) => cat.type === 'HOTTEOK')?.name || null;
 
   const moveNextPage = () => {
-    router.push('/signup/5');
+    const result = SignUpAPI();
+    console.log('===resutl===');
+    console.log(result);
+    // router.push('/signup/5');
   };
   useEffect(() => {
     console.log(category);
