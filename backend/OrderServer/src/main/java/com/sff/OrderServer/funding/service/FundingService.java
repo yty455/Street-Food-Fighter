@@ -161,9 +161,12 @@ public class FundingService {
 
     @Transactional
     private void updatePickedFundingState(Long flagId){
-        Funding funding = fundingRepository.findById(flagId).orElseThrow(()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
+        List<Funding> fundings = fundingRepository.findAllByFlagId(flagId);
         try{
-            funding.updateStateSuccess();
+            for(Funding funding : fundings) {
+                funding.updateStateSuccess();
+            }
+            fundingRepository.saveAll(fundings);
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -171,7 +174,7 @@ public class FundingService {
 
     @Transactional
     private void updateUnpickedFundingState(List<Long> flagIds){
-        List<Funding> fundings = fundingRepository.findAllById(flagIds);
+        List<Funding> fundings = fundingRepository.findAllByFlagIdIn(flagIds);
         try {
             for (Funding funding : fundings) {
                 funding.updateStateFailure();
@@ -209,5 +212,13 @@ public class FundingService {
         }
 
         return result;
+    }
+
+    //-----------
+    // 미선택 깃발들의 펀딩 리스트 조회
+    public List<Long> getUnpickedFlagFundings(FundingChosen fundingChosen){
+        List<Long> unpickedFlags = fundingChosen.getUnpickedFlagIds();
+
+        return null;
     }
 }
