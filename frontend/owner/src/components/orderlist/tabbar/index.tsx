@@ -5,8 +5,7 @@ import TabContent from '../tabcontent';
 
 type TabName = 'waiting' | 'processing' | 'completion' | 'all';
 
-const TabBar = () => {
-  const [activeTab, setActiveTab] = useState('waiting');
+const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
   const [list, setList] = useState(orderwaiting);
 
   const handleTabClick = (tabName: TabName) => {
@@ -42,7 +41,7 @@ const TabBar = () => {
           <div>{orderservice.length}</div>
         </Tab>
       </TabContainer>
-      <TabContent activetab={activeTab} list={list} />
+      <TabContent activetab={activeTab} list={list} onOrderClick={onOrderClick} />
     </div>
   );
 };
