@@ -2,11 +2,11 @@ import styled, { css } from 'styled-components';
 
 const Container = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const light = props.theme.colors.light;
+    const backgroundcolor = props.theme.colors.white;
 
     return css`
       height: 100vh;
-      background-color: ${light};
+      background-color: ${backgroundcolor};
 
       display: flex;
       flex-direction: column;

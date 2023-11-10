@@ -7,6 +7,7 @@ import useSingUpPageStore from '@/stores/signUpStore';
 import SignUpFirstPage from '@/components/signup/firstpage';
 import SignUpSecondPage from '@/components/signup/secondpage';
 import SignUpThirdPage from '@/components/signup/thirdpage';
+import SignUpFourthPage from '@/components/signup/fourthpage';
 
 const SignUpPage = ({ params, ...props }: any) => {
   switch (params.id) {
@@ -16,6 +17,8 @@ const SignUpPage = ({ params, ...props }: any) => {
       return <SignUpSecondPage />;
     case '3':
       return <SignUpThirdPage />;
+    case '4':
+      return <SignUpFourthPage />;
     default:
       return <div>잘못된 페이지 입니다.</div>;
   }

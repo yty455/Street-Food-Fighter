@@ -27,7 +27,8 @@ const BodyStyle = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       width: 100%;
-      height: 60%;
+      height: 65%;
+      padding: 0px 30px;
       padding-top: 10%;
       flex-direction: column;
       align-items: center;
@@ -40,7 +41,7 @@ const FooterStyle = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     return css`
       width: 100%;
-      height: 25%;
+      height: 20%;
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -53,7 +54,7 @@ const InputWrapper = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const marginTop = props.marginTop || '0px';
     return css`
-      padding: 0px 30px;
+      /* padding: 0px 30px; */
       width: 100%;
       margin-top: ${marginTop};
     `;
@@ -70,4 +71,14 @@ const ButtonWrapper = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-export { StyleSignUp, HeaderStyle, InputWrapper, BodyStyle, FooterStyle, ButtonWrapper };
+const Label = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    return css`
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+    `;
+  }};
+`;
+
+export { Label, StyleSignUp, HeaderStyle, InputWrapper, BodyStyle, FooterStyle, ButtonWrapper };
