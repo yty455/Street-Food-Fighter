@@ -134,4 +134,10 @@ public class OrderController {
     public ApiResult<?> getOrderPerUser() {
         return ApiUtils.success(orderService.getOrderPerUser());
     }
+
+    // 영업 종료 - 메뉴명 / 판매수 / 옵션 포함 판매 금액
+    @GetMapping("/api/order-server/orders/stats/{storeId}")
+    public ApiResult<?> getStats(@PathVariable Long storeId) {
+        return ApiUtils.success(orderService.getStats(storeId));
+    }
 }

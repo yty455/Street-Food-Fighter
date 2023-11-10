@@ -26,6 +26,7 @@ import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.infra.UserClient;
 import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
+import com.sff.OrderServer.order.dto.MenuStatsResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
@@ -45,6 +46,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -179,8 +183,7 @@ public class OrderService {
     public List<OrderRecordOfState> getProcessingOrders(Long storeId) {
         List<OrderRecordOfState> processingOrderList = new ArrayList<>();
         List<OrderRecord> processingOrderRecordList = orderRepository.findCurrentOrdersByDate(
-                storeId,
-                OrderState.PROCESSING, LocalDateTime.now());
+                storeId, OrderState.PROCESSING, LocalDateTime.now());
         for (OrderRecord orderRecord : processingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -193,8 +196,7 @@ public class OrderService {
     public List<OrderRecordOfState> getCompletedOrders(Long storeId) {
         List<OrderRecordOfState> completedOrderList = new ArrayList<>();
         List<OrderRecord> completedOrderRecordList = orderRepository.findCurrentOrdersByDate(
-                storeId,
-                OrderState.COMPLETED, LocalDateTime.now());
+                storeId, OrderState.COMPLETED, LocalDateTime.now());
         for (OrderRecord orderRecord : completedOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -207,7 +209,7 @@ public class OrderService {
     public List<OrderRecordOfState> getAllOrders(Long storeId) {
         List<OrderRecordOfState> allOrderList = new ArrayList<>();
         List<OrderRecord> allOrderRecordList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(
-                storeId);
+                storeId, LocalDateTime.now());
         for (OrderRecord orderRecord : allOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -295,6 +297,34 @@ public class OrderService {
             e.printStackTrace();
             throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
         }
+        // Schedule 작업 시작
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.schedule(() -> {
+            try {
+                orderRecord.updateReviewState(ReviewState.REQUEST);
+            } catch (Exception e) {
+                throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REQUEST));
+            }
+            try {
+                // 직렬화할 객체 생성
+                UserInfo userInfo = new UserInfo(orderRecord);
+                List<UserInfo> userInfoList = new ArrayList<>();
+                userInfoList.add(userInfo);
+                UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
+                        .storeId(orderRecord.getStoreId()).type(NotificationType.REQUEST)
+                        .storeName("").userList(userInfoList).build();
+                // 객체를 JSON 문자열로 직렬화
+                String userInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
+                kafkaTemplate.send("notification-service-notify-user", userInfoJson);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
+            }
+        }, 15, TimeUnit.MINUTES);
+
+        // 작업이 완료되면 executor를 종료합니다.
+        executorService.shutdown();
     }
 
     // msa o kafka o
@@ -423,6 +453,11 @@ public class OrderService {
                         ((Long) OrderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
+    public List<MenuStatsResponse> getStats(Long storeId) {
+        List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
+        return menuStatsResponseList;
+    }
+
     private Bucket getBucket(Long bucketId) {
         return bucketRepository.findById(bucketId).orElseThrow(
                 () -> new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
@@ -487,4 +522,5 @@ public class OrderService {
         }
         return result.getResponse();
     }
+
 }
