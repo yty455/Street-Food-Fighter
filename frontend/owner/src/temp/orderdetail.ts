@@ -5,7 +5,7 @@ export const orderdetail = {
   userNickName: '테스터', // 손님 닉네임
   userGrade: 'MIDDLE', // 손님 등급 : 링크
   userPhone: '010-0000-1234', // 손님 번호
-  requirement: '요청사항3', // 요청 사항
+  requirement: '많이 사니까 두 배 이벤트 해주십쇼. 안 지키면 타이어 빵꾸냅니다.', // 요청 사항
   orderItemList: [
     // 주문 메뉴 목록
     {

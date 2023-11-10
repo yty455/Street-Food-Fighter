@@ -1,7 +1,8 @@
 import Topbar from '@/components/common/topbar';
 import { orderdetail } from '@/temp/orderdetail';
-import { Container, TableContainer, TableHeader, TableCell, Content } from './Orderdetail.styled';
+import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, RequestBox, Title } from './Orderdetail.styled';
 import { Order, ordermap } from '@/types/order.type';
+import Button from '@/components/common/button';
 
 const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
   const detail = orderdetail;
@@ -23,7 +24,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
       <Topbar text="주문상세" closeModal={closeModal} type="close" />
       <Content>
         <div>
-          <div>{formattedDate}</div>
+          <Title>{formattedDate}</Title>
           <div> {ordermap[order.orderState]}</div>
         </div>
         <TableContainer>
@@ -47,18 +48,26 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
           </tbody>
         </TableContainer>
         {activeTab == 'waiting' && (
-          <div>
-            <div> 주문접수</div>
-            <div> 주문거부</div>
+          <FlexRow>
+            <div style={{ width: '69%', height: '45px' }}>
+              <Button fontSize="22px" text="주문접수"></Button>
+            </div>
+            <div style={{ width: '29%', height: '45px' }}>
+              <Button fontSize="22px" color="gray" text="주문거부"></Button>
+            </div>
+          </FlexRow>
+        )}
+        {activeTab == 'processing' && (
+          <div style={{ width: '100%', height: '45px' }}>
+            <Button fontSize="22px" text="조리 완료" />
           </div>
         )}
-        {activeTab == 'processing' && <div>조리 완료</div>}
         <div>
-          <div>요청사항</div>
-          <div>{detail.requirement}</div>
+          <Title>요청사항</Title>
+          <RequestBox>{detail.requirement}</RequestBox>
         </div>
         <div>
-          <div>메뉴정보</div>
+          <Title>메뉴정보</Title>
           <div>메뉴정보 컴포넌트</div>
         </div>
       </Content>

@@ -14,8 +14,6 @@ const Container = styled.div.attrs<any>((props) => ({}))`
       height: 100vh;
       position: fixed;
       z-index: 100;
-
-      gap: 10px;
     `;
   }};
 `;
@@ -54,6 +52,30 @@ const TableCell = styled.td.attrs<any>((props) => ({}))`
 `;
 const Content = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
-export { Container, Content, TableContainer, TableHeader, TableCell };
+
+const FlexRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+const RequestBox = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    const bgcolor = props.theme.colors.light;
+    return css`
+      padding: 10px;
+      font-family: ${font};
+      background-color: ${bgcolor};
+      border-radius: 10px;
+      font-size: 18px;
+    `;
+  }};
+`;
+
+const Title = styled.div`
+  font-size: 22px;
+  padding: 20px 0px 10px 0px;
+`;
+export { Title, FlexRow, Container, Content, TableContainer, TableHeader, TableCell, RequestBox };
