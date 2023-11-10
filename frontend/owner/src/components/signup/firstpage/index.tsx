@@ -10,25 +10,47 @@ const SignUpFirstPage = ({ params, ...props }: any) => {
   const { email, name, phone, setRegisterValue } = useSignUpPageStore();
 
   const moveNextPage = () => {
-    // if (email == '' || password == '' || passwordCheck == '') {
-    //   alert('모든 항목을 입력해야합니다.');
-    //   return;
-    // }
-    // if (password !== passwordCheck) {
-    //   alert('비밀번호가 같지 않습니다.');
-    //   return;
-    // }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      alert('이메일 형식이 올바르지 않습니다.');
+      return;
+    }
+    if (name.length == 0 || name.length > 5) {
+      alert('이름의 길이는 1~5자 입니다.');
+      return;
+    }
+    if (phone.length != 13) {
+      alert('휴대폰 번호가 올바르지 않습니다. ' + phone.length);
+      return;
+    }
     router.push('/signup/2');
   };
 
-  useEffect(() => {
-    console.log();
-  }, [email]);
+  const formatPhoneNumber = (value: string): string => {
+    if (!value) return value;
+
+    // 숫자만 있는 문자열로 변환
+    const phoneNumber = value.replace(/[^\d]/g, '');
+
+    // 전화번호 형식에 맞게 하이픈 추가
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 8) {
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+    }
+    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 7)}-${phoneNumber.slice(7, 11)}`;
+  };
 
   const handleChange = (e: any, key: 'email' | 'name' | 'phone') => {
     const { name, value } = e.target;
     // 스토어의 setField 함수를 사용하여 스토어의 상태를 업데이트합니다.
-    setRegisterValue(key, value);
+    if (key == 'phone') {
+      setRegisterValue(key, formatPhoneNumber(value));
+    } else if (key == 'name') {
+      if (value.length <= 5) setRegisterValue(key, value);
+    } else {
+      setRegisterValue(key, value);
+    }
   };
 
   return (
