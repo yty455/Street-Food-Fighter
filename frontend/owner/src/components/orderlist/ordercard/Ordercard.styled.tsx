@@ -30,11 +30,11 @@ const StateBox = styled.div.attrs<any>((props) => ({}))`
     const main = props.theme.colors.main;
     return css`
       background-color: ${main};
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
 
       border-radius: 10px;
-      font-size: 18px;
+      font-size: 20px;
       display: flex;
       align-items: center;
       text-align: center;
@@ -69,6 +69,7 @@ const MenuList = styled.div.attrs<any>((props) => ({}))`
     return css`
       font-family: ${font};
       color: ${color};
+      font-size: 18px;
     `;
   }};
 `;

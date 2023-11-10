@@ -56,6 +56,9 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 `;
 
 const FlexRow = styled.div`
@@ -74,6 +77,8 @@ const RequestBox = styled.div.attrs<any>((props) => ({}))`
       background-color: ${bgcolor};
       border-radius: 10px;
       font-size: 18px;
+
+      margin-top: 10px;
     `;
   }};
 `;

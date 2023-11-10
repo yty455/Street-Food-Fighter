@@ -42,6 +42,6 @@ export const orderdetail = {
   ],
   totalPrice: 10500, // 총 주문 금액
   reviewId: 1, // 리뷰 아이디
-  content: 'dfd', // 리뷰 내용
+  content: '이 집 장사 잘 하네! 좋다좋아.', // 리뷰 내용
   score: 5, // 별점
 };

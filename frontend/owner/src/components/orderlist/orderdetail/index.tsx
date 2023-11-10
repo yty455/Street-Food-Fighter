@@ -4,6 +4,7 @@ import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, Re
 import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
 import Badge from '@/components/common/badge';
+import Receipt from '@/components/common/receipt';
 
 const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
   const detail = orderdetail;
@@ -54,7 +55,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
             </tr>
           </tbody>
         </TableContainer>
-        {activeTab == 'waiting' && (
+        {order.orderState == 'WAITING' && (
           <FlexRow>
             <div style={{ width: '69%', height: '45px' }}>
               <Button fontSize="22px" text="주문접수"></Button>
@@ -64,7 +65,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
             </div>
           </FlexRow>
         )}
-        {activeTab == 'processing' && (
+        {order.orderState == 'PROCESSING' && (
           <div style={{ width: '100%', height: '45px' }}>
             <Button fontSize="22px" text="조리 완료" />
           </div>
@@ -75,7 +76,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
         </div>
         <div>
           <Title>메뉴정보</Title>
-          <div>메뉴정보 컴포넌트</div>
+          <Receipt orderItemList={detail.orderItemList} totalPrice={detail.totalPrice}></Receipt>
         </div>
       </Content>
     </Container>
