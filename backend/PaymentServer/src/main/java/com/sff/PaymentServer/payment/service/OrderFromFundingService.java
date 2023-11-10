@@ -1,6 +1,8 @@
 package com.sff.PaymentServer.payment.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
+import com.sff.PaymentServer.dto.OrderFromFundingResponse;
 import com.sff.PaymentServer.dto.PurposeCreateRequest;
 import com.sff.PaymentServer.error.code.NetworkError;
 import com.sff.PaymentServer.error.code.PaymentError;
@@ -13,6 +15,7 @@ import com.sff.PaymentServer.payment.repository.PaymentRecordRepository;
 import com.sff.PaymentServer.utils.ApiError;
 import com.sff.PaymentServer.utils.ApiResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,23 +27,25 @@ public class OrderFromFundingService {
     private final OrderClient orderClient;
     private final UserClient userClient;
 
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
     public void orderFromFunding(Long fundingId){
         // 주문 정보 추가 - 펀딩 id 로부터
-        Long orderId = createOrderRecord(fundingId);
+        OrderFromFundingResponse orderFromFundingResponse = createOrderRecord(fundingId);
 
         // 결제 상태 변경
-        updatePaymentState(fundingId, orderId);
+        updatePaymentState(fundingId, orderFromFundingResponse.getOrderId());
 
         // 주문 상태 변경 - 주문 성공 + 펀딩 주문 상태 변경
-        updateOrderState(fundingId, orderId);
+        updateOrderState(fundingId, orderFromFundingResponse.getOrderId());
 
         // 주문 접수 대기 알림(to 사장)
-
+        sendNotificationToOwner(orderFromFundingResponse.getStoreId());
 
     }
 
-    private Long createOrderRecord(Long fundingId){
-        ApiResult<Long> result;
+    private OrderFromFundingResponse createOrderRecord(Long fundingId){
+        ApiResult<OrderFromFundingResponse> result;
         try{
             result = orderClient.createOrderRecordFromFunding(fundingId);
         }catch (Exception e){
@@ -80,8 +85,16 @@ public class OrderFromFundingService {
         }
     }
 
-    // -----------------------------------------
+    private void sendNotificationToOwner(Long storeId){
+        try {
+            kafkaTemplate.send("notification-service-notify-store", String.valueOf(storeId));
+        }catch (Exception e){
+            throw new BaseException(new ApiError(PaymentError.ERROR_NOTIFICATION_REQUEST));
+        }
+    }
 
+    // -----------------------------------------
+    // 주문 취소 - 회원 주체
     public void cancelFromFunding(Long fundingId){
         PaymentRecord paymentRecord = paymentRecordRepository.findByFundingId(fundingId).orElseThrow(
                 ()->new BaseException(new ApiError(PaymentError.NOT_EXIST_PAYMENTRECORD)));
@@ -134,4 +147,6 @@ public class OrderFromFundingService {
             throw new BaseException(result.getApiError());
         }
     }
+
+
 }

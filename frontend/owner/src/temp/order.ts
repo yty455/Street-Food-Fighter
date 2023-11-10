@@ -2,7 +2,7 @@ export const orderservice = [
   {
     orderId: 2,
     receiptNumber: '1_20231106-2',
-    orderState: 'WAITING',
+    orderState: 'REFUSED',
     reviewState: 'NONE',
     requirement: '요청사항3',
     orderDate: '2023-11-06T16:17:53.735133',

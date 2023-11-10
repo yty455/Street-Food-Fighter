@@ -13,4 +13,15 @@ public class MenuStatsResponse {
     private int count;
     private Integer totalPrice;
 
+    public MenuStatsResponse(OrderItem orderItem) {
+        this.name = orderItem.getName();
+        this.count = orderItem.getCount();
+        this.totalPrice = orderItem.getMenuTotalPrice();
+    }
+
+    public MenuStatsResponse(OrderItem orderItem, MenuStatsResponse menuStatsResponse) {
+        this.name = orderItem.getName();
+        this.count = orderItem.getCount() + menuStatsResponse.getCount();
+        this.totalPrice = orderItem.getMenuTotalPrice() + menuStatsResponse.getTotalPrice();
+    }
 }

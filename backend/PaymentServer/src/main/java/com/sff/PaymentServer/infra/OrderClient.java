@@ -4,6 +4,7 @@ import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.FundingCreateResponse;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateResponse;
+import com.sff.PaymentServer.dto.OrderFromFundingResponse;
 import com.sff.PaymentServer.utils.ApiResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public interface OrderClient {
 
     // ---펀딩 -> 주문---
     @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
-    ApiResult<Long> createOrderRecordFromFunding(@PathVariable Long fundingId);
+    ApiResult<OrderFromFundingResponse> createOrderRecordFromFunding(@PathVariable Long fundingId);
 
     @PutMapping("/api/order-server/funding-to-order/{fundingId}/state-waiting/{orderId}")
     ApiResult updateFundingAndOrderState(@PathVariable Long fundingId, @PathVariable Long orderId);
@@ -39,4 +40,8 @@ public interface OrderClient {
     // ---펀딩 -> 주문 취소---
     @PutMapping("/api/order-server/fundings/{fundingId}/order-state/cancel")
     ApiResult updateFundingCancel(@PathVariable Long fundingId);
+
+    // ---주문 거절 ---
+    @PutMapping("/api/order-server/state-refused/{orderId}")
+    ApiResult<Long> updateOrderStateRefused(@PathVariable Long orderId);
 }

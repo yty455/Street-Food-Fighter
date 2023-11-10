@@ -1,6 +1,5 @@
 package com.sff.PaymentServer.config;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -35,12 +34,6 @@ public class KafkaConfig {
         return new KafkaAdmin(configs);
     }
 
-    // ------------------------ Publish 설정 -------------------------------------
-    @Bean
-    public NewTopic createStoreTopic() {
-        return new NewTopic("store-service-create-store", 1, (short) 1);
-    }
-
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -61,7 +54,7 @@ public class KafkaConfig {
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "store-service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-service");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);
