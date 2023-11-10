@@ -1,4 +1,4 @@
-import kakaomapApi from '@/apis/kakaoAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
 import { useEffect, useState } from 'react';
 const useCurrentLocation = (setAddressName: any, mapRef: any) => {
   const [position, setPosition] = useState({ lat: 35.08541957184095, lng: 128.87934499308867 });
