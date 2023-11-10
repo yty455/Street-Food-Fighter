@@ -29,10 +29,7 @@ const SignUpFourthPage = ({ params, ...props }: any) => {
       businessCategory,
       category,
     };
-    console.log(data);
     const result = await SignUpAPI(data);
-    console.log('===resutl===');
-    console.log(result);
     // router.push('/signup/5');
   };
   useEffect(() => {
