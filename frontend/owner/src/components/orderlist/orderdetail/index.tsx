@@ -1,6 +1,6 @@
 import Topbar from '@/components/common/topbar';
 import { orderdetail } from '@/temp/orderdetail';
-import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, RequestBox, Title } from './Orderdetail.styled';
+import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, TextBox, Title, ReviewList, ReviewScore } from './Orderdetail.styled';
 import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
 import Badge from '@/components/common/badge';
@@ -72,12 +72,22 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
         )}
         <div>
           <Title>요청사항</Title>
-          <RequestBox>{detail.requirement}</RequestBox>
+          <TextBox>{detail.requirement}</TextBox>
         </div>
         <div>
           <Title>메뉴정보</Title>
           <Receipt orderItemList={detail.orderItemList} totalPrice={detail.totalPrice}></Receipt>
         </div>
+
+        {order.orderState == 'COMPLETED' && (
+          <div>
+            <ReviewList>
+              <Title>리뷰</Title>
+              <ReviewScore>{detail.score}.0</ReviewScore>
+            </ReviewList>
+            <TextBox>{detail.content}</TextBox>
+          </div>
+        )}
       </Content>
     </Container>
   );

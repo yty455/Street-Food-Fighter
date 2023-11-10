@@ -67,7 +67,7 @@ const FlexRow = styled.div`
   flex-direction: row;
   align-items: center;
 `;
-const RequestBox = styled.div.attrs<any>((props) => ({}))`
+const TextBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const font = props.theme.fonts.air;
     const bgcolor = props.theme.colors.light;
@@ -86,4 +86,21 @@ const RequestBox = styled.div.attrs<any>((props) => ({}))`
 const Title = styled.div`
   font-size: 22px;
 `;
-export { Title, FlexRow, Container, Content, TableContainer, TableHeader, TableCell, RequestBox };
+
+const ReviewList = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+`;
+
+const ReviewScore = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    return css`
+      font-family: ${font};
+      font-size: 22px;
+    `;
+  }};
+`;
+export { Title, FlexRow, Container, Content, TableContainer, TableHeader, TableCell, TextBox, ReviewList, ReviewScore };
