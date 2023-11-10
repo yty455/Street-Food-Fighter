@@ -1,5 +1,7 @@
 package com.sff.userserver.domain.point.controller;
 
+import com.sff.userserver.domain.common.annotation.UserIdRequired;
+import com.sff.userserver.domain.common.aspect.UserIdHolder;
 import com.sff.userserver.domain.point.dto.PointAmountResponse;
 import com.sff.userserver.domain.point.dto.PointUpdateRequest;
 import com.sff.userserver.domain.point.service.PointService;
@@ -16,8 +18,9 @@ public class PointController {
     private final PointService pointService;
 
     @GetMapping("/me/points")
-    public ApiResult<?> getMyPoint() {
-        PointAmountResponse myPoint = pointService.getMyPoint(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> getMyPoint(UserIdHolder userIdHolder) {
+        PointAmountResponse myPoint = pointService.getMyPoint(userIdHolder.getUserId()); // TODO: 실제 인증된 회원의 ID 넣기
         return ApiUtils.success(myPoint);
     }
 
