@@ -75,8 +75,8 @@ const TimeSelectorStyle = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       flex-direction: column;
       align-items: start;
-      padding: 10px 30px;
       padding-top: 20px;
+      padding-bottom: 10px;
     `;
   }};
 `;
