@@ -14,7 +14,7 @@ const OrderCard = ({ order, onClick }: { order: Order; onClick: any }) => {
         {order.requirement.length > 0 && <RequireBox>요청 있음</RequireBox>}
       </FlexRow2>
       <FlexRow>
-        <StateBox>{ordermap[order.orderState]}</StateBox>
+        <StateBox type={order.orderState}>{ordermap[order.orderState]}</StateBox>
         <FlexRow>
           {order.orderMenuList.map((menuItem, index) => (
             <MenuList key={index}>

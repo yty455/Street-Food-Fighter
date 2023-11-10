@@ -28,8 +28,15 @@ const FlexRow2 = styled.div`
 const StateBox = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const main = props.theme.colors.main;
+    const white = props.theme.colors.white;
+    const red = props.theme.colors.red;
+    const green = props.theme.colors.green;
+    const bcolor = props.type === 'REFUSED' ? red : props.type === 'COMPLETED' ? green : main;
+    const bgcolor = props.type === 'REFUSED' || props.type === 'COMPLETED' ? white : main;
+
     return css`
-      background-color: ${main};
+      background-color: ${bgcolor};
+      border: 1px solid ${bcolor};
       width: 55px;
       height: 55px;
 
