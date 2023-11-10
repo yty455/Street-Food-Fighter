@@ -1,4 +1,4 @@
-import kakaomapApi from '@/apis/kakaoAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
 
 const handleRefreshClick = async (mapRef: any, setAddressName: any) => {
   const map = mapRef.current;
