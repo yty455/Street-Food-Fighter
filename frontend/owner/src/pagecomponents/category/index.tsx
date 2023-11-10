@@ -8,7 +8,7 @@ import { vendorcat } from '@/temp/category';
 import CategorySelector from '@/components/common/categoryselector';
 
 const CategoryPage = () => {
-  const initialCategoryName = categories.find((cat) => cat.type === vendorcat.category)?.name || null;
+  const initialCategoryName = vendorcat.category;
 
   const [selectedType, setSelectedType] = useState(vendorcat.businessCategory);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategoryName);
