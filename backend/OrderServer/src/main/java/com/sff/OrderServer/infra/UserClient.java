@@ -5,7 +5,7 @@ import com.sff.OrderServer.utils.ApiResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "userClient", url = "${spring.data.User_Server}")
+@FeignClient(name = "userClient", url = "${feign.userserver.url}")
 public interface UserClient {
 
     @GetMapping("/api/user-server/me")

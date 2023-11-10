@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "notificationClient", url = "${spring.data.Notification_Server}")
+@FeignClient(name = "notificationClient", url = "${feign.notiserver.url}")
 public interface NotificationClient {
 //    ex)
 //    @PutMapping("/api/user-server/{memberId}/points")

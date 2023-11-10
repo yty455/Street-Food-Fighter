@@ -45,6 +45,7 @@ import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -455,6 +456,24 @@ public class OrderService {
 
     public List<MenuStatsResponse> getStats(Long storeId) {
         List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
+        List<OrderRecord> orderList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId,
+                LocalDateTime.now());
+        HashMap<String, MenuStatsResponse> map = new HashMap<>();
+        for (OrderRecord orderRecord : orderList) {
+            for (OrderItem orderItem : getOrderMenusDetail(orderRecord.getBucket())) {
+                if (!map.containsKey(orderItem.getName())) {
+                    map.put(orderItem.getName(), new MenuStatsResponse(orderItem));
+                    continue;
+                }
+                map.put(orderItem.getName(),
+                        new MenuStatsResponse(orderItem, map.get(orderItem.getName())));
+            }
+        }
+
+        for (String key : map.keySet()) {
+            menuStatsResponseList.add(map.get(key));
+        }
+
         return menuStatsResponseList;
     }
 
