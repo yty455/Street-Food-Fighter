@@ -12,13 +12,11 @@ import java.time.LocalDate;
 public class FlagMSAResponse {
 
     private String storeName;
-    private String storeURL;
     private String flagAddress;
     private LocalDate date;
 
-    public FlagMSAResponse(String storeName, String storeURL, String flagAddress, LocalDate date) {
+    public FlagMSAResponse(String storeName, String flagAddress, LocalDate date) {
         this.storeName = storeName;
-        this.storeURL = storeURL;
         this.flagAddress = flagAddress;
         this.date = date;
     }

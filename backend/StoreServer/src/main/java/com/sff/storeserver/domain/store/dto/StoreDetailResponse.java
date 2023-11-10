@@ -30,7 +30,6 @@ public class StoreDetailResponse {
     private String activeArea;
     private String information;
     private String introduction;
-    private String storeUrl;
 
     private List<MenuInfoResponse> menuInfoResponseList;
     private Double score;
@@ -45,7 +44,6 @@ public class StoreDetailResponse {
                 .activeArea(store.getActiveArea())
                 .information(store.getInformation())
                 .introduction(store.getIntroduction())
-                .storeUrl(store.getStoreUrl())
                 .menuInfoResponseList(menuInfoResponseList)
                 .score(score)
                 .build();
