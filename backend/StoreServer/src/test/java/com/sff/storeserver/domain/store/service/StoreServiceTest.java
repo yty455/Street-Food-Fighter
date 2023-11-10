@@ -136,7 +136,6 @@ class StoreServiceTest extends IntegrationTestSupport {
 //                .areaPoint(new Point(48.87373649724122, 2.2954639195323967))
                 .lati(48.87373649724122)
                 .longi(2.2954639195323967)
-                .storeUrl("www.naver.com")
                 .build();
     }
 
@@ -156,7 +155,6 @@ class StoreServiceTest extends IntegrationTestSupport {
 //                .areaPoint(new Point(48.87373649724122, 2.2954639195323967))
                 .lati(lati)
                 .longi(longi)
-                .storeUrl("www.naver.com")
                 .build();
     }
 
