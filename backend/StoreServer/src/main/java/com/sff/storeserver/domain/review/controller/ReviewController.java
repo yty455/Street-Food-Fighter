@@ -53,7 +53,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "손님 - 가게에 등록된 리뷰 조회", description = "손님 - 가게에 등록된 리뷰를 조회 합니다.")
-    @GetMapping("/user/store/{storeId}/review")
+    @GetMapping("/store/{storeId}/review")
     public ApiResult<?> getStoreReviews(@PathVariable("storeId") Long storeId,
                                         @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
                                         @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
