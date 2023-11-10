@@ -18,7 +18,7 @@ public class UserIdAspect {
 
     @Before("@annotation(com.sff.userserver.domain.common.annotation.UserIdRequired)")
     public void getUserId(JoinPoint joinPoint) {
-        String userIdHeader = request.getHeader("userId");
+        String userIdHeader = request.getHeader("UserId");
         if (userIdHeader == null) {
             throw new BaseException(new ApiError("request header 에 userId가 없습니다", 1000));
         }
