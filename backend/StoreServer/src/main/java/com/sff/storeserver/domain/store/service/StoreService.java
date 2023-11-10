@@ -3,6 +3,7 @@ package com.sff.storeserver.domain.store.service;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
+import com.sff.storeserver.common.feignClient.PayClient;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
@@ -32,6 +33,8 @@ public class StoreService {
     private final ReviewRepository reviewRepository;
 
     private final OrderClient orderClient;
+    private final PayClient payClient;
+
 
     @Transactional
     public void createStore(StoreInfo storeInfo) {
@@ -152,7 +155,7 @@ public class StoreService {
             });
 
             // 깃발에 펀딩한 유저에게 알림 전송
-            orderClient.notifyFlag(flagNotificationInfo);
+            payClient.notifyFlag(flagNotificationInfo);
         }
         store.startBusiness(lati, longi, activeArea);
 
