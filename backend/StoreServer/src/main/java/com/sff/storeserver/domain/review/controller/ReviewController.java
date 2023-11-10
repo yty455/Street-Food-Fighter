@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "리뷰 API", description = "리뷰 관련 API")
 @RestController
+@RequestMapping("/api/store-service")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     @Operation(summary = "손님 - 리뷰 등록", description = "손님 - 리뷰를 등록 합니다.")
-    @PostMapping("/api/store-server/review")
+    @PostMapping("/review")
     public ApiResult<?> createReview(@Valid @RequestBody ReviewRequest reviewRequest, BindingResult bindingResult) {
 
         // 예외처리
@@ -37,10 +38,10 @@ public class ReviewController {
     }
 
     @Operation(summary = "손님 - 내가 쓴 리뷰 조회", description = "손님 - 내가 쓴 리뷰를 조회 합니다.")
-    @GetMapping("/api/store-server/user/{userId}/review")
+    @GetMapping("/user/{userId}/review")
     public ApiResult<?> getMyReviews(@PathVariable("userId") Long userId,
-                                     @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
-                                     @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
+            @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
+            @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
 
         Page<MyReviewResponse> myReviewResponseList = reviewService.getMyReviews(userId, page, size);
 
@@ -48,10 +49,10 @@ public class ReviewController {
     }
 
     @Operation(summary = "손님 - 가게에 등록된 리뷰 조회", description = "손님 - 가게에 등록된 리뷰를 조회 합니다.")
-    @GetMapping("/api/store-server/user/store/{storeId}/review")
+    @GetMapping("/user/store/{storeId}/review")
     public ApiResult<?> getStoreReviews(@PathVariable("storeId") Long storeId,
-                                        @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
-                                        @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
+            @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
+            @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
 
         Slice<StoreReviewResponse> storeReviewResponseList = reviewService.getStoreReviews(storeId, page, size);
 
