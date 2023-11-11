@@ -1,5 +1,7 @@
 package com.sff.storeserver.domain.store.controller;
 
+import com.sff.storeserver.common.aop.UserIdHolder;
+import com.sff.storeserver.common.aop.UserIdRequired;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.MenuInfo;
@@ -17,9 +19,10 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
-    @PostMapping("/menus/{storeId}")
-    public ApiResult<String> createMenus(@PathVariable Long storeId, @Valid @RequestBody MenuInfo menuInfo) {
-        menuService.createMenus(menuInfo, storeId);
+    @PostMapping("/menus")
+    @UserIdRequired
+    public ApiResult<String> createMenus(UserIdHolder userIdHolder, @Valid @RequestBody MenuInfo menuInfo) {
+        menuService.createMenus(menuInfo, userIdHolder.getUserId());
         return ApiUtils.success("상품 추가를 성공했습니다.");
     }
 

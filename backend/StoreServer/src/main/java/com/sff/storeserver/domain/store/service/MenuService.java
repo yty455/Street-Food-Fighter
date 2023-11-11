@@ -24,8 +24,9 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public void createMenus(MenuInfo menuInfo, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() ->
+    public void createMenus(MenuInfo menuInfo, Long ownerId) {
+
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE)
         );
         Menu menu = menuInfo.toEntity();
