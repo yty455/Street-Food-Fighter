@@ -81,13 +81,6 @@ public class FundingController {
         return ApiUtils.success("펀딩 상태 대기 중으로 변경 및 바구니 결제 상태 true로 변경 완료");
     }
 
-    // 펀딩 성공 / 실패 알림 보내기 요청
-    @PutMapping("/api/order-server/fundings/chosen")
-    public ApiResult<?> updateFundingStates(@RequestBody FundingChosen fundingChosen){
-        fundingService.updateFundingStates(fundingChosen);
-        return ApiUtils.success("펀딩 성공, 실패 상태 변경 완료 및 알림 전송 요청 성공");
-    }
-
     // 깃발 별 펀딩 총 금액 요청
     @PostMapping("/api/order-server/fundings/flags")
     public ApiResult<?> getFundingAmountPerFlag(@RequestBody FlagList flags){
@@ -101,10 +94,17 @@ public class FundingController {
     }
 
     // 미선택 깃발의 펀딩 리스트 조회
-    @GetMapping("/api/order-server/fundings/chosen")
+    @PostMapping("/api/order-server/fundings/chosen")
     public ApiResult<?> getFundingPerFlags(@RequestBody FundingChosen fundingChosen){
         return ApiUtils.success(fundingService.getUnpickedFlagFundings(fundingChosen));
     }
 
+    // 펀딩 성공 / 실패 알림 보내기 요청
+    @PutMapping("/api/order-server/fundings/chosen")
+    public ApiResult<?> updateFundingStates(@RequestBody FundingChosen fundingChosen){
+        fundingService.updateFundingStates(fundingChosen);
+        fundingService.sendFundingResultToUsers(fundingChosen);
+        return ApiUtils.success("펀딩 성공, 실패 상태 변경 완료 및 알림 전송 요청 성공");
+    }
 
 }

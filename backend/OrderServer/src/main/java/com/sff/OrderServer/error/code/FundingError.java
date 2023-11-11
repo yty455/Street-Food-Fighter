@@ -14,7 +14,9 @@ public enum FundingError implements ServiceError {
     UPDATE_FUNDINGSTATE_ERROR(3604, "펀딩 상태 변경에 실패하였습니다."),
     UPDATE_FUNDING_ORDERSTATE_ERROR(3605, "펀딩 주문 상태 변경에 실패하였습니다."),
     FAILED_UPDATE_STATE_ORDER_COMPLETED(3606, "주문 완료 상태로의 펀딩 상태 변경에 실패했습니다"),
-    FAILED_UPDATE_STATE_AND_ORDER_STATE(3607, "펀딩 상태 및 주문 상태 변경에 실패했습니다. ")
+    FAILED_UPDATE_STATE_AND_ORDER_STATE(3607, "펀딩 상태 및 주문 상태 변경에 실패했습니다. "),
+    SERIAL_ERROR(3608, "객체 직렬화 실패"),
+    ERROR_NOTIFICATION_REQUEST(3609, "알림 요청 에러")
     ;
 
     private final int code;
