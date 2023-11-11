@@ -14,8 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MyInfoRequest {
     @Size(min = 1, max = 10, message = "닉네임은 10자까지 가능합니다.")
     private String nickname;
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "올바른 휴대폰 번호를 입력해주세요.")
+    @Pattern(regexp = "^010-\\d{4}-\\d{4}$", message = "올바른 휴대폰 번호를 입력해주세요.")
     private String phone;
+    @Pattern(regexp = "^$|^(http://|https://).*$", message = "올바른 이미지 URL을 입력해주세요.")
     private String imageUrl;
     private String region1;
     private String region2;

@@ -37,6 +37,7 @@ public class Member {
     private SocialType socialType; // KAKAO
     private String socialId;
     private String refreshToken;
+    private String fcmToken;
     @Embedded
     private Address address;
     @OneToOne(fetch = FetchType.LAZY)
@@ -46,7 +47,7 @@ public class Member {
     private List<Wishlist> wishlists = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String region1, String region2, String region3, String region4, Point point) {
+    public Member(String email, String password, String nickname, String phone, String imageUrl, Role role, SocialType socialType, String socialId, String refreshToken, String fcmToken, String region1, String region2, String region3, String region4, Point point) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -57,6 +58,7 @@ public class Member {
         this.socialType = socialType;
         this.socialId = socialId;
         this.refreshToken = refreshToken;
+        this.fcmToken = fcmToken;
         this.address = new Address(region1, region2, region3, region4);
         this.point = point;
     }
@@ -78,10 +80,15 @@ public class Member {
     }
 
     public void update(SignupRequest signupRequest) {
+        updateFcmToken(signupRequest.getFcmToken());
         updateNickname(signupRequest.getNickname());
         updatePhone(signupRequest.getPhone());
         updateImageUrl(signupRequest.getImageUrl());
         updateAddress(signupRequest.getRegion1(), signupRequest.getRegion2(), signupRequest.getRegion3(), signupRequest.getRegion4());
+    }
+
+    private void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
 
