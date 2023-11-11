@@ -10,7 +10,7 @@ const NameBox = styled.div`
 const CategoryBox = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 0px;
+  margin: 15px 0px;
 `;
 
 const CountBox = styled.div`
@@ -44,6 +44,8 @@ const Bar = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       border-radius: 0px 10px 10px 0px;
       align-items: center;
+
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     `;
   }};
 `;

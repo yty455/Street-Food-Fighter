@@ -43,7 +43,9 @@ const ContentNo = styled.div`
 `;
 
 const ChartContainer = styled.div`
-  padding: 10px 20px;
+  padding: 20px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
 `;
 const ChartTitle = styled.div`
   display: flex;
