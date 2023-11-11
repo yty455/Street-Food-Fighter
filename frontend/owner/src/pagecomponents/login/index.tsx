@@ -20,7 +20,7 @@ const LoginPage = () => {
         <InputWrapper>
           <Input use="info" placeholder="이메일을 입력해주세요" label="로그인이 필요해요 :)"></Input>
         </InputWrapper>
-        <InputWrapper marginTop="30px">
+        <InputWrapper margintop="30px">
           <Input use="info" placeholder="비밀번호를 입력해주세요"></Input>
         </InputWrapper>
         <ButtonList>
@@ -28,7 +28,7 @@ const LoginPage = () => {
             <RoundBtn text="시작하기"></RoundBtn>
           </ButtonWrapper>
           <ButtonWrapper>
-            <RoundBtn onClick={moveRegisterPage} text="회원가입" borderSize="1px" color="white"></RoundBtn>
+            <RoundBtn onClick={moveRegisterPage} text="회원가입" bordersize="1px" color="white"></RoundBtn>
           </ButtonWrapper>
         </ButtonList>
       </BodyStyle>
