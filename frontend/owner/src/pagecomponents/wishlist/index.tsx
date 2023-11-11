@@ -3,10 +3,25 @@ import Topbar from '@/components/common/topbar';
 import { wishlist } from '@/temp/wishlist';
 import { TextNo, SubTextNo, StyledLocation, ContentNo } from './WishList.styled';
 import { useState } from 'react';
+import useModal from '@/hooks/common/modal.hook';
+import SearchPlace from '@/components/common/searchplace';
+import kakaoAddressAPI from '@/apis/kakao/kakaoAddressAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
 
 const WishListPage = () => {
   const wishes = wishlist;
+
   const [address, setAddress] = useState('');
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const handleSelectPlace = async (x: any, y: any) => {
+    const addressName = await kakaomapApi({ latitude: y, longitude: x });
+    if (addressName) {
+      setAddress(addressName);
+    }
+    closeModal();
+  };
+
   const findCountByType = (type: any) => {
     const item = wishes.find((item) => item.foodType === type);
     return item ? item.count : 0;
@@ -18,7 +33,7 @@ const WishListPage = () => {
   return (
     <div>
       <Topbar text="지역별 통계" />
-      <StyledLocation>{address.length > 0 ? `지역명 : ${address}` : '지역 검색 하러가기'}</StyledLocation>
+      <StyledLocation onClick={() => openModal()}>{address.length > 0 ? `지역명 : ${address}` : '지역 검색 하러가기'}</StyledLocation>
       {address.length == 0 ? (
         <ContentNo>
           <div>
@@ -51,6 +66,7 @@ const WishListPage = () => {
           })}
         </div>
       )}
+      {isModalOpen && <SearchPlace onClose={closeModal} onSelectPlace={handleSelectPlace} />}
     </div>
   );
 };
