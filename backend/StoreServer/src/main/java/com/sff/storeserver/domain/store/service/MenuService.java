@@ -24,8 +24,9 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public void createMenus(MenuInfo menuInfo, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() ->
+    public void createMenus(MenuInfo menuInfo, Long ownerId) {
+
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE)
         );
         Menu menu = menuInfo.toEntity();
@@ -38,16 +39,22 @@ public class MenuService {
         return menus.stream().map(MenuInfoResponse::fromEntity).toList();
     }
 
-    public void updateMenus(MenuInfo menuInfo, Long menuId) {
+    public void updateMenus(MenuInfo menuInfo, Long menuId, Long ownerId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
                 new BaseException(MenuError.NOT_FOUND_MENU)
         );
+        if (menu.getStore().getOwnerId() != ownerId) {
+            throw new BaseException(MenuError.NOT_STORE_OWNER);
+        }
         menu.updateMenu(menuInfo);
     }
 
-    public void deleteMenus(Long menuId) {
+    public void deleteMenus(Long menuId, Long ownerId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
                 new BaseException(MenuError.NOT_FOUND_MENU));
+        if (menu.getStore().getOwnerId() != ownerId) {
+            throw new BaseException(MenuError.NOT_STORE_OWNER);
+        }
         menu.delete();
     }
 }
