@@ -14,7 +14,7 @@ const OperButton = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       background-color: ${bgcolor};
       width: 50vw;
-      height: 150px;
+      height: 43vw;
       justify-content: center;
       align-items: center;
 
@@ -47,11 +47,9 @@ const MenuList = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       justify-content: space-evenly;
-      align-content: stretch;
+      align-content: space-around;
       flex-wrap: wrap;
-
-      height: calc(100vh - 150px);
-      padding-top: 40px;
+      height: calc(100vh - 43vw);
     `;
   }};
 `;
@@ -67,8 +65,8 @@ const Menu = styled.div.attrs<any>((props) => ({}))`
       justify-content: center;
       background-color: ${white};
       border-radius: 10px;
-      width: 45vw;
-      height: 45vw;
+      width: 43vw;
+      height: 43vw;
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
       gap: 20px;
 
