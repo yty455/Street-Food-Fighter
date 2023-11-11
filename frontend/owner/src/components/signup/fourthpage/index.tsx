@@ -6,15 +6,34 @@ import useSignUpPageStore from '@/stores/signUpStore';
 import { categories } from '@/assets/category';
 import Select from '@/components/common/select';
 import CategorySelector from '@/components/common/categoryselector';
+import SignUpAPI from '@/apis/signup/SignUpAPI';
 
 const SignUpFourthPage = ({ params, ...props }: any) => {
   const router = useRouter();
   const { businessCategory, category, setRegisterValue } = useSignUpPageStore();
-
+  const { email, password, storeName, name, bank, phone, accountNumber, openHour, openMinute, closeHour, closeMinute } = useSignUpPageStore();
   const initialCategoryName = categories.find((cat) => cat.type === 'HOTTEOK')?.name || null;
 
-  const moveNextPage = () => {
-    router.push('/signup/5');
+  const moveNextPage = async () => {
+    const data = {
+      email,
+      password,
+      name,
+      phone,
+      bank,
+      accountNumber,
+      fcmToken: '',
+      storeName,
+      openTime: openHour + ':' + openMinute,
+      closeTime: closeHour + ':' + closeMinute,
+      businessCategory,
+      category,
+    };
+    console.log(data);
+    const result = await SignUpAPI(data);
+    console.log('===resutl===');
+    console.log(result);
+    // router.push('/signup/5');
   };
   useEffect(() => {
     console.log(category);
