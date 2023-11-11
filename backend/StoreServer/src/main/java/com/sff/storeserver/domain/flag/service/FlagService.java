@@ -35,10 +35,10 @@ public class FlagService {
     private final OrderClient orderClient;
 
     @Transactional
-    public Long createFlag(FlagRequest flagRequest) {
-        Store findStore = storeRepository.findById(flagRequest.getStoreId())
+    public Long createFlag(Long ownerId, FlagRequest flagRequest) {
+        Store findStore = storeRepository.findById(ownerId)
                 .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
-
+        flagRequest.setStoreId(findStore.getId());
         return flagRepository.save(flagRequest.toEntity(findStore)).getId();
     }
 
@@ -58,12 +58,14 @@ public class FlagService {
     }
 
 
-    public FlagDetailResponse getFlagDetail(Long storeId, Long flagId) {
+    public FlagDetailResponse getFlagDetail(Long ownerId, Long flagId) {
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
         Flag flag = flagRepository.findById(flagId)
                 .orElseThrow(() -> new BaseException(FlagError.NOT_FOUND_FLAG));
 
         // 가게 ID를 받을 필요가 있는지,,,
-        if (flag.getStore().getId() != storeId) {
+        if (flag.getStore().getId() != store.getId()) {
             throw new BaseException(StoreError.NOT_FOUND_STORE);
         }
 
