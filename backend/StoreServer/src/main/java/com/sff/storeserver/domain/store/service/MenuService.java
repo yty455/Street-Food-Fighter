@@ -39,16 +39,22 @@ public class MenuService {
         return menus.stream().map(MenuInfoResponse::fromEntity).toList();
     }
 
-    public void updateMenus(MenuInfo menuInfo, Long menuId) {
+    public void updateMenus(MenuInfo menuInfo, Long menuId, Long ownerId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
                 new BaseException(MenuError.NOT_FOUND_MENU)
         );
+        if (menu.getStore().getOwnerId() != ownerId) {
+            throw new BaseException(MenuError.NOT_STORE_OWNER);
+        }
         menu.updateMenu(menuInfo);
     }
 
-    public void deleteMenus(Long menuId) {
+    public void deleteMenus(Long menuId, Long ownerId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() ->
                 new BaseException(MenuError.NOT_FOUND_MENU));
+        if (menu.getStore().getOwnerId() != ownerId) {
+            throw new BaseException(MenuError.NOT_STORE_OWNER);
+        }
         menu.delete();
     }
 }

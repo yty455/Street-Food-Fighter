@@ -32,14 +32,16 @@ public class MenuController {
     }
 
     @PutMapping("/menus/{menuId}")
-    public ApiResult<String> addOptions(@PathVariable Long menuId, @Valid @RequestBody MenuInfo menuInfo) {
-        menuService.updateMenus(menuInfo, menuId);
+    @UserIdRequired
+    public ApiResult<String> addOptions(UserIdHolder userIdHolder, @PathVariable Long menuId, @Valid @RequestBody MenuInfo menuInfo) {
+        menuService.updateMenus(menuInfo, menuId, userIdHolder.getUserId());
         return ApiUtils.success("메뉴 수정을 성공했습니다.");
     }
 
     @DeleteMapping("/menus/{menuId}")
-    public ApiResult<String> deleteOptions(@PathVariable Long menuId) {
-        menuService.deleteMenus(menuId);
+    @UserIdRequired
+    public ApiResult<String> deleteOptions(UserIdHolder userIdHolder, @PathVariable Long menuId) {
+        menuService.deleteMenus(menuId, userIdHolder.getUserId());
         return ApiUtils.success("메뉴 삭제를 성공했습니다.");
     }
 }
