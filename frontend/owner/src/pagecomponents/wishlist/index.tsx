@@ -1,16 +1,12 @@
-import { categories } from '@/assets/category';
 import Topbar from '@/components/common/topbar';
-import { wishlist } from '@/temp/wishlist';
-import { TextNo, SubTextNo, StyledLocation, ContentNo } from './WishList.styled';
+import { TextNo, SubTextNo, StyledLocation, ContentNo, ChartContainer, ChartTitleFood, ChartTitle, ChartTitlePeople } from './WishList.styled';
 import { useState } from 'react';
 import useModal from '@/hooks/common/modal.hook';
 import SearchPlace from '@/components/common/searchplace';
-import kakaoAddressAPI from '@/apis/kakao/kakaoAddressAPI';
 import kakaomapApi from '@/apis/kakao/kakaoAPI';
+import Chart from '@/components/wishlist/chart';
 
 const WishListPage = () => {
-  const wishes = wishlist;
-
   const [address, setAddress] = useState('');
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -21,14 +17,6 @@ const WishListPage = () => {
     }
     closeModal();
   };
-
-  const findCountByType = (type: any) => {
-    const item = wishes.find((item) => item.foodType === type);
-    return item ? item.count : 0;
-  };
-
-  // 최대 count 찾기
-  const maxCount = Math.max(...wishlist.map((item) => item.count), 0);
 
   return (
     <div>
@@ -45,26 +33,13 @@ const WishListPage = () => {
           </div>
         </ContentNo>
       ) : (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px 0', fontWeight: 'bold' }}>
-            <span>음식이름</span>
-            <span style={{ marginRight: '210px' }}>희망손님수</span>
-          </div>
-          {categories.map((category) => {
-            const count = findCountByType(category.type);
-            const barWidth = maxCount ? (count / maxCount) * 100 : 0; // 최대 길이에 대한 비율로 너비 계산
-
-            return (
-              <div key={category.id} style={{ margin: '10px 0' }}>
-                <span style={{ marginRight: '10px' }}>{category.name}:</span>
-                <div style={{ display: 'inline-block', width: '200px', backgroundColor: '#ddd' }}>
-                  <div style={{ height: '20px', width: `${barWidth}%`, backgroundColor: 'blue' }}></div>
-                </div>
-                <span style={{ marginLeft: '10px' }}>{count}개</span>
-              </div>
-            );
-          })}
-        </div>
+        <ChartContainer>
+          <ChartTitle>
+            <ChartTitleFood>음식 이름</ChartTitleFood>
+            <ChartTitlePeople>희망손님수</ChartTitlePeople>
+          </ChartTitle>
+          <Chart address={address} />
+        </ChartContainer>
       )}
       {isModalOpen && <SearchPlace onClose={closeModal} onSelectPlace={handleSelectPlace} />}
     </div>

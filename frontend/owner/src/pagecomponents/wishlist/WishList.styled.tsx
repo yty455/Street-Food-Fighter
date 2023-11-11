@@ -41,4 +41,24 @@ const ContentNo = styled.div`
   height: 50vh;
   gap: 10px;
 `;
-export { StyledLocation, TextNo, SubTextNo, ContentNo };
+
+const ChartContainer = styled.div`
+  padding: 10px 20px;
+`;
+const ChartTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const ChartTitleFood = styled.div`
+  width: 100px;
+  font-size: 18px;
+  border-bottom: 0.6px solid black;
+  text-align: center;
+`;
+const ChartTitlePeople = styled.div`
+  width: calc(100vw - 160px);
+  font-size: 18px;
+  border-bottom: 0.6px solid black;
+  text-align: center;
+`;
+export { ChartTitle, ChartContainer, StyledLocation, TextNo, SubTextNo, ContentNo, ChartTitleFood, ChartTitlePeople };
