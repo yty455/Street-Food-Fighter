@@ -78,7 +78,11 @@ const MainPage = () => {
           <img src="/images/main/list.png" style={{ width: '75px' }} />
           <div>주문 목록</div>
         </Menu>
-        <Menu>
+        <Menu
+          onClick={() => {
+            router.push('/wishlist');
+          }}
+        >
           <img src="/images/main/graph.png" style={{ width: '75px' }} />
           <div>지역 통계</div>
         </Menu>
