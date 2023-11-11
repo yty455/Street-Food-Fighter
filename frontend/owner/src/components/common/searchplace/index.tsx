@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ModalOverlay, List, SearchTop, TopTitle, SearchBar, SearchText, Place, BoldText, LightText, NoResult } from './Searchplace.styled';
-import useKakaoSearchHook from '@/hooks/flagset/searchplace.hook';
+import useKakaoSearchHook from '@/hooks/common/searchplace.hook';
 
 const SearchPlace = ({ onClose, onSelectPlace }: any) => {
   const [query, setQuery] = useState('');

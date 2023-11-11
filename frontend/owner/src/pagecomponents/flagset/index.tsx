@@ -1,4 +1,3 @@
-import SearchPlace from '@/components/flagset/searchplace';
 import useCurrentLocation from '@/hooks/flagset/current.hook';
 import useSetPlaceHook from '@/hooks/flagset/setplace.hook';
 import { useState, useRef } from 'react';
@@ -8,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 import { MarkerPosition } from '@/types/map.type';
 import SettingBox from '@/components/flagset/settingbox';
+import SearchPlace from '@/components/common/searchplace';
 
 const FlagSetPage = () => {
   const [addressName, setAddressName] = useState('');
