@@ -2,9 +2,11 @@ package com.sff.PaymentServer.payment.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.sff.PaymentServer.dto.FundingChosen;
+import com.sff.PaymentServer.dto.FundingList;
 import com.sff.PaymentServer.dto.NotificationType;
-import com.sff.PaymentServer.dto.PurposeCreateRequest;
+import com.sff.PaymentServer.dto.PointUpdateRequest;
 import com.sff.PaymentServer.dto.UserInfo;
 import com.sff.PaymentServer.dto.UserNotificationInfo;
 import com.sff.PaymentServer.error.code.NetworkError;
@@ -35,6 +37,7 @@ public class RefundService {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     // 사장의 주문 접수 거절에 따른 화불 처리
+    @Transactional
     public void refundFromReject(Long orderId){
         PaymentRecord paymentRecord = paymentRecordRepository.findByOrderId(orderId).orElseThrow(
                 ()->new BaseException(new ApiError(PaymentError.NOT_EXIST_PAYMENTRECORD)));
@@ -55,7 +58,7 @@ public class RefundService {
     private void refund(PaymentRecord paymentRecord){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(paymentRecord.getUserId(), new PurposeCreateRequest(
+            result = userClient.updateUserPoint(paymentRecord.getUserId(), new PointUpdateRequest(
                     paymentRecord.getPrice(), true));
         }catch (Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
@@ -109,8 +112,70 @@ public class RefundService {
 
     // -----------------------------------
     // 미선택 깃발 리스트의 환불 처리 및 펀딩 상태 변경 + 알림 요청 처리
+    @Transactional
     public void updateUnpickedFundingsRefundAndAllFlagsState(FundingChosen fundingChosen){
+        // 선택, 미선택 깃발의 펀딩 리스트 조회 -> fundingId 리스트 리턴
+        List<Long> unpickedFundings = getFundingPerFlags(fundingChosen);
 
+        // 미선택 깃발 펀딩 전체 환불
+        List<PaymentRecord> paymentRecords = paymentRecordRepository.findAllByFundingIdIn(unpickedFundings);
+        refundingToUsers(paymentRecords);
+
+        // 결제 정보 수정
+        updatePaymentRecordState(paymentRecords);
+
+        // 펀딩 성공/실패 상태 변경 요청 + 알림 전송 요청
+        updateFundings(fundingChosen);
     }
 
+    private List<Long> getFundingPerFlags(FundingChosen fundingChosen){
+        ApiResult<FundingList> result;
+        try {
+            result = orderClient.getFundingPerFlags(fundingChosen);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse().getFundings();
+    }
+
+    private void refundingToUsers(List<PaymentRecord> paymentRecords){
+        for(PaymentRecord paymentRecord : paymentRecords){
+            ApiResult result;
+            try{
+                result = userClient.updateUserPoint(paymentRecord.getUserId(), new PointUpdateRequest(paymentRecord.getPrice(), true));
+            }catch (Exception e){
+                throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
+            }
+            if(result.getSuccess()==false){
+                throw new BaseException(result.getApiError());
+            }
+        }
+    }
+
+    @Transactional
+    private void updatePaymentRecordState(List<PaymentRecord> paymentRecords){
+        try{
+            for(PaymentRecord paymentRecord : paymentRecords){
+                paymentRecord.updateState(PaymentState.REFUND);
+            }
+            paymentRecordRepository.saveAll(paymentRecords);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(PaymentError.ERROR_PAYMENT_STATE_CHANGE));
+        }
+    }
+
+    private void updateFundings(FundingChosen fundingChosen){
+        ApiResult result;
+        try{
+            result = orderClient.updateFundings(fundingChosen);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+    }
 }

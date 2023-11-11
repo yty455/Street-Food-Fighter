@@ -1,9 +1,7 @@
 package com.sff.PaymentServer.payment.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.sff.PaymentServer.dto.OrderFromFundingResponse;
-import com.sff.PaymentServer.dto.PurposeCreateRequest;
+import com.sff.PaymentServer.dto.PointUpdateRequest;
 import com.sff.PaymentServer.error.code.NetworkError;
 import com.sff.PaymentServer.error.code.PaymentError;
 import com.sff.PaymentServer.error.type.BaseException;
@@ -29,6 +27,7 @@ public class OrderFromFundingService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    @Transactional
     public void orderFromFunding(Long fundingId){
         // 주문 정보 추가 - 펀딩 id 로부터
         OrderFromFundingResponse orderFromFundingResponse = createOrderRecord(fundingId);
@@ -63,7 +62,6 @@ public class OrderFromFundingService {
     private void updatePaymentState(Long fundingId, Long orderId){
         PaymentRecord paymentRecord = paymentRecordRepository.findByFundingId(fundingId).orElseThrow(
                 ()->new BaseException(new ApiError(PaymentError.NOT_EXIST_PAYMENTRECORD)));
-
         try{
             paymentRecord.updateState(PaymentState.ORDER);
             paymentRecord.updateOrderId(orderId);
@@ -80,7 +78,7 @@ public class OrderFromFundingService {
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
         }
 
-        if(result.getSuccess()){
+        if(result.getSuccess()==false){
             throw new BaseException(result.getApiError());
         }
     }
@@ -95,6 +93,7 @@ public class OrderFromFundingService {
 
     // -----------------------------------------
     // 주문 취소 - 회원 주체
+    @Transactional
     public void cancelFromFunding(Long fundingId){
         PaymentRecord paymentRecord = paymentRecordRepository.findByFundingId(fundingId).orElseThrow(
                 ()->new BaseException(new ApiError(PaymentError.NOT_EXIST_PAYMENTRECORD)));
@@ -116,7 +115,7 @@ public class OrderFromFundingService {
         ApiResult result;
         try {
             result = userClient.updateUserPoint(userId,
-                    new PurposeCreateRequest((int) Math.floor(price * 0.9), true));
+                    new PointUpdateRequest((int) Math.floor(price * 0.9), true));
         }catch(Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
         }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurposeCreateRequest {
+public class PointUpdateRequest {
     private Integer amount;
     private Boolean isCharge;
 }

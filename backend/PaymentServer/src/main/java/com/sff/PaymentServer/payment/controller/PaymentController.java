@@ -57,9 +57,12 @@ public class PaymentController {
         return ApiUtils.success("주문 접수 거절에 따른 환불 처리 완료");
     }
 
+    // ---MSA---
     @PutMapping("/api/payment_server/flags/chosen")
-    public ApiResult<?> updateFundingsChosen(@RequestHeader("UserId") Long userId, @RequestBody FundingChosen flags){
+    public ApiResult<?> updateFundingsChosen(@RequestBody FundingChosen flags){
         refundService.updateUnpickedFundingsRefundAndAllFlagsState(flags);
         return ApiUtils.success("미선택 깃발의 펀딩 환불 처리 및 전체 펀딩들의 선택, 미선택에 따른 상태 변경 및 알림 요청 완료");
     }
+
+
 }
