@@ -16,7 +16,7 @@ import java.util.List;
 @FeignClient(name = "orderserver", url = "${feign.orderserver.url}")
 public interface OrderClient {
     @GetMapping(value = "/api/order-server/{orderId}")
-    ApiResult<Long> getStoreId(@PathVariable Long orderId);
+    ApiResult<Long> getStoreId(@PathVariable("orderId") Long orderId);
 
     @PostMapping(value = "/api/order-server/menus")
     ApiResult<List<ReviewMenuInfo>> getMenus(@RequestBody List<Long> orderIds);
@@ -25,5 +25,5 @@ public interface OrderClient {
     ApiResult<List<FlagFundingInfo>> getFundingAmount(@RequestBody FlagFundingRequest flagFundingRequest);
 
     @GetMapping(value = "/api/order-server/fundings/flags/{flagId}/users")
-    ApiResult<List<FundingUserInfo>> getFundingUsers(@PathVariable Long flagId);
+    ApiResult<List<FundingUserInfo>> getFundingUsers(@PathVariable("flagId") Long flagId);
 }
