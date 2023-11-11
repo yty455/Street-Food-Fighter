@@ -1,22 +1,9 @@
 import api from '../api';
 
-const SignUpAPI = async () => {
+const SignUpAPI = async (data: any) => {
   try {
-    const body = {
-      email: 'owner@owner.com',
-      password: '1234',
-      name: '테스트사장',
-      phone: '010-0000-1111',
-      bank: '싸피뱅크',
-      accountNumber: '123-123-12345-161445',
-      fcmToken: '',
-      storeName: '미친붕어빵',
-      openTime: '10:00',
-      closeTime: '18:00',
-      businessCategory: '포장마차',
-      category: '호떡',
-    };
-    const response = await api.post(`/api/owner-server/sign-up`, body, {
+    console.log(data);
+    const response = await api.post(`/api/owner-server/sign-up`, data, {
       headers: {},
     });
     console.log(response.data);

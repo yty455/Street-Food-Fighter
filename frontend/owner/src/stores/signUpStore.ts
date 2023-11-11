@@ -14,6 +14,7 @@ type RegisterState = {
   closeMinute: number;
   businessCategory: string;
   category: string;
+  storeName: string;
   setRegisterValue: <K extends keyof RegisterState>(field: K, value: RegisterState[K]) => void;
 };
 
@@ -31,6 +32,7 @@ const useRegisterPageStore = create<RegisterState>((set) => ({
   closeMinute: 0,
   businessCategory: '포장마차',
   category: 'HOTTEOK',
+  storeName: '',
   setRegisterValue: (field, value) => set((state) => ({ ...state, [field]: value })),
 }));
 
