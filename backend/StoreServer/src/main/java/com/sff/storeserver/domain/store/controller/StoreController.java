@@ -51,7 +51,8 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
-    @PatchMapping("/store")
+    @PatchMapping("/stores")
+    @UserIdRequired
     public ApiResult<String> updateStore(UserIdHolder userIdHolder, @RequestBody StoreUpdateInfo storeUpdateInfo) {
         storeService.updateStore(storeUpdateInfo, userIdHolder.getUserId());
         return ApiUtils.success("가게 정보 수정을 성공했습니다.");
@@ -59,6 +60,7 @@ public class StoreController {
 
     @Operation(summary = "사장 - 가게 카테고리, 업태 조회", description = "가게 카테고리, 업태를 조회합니다.")
     @GetMapping("/stores/categories")
+    @UserIdRequired
     public ApiResult<StoreUpdateCategory> getStoreCategory(UserIdHolder userIdHolder) {
         StoreUpdateCategory storeUpdateCategory = storeService.getStoreCategory(userIdHolder.getUserId());
         return ApiUtils.success(storeUpdateCategory);
@@ -66,6 +68,7 @@ public class StoreController {
 
     @Operation(summary = "사장 - 가게 카테고리, 업태 수정", description = "가게 카테고리, 업태를 수정합니다.")
     @PatchMapping("/stores/categories")
+    @UserIdRequired
     public ApiResult<String> updateStoreCategory(UserIdHolder userIdHolder, @RequestBody StoreUpdateCategory storeUpdateCategory) {
         storeService.updateStoreCategory(storeUpdateCategory, userIdHolder.getUserId());
         return ApiUtils.success("가게 카테고리 수정을 성공했습니다.");
@@ -73,10 +76,9 @@ public class StoreController {
 
     @Operation(summary = "사장 - 사장님 회원 탈퇴", description = "사장님 회원 탈퇴")
     @DeleteMapping("/store")
+    @UserIdRequired
     public ApiResult<String> deleteStore(UserIdHolder userIdHolder) {
-
         storeService.deleteStore(userIdHolder.getUserId());
-
         return ApiUtils.success("가게 정보 삭제 완료");
     }
 
@@ -101,27 +103,25 @@ public class StoreController {
 
     @Operation(summary = "사장 - 가게 영업 시작", description = "가게 영업을 시작합니다. (깃발 선택 가능)")
     @PostMapping("/store/business")
+    @UserIdRequired
     public ApiResult<String> startBusiness(UserIdHolder userIdHolder,
                                            @RequestParam Long flagId,
                                            @RequestParam double lati,
                                            @RequestParam double longi,
                                            @RequestParam String activeArea) {
-
         storeService.startBusiness(userIdHolder.getUserId(), flagId, lati, longi, activeArea);
-
         return ApiUtils.success("가게 영업 시작");
     }
 
     @Operation(summary = "사장 - 가게 영업 종료", description = "가게 영업을 종료합니다.")
     @DeleteMapping("/store/business")
+    @UserIdRequired
     public ApiResult<String> closeBusiness(UserIdHolder userIdHolder) {
-
         storeService.closeBusiness(userIdHolder.getUserId());
-
         return ApiUtils.success("가게 영업 종료");
     }
 
-    @Operation(summary = "사장 - 사장ID 찾기", description = "가게 ID로 사장 ID를 찾습니다..")
+    @Operation(summary = "사장 - 사장ID 찾기", description = "가게 ID로 사장 ID를 찾습니다.")
     @GetMapping("/store/{storeId}/owner")
     public ApiResult<Long> getOwnerId(@PathVariable Long storeId) {
         Long ownerId = storeService.getOwnerId(storeId);
