@@ -3,6 +3,7 @@ package com.sff.PaymentServer.payment.controller;
 import com.sff.PaymentServer.dto.FundingChosen;
 import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
+import com.sff.PaymentServer.payment.service.CalculateService;
 import com.sff.PaymentServer.payment.service.FundingPaymentService;
 import com.sff.PaymentServer.payment.service.OrderFromFundingService;
 import com.sff.PaymentServer.payment.service.OrderPaymentService;
@@ -25,6 +26,7 @@ public class PaymentController {
     private final FundingPaymentService fundingPaymentService;
     private final OrderFromFundingService orderFromFundingService;
     private final RefundService refundService;
+    private final CalculateService calculateService;
 
     @PostMapping("/api/payment-server/orders")
     public ApiResult<?> createOrderPayment(@RequestHeader("UserId") Long userId, @RequestBody
@@ -64,5 +66,9 @@ public class PaymentController {
         return ApiUtils.success("미선택 깃발의 펀딩 환불 처리 및 전체 펀딩들의 선택, 미선택에 따른 상태 변경 및 알림 요청 완료");
     }
 
-
+    @PutMapping("/api/payment_server/calculation")
+    public ApiResult<?> updatePaymentState(@RequestHeader("UserId") Long ownerId){
+        calculateService.calculatePayment(ownerId);
+        return ApiUtils.success("정산 완료");
+    }
 }
