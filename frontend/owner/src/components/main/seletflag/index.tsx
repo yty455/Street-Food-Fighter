@@ -28,9 +28,9 @@ const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
         activeArea: addressName,
       };
       const response = await callSelectFlagAPI(data);
-      console.log(response);
+      // console.log(response);
 
-      console.log('Selected Flag ID: ', selectedFlagId);
+      // console.log('Selected Flag ID: ', selectedFlagId);
       onStartOperation();
     }
   };
