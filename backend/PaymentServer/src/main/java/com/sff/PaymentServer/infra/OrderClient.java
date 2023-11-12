@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "orderserver", url = "${spring.data.Order_Server}")
+@FeignClient(name = "orderserver", url = "${feign.orderserver.url}")
 public interface OrderClient {
 
     // ---주문 결제---
