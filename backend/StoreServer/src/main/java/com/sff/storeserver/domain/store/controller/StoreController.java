@@ -105,7 +105,7 @@ public class StoreController {
     @PostMapping("/store/business")
     @UserIdRequired
     public ApiResult<String> startBusiness(UserIdHolder userIdHolder,
-                                           @RequestBody StoreStartInfo storeStartInfo) {
+                                           @RequestBody @Valid StoreStartInfo storeStartInfo) {
         storeService.startBusiness(userIdHolder.getUserId(), storeStartInfo.getFlagId(), storeStartInfo.getLati(),
                 storeStartInfo.getLongi(), storeStartInfo.getActiveArea());
         return ApiUtils.success("가게 영업 시작");

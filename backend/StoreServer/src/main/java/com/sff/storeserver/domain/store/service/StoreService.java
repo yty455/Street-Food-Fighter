@@ -5,6 +5,7 @@ import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.common.feignClient.PayClient;
+import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
@@ -146,6 +147,7 @@ public class StoreService {
             FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
             flags.forEach(flag -> {
+                log.info("flagId : {}", flag.getId());
                 if (flagId == flag.getId()) {
                     flag.fundingSuccess();
                     flagNotificationInfo.updatePicked(flag.getId());
@@ -154,10 +156,9 @@ public class StoreService {
                     flagNotificationInfo.updateUnpicked(flag.getId());
                 }
             });
-
             // 깃발에 펀딩한 유저에게 알림 전송
             try {
-                payClient.notifyFlag(flagNotificationInfo);
+                ApiResult<String> result = payClient.notifyFlag(flagNotificationInfo);
             } catch (Exception ex) {
                 log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
                 throw new BaseException(FeignError.FEIGN_ERROR);

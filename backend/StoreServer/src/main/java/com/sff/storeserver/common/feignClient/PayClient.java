@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "payserver", url = "${feign.payserver.url}")
 public interface PayClient {
     @PutMapping(value = "/api/payment-server/flags/chosen")
-    ApiResult<?> notifyFlag(@RequestBody FlagNotificationInfo flagNotificationInfo);
+    ApiResult<String> notifyFlag(@RequestBody FlagNotificationInfo flagNotificationInfo);
 }
