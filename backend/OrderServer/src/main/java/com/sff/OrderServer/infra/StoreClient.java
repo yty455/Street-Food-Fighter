@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "storeClient", url = "${feign.storeserver.url}")
+@FeignClient(name = "storeserver", url = "${feign.storeserver.url}")
 public interface StoreClient {
 
     @PostMapping("/api/store-service/msa/store")
