@@ -40,7 +40,7 @@ public class FlagController {
     }
 
     @Operation(summary = "사장 - 깃발 상세 조회", description = "깃발의 상세 정보를 조회 합니다.")
-    @GetMapping("/store/{storeId}/flags/{flagId}")
+    @GetMapping("/store/flags/{flagId}")
     @UserIdRequired
     public ApiResult<?> getFlagDetail(UserIdHolder userIdHolder, @PathVariable("flagId") Long flagId) {
         FlagDetailResponse flagDetailResponse = flagService.getFlagDetail(userIdHolder.getUserId(), flagId);
