@@ -5,7 +5,7 @@ import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
 import SelectFlag from '@/components/main/seletflag';
-import CloseAPI from '@/apis/vendor/CloseAPI';
+import CloseAPI from '@/apis/close/CloseAPI';
 
 const MainPage = () => {
   const router = useRouter();

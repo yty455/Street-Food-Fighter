@@ -1,14 +1,14 @@
 import api from '../api';
 
-const CloseAPI = async () => {
+const StatsAPI = async () => {
   // 임시
   const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
   try {
-    const response = await api.delete(`/api/store-service/store/business`, {
+    const response = await api.get(`/api/order-server/orders/stats`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log(response.data);
+    console.log('StatsAPI', response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -16,4 +16,4 @@ const CloseAPI = async () => {
   }
 };
 
-export default CloseAPI;
+export default StatsAPI;
