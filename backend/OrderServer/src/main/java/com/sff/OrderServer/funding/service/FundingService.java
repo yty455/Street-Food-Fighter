@@ -7,11 +7,13 @@ import com.sff.OrderServer.bucket.entity.Bucket;
 import com.sff.OrderServer.bucket.entity.OrderMenu;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
+import com.sff.OrderServer.dto.FlagMSAResponse;
 import com.sff.OrderServer.dto.NotificationType;
 import com.sff.OrderServer.dto.UserInfo;
 import com.sff.OrderServer.dto.UserNotificationInfo;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
+import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.dto.FlagList;
 import com.sff.OrderServer.funding.dto.FundingChosen;
@@ -25,7 +27,9 @@ import com.sff.OrderServer.funding.dto.FundingResponse;
 import com.sff.OrderServer.funding.dto.FundingUser;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.utils.ApiError;
+import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
+
+    private final StoreClient storeClient;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -90,12 +96,8 @@ public class FundingService {
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
 
-        // funding의 storeId로 storeName, storeUrl (MSA)
-        // funding의 flagId로 flagAddress, flagDate (MSA)
-        String storeName = "가게 이름";
-        String storeUrl = "URL";
-        String flagAddress = "깃발 주소";
-        LocalDateTime flagDate = LocalDateTime.now();
+        // 깃발 정보 요청
+        FlagMSAResponse flag = getFlagInfo(funding.getFlagId());
 
         Bucket bucket = funding.getBucket();
         List<FundingItem> fundingItems = getFundingItems(orderMenuRepository.findAllByBucket(bucket));
@@ -104,14 +106,28 @@ public class FundingService {
                 .state(funding.getFundingState())
                 .orderState(funding.getOrderState())
                 .storeId(funding.getStoreId())
-                .storeName(storeName)
-                .storeUrl(storeUrl)
-                .flagAddress(flagAddress)
-                .flagDate(flagDate)
+                .storeName(flag.getStoreName())
+                .categoryType(flag.getCategoryType())
+                .flagAddress(flag.getFlagAddress())
+                .flagDate(flag.getDate())
                 .createAt(funding.getCreatedAt())
                 .requirement(funding.getRequirement())
                 .fundingItemList(fundingItems)
                 .totalPrice(bucket.getTotalPrice()).build();
+    }
+
+    private FlagMSAResponse getFlagInfo(Long flagId){
+        ApiResult<FlagMSAResponse> result;
+        try{
+            result = storeClient.getFlagInformation(flagId);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_STORE));
+        }
+
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
     }
 
     private List<FundingItem> getFundingItems(List<OrderMenu> orderMenus){
