@@ -4,15 +4,38 @@ import StyledComponentsRegistry from './lib/registry';
 import '../styles/globals.css';
 import { ThemeProvider } from 'styled-components';
 import theme from '../styles/DefaultTheme';
+import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
+import GetTokenAPI from '@/apis/token/RefreshTokenAPI';
+import { useRouter } from 'next/navigation';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // 저장된 데이터 불러오기
+  const setOwner = useSetOwnerInfoHook();
+  const router = useRouter();
+
   useEffect(() => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken != null) {
-      // 문자열을 객체로 변환
-      const userInfo = JSON.parse(refreshToken);
-      console.log(userInfo);
-    }
+    const refreshTokenJson = localStorage.getItem('refreshToken');
+    const updateAccessToken = async () => {
+      if (refreshTokenJson != null) {
+        try {
+          const refreshToken = JSON.parse(refreshTokenJson);
+          const result = await GetTokenAPI(refreshToken);
+          const accessToken = result.headers['authorization'];
+          localStorage.setItem('refreshToken', JSON.stringify(result.headers['authorization-refresh']));
+          setOwner(accessToken);
+          return;
+        } catch (error) {
+          localStorage.removeItem('refreshToken');
+          console.error('Error fetching access token:', error);
+          router.push('/login');
+        }
+        router.push('/login');
+      } else {
+        localStorage.removeItem('refreshToken');
+        router.push('/login');
+      }
+    };
+
+    updateAccessToken();
   }, []);
 
   return (

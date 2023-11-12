@@ -10,12 +10,7 @@ import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
 const LoginPage = () => {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useState({ email: 'owner@owner.com', password: '1234' });
-  const ownerInfo2 = OwnerInfoStore();
   const setOwner = useSetOwnerInfoHook();
-
-  useEffect(() => {
-    console.log(ownerInfo2);
-  }, [ownerInfo2.accountNumber]);
 
   const moveRegisterPage = (e: any) => {
     router.push('/signup/1');
