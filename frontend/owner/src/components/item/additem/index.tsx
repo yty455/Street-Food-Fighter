@@ -20,8 +20,14 @@ const AddItem = ({ closeModal, type, item }: any) => {
   const handleImageUpload = useImageUploader('menu_images', setMenuUrl);
 
   // 옵션 관련
-  const { options, addOption, handleOptionChange, removeOption } = useOptionsHook(item?.optionInfoList || []);
+  const { options, addOption, handleOptionChange, removeOption, resetOptions } = useOptionsHook(item?.optionInfoList || []);
 
+  const resetInputs = () => {
+    setName('');
+    setPrice('');
+    setMenuUrl('/images/common/defaultmenuimg.png');
+    resetOptions();
+  };
   // 저장로직
   const { addMenu } = useAddMenuHook();
   const saveItem = async () => {
@@ -34,6 +40,7 @@ const AddItem = ({ closeModal, type, item }: any) => {
     };
     // console.log(JSON.stringify(itemData, null, 2));
     await addMenu(itemData);
+
     closeModal();
   };
 
