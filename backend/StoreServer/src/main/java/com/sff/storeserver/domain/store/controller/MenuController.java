@@ -7,6 +7,7 @@ import com.sff.storeserver.common.utils.ApiUtils;
 import com.sff.storeserver.domain.store.dto.MenuInfo;
 import com.sff.storeserver.domain.store.dto.MenuInfoResponse;
 import com.sff.storeserver.domain.store.service.MenuService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
+    @Operation(summary = "사장 - 가게 상품 추가", description = "가게 상품을 추가합니다.")
     @PostMapping("/menus")
     @UserIdRequired
     public ApiResult<String> createMenus(UserIdHolder userIdHolder, @Valid @RequestBody MenuInfo menuInfo) {
@@ -26,11 +28,14 @@ public class MenuController {
         return ApiUtils.success("상품 추가를 성공했습니다.");
     }
 
-    @GetMapping("/menus/{storeId}")
-    public ApiResult<List<MenuInfoResponse>> getMenus(@PathVariable Long storeId) {
-        return ApiUtils.success(menuService.getMenus(storeId));
+    @Operation(summary = "사장 - 가게 상품 조회", description = "가게 상품을 조회합니다.")
+    @GetMapping("/menus")
+    @UserIdRequired
+    public ApiResult<List<MenuInfoResponse>> getMenus(UserIdHolder userIdHolder) {
+        return ApiUtils.success(menuService.getMenus(userIdHolder.getUserId()));
     }
 
+    @Operation(summary = "사장 - 가게 상품 수정", description = "가게 메뉴를 수정합니다.")
     @PutMapping("/menus/{menuId}")
     @UserIdRequired
     public ApiResult<String> addOptions(UserIdHolder userIdHolder, @PathVariable Long menuId, @Valid @RequestBody MenuInfo menuInfo) {
@@ -38,6 +43,7 @@ public class MenuController {
         return ApiUtils.success("메뉴 수정을 성공했습니다.");
     }
 
+    @Operation(summary = "사장 - 가게 상품 삭제", description = "가게 메뉴를 삭제합니다.")
     @DeleteMapping("/menus/{menuId}")
     @UserIdRequired
     public ApiResult<String> deleteOptions(UserIdHolder userIdHolder, @PathVariable Long menuId) {
