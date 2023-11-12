@@ -1,6 +1,10 @@
 import { CenterTd, LineTr, MenuNameTd, OptionNameTd, PriceTd, Table, TableHead, TotalPrice } from './Recipt.styled';
 
 const Receipt = ({ orderItemList, totalPrice, type }: any) => {
+  // console.log(orderItemList);
+  if (!Array.isArray(orderItemList)) {
+    return <div>정산 테이블 로딩중</div>;
+  }
   return (
     <div style={{ marginTop: '10px' }}>
       <Table>
@@ -21,8 +25,8 @@ const Receipt = ({ orderItemList, totalPrice, type }: any) => {
             item.orderOptionList
               ? item.orderOptionList.map((option: any) => (
                   <tr key={option.optionId}>
-                    <OptionNameTd> + {option.name}</OptionNameTd>
                     <CenterTd>1</CenterTd>
+                    <OptionNameTd> + {option.name}</OptionNameTd>
                     <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
                   </tr>
                 ))

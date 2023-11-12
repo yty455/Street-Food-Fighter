@@ -1,11 +1,12 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { accounts } from '@/temp/accounts';
 import { Center, ChartBox } from './Donutchart.styled';
+import useStatsHook from '@/hooks/apis/stats.hook';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function AssetDoughnutChart() {
+  const accounts = useStatsHook();
   const accountsdata = accounts.menuStatsList;
 
   const labels = accountsdata.map((account) => account.name);
@@ -38,7 +39,7 @@ export default function AssetDoughnutChart() {
     <ChartBox>
       <Center>
         <div>총 금액</div>
-        <div>28,000원</div>
+        <div>{Number(accounts.totalPrice).toLocaleString()}원</div>
       </Center>
       <Doughnut data={Data} options={options}></Doughnut>
     </ChartBox>
