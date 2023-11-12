@@ -19,10 +19,11 @@ interface ItemBoxProps {
 }
 
 const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
+  // console.log('item : ', item);
   return (
     <Container>
       <MenuBox>
-        <MenuImage src={item.menuUrl} />
+        <MenuImage src={item.menuUrl || '/images/common/menuimg.png'} />
         <MenuContentBox>
           <div>
             <LittleTitle>상품명</LittleTitle>

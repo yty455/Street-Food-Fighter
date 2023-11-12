@@ -1,15 +1,17 @@
 import Topbar from '@/components/common/topbar';
 import { Container } from './Item.styled';
 import ItemBox from '@/components/item/itembox';
-import { items } from '@/temp/items';
 import BottomBtn from '@/components/common/bottombtn';
 import { useState } from 'react';
 import AddItem from '@/components/item/additem';
+import useMenuInfoHook from '@/hooks/apis/menuinfo.hook';
 
 const ItemPage = () => {
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
 
   const [currentItem, setCurrentItem] = useState(null);
+
+  const items = useMenuInfoHook();
 
   const openAddItemModal = () => {
     setIsAddItemOpen(true);
