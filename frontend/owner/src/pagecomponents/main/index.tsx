@@ -28,7 +28,6 @@ const MainPage = () => {
       }
       openModal(); // 모달 열기
     } else {
-      // 다른 작업 수행
     }
     setVendorOpen(!isVendorOpen);
   };
@@ -37,18 +36,17 @@ const MainPage = () => {
     <MainContainer>
       <OperButtonList>
         <OperButton>{isVendorOpen ? <OperText>영업 중</OperText> : <OperText>영업 전</OperText>}</OperButton>
-        <OperButton type="btn" onClick={switchVendor}>
-          {!isVendorOpen ? (
-            <OperText>영업 시작</OperText>
-          ) : (
-            <OperText
-              onClick={() => {
-                router.push('/close');
-              }}
-            >
-              영업 종료
-            </OperText>
-          )}
+        <OperButton
+          type="btn"
+          onClick={
+            !isVendorOpen
+              ? switchVendor
+              : () => {
+                  router.push('/close');
+                }
+          }
+        >
+          {!isVendorOpen ? <OperText>영업 시작</OperText> : <OperText>영업 종료</OperText>}
         </OperButton>
       </OperButtonList>
       <MenuList>
