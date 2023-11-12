@@ -6,8 +6,10 @@ import { Center, ChartBox } from './Donutchart.styled';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function AssetDoughnutChart() {
-  const labels = accounts.map((account) => account.name);
-  const data = accounts.map((account) => account.count);
+  const accountsdata = accounts.menuStatsList;
+
+  const labels = accountsdata.map((account) => account.name);
+  const data = accountsdata.map((account) => account.count);
 
   const Data = {
     labels: labels,

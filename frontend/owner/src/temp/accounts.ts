@@ -1,37 +1,25 @@
-export const accounts = [
-  {
-    name: '떡볶이', // 메뉴명
-    count: 4, // 메뉴 주문 수
-    totalPrice: 16000, // 총 메뉴 판매 금액
-  },
-  {
-    name: '모듬튀김',
-    count: 2,
-    totalPrice: 5000,
-  },
-  {
-    name: '순대',
-    count: 2,
-    totalPrice: 5000,
-  },
-  {
-    name: '오뎅',
-    count: 5,
-    totalPrice: 5000,
-  },
-  {
-    name: '떡꼬치',
-    count: 2,
-    totalPrice: 5000,
-  },
-  {
-    name: '피카츄',
-    count: 2,
-    totalPrice: 5000,
-  },
-  {
-    name: '순대꼬치',
-    count: 5,
-    totalPrice: 5000,
-  },
-];
+export const accounts = {
+  menuStatsList: [
+    {
+      name: '햄버거', // 메뉴명
+      count: 2, // 메뉴 주문 수
+      menuTotalPrice: 8000, // 총 메뉴 판매 금액
+    },
+    {
+      name: '피자',
+      count: 1,
+      menuTotalPrice: 10500,
+    },
+    {
+      name: '감자튀김',
+      count: 1,
+      menuTotalPrice: 2500,
+    },
+    {
+      name: '아이스크림',
+      count: 4,
+      menuTotalPrice: 2000,
+    },
+  ],
+  totalPrice: 22500, // 총 일일 판매 금액
+};

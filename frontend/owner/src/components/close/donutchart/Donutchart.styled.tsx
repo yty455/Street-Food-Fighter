@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 const ChartBox = styled.div`
   display: flex;
-  width: 380px;
+  width: 300px;
   align-items: center;
   justify-content: center;
   position: relative;

@@ -1,6 +1,6 @@
 import { CenterTd, LineTr, MenuNameTd, OptionNameTd, PriceTd, Table, TableHead, TotalPrice } from './Recipt.styled';
 
-const Receipt = ({ orderItemList, totalPrice }: any) => {
+const Receipt = ({ orderItemList, totalPrice, type }: any) => {
   return (
     <div style={{ marginTop: '10px' }}>
       <Table>
@@ -29,7 +29,7 @@ const Receipt = ({ orderItemList, totalPrice }: any) => {
               : [],
           ])}
           <LineTr>
-            <td colSpan={2}>결제금액 :</td>
+            {type === 'total' ? <td colSpan={2}>총 정산금액 :</td> : <td colSpan={2}>결제금액 :</td>}
             <TotalPrice>{Number(totalPrice).toLocaleString()}원</TotalPrice>
           </LineTr>
         </tbody>
