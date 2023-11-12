@@ -22,10 +22,11 @@ public class PaymentFeignClientConfig {
                 }
 
                 String userId = attributes.getRequest().getHeader("UserId");
-                // jwt 토큰도 동일하게 추가 필요
                 if (userId != null) {
-                    template.header("userId", userId);
+                    template.header("UserId", userId);
                 }
+
+
             }
         };
     }
