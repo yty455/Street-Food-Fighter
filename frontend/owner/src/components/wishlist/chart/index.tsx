@@ -1,10 +1,23 @@
 import { categories } from '@/assets/category';
 import { wishlist } from '@/temp/wishlist';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar, CategoryBox, Count, CountBox, FoodName, NameBox } from './Chart.styled';
+import WishlistAPI from '@/apis/wishlist/WishlistAPI';
+import { WishlistItem } from '@/types/wishlist.type';
 
 const Chart = (address: any) => {
-  const wishes = wishlist;
+  const [wishes, setWishes] = useState<WishlistItem[]>([]);
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      console.log(address);
+      const response = await WishlistAPI({ addressname: address.addressName });
+      if (response) {
+        setWishes(response);
+      }
+    };
+    fetchWishlist();
+  }, [address]);
+
   const findCountByType = (type: any) => {
     const item = wishes.find((item) => item.foodType === type);
     return item ? item.count : 0;
