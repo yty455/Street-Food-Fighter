@@ -22,9 +22,9 @@ public class OrderController {
 
     // 주문 추가
     @PostMapping("/api/order-server/orders")
-    public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId, @RequestHeader("StoreId") Long storeId,
+    public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
-        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId, storeId));
+        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId));
     }
 
     // 주문 내역 조회

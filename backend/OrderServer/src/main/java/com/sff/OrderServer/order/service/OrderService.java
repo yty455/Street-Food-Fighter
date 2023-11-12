@@ -72,16 +72,15 @@ public class OrderService {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Transactional
-    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId,
-            Long storeId) {
-        Integer orderCount = orderRepository.countOrdersByStoreId(storeId, LocalDateTime.now());
+    public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
+        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(), LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
         if (orderRepository.findByBucket(bucket).isPresent()) {
             throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
         }
         try {
             Long orderId = orderRepository.save(
-                    new OrderRecord(orderCreateRequest, orderCount, bucket, userId, storeId)).getOrderId();
+                    new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
             return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
             e.printStackTrace();
