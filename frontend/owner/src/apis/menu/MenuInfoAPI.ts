@@ -1,13 +1,14 @@
+// 상품 조회
 import api from '../api';
 
-const StatsAPI = async () => {
+const MenuInfoAPI = async () => {
   const accessToken = localStorage.getItem('accessToken');
 
   try {
-    const response = await api.get(`/api/order-server/orders/stats`, {
+    const response = await api.get(`/api/store-service/menus`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('StatsAPI', response.data.response);
+    console.log('MenuInfoAPI', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
@@ -15,4 +16,4 @@ const StatsAPI = async () => {
   }
 };
 
-export default StatsAPI;
+export default MenuInfoAPI;

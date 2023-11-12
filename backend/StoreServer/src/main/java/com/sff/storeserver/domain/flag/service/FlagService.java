@@ -47,6 +47,9 @@ public class FlagService {
         List<Long> flagIdList = flagList.stream()
                 .map(Flag::getId)
                 .toList();
+        for (Long id : flagIdList) {
+            log.info("id : {}", id);
+        }
         // 깃발 ID를 주문 서비스에 보내서 깃발의 펀딩 금액 받아 오기
         List<FlagFundingInfo> flagFundingInfos = orderClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
         List<FlagResponse> flagResponses = new ArrayList<>();

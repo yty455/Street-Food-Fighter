@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "ownerserver", url = "${feign.ownerserver.url}")
 public interface OwnerClient {
 
-    @PutMapping("/api/owner-server/owners/{ownerId}/points")
+    @PutMapping("/api/owner-server/{ownerId}/points")
     ApiResult updateOwnerPoint(@PathVariable Long ownerId, @RequestBody PointUpdateRequest pointUpdateRequest);
 }

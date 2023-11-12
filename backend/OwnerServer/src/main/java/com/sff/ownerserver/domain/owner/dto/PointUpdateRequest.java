@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PointUpdateRequest {
     private Long amount;
-    private boolean isCharge;
+    private Boolean isCharge;
 }

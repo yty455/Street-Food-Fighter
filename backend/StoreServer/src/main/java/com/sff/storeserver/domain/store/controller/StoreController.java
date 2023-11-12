@@ -105,7 +105,7 @@ public class StoreController {
     @PostMapping("/store/business")
     @UserIdRequired
     public ApiResult<String> startBusiness(UserIdHolder userIdHolder,
-                                           @RequestBody StoreStartInfo storeStartInfo) {
+                                           @RequestBody @Valid StoreStartInfo storeStartInfo) {
         storeService.startBusiness(userIdHolder.getUserId(), storeStartInfo.getFlagId(), storeStartInfo.getLati(),
                 storeStartInfo.getLongi(), storeStartInfo.getActiveArea());
         return ApiUtils.success("가게 영업 시작");
@@ -131,5 +131,12 @@ public class StoreController {
     public ApiResult<String> getStoreName(@PathVariable Long storeId) {
         String storeName = storeService.getStoreName(storeId);
         return ApiUtils.success(storeName);
+    }
+
+    @Operation(summary = "사장 - 가게 아이디 찾기", description = "사장 ID로 가게 아이디를 찾습니다.")
+    @GetMapping("/store/storeId/{ownerId}")
+    public ApiResult<Long> getStoreIdByOwnerId(@PathVariable Long ownerId) {
+        Long storeId = storeService.getStoreIdByOwnerId(ownerId);
+        return ApiUtils.success(storeId);
     }
 }

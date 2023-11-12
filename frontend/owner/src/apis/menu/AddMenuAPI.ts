@@ -1,18 +1,16 @@
 import api from '../api';
 
-const CloseAPI = async () => {
+const AddMenuAPI = async (data: any) => {
   const accessToken = localStorage.getItem('accessToken');
-
   try {
-    const response = await api.delete(`/api/store-service/store/business`, {
+    const response = await api.post(`/api/store-service/menus`, data, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log(response.data);
+    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
     return null;
   }
 };
 
-export default CloseAPI;
+export default AddMenuAPI;

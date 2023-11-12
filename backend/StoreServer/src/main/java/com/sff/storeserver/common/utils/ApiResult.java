@@ -1,13 +1,16 @@
 package com.sff.storeserver.common.utils;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiResult<T> {
-    private final boolean success;
-    private final T response;
-    private final ApiError apiError;
+    private Boolean success;
+    private T response;
+    private ApiError apiError;
 }

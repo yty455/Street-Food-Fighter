@@ -23,4 +23,7 @@ public interface StoreClient {
 
     @GetMapping("/api/store-service/msa/flag/{flagId}")
     ApiResult<FlagMSAResponse> getFlagInformation(@PathVariable Long flagId);
+
+    @GetMapping("/api/store-service/store/storeId/{ownerId}")
+    ApiResult<Long> getStore(@PathVariable Long ownerId);
 }
