@@ -84,21 +84,21 @@ public class StoreController {
 
     @Operation(summary = "손님 - 내 근처 가게 조회 성공", description = "내 근처 가게 조회합니다.")
     @GetMapping("/stores/near")
-    public ApiResult<?> getNearStore(@RequestParam("lati") double lati,
-                                     @RequestParam("longi") double longi,
-                                     @RequestParam("categories") List<CategoryType> categories) {
+    public ApiResult<List<StoreInfoResponse>> getNearStore(@RequestParam("lati") double lati,
+                                                           @RequestParam("longi") double longi,
+                                                           @RequestParam("categories") List<CategoryType> categories) {
         List<StoreInfoResponse> stores = storeService.getNearStore(lati, longi, categories);
         return ApiUtils.success(stores);
     }
 
-    @Operation(summary = "손님 - 펀딩 정보 조회", description = "내 근처 펀딩 조회합니다.")
+    @Operation(summary = "손님 - 펀딩할 수 있는 깃발 조회", description = "내 근처 깃발 조회합니다.")
     @GetMapping("/flag/near")
-    public ApiResult<?> getNearFlag(@RequestParam("date") LocalDate date,
-                                    @RequestParam("lati") double lati,
-                                    @RequestParam("longi") double longi,
-                                    @RequestParam("categories") List<CategoryType> categories) {
-        List<StoreInfoResponse> stores = storeService.getNearFlag(date, lati, longi, categories);
-        return ApiUtils.success(stores);
+    public ApiResult<List<FlagStoreInfoResponse>> getNearFlag(@RequestParam("date") LocalDate date,
+                                                              @RequestParam("lati") double lati,
+                                                              @RequestParam("longi") double longi,
+                                                              @RequestParam("categories") List<CategoryType> categories) {
+        List<FlagStoreInfoResponse> flags = storeService.getNearFlag(date, lati, longi, categories);
+        return ApiUtils.success(flags);
     }
 
     @Operation(summary = "사장 - 가게 영업 시작", description = "가게 영업을 시작합니다. (깃발 선택 가능)")
