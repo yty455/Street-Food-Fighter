@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.service;
 
+import com.sff.storeserver.common.error.code.FeignError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
@@ -155,10 +156,14 @@ public class StoreService {
             });
 
             // 깃발에 펀딩한 유저에게 알림 전송
-            payClient.notifyFlag(flagNotificationInfo);
+            try {
+                payClient.notifyFlag(flagNotificationInfo);
+            } catch (Exception ex) {
+                log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
+                throw new BaseException(FeignError.FEIGN_ERROR);
+            }
         }
         store.startBusiness(lati, longi, activeArea);
-
     }
 
     @Transactional
