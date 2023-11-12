@@ -28,6 +28,7 @@ public class CalculateService {
         List<PaymentRecord> paymentRecords = paymentRecordRepository.findAllByOwnerIdAndState(ownerId, PaymentState.ORDER);
         System.out.println(2);
         // 정산 포인트 사장 포인트에 추가
+        System.out.println("ownerId : "+ownerId);
         updateOwnerPoint(ownerId, paymentRecords);
         System.out.println(3);
         // 결제 상태 정산으로 변경
