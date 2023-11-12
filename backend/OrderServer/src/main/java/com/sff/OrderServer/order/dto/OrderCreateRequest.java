@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class OrderCreateRequest {
 
     private Long bucketId;
-    private Long storeId;
     private String requirement;
 }
