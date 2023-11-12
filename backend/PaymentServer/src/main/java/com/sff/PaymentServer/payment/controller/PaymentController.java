@@ -47,26 +47,26 @@ public class PaymentController {
         return ApiUtils.success("펀딩을 통한 주문 성공");
     }
 
-    @PutMapping("/api/payment_server/fundings/{fundingId}/cancel")
+    @PutMapping("/api/payment-server/fundings/{fundingId}/cancel")
     public ApiResult<?> updateFundingCancel(@PathVariable Long fundingId){
         orderFromFundingService.cancelFromFunding(fundingId);
         return ApiUtils.success("90퍼센트 환불의 펀딩 취소 성공");
     }
 
-    @PutMapping("/api/payment_server/orders/{orderId}/reject")
+    @PutMapping("/api/payment-server/orders/{orderId}/reject")
     public ApiResult<?> updateOrderReject(@RequestHeader("UserId") Long userId, @PathVariable Long orderId){
         refundService.refundFromReject(orderId);
         return ApiUtils.success("주문 접수 거절에 따른 환불 처리 완료");
     }
 
     // ---MSA---
-    @PutMapping("/api/payment_server/flags/chosen")
+    @PutMapping("/api/payment-server/flags/chosen")
     public ApiResult<?> updateFundingsChosen(@RequestBody FundingChosen flags){
         refundService.updateUnpickedFundingsRefundAndAllFlagsState(flags);
         return ApiUtils.success("미선택 깃발의 펀딩 환불 처리 및 전체 펀딩들의 선택, 미선택에 따른 상태 변경 및 알림 요청 완료");
     }
 
-    @PutMapping("/api/payment_server/calculation")
+    @PutMapping("/api/payment-server/calculation")
     public ApiResult<?> updatePaymentState(@RequestHeader("UserId") Long ownerId){
         calculateService.calculatePayment(ownerId);
         return ApiUtils.success("정산 완료");
