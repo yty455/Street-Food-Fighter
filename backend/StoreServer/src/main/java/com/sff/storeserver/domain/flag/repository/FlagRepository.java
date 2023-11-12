@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface FlagRepository extends JpaRepository<Flag, Long> {
 
-    @Query("select new com.sff.storeserver.domain.flag.dto.FlagMSAResponse(s.name, f.address, f.date) from Flag f join f.store s where f.id = :flagId")
+    @Query("select new com.sff.storeserver.domain.flag.dto.FlagMSAResponse(s.name, s.category, f.address, f.date) from Flag f join f.store s where f.id = :flagId")
     FlagMSAResponse getFlagById(@Param("flagId") Long flagId);
 
     List<Flag> findByStoreIdAndDate(Long storeId, LocalDate date);
