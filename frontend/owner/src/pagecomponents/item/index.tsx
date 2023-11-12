@@ -31,7 +31,7 @@ const ItemPage = () => {
       <Topbar text="상품 관리"></Topbar>
       <Content>
         {items.map((item) => (
-          <ItemBox key={item.id} item={item} onEdit={() => openModifyItemModal(item)} />
+          <ItemBox key={item.id} item={item} onEdit={() => openModifyItemModal(item)} refreshItems={refreshItems} />
         ))}
         <BottomBtn text="상품 추가" onClick={openAddItemModal} />
       </Content>

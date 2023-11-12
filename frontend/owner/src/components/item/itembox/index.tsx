@@ -17,13 +17,17 @@ import useDeleteMenuHook from '@/hooks/apis/deletemenu.hook';
 interface ItemBoxProps {
   item: Item;
   onEdit: (item: Item) => void;
+  refreshItems: () => void;
 }
 
-const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
+const ItemBox = ({ item, onEdit, refreshItems }: ItemBoxProps) => {
   // console.log('item : ', item);
 
   const { deleteMenu } = useDeleteMenuHook();
-
+  const handleDelete = async () => {
+    await deleteMenu(item.id);
+    refreshItems(); // 삭제 후 refreshItems 호출
+  };
   return (
     <Container>
       <MenuBox>
@@ -43,7 +47,7 @@ const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
             <Button text="수정" onClick={() => onEdit(item)}></Button>
           </div>
           <div>
-            <Button text="삭제" color="red" onClick={() => deleteMenu(item.id)}></Button>
+            <Button text="삭제" color="red" onClick={handleDelete}></Button>
           </div>
         </ButtonList>
       </MenuBox>
