@@ -1,14 +1,15 @@
+// 깃발조회
 import api from '../api';
 
-const StatsAPI = async () => {
+const DateFlagAPI = async (date: any) => {
   // 임시
   const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
   try {
-    const response = await api.get(`/api/order-server/orders/stats`, {
+    const response = await api.get(`/api/store-service/store/flags?date=${date}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    //console.log('StatsAPI', response.data);
+    // console.log('DateFlagAPI', response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -16,4 +17,4 @@ const StatsAPI = async () => {
   }
 };
 
-export default StatsAPI;
+export default DateFlagAPI;
