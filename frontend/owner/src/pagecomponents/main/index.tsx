@@ -5,6 +5,7 @@ import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
 import SelectFlag from '@/components/main/seletflag';
+import CloseAPI from '@/apis/close/CloseAPI';
 
 const MainPage = () => {
   const router = useRouter();
@@ -28,16 +29,27 @@ const MainPage = () => {
       }
       openModal(); // 모달 열기
     } else {
-      // 다른 작업 수행
     }
     setVendorOpen(!isVendorOpen);
+  };
+
+  const handleCloseAPI = async () => {
+    try {
+      const res = await CloseAPI();
+      console.log(res);
+      if (res) {
+        router.push('/close');
+      }
+    } catch (error) {
+      console.log('error');
+    }
   };
 
   return (
     <MainContainer>
       <OperButtonList>
         <OperButton>{isVendorOpen ? <OperText>영업 중</OperText> : <OperText>영업 전</OperText>}</OperButton>
-        <OperButton type="btn" onClick={switchVendor}>
+        <OperButton type="btn" onClick={!isVendorOpen ? switchVendor : handleCloseAPI}>
           {!isVendorOpen ? <OperText>영업 시작</OperText> : <OperText>영업 종료</OperText>}
         </OperButton>
       </OperButtonList>

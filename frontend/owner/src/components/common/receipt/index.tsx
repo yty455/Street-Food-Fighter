@@ -1,6 +1,6 @@
 import { CenterTd, LineTr, MenuNameTd, OptionNameTd, PriceTd, Table, TableHead, TotalPrice } from './Recipt.styled';
 
-const Receipt = ({ orderItemList, totalPrice }: any) => {
+const Receipt = ({ orderItemList, totalPrice, type }: any) => {
   return (
     <div style={{ marginTop: '10px' }}>
       <Table>
@@ -12,22 +12,24 @@ const Receipt = ({ orderItemList, totalPrice }: any) => {
           </LineTr>
         </thead>
         <tbody>
-          {orderItemList.map((item: any) => [
+          {orderItemList.flatMap((item: any) => [
             <tr key={item.name}>
               <MenuNameTd>{item.name}</MenuNameTd>
               <CenterTd>{item.count}</CenterTd>
               <PriceTd>{Number(item.menuTotalPrice).toLocaleString()}원</PriceTd>
             </tr>,
-            ...item.orderOptionList.map((option: any) => (
-              <tr key={option.optionId}>
-                <OptionNameTd> + {option.name}</OptionNameTd>
-                <CenterTd>1</CenterTd>
-                <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
-              </tr>
-            )),
+            item.orderOptionList
+              ? item.orderOptionList.map((option: any) => (
+                  <tr key={option.optionId}>
+                    <OptionNameTd> + {option.name}</OptionNameTd>
+                    <CenterTd>1</CenterTd>
+                    <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
+                  </tr>
+                ))
+              : [],
           ])}
           <LineTr>
-            <td colSpan={2}>결제금액 :</td>
+            {type === 'total' ? <td colSpan={2}>총 정산금액 :</td> : <td colSpan={2}>결제금액 :</td>}
             <TotalPrice>{Number(totalPrice).toLocaleString()}원</TotalPrice>
           </LineTr>
         </tbody>
