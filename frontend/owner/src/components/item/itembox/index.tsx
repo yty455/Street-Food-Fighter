@@ -12,6 +12,7 @@ import {
   OptionContent,
 } from './Itembox.styled';
 import Button from '@/components/common/button';
+import useDeleteMenuHook from '@/hooks/apis/deletemenu.hook';
 
 interface ItemBoxProps {
   item: Item;
@@ -20,6 +21,9 @@ interface ItemBoxProps {
 
 const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
   // console.log('item : ', item);
+
+  const { deleteMenu } = useDeleteMenuHook();
+
   return (
     <Container>
       <MenuBox>
@@ -39,7 +43,7 @@ const ItemBox = ({ item, onEdit }: ItemBoxProps) => {
             <Button text="수정" onClick={() => onEdit(item)}></Button>
           </div>
           <div>
-            <Button text="삭제" color="red"></Button>
+            <Button text="삭제" color="red" onClick={() => deleteMenu(item.id)}></Button>
           </div>
         </ButtonList>
       </MenuBox>
