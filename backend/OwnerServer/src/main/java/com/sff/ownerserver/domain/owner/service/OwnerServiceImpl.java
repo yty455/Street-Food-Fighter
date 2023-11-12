@@ -57,8 +57,10 @@ public class OwnerServiceImpl implements OwnerService {
     public void updatePoint(Long ownerId, PointUpdateRequest pointUpdateRequest) {
         Owner owner = findOwner(ownerId);
         if (pointUpdateRequest.isCharge()) {
+            System.out.println("충전");
             owner.addPoints(pointUpdateRequest.getAmount());
         } else {
+            System.out.println("차감");
             owner.deductPoints(pointUpdateRequest.getAmount());
         }
     }
