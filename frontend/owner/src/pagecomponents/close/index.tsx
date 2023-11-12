@@ -9,8 +9,8 @@ const ClosePage = () => {
       <Topbar text="영업 종료" />
       <Content>
         <DonutChart />
-        <div style={{ width: '80vw', height: '40px' }}>
-          <Button text="상세 보기" />
+        <div style={{ width: '80vw', height: '45px' }}>
+          <Button text="상세 보기" fontSize="20px" />
         </div>
       </Content>
     </div>
