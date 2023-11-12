@@ -36,6 +36,7 @@ import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderResponse;
 import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
+import com.sff.OrderServer.order.dto.StoreStatsResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
@@ -453,10 +454,11 @@ public class OrderService {
                         ((Long) OrderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
-    public List<MenuStatsResponse> getStats(Long storeId) {
+    public StoreStatsResponse getStats(Long storeId) {
         List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
         List<OrderRecord> orderList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId,
                 LocalDateTime.now());
+
         HashMap<String, MenuStatsResponse> map = new HashMap<>();
         for (OrderRecord orderRecord : orderList) {
             for (OrderItem orderItem : getOrderMenusDetail(orderRecord.getBucket())) {
@@ -468,12 +470,13 @@ public class OrderService {
                         new MenuStatsResponse(orderItem, map.get(orderItem.getName())));
             }
         }
-
+        int totalPrice = 0;
         for (String key : map.keySet()) {
             menuStatsResponseList.add(map.get(key));
+            totalPrice += map.get(key).getMenuTotalPrice();
         }
 
-        return menuStatsResponseList;
+        return new StoreStatsResponse(menuStatsResponseList, totalPrice);
     }
 
     private Bucket getBucket(Long bucketId) {
