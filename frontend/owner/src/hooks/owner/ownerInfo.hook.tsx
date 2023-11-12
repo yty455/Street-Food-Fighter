@@ -5,7 +5,7 @@ import OwnerInfoStore from '@/stores/ownerinfo/ownerInfoStore';
 const useSetOwnerInfoHook = () => {
   const { setOwnerValue, setStoreValue, setLogin } = OwnerInfoStore();
   const setUserInfo = async (accessToken: any) => {
-    localStorage.setItem('accessToken', JSON.stringify(accessToken));
+    localStorage.setItem('accessToken', accessToken);
     const ownerInfo = await OwnerInfoAPI(accessToken);
     const storeInfo = await StoreInfoAPI(accessToken);
     setOwnerValue(ownerInfo.response);

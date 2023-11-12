@@ -1,18 +1,16 @@
 import api from '../api';
 
-const StatsAPI = async () => {
+const AddMenuAPI = async (data: any) => {
   const accessToken = localStorage.getItem('accessToken');
-
   try {
-    const response = await api.get(`/api/order-server/orders/stats`, {
+    const response = await api.post(`/api/store-service/menus`, data, {
       headers: { Authorization: `${accessToken}` },
     });
-    //console.log('StatsAPI', response.data);
+    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
     return null;
   }
 };
 
-export default StatsAPI;
+export default AddMenuAPI;
