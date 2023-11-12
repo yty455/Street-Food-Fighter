@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.flag.service;
 
+import com.sff.storeserver.common.error.code.FeignError;
 import com.sff.storeserver.common.error.code.FlagError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
@@ -17,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +31,8 @@ public class FlagService {
 
     private final UserClient userClient;
     private final OrderClient orderClient;
+
+    private final Integer ZERO_AMOUNT = 0;
 
     @Transactional
     public Long createFlag(Long ownerId, FlagRequest flagRequest) {
@@ -51,13 +51,23 @@ public class FlagService {
             log.info("id : {}", id);
         }
         // 깃발 ID를 주문 서비스에 보내서 깃발의 펀딩 금액 받아 오기
-        List<FlagFundingInfo> flagFundingInfos = orderClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
-        List<FlagResponse> flagResponses = new ArrayList<>();
-        for (int idx = 0; idx < flagList.size(); idx++) {
-            flagResponses.add(FlagResponse.fromEntity(flagList.get(idx), flagFundingInfos.get(idx).getAmount()));
+        try {
+            List<FlagFundingInfo> flagFundingInfos = orderClient.getFundingAmount(FlagFundingRequest.builder().flags(flagIdList).build()).getResponse();
+            List<FlagResponse> flagResponses = new ArrayList<>();
+            for (Flag flag : flagList) {
+                Optional<FlagFundingInfo> flagFundingInfoOptional = flagFundingInfos.stream().filter(flagFundingInfo -> flagFundingInfo.getFlagId() == flag.getId()).findFirst();
+                if (flagFundingInfoOptional.isPresent()) {
+                    flagResponses.add(FlagResponse.fromEntity(flag, flagFundingInfoOptional.get().getAmount()));
+                } else {
+                    flagResponses.add(FlagResponse.fromEntity(flag, ZERO_AMOUNT));
+                }
+            }
+            return flagResponses;
+        } catch (Exception ex) {
+            log.error("[store-server] orderClient error {}", ex.getMessage());
+            throw new BaseException(FeignError.FEIGN_ORDER_ERROR);
         }
 
-        return flagResponses;
     }
 
 
