@@ -108,16 +108,20 @@ public class StoreService {
 
     }
 
-    public List<StoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
-        List<Store> nearbyFlags = storeRepository.findNearFlag(lati, longi, date);
+    public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
+        List<Flag> nearByFlags = flagRepository.findNearFlag(lati, longi, date);
+//        List<Store> nearbyStores = storeRepository.findNearFlag(lati, longi, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-
-        return nearbyFlags
-                .stream()
-                .filter(store -> categories.contains(store.getCategory()))
-                .map(StoreInfoResponse::fromEntity)
+        return nearByFlags.stream()
+                .filter(flag -> categories.contains(flag.getStore().getCategory()))
+                .map(FlagStoreInfoResponse::fromEntity)
                 .toList();
+//        return nearbyFlags
+//                .stream()
+//                .filter(store -> categories.contains(store.getCategory()))
+//                .map(StoreInfoResponse::fromEntity)
+//                .toList();
     }
 
     public Long getOwnerId(Long storeId) {
@@ -147,7 +151,6 @@ public class StoreService {
             FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
             flags.forEach(flag -> {
-                log.info("flagId : {}", flag.getId());
                 if (flagId == flag.getId()) {
                     flag.fundingSuccess();
                     flagNotificationInfo.updatePicked(flag.getId());

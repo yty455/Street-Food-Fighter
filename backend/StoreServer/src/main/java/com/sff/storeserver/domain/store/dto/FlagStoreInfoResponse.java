@@ -1,5 +1,7 @@
 package com.sff.storeserver.domain.store.dto;
 
+import com.sff.storeserver.domain.flag.dto.FlagResponse;
+import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.store.entity.BusinessType;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
@@ -14,9 +16,13 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreInfoResponse {
-    private Long storeId;
+public class FlagStoreInfoResponse {
+    // 깃발 정보
+    private FlagResponse flag;
+
+    // 가게 정보
     private Long ownerId;
+    private Long storeId;
     private String name;
     private String ownerName;
     private String phone;
@@ -32,8 +38,10 @@ public class StoreInfoResponse {
     private String introduction;
     private BusinessType state;
 
-    public static StoreInfoResponse fromEntity(Store store) {
-        return StoreInfoResponse.builder()
+    public static FlagStoreInfoResponse fromEntity(Flag flag) {
+        Store store = flag.getStore();
+        return FlagStoreInfoResponse.builder()
+                .flag(FlagResponse.fromEntity(flag))
                 .storeId(store.getId())
                 .ownerId(store.getOwnerId())
                 .name(store.getName())
