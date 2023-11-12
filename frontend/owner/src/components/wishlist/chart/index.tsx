@@ -9,8 +9,7 @@ const Chart = (address: any) => {
   const [wishes, setWishes] = useState<WishlistItem[]>([]);
   useEffect(() => {
     const fetchWishlist = async () => {
-      console.log(address);
-      const response = await WishlistAPI({ addressname: address.addressName });
+      const response = await WishlistAPI({ addressname: address.address });
       if (response) {
         setWishes(response);
       }
@@ -19,6 +18,7 @@ const Chart = (address: any) => {
   }, [address]);
 
   const findCountByType = (type: any) => {
+    // console.log('wish', wishes);
     const item = wishes.find((item) => item.foodType === type);
     return item ? item.count : 0;
   };
