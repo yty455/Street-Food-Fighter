@@ -1,5 +1,6 @@
 package com.sff.OrderServer.infra;
 
+import com.sff.OrderServer.dto.FlagMSAResponse;
 import com.sff.OrderServer.dto.ReviewMSAResponse;
 import com.sff.OrderServer.dto.StoreMSARequest;
 import com.sff.OrderServer.dto.StoreMSAResponse;
@@ -20,4 +21,6 @@ public interface StoreClient {
     @GetMapping("/api/store-service/msa/review/{orderId}")
     ApiResult<ReviewMSAResponse> getReview(@PathVariable Long orderId);
 
+    @GetMapping("/api/store-service/msa/flag/{flagId}")
+    ApiResult<FlagMSAResponse> getFlagInformation(@PathVariable Long flagId);
 }
