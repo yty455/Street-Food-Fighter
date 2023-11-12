@@ -71,4 +71,5 @@ public class PaymentController {
         calculateService.calculatePayment(ownerId);
         return ApiUtils.success("정산 완료");
     }
+
 }
