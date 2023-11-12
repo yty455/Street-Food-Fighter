@@ -1,25 +1,26 @@
 import { useRef, useState, useEffect } from 'react';
 import { StyleLogin, HeaderStyle, InputWrapper, BodyStyle, FooterStyle, ButtonWrapper, ButtonList } from './Login.styled';
 import Input from '@/components/common/input';
-// import RoundButton from '@/components/common/roundbtn';
 import RoundBtn from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
 import LoginAPI from '@/apis/login/Login';
-import OwnerInfoAPI from '@/apis/ownerinfo/OwnerInfoAPI';
-import StoreInfoAPI from '@/apis/store/StoreInfoAPI';
 import OwnerInfoStore from '@/stores/ownerinfo/ownerInfoStore';
+import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
 
 const LoginPage = () => {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useState({ email: 'owner@owner.com', password: '1234' });
-  const { setOwnerValue, setStoreValue } = OwnerInfoStore();
   const ownerInfo2 = OwnerInfoStore();
+  const setOwner = useSetOwnerInfoHook();
+
   useEffect(() => {
     console.log(ownerInfo2);
   }, [ownerInfo2.accountNumber]);
+
   const moveRegisterPage = (e: any) => {
     router.push('/signup/1');
   };
+
   const changeLoginInfo = (e: any) => {
     const { name, value } = e.target;
     setLoginInfo((prev) => ({
@@ -27,17 +28,14 @@ const LoginPage = () => {
       [name]: value,
     }));
   };
+
   const login = async () => {
     try {
       const result = await LoginAPI(loginInfo);
       const accessToken = result.headers['authorization'];
       const refreshToken = result.headers['authorization-refresh'];
-      const ownerInfo = await OwnerInfoAPI(accessToken);
-      const storeInfo = await StoreInfoAPI(accessToken);
-      localStorage.setItem('accessToken', JSON.stringify(accessToken));
       localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
-      setOwnerValue(ownerInfo.response);
-      setStoreValue(storeInfo.response);
+      setOwner(accessToken);
       alert('로그인에 성공 하셨습니다.');
       router.push('/');
     } catch (error) {

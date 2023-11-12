@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 type OwnerState = {
+  isLogin: boolean;
   email: string;
   phone: string;
   ownerName: string;
@@ -22,9 +23,12 @@ type OwnerState = {
   setRegisterValue: <K extends keyof OwnerState>(field: K, value: OwnerState[K]) => void;
   setOwnerValue: (data: any) => void;
   setStoreValue: (data: any) => void;
+  setLogin: () => void;
+  setLogout: () => void;
 };
 
 const OwnerInfoStore = create<OwnerState>((set) => ({
+  isLogin: false,
   email: '',
   phone: '',
   ownerName: '',
@@ -43,6 +47,8 @@ const OwnerInfoStore = create<OwnerState>((set) => ({
   information: '', // 가게 정보
   introduction: '', //가게 안내
   state: '',
+  setLogin: () => set((state) => ({ ...state, ['isLogin']: true })),
+  setLogout: () => set((state) => ({ ...state, ['isLogin']: false })),
   setRegisterValue: (field, value) => set((state) => ({ ...state, [field]: value })),
   setOwnerValue: (value) =>
     set((state) => ({
