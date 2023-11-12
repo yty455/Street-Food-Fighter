@@ -25,12 +25,15 @@ const useOptionsHook = (initialOptions: []) => {
   const removeOption = (optionId: number) => {
     setOptions((options) => options.filter((option) => option.id !== optionId));
   };
-
+  const resetOptions = () => {
+    setOptions(convertedInitialOptions);
+  };
   return {
     options,
     addOption,
     handleOptionChange,
     removeOption,
+    resetOptions,
   };
 };
 

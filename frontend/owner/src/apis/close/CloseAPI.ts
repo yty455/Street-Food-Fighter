@@ -1,8 +1,7 @@
 import api from '../api';
 
 const CloseAPI = async () => {
-  // 임시
-  const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+  const accessToken = localStorage.getItem('accessToken');
 
   try {
     const response = await api.delete(`/api/store-service/store/business`, {
