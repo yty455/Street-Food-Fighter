@@ -1,16 +1,13 @@
 package com.sff.storeserver.domain.flag.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sff.storeserver.domain.flag.entity.Flag;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,9 +17,7 @@ public class FlagResponse {
 
     // 깃발 정보
     private LocalDate date;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime openTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime closeTime;
     private String address;
 
