@@ -34,8 +34,10 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
-    public List<MenuInfoResponse> getMenus(Long storeId) {
-        List<Menu> menus = menuRepository.findByStoreId(storeId);
+    public List<MenuInfoResponse> getMenus(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
+                new BaseException(StoreError.NOT_FOUND_STORE));
+        List<Menu> menus = menuRepository.findByStoreId(store.getId());
         return menus.stream().map(MenuInfoResponse::fromEntity).toList();
     }
 

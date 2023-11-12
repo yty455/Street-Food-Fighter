@@ -126,7 +126,7 @@ public class StoreController {
         return ApiUtils.success(ownerId);
     }
 
-    @Operation(summary = "사장 - 가게 이름 찾기", description = "가게 ID로 가게 이름을 찾습니다..")
+    @Operation(summary = "사장 - 가게 이름 찾기", description = "가게 ID로 가게 이름을 찾습니다.")
     @GetMapping("/store/{storeId}/name")
     public ApiResult<String> getStoreName(@PathVariable Long storeId) {
         String storeName = storeService.getStoreName(storeId);
