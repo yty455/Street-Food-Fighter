@@ -176,4 +176,10 @@ public class StoreService {
         store.closeBusiness();
 
     }
+
+    public Long getStoreIdByOwnerId(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId)
+                .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
+        return store.getId();
+    }
 }

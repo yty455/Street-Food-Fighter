@@ -132,4 +132,11 @@ public class StoreController {
         String storeName = storeService.getStoreName(storeId);
         return ApiUtils.success(storeName);
     }
+
+    @Operation(summary = "사장 - 가게 아이디 찾기", description = "사장 ID로 가게 아이디를 찾습니다.")
+    @GetMapping("/store/storeId/{ownerId}")
+    public ApiResult<Long> getStoreIdByOwnerId(@PathVariable Long ownerId) {
+        Long storeId = storeService.getStoreIdByOwnerId(ownerId);
+        return ApiUtils.success(storeId);
+    }
 }
