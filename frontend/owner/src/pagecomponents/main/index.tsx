@@ -1,17 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
-import SelectFlag from '@/components/main/seletflag';
 import CloseAPI from '@/apis/close/CloseAPI';
+import useDateFlagHook from '@/hooks/apis/dateflag.hook';
+import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
+import useSelectFlagHook from '@/hooks/apis/selectflag.hook';
+import SelectFlag from '@/components/main/seletflag';
 
 const MainPage = () => {
   const router = useRouter();
   const [isVendorOpen, setVendorOpen] = useState(false);
 
-  const todayflag = Flag0;
+  const today = new Date().toISOString().split('T')[0];
+  const todayflag = useDateFlagHook(today); // 깃발조회
+  // const todayflag = Flag2; // 깃발조회
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
@@ -20,9 +25,29 @@ const MainPage = () => {
     setModalContent(<StartPopup onClose={closeModal} />);
   };
 
-  const switchVendor = () => {
+  // 현재위치 가져오기
+  const [addressName, setAddressName] = useState('');
+  const { position } = useFindCurrentLoc(setAddressName);
+
+  // useEffect(() => {
+  //   if (todayflag.length === 0) {
+  //     console.log(`현재 위치: 위도 ${position.lat}, 경도 ${position.lng}, 주소: ${addressName}`);
+  //   }
+  // }, [todayflag, position, addressName]);
+  const callSelectFlagAPI = useSelectFlagHook();
+
+  const switchVendor = async () => {
     if (!isVendorOpen) {
       if (todayflag.length === 0) {
+        const data = {
+          flagId: 0,
+          lati: position.lat,
+          longi: position.lng,
+          activeArea: addressName,
+        };
+        const response = await callSelectFlagAPI(data);
+        // console.log(response);
+
         setModalContent(<StartPopup onClose={closeModal} />);
       } else {
         setModalContent(<SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} />);
