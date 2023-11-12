@@ -30,6 +30,6 @@ feign:
   notiserver:
     url: k9e205.p.ssafy.io:8120
   orderserver:
-    url: k9e205.p.ssafy.io:8130
+    url: localhost:8080 #k9e205.p.ssafy.io:8130
   ownerserver:
     url: k9e205.p.ssafy.io:8140

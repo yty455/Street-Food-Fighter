@@ -24,13 +24,15 @@ public class CalculateService {
 
     @Transactional
     public void calculatePayment(Long ownerId){
+        System.out.println(1);
         List<PaymentRecord> paymentRecords = paymentRecordRepository.findAllByOwnerIdAndState(ownerId, PaymentState.ORDER);
-
+        System.out.println(2);
         // 정산 포인트 사장 포인트에 추가
         updateOwnerPoint(ownerId, paymentRecords);
-
+        System.out.println(3);
         // 결제 상태 정산으로 변경
         updatePaymentState(paymentRecords);
+        System.out.println(4);
     }
 
     private void updateOwnerPoint(Long ownerId, List<PaymentRecord> paymentRecords){
