@@ -105,7 +105,6 @@ public class StoreService {
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
-
     }
 
     public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
