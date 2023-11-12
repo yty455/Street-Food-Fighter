@@ -3,6 +3,8 @@ import { Container, Title, TitleBox, Today } from './Selectflag.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import FlagCard from '../flagcard';
 import { useState } from 'react';
+import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
+import useSelectFlagHook from '@/hooks/apis/selectflag.hook';
 
 const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
   const [selectedFlagId, setSelectedFlagId] = useState(null);
@@ -11,8 +13,23 @@ const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
     setSelectedFlagId(flagId);
   };
 
-  const handleStartClick = () => {
+  // 현재위치 가져오기
+  const [addressName, setAddressName] = useState('');
+  const { position } = useFindCurrentLoc(setAddressName);
+
+  const callSelectFlagAPI = useSelectFlagHook();
+
+  const handleStartClick = async () => {
     if (onStartOperation) {
+      const data = {
+        flagId: selectedFlagId,
+        lati: position.lat,
+        longi: position.lng,
+        activeArea: addressName,
+      };
+      const response = await callSelectFlagAPI(data);
+      console.log(response);
+
       console.log('Selected Flag ID: ', selectedFlagId);
       onStartOperation();
     }
