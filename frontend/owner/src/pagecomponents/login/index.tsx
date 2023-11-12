@@ -39,6 +39,7 @@ const LoginPage = () => {
       setOwnerValue(ownerInfo.response);
       setStoreValue(storeInfo.response);
       alert('로그인에 성공 하셨습니다.');
+      router.push('/');
     } catch (error) {
       console.error(Error);
       alert('로그인에 실패 하셨습니다.');
