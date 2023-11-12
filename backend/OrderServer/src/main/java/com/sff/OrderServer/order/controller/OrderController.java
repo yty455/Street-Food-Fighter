@@ -22,9 +22,9 @@ public class OrderController {
 
     // 주문 추가
     @PostMapping("/api/order-server/orders")
-    public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId,
+    public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId, @RequestHeader("StoreId") Long storeId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
-        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId));
+        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId, storeId));
     }
 
     // 주문 내역 조회
@@ -40,26 +40,26 @@ public class OrderController {
     }
 
     // 주문 목록 조회-접수대기
-    @GetMapping("/api/order-server/orders-waiting/{storeId}")
-    public ApiResult<?> getWaitingOrders(@PathVariable Long storeId) {
+    @GetMapping("/api/order-server/orders-waiting")
+    public ApiResult<?> getWaitingOrders(@RequestHeader("StoreId") Long storeId) {
         return ApiUtils.success(orderService.getWaitingOrders(storeId));
     }
 
     // 주문 목록 조회-처리중
-    @GetMapping("/api/order-server/orders-processing/{storeId}")
-    public ApiResult<?> getProcessingOrders(@PathVariable Long storeId) {
+    @GetMapping("/api/order-server/orders-processing")
+    public ApiResult<?> getProcessingOrders(@RequestHeader("StoreId") Long storeId) {
         return ApiUtils.success(orderService.getProcessingOrders(storeId));
     }
 
     // 주문 목록 조회-완료
-    @GetMapping("/api/order-server/order-completion/{storeId}")
-    public ApiResult<?> getCompletedOrders(@PathVariable Long storeId) {
+    @GetMapping("/api/order-server/order-completion")
+    public ApiResult<?> getCompletedOrders(@RequestHeader("StoreId") Long storeId) {
         return ApiUtils.success(orderService.getCompletedOrders(storeId));
     }
 
     // 주문 목록 조회-전체 일자별
-    @GetMapping("/api/order-server/owner/orders/{storeId}")
-    public ApiResult<?> getAllOrders(@PathVariable Long storeId) {
+    @GetMapping("/api/order-server/owner/orders")
+    public ApiResult<?> getAllOrders(@RequestHeader("StoreId") Long storeId) {
         return ApiUtils.success(orderService.getAllOrders(storeId));
     }
 
@@ -136,8 +136,8 @@ public class OrderController {
     }
 
     // 영업 종료 - 메뉴명 / 판매수 / 옵션 포함 판매 금액
-    @GetMapping("/api/order-server/orders/stats/{storeId}")
-    public ApiResult<?> getStats(@PathVariable Long storeId) {
+    @GetMapping("/api/order-server/orders/stats")
+    public ApiResult<?> getStats(@RequestHeader("StoreId") Long storeId) {
         return ApiUtils.success(orderService.getStats(storeId));
     }
 }
