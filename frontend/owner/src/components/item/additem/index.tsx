@@ -7,6 +7,7 @@ import Button from '@/components/common/button';
 import BottomBtn from '@/components/common/bottombtn';
 import useImageUploader from '@/hooks/common/imageUpload.hook';
 import useOptionsHook from '@/hooks/item/option.hook.';
+import useAddMenuHook from '@/hooks/apis/addmenu.hook';
 
 const AddItem = ({ closeModal, type, item }: any) => {
   const [name, setName] = useState(item?.name || '');
@@ -22,16 +23,17 @@ const AddItem = ({ closeModal, type, item }: any) => {
   const { options, addOption, handleOptionChange, removeOption } = useOptionsHook(item?.optionInfoList || []);
 
   // 저장로직
-  const saveItem = () => {
+  const { addMenu } = useAddMenuHook();
+  const saveItem = async () => {
     const optionsWithoutIds = options.map(({ id, ...rest }) => rest);
     const itemData = {
       name,
-      price,
+      price: Number(price),
       menuUrl,
       optionInfoList: optionsWithoutIds,
     };
-    console.log(JSON.stringify(itemData, null, 2));
-
+    // console.log(JSON.stringify(itemData, null, 2));
+    await addMenu(itemData);
     closeModal();
   };
 
