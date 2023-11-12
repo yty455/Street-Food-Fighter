@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
@@ -6,12 +6,15 @@ import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
 import SelectFlag from '@/components/main/seletflag';
 import CloseAPI from '@/apis/close/CloseAPI';
+import DateFlagAPI from '@/apis/flag/DateFlagAPI';
+import useDateFlagHook from '@/hooks/apis/dateflag.hook';
 
 const MainPage = () => {
   const router = useRouter();
   const [isVendorOpen, setVendorOpen] = useState(false);
 
-  const todayflag = Flag0;
+  const today = new Date().toISOString().split('T')[0];
+  const todayflag = useDateFlagHook(today); // 깃발조회
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
