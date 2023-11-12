@@ -1,24 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TabContainer, Tab } from './Tabbar.styled';
-import { orderservice, orderwaiting, ordersprocessing, orderscompletion } from '@/temp/order';
 import TabContent from '../tabcontent';
+import WaitingOrdersAPI from '@/apis/orders/WaitingOrdersAPI';
+import ProcessingOrdersAPI from '@/apis/orders/ProcessingOrdersAPI';
+import CompleteOrdersAPI from '@/apis/orders/CompleteOrdersAPI';
+import AllOrdersAPI from '@/apis/orders/AllOrdersAPI';
 
 type TabName = 'waiting' | 'processing' | 'completion' | 'all';
 
 const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
-  const [list, setList] = useState(orderwaiting);
+  const [list, setList] = useState([]);
+  const [waitlist, setWaitList] = useState([]);
+  const [processlist, setProcessList] = useState([]);
+  const [completelist, setCompleteList] = useState([]);
+  const [alllist, setAllList] = useState([]);
+
+  useEffect(() => {
+    const fetchWaitingOrders = async () => {
+      if (activeTab === 'waiting') {
+        setList(waitlist);
+      } else if (activeTab === 'processing') {
+        setList(processlist);
+      } else if (activeTab === 'completion') {
+        setList(completelist);
+      } else if (activeTab === 'all') {
+        setList(alllist);
+      }
+    };
+
+    fetchWaitingOrders();
+  }, [activeTab]);
+
+  useEffect(() => {
+    const fetchWaitingOrders = async () => {
+      const fetchedOrders1 = await WaitingOrdersAPI();
+      if (fetchedOrders1) {
+        setWaitList(fetchedOrders1);
+      }
+      const fetchedOrders2 = await ProcessingOrdersAPI();
+      if (fetchedOrders2) {
+        setProcessList(fetchedOrders2);
+      }
+      const fetchedOrders3 = await CompleteOrdersAPI();
+      if (fetchedOrders3) {
+        setCompleteList(fetchedOrders3);
+      }
+      const fetchedOrders4 = await AllOrdersAPI();
+      if (fetchedOrders4) {
+        setAllList(fetchedOrders4);
+      }
+    };
+
+    fetchWaitingOrders();
+  }, []);
 
   const handleTabClick = (tabName: TabName) => {
     setActiveTab(tabName);
-    if (tabName === 'waiting') {
-      setList(orderwaiting);
-    } else if (tabName === 'processing') {
-      setList(ordersprocessing);
-    } else if (tabName === 'completion') {
-      setList(orderscompletion);
-    } else if (tabName === 'all') {
-      setList(orderservice);
-    }
   };
 
   return (
@@ -26,19 +63,19 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
       <TabContainer>
         <Tab active={(activeTab === 'waiting').toString()} onClick={() => handleTabClick('waiting')}>
           <div>접수대기</div>
-          <div>{orderwaiting.length}</div>
+          <div>{waitlist.length}</div>
         </Tab>
         <Tab active={(activeTab === 'processing').toString()} onClick={() => handleTabClick('processing')}>
           <div>조리중</div>
-          <div>{ordersprocessing.length}</div>
+          <div>{processlist.length}</div>
         </Tab>
         <Tab active={(activeTab === 'completion').toString()} onClick={() => handleTabClick('completion')}>
           <div>완료</div>
-          <div>{orderscompletion.length}</div>
+          <div>{completelist.length}</div>
         </Tab>
         <Tab active={(activeTab === 'all').toString()} onClick={() => handleTabClick('all')}>
           <div>전체</div>
-          <div>{orderservice.length}</div>
+          <div>{alllist.length}</div>
         </Tab>
       </TabContainer>
       <TabContent activetab={activeTab} list={list} onOrderClick={onOrderClick} />
