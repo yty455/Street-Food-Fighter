@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "userserver", url = "${spring.data.User_Server}")
+@FeignClient(name = "userserver", url = "${feign.userserver.url}")
 public interface UserClient {
 
     @PutMapping("/api/user-server/{memberId}/points")
