@@ -8,7 +8,7 @@ const AllOrdersAPI = async () => {
     const response = await api.get(`/api/order-server/owner/orders`, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log('CompleteOrdersAPI', response.data.response);
+    // console.log('AllOrdersAPI', response.data.response);
     return response.data.response;
   } catch (error) {
     console.error(error);

@@ -8,7 +8,7 @@ const ProcessingOrdersAPI = async () => {
     const response = await api.get(`/api/order-server/orders-processing`, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log('ProcessingOrdersAPI', response.data.response);
+    // console.log('ProcessingOrdersAPI', response.data.response);
     return response.data.response;
   } catch (error) {
     console.error(error);
