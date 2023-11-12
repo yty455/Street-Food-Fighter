@@ -38,7 +38,17 @@ const MainPage = () => {
       <OperButtonList>
         <OperButton>{isVendorOpen ? <OperText>영업 중</OperText> : <OperText>영업 전</OperText>}</OperButton>
         <OperButton type="btn" onClick={switchVendor}>
-          {!isVendorOpen ? <OperText>영업 시작</OperText> : <OperText>영업 종료</OperText>}
+          {!isVendorOpen ? (
+            <OperText>영업 시작</OperText>
+          ) : (
+            <OperText
+              onClick={() => {
+                router.push('/close');
+              }}
+            >
+              영업 종료
+            </OperText>
+          )}
         </OperButton>
       </OperButtonList>
       <MenuList>
