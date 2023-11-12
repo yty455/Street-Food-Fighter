@@ -168,7 +168,8 @@ public class OrderService {
         return menuList;
     }
 
-    public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
+    public List<OrderRecordOfState> getWaitingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
         List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
                 OrderState.WAITING, LocalDateTime.now());
@@ -181,7 +182,8 @@ public class OrderService {
         return waitingOrderList;
     }
 
-    public List<OrderRecordOfState> getProcessingOrders(Long storeId) {
+    public List<OrderRecordOfState> getProcessingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> processingOrderList = new ArrayList<>();
         List<OrderRecord> processingOrderRecordList = orderRepository.findCurrentOrdersByDate(
                 storeId, OrderState.PROCESSING, LocalDateTime.now());
@@ -194,7 +196,8 @@ public class OrderService {
         return processingOrderList;
     }
 
-    public List<OrderRecordOfState> getCompletedOrders(Long storeId) {
+    public List<OrderRecordOfState> getCompletedOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> completedOrderList = new ArrayList<>();
         List<OrderRecord> completedOrderRecordList = orderRepository.findCurrentOrdersByDate(
                 storeId, OrderState.COMPLETED, LocalDateTime.now());
@@ -207,7 +210,8 @@ public class OrderService {
         return completedOrderList;
     }
 
-    public List<OrderRecordOfState> getAllOrders(Long storeId) {
+    public List<OrderRecordOfState> getAllOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> allOrderList = new ArrayList<>();
         List<OrderRecord> allOrderRecordList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(
                 storeId, LocalDateTime.now());
@@ -454,7 +458,8 @@ public class OrderService {
                         ((Long) OrderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
-    public StoreStatsResponse getStats(Long storeId) {
+    public StoreStatsResponse getStats(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
         List<OrderRecord> orderList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId,
                 LocalDateTime.now());
@@ -544,4 +549,17 @@ public class OrderService {
         return result.getResponse();
     }
 
+    private Long getStoreInfo(Long ownerId) {
+        ApiResult<Long> result;
+        try {
+            result = storeClient.getStore(ownerId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
 }

@@ -20,4 +20,6 @@ public interface StoreClient {
     @GetMapping("/api/store-service/msa/review/{orderId}")
     ApiResult<ReviewMSAResponse> getReview(@PathVariable Long orderId);
 
+    @GetMapping("/api/store-service/store/storeId/{ownerId}")
+    ApiResult<Long> getStore(@PathVariable Long ownerId);
 }
