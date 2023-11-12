@@ -12,19 +12,21 @@ const Receipt = ({ orderItemList, totalPrice }: any) => {
           </LineTr>
         </thead>
         <tbody>
-          {orderItemList.map((item: any) => [
+          {orderItemList.flatMap((item: any) => [
             <tr key={item.name}>
               <MenuNameTd>{item.name}</MenuNameTd>
               <CenterTd>{item.count}</CenterTd>
               <PriceTd>{Number(item.menuTotalPrice).toLocaleString()}원</PriceTd>
             </tr>,
-            ...item.orderOptionList.map((option: any) => (
-              <tr key={option.optionId}>
-                <OptionNameTd> + {option.name}</OptionNameTd>
-                <CenterTd>1</CenterTd>
-                <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
-              </tr>
-            )),
+            item.orderOptionList
+              ? item.orderOptionList.map((option: any) => (
+                  <tr key={option.optionId}>
+                    <OptionNameTd> + {option.name}</OptionNameTd>
+                    <CenterTd>1</CenterTd>
+                    <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
+                  </tr>
+                ))
+              : [],
           ])}
           <LineTr>
             <td colSpan={2}>결제금액 :</td>
