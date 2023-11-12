@@ -60,8 +60,8 @@ public class OrderRecord {
     private ReviewState reviewState = ReviewState.NONE;
 
     public OrderRecord(OrderCreateRequest orderCreateRequest, Integer orderCount, Bucket bucket,
-            Long userId, Long storeId) {
-        String receiptNumber = storeId + "_" + LocalDateTime.now().format(
+            Long userId) {
+        String receiptNumber = orderCreateRequest.getStoreId() + "_" + LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("yyyyMMdd")) + "-" + (orderCount + 1);
         this.receiptNumber = receiptNumber;
         this.orderState = OrderState.PAYMENT_IN_PROGRESS;
@@ -69,7 +69,7 @@ public class OrderRecord {
         this.requirement = (orderCreateRequest.getRequirement() != null) ? orderCreateRequest.getRequirement() : "";
         this.bucket = bucket;
         this.userId = userId;
-        this.storeId = storeId;
+        this.storeId = orderCreateRequest.getStoreId();
         this.createdAt = LocalDateTime.now();
     }
 
