@@ -41,26 +41,26 @@ public class OrderController {
 
     // 주문 목록 조회-접수대기
     @GetMapping("/api/order-server/orders-waiting")
-    public ApiResult<?> getWaitingOrders(@RequestHeader("StoreId") Long storeId) {
-        return ApiUtils.success(orderService.getWaitingOrders(storeId));
+    public ApiResult<?> getWaitingOrders(@RequestHeader("UserId") Long ownerId) {
+        return ApiUtils.success(orderService.getWaitingOrders(ownerId));
     }
 
     // 주문 목록 조회-처리중
     @GetMapping("/api/order-server/orders-processing")
-    public ApiResult<?> getProcessingOrders(@RequestHeader("StoreId") Long storeId) {
-        return ApiUtils.success(orderService.getProcessingOrders(storeId));
+    public ApiResult<?> getProcessingOrders(@RequestHeader("UserId") Long ownerId) {
+        return ApiUtils.success(orderService.getProcessingOrders(ownerId));
     }
 
     // 주문 목록 조회-완료
     @GetMapping("/api/order-server/order-completion")
-    public ApiResult<?> getCompletedOrders(@RequestHeader("StoreId") Long storeId) {
-        return ApiUtils.success(orderService.getCompletedOrders(storeId));
+    public ApiResult<?> getCompletedOrders(@RequestHeader("UserId") Long ownerId) {
+        return ApiUtils.success(orderService.getCompletedOrders(ownerId));
     }
 
     // 주문 목록 조회-전체 일자별
     @GetMapping("/api/order-server/owner/orders")
-    public ApiResult<?> getAllOrders(@RequestHeader("StoreId") Long storeId) {
-        return ApiUtils.success(orderService.getAllOrders(storeId));
+    public ApiResult<?> getAllOrders(@RequestHeader("UserId") Long ownerId) {
+        return ApiUtils.success(orderService.getAllOrders(ownerId));
     }
 
     // 주문 상세 조회
@@ -137,7 +137,7 @@ public class OrderController {
 
     // 영업 종료 - 메뉴명 / 판매수 / 옵션 포함 판매 금액
     @GetMapping("/api/order-server/orders/stats")
-    public ApiResult<?> getStats(@RequestHeader("StoreId") Long storeId) {
-        return ApiUtils.success(orderService.getStats(storeId));
+    public ApiResult<?> getStats(@RequestHeader("UserId") Long ownerId) {
+        return ApiUtils.success(orderService.getStats(ownerId));
     }
 }
