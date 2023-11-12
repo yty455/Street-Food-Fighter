@@ -74,8 +74,7 @@ public class OrderService {
 
     @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
-        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
-                LocalDateTime.now());
+        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(), LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
         if (orderRepository.findByBucket(bucket).isPresent()) {
             throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
