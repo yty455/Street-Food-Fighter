@@ -8,9 +8,17 @@ const Container = styled.div.attrs<any>((props) => ({}))`
       flex-direction: column;
       background-color: ${lightgray};
       height: 100vh;
-      gap: 15px;
     `;
   }};
 `;
 
-export { Container };
+const Content = styled.div`
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding-bottom: 70px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+export { Container, Content };
