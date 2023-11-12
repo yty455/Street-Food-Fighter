@@ -2,7 +2,6 @@ import api from '../api';
 
 const LoginAPI = async (data: any) => {
   try {
-    console.log(data);
     const response = await api.post(`/api/owner-server/login`, data, {
       headers: {},
     });

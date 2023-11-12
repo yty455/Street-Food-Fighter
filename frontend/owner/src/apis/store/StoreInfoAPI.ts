@@ -1,8 +1,8 @@
 import api from '../api';
 
-const OwnerInfoAPI = async (token: string) => {
+const StoreInfoAPI = async (token: string) => {
   try {
-    const response = await api.get(`/api/owner-server/me`, {
+    const response = await api.get(`/api/store-service/store`, {
       headers: { authorization: token },
     });
     return response.data;
@@ -12,4 +12,4 @@ const OwnerInfoAPI = async (token: string) => {
   }
 };
 
-export default OwnerInfoAPI;
+export default StoreInfoAPI;
