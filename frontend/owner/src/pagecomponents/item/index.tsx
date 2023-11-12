@@ -11,7 +11,7 @@ const ItemPage = () => {
 
   const [currentItem, setCurrentItem] = useState(null);
 
-  const items = useMenuInfoHook();
+  const { items, refreshItems } = useMenuInfoHook();
 
   const openAddItemModal = () => {
     setIsAddItemOpen(true);
@@ -23,6 +23,7 @@ const ItemPage = () => {
   };
 
   const closeAddItemModal = () => {
+    refreshItems();
     setIsAddItemOpen(false);
   };
   return (

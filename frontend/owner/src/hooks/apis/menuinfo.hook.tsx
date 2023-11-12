@@ -5,18 +5,18 @@ import { Item } from '@/types/item.type';
 const useMenuInfoHook = () => {
   const [items, setItems] = useState<Item[]>([]);
 
-  useEffect(() => {
-    const fetchMenuInfo = async () => {
-      const fetchedItems = await MenuInfoAPI();
-      if (fetchedItems && Array.isArray(fetchedItems)) {
-        setItems(fetchedItems as Item[]);
-      }
-    };
+  const fetchMenuInfo = async () => {
+    const fetchedItems = await MenuInfoAPI();
+    if (fetchedItems && Array.isArray(fetchedItems)) {
+      setItems(fetchedItems);
+    }
+  };
 
+  useEffect(() => {
     fetchMenuInfo();
   }, []);
 
-  return items;
+  return { items, refreshItems: fetchMenuInfo };
 };
 
 export default useMenuInfoHook;
