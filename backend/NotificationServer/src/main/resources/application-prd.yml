@@ -1,8 +1,27 @@
 spring:
-  cloud:
-    config:
-      enabled: true
-  config:
-    import: optional:configserver:${CONFIG_SERVER}
-  application:
-    name: notiserver
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_SERVER}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_ID}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info
+server:
+  port: 8120
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: k9e205.p.ssafy.io
+    non-secure-port: 8120
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:1234@k9e205.p.ssafy.io:8761/eureka/
