@@ -13,6 +13,8 @@ import { user } from '@/temp/user';
 import Button from '@/components/common/button';
 import { VendorData } from '@/types/vendortype';
 import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
+import useBucketStore from '@/stores/bucketStore';
+import OrderAPI from '@/apis/vendor/OrderAPI';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -20,6 +22,8 @@ const PurchasePage = () => {
 
   const storedVendorId = useVendorStore((state) => state.vendorId);
   const [vendor, setVendor] = useState<VendorData | null>(null);
+
+  const bucket = useBucketStore((state) => state.bucket);
 
   useEffect(() => {
     const fetchVendorData = async () => {
@@ -34,7 +38,6 @@ const PurchasePage = () => {
 
   const catImage = categories.find((cat) => cat.type === vendor?.categoryType)?.image || '16.png';
   const { order } = useOrderStore();
-  // console.log(order);
 
   // input (요청사항)
   const [request, setRequest] = useState('');
@@ -43,8 +46,17 @@ const PurchasePage = () => {
   };
 
   // 결제하기 클릭
-  const handleSubmit = () => {
-    console.log('저장된 요청 사항:', request);
+  const handleSubmit = async () => {
+    // console.log('저장된 요청 사항:', request);
+
+    if (bucket) {
+      const data = {
+        bucketId: bucket.bucketId,
+        storeId: storedVendorId,
+        requirement: request,
+      };
+      await OrderAPI(data);
+    }
   };
   return (
     <div>
