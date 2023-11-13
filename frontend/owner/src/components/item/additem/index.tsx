@@ -7,8 +7,12 @@ import Button from '@/components/common/button';
 import BottomBtn from '@/components/common/bottombtn';
 import useImageUploader from '@/hooks/common/imageUpload.hook';
 import useOptionsHook from '@/hooks/item/option.hook.';
+import useAddMenuHook from '@/hooks/apis/addmenu.hook';
+import EditMenuAPI from '@/apis/menu/EditMenuAPI';
+import useEditMenuHook from '@/hooks/apis/editmenu.hook';
 
 const AddItem = ({ closeModal, type, item }: any) => {
+  // console.log('item: ', item);
   const [name, setName] = useState(item?.name || '');
   const [price, setPrice] = useState(item?.price || '');
   const [menuUrl, setMenuUrl] = useState(item?.menuUrl || '/images/common/defaultmenuimg.png');
@@ -19,19 +23,33 @@ const AddItem = ({ closeModal, type, item }: any) => {
   const handleImageUpload = useImageUploader('menu_images', setMenuUrl);
 
   // 옵션 관련
-  const { options, addOption, handleOptionChange, removeOption } = useOptionsHook(item?.optionInfoList || []);
+  const { options, addOption, handleOptionChange, removeOption, resetOptions } = useOptionsHook(item?.optionInfoList || []);
 
+  const resetInputs = () => {
+    setName('');
+    setPrice('');
+    setMenuUrl('/images/common/defaultmenuimg.png');
+    resetOptions();
+  };
   // 저장로직
-  const saveItem = () => {
+  const { addMenu } = useAddMenuHook();
+  const { editMenu } = useEditMenuHook();
+  const saveItem = async () => {
     const optionsWithoutIds = options.map(({ id, ...rest }) => rest);
     const itemData = {
       name,
-      price,
+      price: Number(price),
       menuUrl,
       optionInfoList: optionsWithoutIds,
     };
-    console.log(JSON.stringify(itemData, null, 2));
+    // console.log(JSON.stringify(itemData, null, 2));
+    if (type === 'modify') {
+      await editMenu(item.id, itemData);
+    } else {
+      await addMenu(itemData);
+    }
 
+    resetInputs();
     closeModal();
   };
 

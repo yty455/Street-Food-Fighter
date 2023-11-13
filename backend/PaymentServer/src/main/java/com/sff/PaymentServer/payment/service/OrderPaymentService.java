@@ -1,9 +1,8 @@
 package com.sff.PaymentServer.payment.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateResponse;
-import com.sff.PaymentServer.dto.PurposeCreateRequest;
+import com.sff.PaymentServer.dto.PointUpdateRequest;
 import com.sff.PaymentServer.error.code.NetworkError;
 import com.sff.PaymentServer.error.code.PaymentError;
 import com.sff.PaymentServer.error.type.BaseException;
@@ -31,6 +30,7 @@ public class OrderPaymentService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    @Transactional
     public void createOrderPayment(Long userId, OrderCreateRequest orderCreateRequest){
         // 주문 정보 추가 -> OrderServer
         OrderCreateResponse orderCreateResponse = createOrderRecord(orderCreateRequest);
@@ -66,7 +66,7 @@ public class OrderPaymentService {
     private void subtractUser(Long userId, Integer totalPrice){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PurposeCreateRequest(totalPrice, false));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));

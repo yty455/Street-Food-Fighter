@@ -1,8 +1,7 @@
 package com.sff.userserver.domain.member.service;
 
-import com.sff.userserver.domain.member.dto.GradeUpdateRequest;
-import com.sff.userserver.domain.member.dto.MemberInfoResponse;
-import com.sff.userserver.domain.member.dto.SignupRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sff.userserver.domain.member.dto.*;
 import com.sff.userserver.domain.member.entity.Member;
 
 import java.util.List;
@@ -18,5 +17,7 @@ public interface MemberService {
 
     List<MemberInfoResponse> getMembers(List<Long> memberIds);
 
-    void updateGrade(List<GradeUpdateRequest> gradeUpdateRequests);
+    void updateGrade(String gradeUpdateRequestList) throws JsonProcessingException;
+
+    List<MemberFcmTokenResponse> getFcmTokens(List<Long> memberIds);
 }

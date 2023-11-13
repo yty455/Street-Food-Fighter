@@ -1,30 +1,41 @@
 package com.sff.OrderServer.funding.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sff.OrderServer.bucket.dto.Option;
 import com.sff.OrderServer.bucket.entity.Bucket;
 import com.sff.OrderServer.bucket.entity.OrderMenu;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
+import com.sff.OrderServer.dto.FlagMSAResponse;
+import com.sff.OrderServer.dto.NotificationType;
+import com.sff.OrderServer.dto.UserInfo;
+import com.sff.OrderServer.dto.UserNotificationInfo;
 import com.sff.OrderServer.error.code.BucketError;
 import com.sff.OrderServer.error.code.FundingError;
+import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.dto.FlagList;
 import com.sff.OrderServer.funding.dto.FundingChosen;
 import com.sff.OrderServer.funding.dto.FundingCreateResponse;
 import com.sff.OrderServer.funding.dto.FundingDetailResponse;
 import com.sff.OrderServer.funding.dto.FundingItem;
+import com.sff.OrderServer.funding.dto.FundingList;
 import com.sff.OrderServer.funding.dto.FundingPerFlag;
 import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
 import com.sff.OrderServer.funding.dto.FundingUser;
 import com.sff.OrderServer.funding.entity.Funding;
 import com.sff.OrderServer.funding.repository.FundingRepository;
+import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.utils.ApiError;
+import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +46,11 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
+
+    private final StoreClient storeClient;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     // 펀딩 정보 저장 - 초기 상태 : 결제 중
     @Transactional
@@ -80,12 +96,8 @@ public class FundingService {
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
                 ()->new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING)));
 
-        // funding의 storeId로 storeName, storeUrl (MSA)
-        // funding의 flagId로 flagAddress, flagDate (MSA)
-        String storeName = "가게 이름";
-        String storeUrl = "URL";
-        String flagAddress = "깃발 주소";
-        LocalDateTime flagDate = LocalDateTime.now();
+        // 깃발 정보 요청
+        FlagMSAResponse flag = getFlagInfo(funding.getFlagId());
 
         Bucket bucket = funding.getBucket();
         List<FundingItem> fundingItems = getFundingItems(orderMenuRepository.findAllByBucket(bucket));
@@ -94,14 +106,28 @@ public class FundingService {
                 .state(funding.getFundingState())
                 .orderState(funding.getOrderState())
                 .storeId(funding.getStoreId())
-                .storeName(storeName)
-                .storeUrl(storeUrl)
-                .flagAddress(flagAddress)
-                .flagDate(flagDate)
+                .storeName(flag.getStoreName())
+                .categoryType(flag.getCategoryType())
+                .flagAddress(flag.getFlagAddress())
+                .flagDate(flag.getDate())
                 .createAt(funding.getCreatedAt())
                 .requirement(funding.getRequirement())
                 .fundingItemList(fundingItems)
                 .totalPrice(bucket.getTotalPrice()).build();
+    }
+
+    private FlagMSAResponse getFlagInfo(Long flagId){
+        ApiResult<FlagMSAResponse> result;
+        try{
+            result = storeClient.getFlagInformation(flagId);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_STORE));
+        }
+
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
     }
 
     private List<FundingItem> getFundingItems(List<OrderMenu> orderMenus){
@@ -154,9 +180,6 @@ public class FundingService {
         if(unpickedFlagIds!=null) {
             updateUnpickedFundingState(unpickedFlagIds);
         }
-
-        // 알림 요청 보내기 : KAFKA
-
     }
 
     @Transactional
@@ -183,6 +206,56 @@ public class FundingService {
             fundingRepository.saveAll(fundings);
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_AND_ORDER_STATE));
+        }
+    }
+
+    public void sendFundingResultToUsers(FundingChosen fundingChosen){
+        // 펀딩 성공 알림
+        sendToSuccess(fundingRepository.findAllByFlagId(fundingChosen.getPickedFlagId()));
+
+        // 펀딩 실패 알림
+        sendToFail(fundingRepository.findAllByFlagIdIn(fundingChosen.getUnpickedFlagIds()));
+    }
+    private void sendToSuccess(List<Funding> pickedFundings){
+        if(pickedFundings.isEmpty()){
+            return;
+        }
+        List<UserInfo> userInfoList = new ArrayList<>();
+        for(Funding funding : pickedFundings){
+            userInfoList.add(new UserInfo(funding));
+        }
+        Long storeId = pickedFundings.get(0).getStoreId();
+        UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
+                .storeId(storeId).type(NotificationType.SUCCESS)
+                .storeName("").userList(userInfoList).build();
+        try{
+            String notificationInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
+            kafkaTemplate.send("notification-service-notify-user", notificationInfoJson);
+        }catch (JsonProcessingException e) {
+            throw new BaseException(new ApiError(FundingError.SERIAL_ERROR));
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.ERROR_NOTIFICATION_REQUEST));
+        }
+    }
+    private void sendToFail(List<Funding> unpickedFundings){
+        if(unpickedFundings.isEmpty()){
+            return;
+        }
+        List<UserInfo> userInfoList = new ArrayList<>();
+        for(Funding funding : unpickedFundings){
+            userInfoList.add(new UserInfo(funding));
+        }
+        Long storeId = unpickedFundings.get(0).getStoreId();
+        UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
+                .storeId(storeId).type(NotificationType.FAILURE)
+                .storeName("").userList(userInfoList).build();
+        try{
+            String notificationInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
+            kafkaTemplate.send("notification-service-notify-user", notificationInfoJson);
+        }catch (JsonProcessingException e) {
+            throw new BaseException(new ApiError(FundingError.SERIAL_ERROR));
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.ERROR_NOTIFICATION_REQUEST));
         }
     }
 
@@ -216,9 +289,8 @@ public class FundingService {
 
     //-----------
     // 미선택 깃발들의 펀딩 리스트 조회
-    public List<Long> getUnpickedFlagFundings(FundingChosen fundingChosen){
+    public FundingList getUnpickedFlagFundings(FundingChosen fundingChosen){
         List<Long> unpickedFlags = fundingChosen.getUnpickedFlagIds();
-
-        return null;
+        return new FundingList((fundingRepository.findAllByFlagIdIn(unpickedFlags)).stream().map(funding->funding.getFundingId()).toList());
     }
 }

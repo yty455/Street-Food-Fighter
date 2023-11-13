@@ -58,7 +58,7 @@ const FooterStyle = styled.div.attrs<any>((props) => ({}))`
 
 const InputWrapper = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const marginTop = props.marginTop || '0px';
+    const marginTop = props.margintop || '0px';
     return css`
       width: 100%;
       padding: 0px 30px;

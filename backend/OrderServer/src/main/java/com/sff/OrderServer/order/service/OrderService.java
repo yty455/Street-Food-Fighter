@@ -36,6 +36,7 @@ import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderResponse;
 import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
+import com.sff.OrderServer.order.dto.StoreStatsResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
@@ -73,8 +74,7 @@ public class OrderService {
 
     @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
-        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
-                LocalDateTime.now());
+        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(), LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
         if (orderRepository.findByBucket(bucket).isPresent()) {
             throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
@@ -84,9 +84,9 @@ public class OrderService {
                     new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
             return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
-
     }
 
     public List<OrderResponse> getOrderRecords(Long userId) {
@@ -168,7 +168,8 @@ public class OrderService {
         return menuList;
     }
 
-    public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
+    public List<OrderRecordOfState> getWaitingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
         List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
                 OrderState.WAITING, LocalDateTime.now());
@@ -181,7 +182,8 @@ public class OrderService {
         return waitingOrderList;
     }
 
-    public List<OrderRecordOfState> getProcessingOrders(Long storeId) {
+    public List<OrderRecordOfState> getProcessingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> processingOrderList = new ArrayList<>();
         List<OrderRecord> processingOrderRecordList = orderRepository.findCurrentOrdersByDate(
                 storeId, OrderState.PROCESSING, LocalDateTime.now());
@@ -194,7 +196,8 @@ public class OrderService {
         return processingOrderList;
     }
 
-    public List<OrderRecordOfState> getCompletedOrders(Long storeId) {
+    public List<OrderRecordOfState> getCompletedOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> completedOrderList = new ArrayList<>();
         List<OrderRecord> completedOrderRecordList = orderRepository.findCurrentOrdersByDate(
                 storeId, OrderState.COMPLETED, LocalDateTime.now());
@@ -207,7 +210,8 @@ public class OrderService {
         return completedOrderList;
     }
 
-    public List<OrderRecordOfState> getAllOrders(Long storeId) {
+    public List<OrderRecordOfState> getAllOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> allOrderList = new ArrayList<>();
         List<OrderRecord> allOrderRecordList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(
                 storeId, LocalDateTime.now());
@@ -454,10 +458,12 @@ public class OrderService {
                         ((Long) OrderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
-    public List<MenuStatsResponse> getStats(Long storeId) {
+    public StoreStatsResponse getStats(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
         List<OrderRecord> orderList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId,
                 LocalDateTime.now());
+
         HashMap<String, MenuStatsResponse> map = new HashMap<>();
         for (OrderRecord orderRecord : orderList) {
             for (OrderItem orderItem : getOrderMenusDetail(orderRecord.getBucket())) {
@@ -469,12 +475,13 @@ public class OrderService {
                         new MenuStatsResponse(orderItem, map.get(orderItem.getName())));
             }
         }
-
+        int totalPrice = 0;
         for (String key : map.keySet()) {
             menuStatsResponseList.add(map.get(key));
+            totalPrice += map.get(key).getMenuTotalPrice();
         }
 
-        return menuStatsResponseList;
+        return new StoreStatsResponse(menuStatsResponseList, totalPrice);
     }
 
     private Bucket getBucket(Long bucketId) {
@@ -542,4 +549,17 @@ public class OrderService {
         return result.getResponse();
     }
 
+    private Long getStoreInfo(Long ownerId) {
+        ApiResult<Long> result;
+        try {
+            result = storeClient.getStore(ownerId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
 }

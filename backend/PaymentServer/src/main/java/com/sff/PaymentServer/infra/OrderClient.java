@@ -1,19 +1,23 @@
 package com.sff.PaymentServer.infra;
 
+import com.sff.PaymentServer.dto.FundingChosen;
 import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.FundingCreateResponse;
+import com.sff.PaymentServer.dto.FundingList;
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateResponse;
 import com.sff.PaymentServer.dto.OrderFromFundingResponse;
 import com.sff.PaymentServer.utils.ApiResult;
+import com.sff.PaymentServer.utils.ApiUtils;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "orderserver", url = "${spring.data.Order_Server}")
+@FeignClient(name = "orderserver", url = "${feign.orderserver.url}")
 public interface OrderClient {
 
     // ---주문 결제---
@@ -44,4 +48,11 @@ public interface OrderClient {
     // ---주문 거절 ---
     @PutMapping("/api/order-server/state-refused/{orderId}")
     ApiResult<Long> updateOrderStateRefused(@PathVariable Long orderId);
+
+    // ---미선택 깃발 펀딩들 전체 환불 및 펀딩들 상태 변경
+    @PostMapping("/api/order-server/fundings/chosen")
+    ApiResult<FundingList> getFundingPerFlags(@RequestBody FundingChosen fundingChosen);
+
+    @PutMapping("/api/order-server/fundings/chosen")
+    ApiResult updateFundings(@RequestBody FundingChosen fundingChosen);
 }

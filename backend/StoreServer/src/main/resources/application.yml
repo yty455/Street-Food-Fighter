@@ -36,6 +36,7 @@ springdoc:
 logging:
   config: classpath:logback.xml
   level:
+    feign.Logger: DEBUG
     root: info
 
 feign:

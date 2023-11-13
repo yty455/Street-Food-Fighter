@@ -1,9 +1,11 @@
 package com.sff.storeserver.domain.store.service;
 
+import com.sff.storeserver.common.error.code.FeignError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.common.feignClient.PayClient;
+import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
@@ -103,18 +105,15 @@ public class StoreService {
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
-
     }
 
-    public List<StoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
-        List<Store> nearbyFlags = storeRepository.findNearFlag(lati, longi, date);
+    public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
+        List<Flag> nearByFlags = flagRepository.findNearFlag(lati, longi, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-
-        return nearbyFlags
-                .stream()
-                .filter(store -> categories.contains(store.getCategory()))
-                .map(StoreInfoResponse::fromEntity)
+        return nearByFlags.stream()
+                .filter(flag -> categories.contains(flag.getStore().getCategory()))
+                .map(FlagStoreInfoResponse::fromEntity)
                 .toList();
     }
 
@@ -153,12 +152,15 @@ public class StoreService {
                     flagNotificationInfo.updateUnpicked(flag.getId());
                 }
             });
-
             // 깃발에 펀딩한 유저에게 알림 전송
-            payClient.notifyFlag(flagNotificationInfo);
+            try {
+                ApiResult<String> result = payClient.notifyFlag(flagNotificationInfo);
+            } catch (Exception ex) {
+                log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
+                throw new BaseException(FeignError.FEIGN_ERROR);
+            }
         }
         store.startBusiness(lati, longi, activeArea);
-
     }
 
     @Transactional
@@ -170,5 +172,11 @@ public class StoreService {
         // TODO - 영업 종료 후 주문 서비스에 보내서 정산 금액 받기
         store.closeBusiness();
 
+    }
+
+    public Long getStoreIdByOwnerId(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId)
+                .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
+        return store.getId();
     }
 }

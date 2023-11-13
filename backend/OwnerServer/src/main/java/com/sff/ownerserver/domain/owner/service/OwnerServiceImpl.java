@@ -56,7 +56,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public void updatePoint(Long ownerId, PointUpdateRequest pointUpdateRequest) {
         Owner owner = findOwner(ownerId);
-        if (pointUpdateRequest.isCharge()) {
+        if (pointUpdateRequest.getIsCharge()) {
             owner.addPoints(pointUpdateRequest.getAmount());
         } else {
             owner.deductPoints(pointUpdateRequest.getAmount());

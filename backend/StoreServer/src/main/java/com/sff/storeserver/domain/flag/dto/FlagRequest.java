@@ -36,6 +36,10 @@ public class FlagRequest {
     @NotNull(message = "경도 값이 공백입니다.")
     private double longi;
 
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
     public Flag toEntity(Store store) {
         return Flag.builder()
                 .store(store)

@@ -15,6 +15,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreInfoResponse {
+    private Long storeId;
     private Long ownerId;
     private String name;
     private String ownerName;
@@ -33,6 +34,7 @@ public class StoreInfoResponse {
 
     public static StoreInfoResponse fromEntity(Store store) {
         return StoreInfoResponse.builder()
+                .storeId(store.getId())
                 .ownerId(store.getOwnerId())
                 .name(store.getName())
                 .ownerName(store.getOwnerName())
