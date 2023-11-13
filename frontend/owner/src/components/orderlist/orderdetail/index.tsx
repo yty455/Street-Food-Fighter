@@ -9,6 +9,7 @@ import DetailOrderAPI from '@/apis/orders/DetailOrderAPI';
 import DetailType from '@/types/orderdetail.type';
 import ToProcessingAPI from '@/apis/orderstate/ToProcessingAPI';
 import ToCompletionAPI from '@/apis/orderstate/ToCompletionAPI';
+import ToRejectAPI from '@/apis/orderstate/ToRejectAPI';
 
 const OrderDetail = ({
   order,
@@ -50,6 +51,15 @@ const OrderDetail = ({
     const response = await ToProcessingAPI({ orderId: order.orderId });
     if (response) {
       // console.log('Order processing response:', response);
+      closeModal();
+      onOrderStateChanged();
+    }
+  };
+  // 주문 거절 클릭
+  const handleOrderReject = async () => {
+    const response = await ToRejectAPI({ orderId: order.orderId });
+    if (response) {
+      console.log('Order Reject response:', response);
       closeModal();
       onOrderStateChanged();
     }
@@ -104,8 +114,8 @@ const OrderDetail = ({
             <div style={{ width: '69%', height: '45px' }} onClick={handleOrderAccept}>
               <Button fontSize="22px" text="주문접수"></Button>
             </div>
-            <div style={{ width: '29%', height: '45px' }}>
-              <Button fontSize="22px" color="gray" text="주문거부"></Button>
+            <div style={{ width: '29%', height: '45px' }} onClick={handleOrderReject}>
+              <Button fontSize="22px" color="gray" text="주문거절"></Button>
             </div>
           </FlexRow>
         )}
