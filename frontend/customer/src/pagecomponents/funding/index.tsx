@@ -62,6 +62,7 @@ const FundingPage = () => {
         date: formattedDate,
       });
       if (nearFlagsData) {
+        console.log(nearFlagsData);
         setFlags(nearFlagsData);
       } else {
         console.error('Failed to fetch near flag data');
@@ -119,9 +120,9 @@ const FundingPage = () => {
       </Curpos>
       <CardList>
         <div />
-        {flags.map((vendor) => (
+        {flags.map((vendor, index) => (
           <Card
-            key={vendor.storeId}
+            key={index} // index를 key로 사용
             vendor={vendor}
             onClick={() => {
               router.push(`/vendor/${vendor.storeId}`);
