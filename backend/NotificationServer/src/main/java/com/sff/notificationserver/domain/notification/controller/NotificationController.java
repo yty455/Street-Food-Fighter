@@ -23,7 +23,7 @@ public class NotificationController {
 
     @Operation(summary = "손님 - 알림 조회", description = "손님의 알림 목록을 조회 합니다.")
     @UserIdRequired
-    @GetMapping("/api/notification-server/user/notification")
+    @GetMapping("/api/noti-server/user/notification")
     public ApiResult<?> getTodayNotifications(UserIdHolder userIdHolder,
                                               @RequestParam @Parameter(name = "page", description = "요청하는 페이지") int page,
                                               @RequestParam @Parameter(name = "size", description = "가져오려는 알림 개수") int size) {
