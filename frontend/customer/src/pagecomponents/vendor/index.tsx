@@ -89,7 +89,7 @@ const VendorPage = ({ id }: { id: string }) => {
           <div>{vendor.score || '0'}.0</div>
         </Review>
       </TopBox>
-      <TabBar vendor={vendor} />
+      <TabBar vendor={vendor} vendorid={index} />
     </VendorContainer>
   );
 };

@@ -1,14 +1,14 @@
 import api from '../api';
 
-const VendorDetailAPI = async ({ storeId }: any) => {
+const VendorReviewAPI = async ({ storeId }: any) => {
   // const accessToken = localStorage.getItem('accessToken');
   const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
   try {
-    const response = await api.get(`/api/store-service/stores/${storeId}/detail`, {
+    const response = await api.get(`/api/store-service/store/${storeId}/review?page=0&size=5`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('VendorDetailAPI', response.data);
+    console.log('VendorReviewAPI', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
@@ -16,4 +16,4 @@ const VendorDetailAPI = async ({ storeId }: any) => {
   }
 };
 
-export default VendorDetailAPI;
+export default VendorReviewAPI;
