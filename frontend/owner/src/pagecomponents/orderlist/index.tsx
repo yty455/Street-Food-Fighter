@@ -14,12 +14,18 @@ const OrderlistPage = () => {
     setActiveTab(activeTab);
   };
 
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refreshTabList = async () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
   return (
     <div>
-      {isModalOpen && selectedItem && <OrderDetail activeTab={activeTab} order={selectedItem} closeModal={closeModal} />}
+      {isModalOpen && selectedItem && (
+        <OrderDetail activeTab={activeTab} order={selectedItem} closeModal={closeModal} onOrderStateChanged={refreshTabList} />
+      )}
       <div>
         <Topbar text="주문 목록" />
-        <TabBar onOrderClick={handleOrderClick} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabBar onOrderClick={handleOrderClick} activeTab={activeTab} setActiveTab={setActiveTab} refreshKey={refreshKey} />
       </div>
     </div>
   );

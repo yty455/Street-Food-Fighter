@@ -1,5 +1,4 @@
 import Topbar from '@/components/common/topbar';
-import { orderdetail } from '@/temp/orderdetail';
 import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, TextBox, Title, ReviewList, ReviewScore } from './Orderdetail.styled';
 import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
@@ -8,11 +7,23 @@ import Receipt from '@/components/common/receipt';
 import { useEffect, useState } from 'react';
 import DetailOrderAPI from '@/apis/orders/DetailOrderAPI';
 import DetailType from '@/types/orderdetail.type';
+import ToProcessingAPI from '@/apis/orderstate/ToProcessingAPI';
+import ToCompletionAPI from '@/apis/orderstate/ToCompletionAPI';
+import ToRejectAPI from '@/apis/orderstate/ToRejectAPI';
 
-const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
+const OrderDetail = ({
+  order,
+  activeTab,
+  closeModal,
+  onOrderStateChanged,
+}: {
+  order: Order;
+  activeTab: any;
+  closeModal: any;
+  onOrderStateChanged: () => void;
+}) => {
   // console.log('order : ', order);
   const [detail, setDetail] = useState<DetailType>({} as DetailType);
-
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const fetchedDetails = await DetailOrderAPI({ orderId: order.orderId });
@@ -33,6 +44,34 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
     const formattedTime = date.toLocaleTimeString('ko-KR', optionsTime).slice(0, 5);
 
     return `${formattedDate} ${formattedTime}`;
+  };
+
+  // 주문 접수 클릭
+  const handleOrderAccept = async () => {
+    const response = await ToProcessingAPI({ orderId: order.orderId });
+    if (response) {
+      // console.log('Order processing response:', response);
+      closeModal();
+      onOrderStateChanged();
+    }
+  };
+  // 주문 거절 클릭
+  const handleOrderReject = async () => {
+    const response = await ToRejectAPI({ orderId: order.orderId });
+    if (response) {
+      console.log('Order Reject response:', response);
+      closeModal();
+      onOrderStateChanged();
+    }
+  };
+  // 조리완료 클릭
+  const handleOrderFinish = async () => {
+    const response = await ToCompletionAPI({ orderId: order.orderId });
+    if (response) {
+      console.log('Order finish response:', response);
+      closeModal();
+      onOrderStateChanged();
+    }
   };
 
   const formattedDate = formatDate(detail.createAt);
@@ -72,16 +111,16 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
         </TableContainer>
         {order.orderState == 'WAITING' && (
           <FlexRow>
-            <div style={{ width: '69%', height: '45px' }}>
+            <div style={{ width: '69%', height: '45px' }} onClick={handleOrderAccept}>
               <Button fontSize="22px" text="주문접수"></Button>
             </div>
-            <div style={{ width: '29%', height: '45px' }}>
-              <Button fontSize="22px" color="gray" text="주문거부"></Button>
+            <div style={{ width: '29%', height: '45px' }} onClick={handleOrderReject}>
+              <Button fontSize="22px" color="gray" text="주문거절"></Button>
             </div>
           </FlexRow>
         )}
         {order.orderState == 'PROCESSING' && (
-          <div style={{ width: '100%', height: '45px' }}>
+          <div style={{ width: '100%', height: '45px' }} onClick={handleOrderFinish}>
             <Button fontSize="22px" text="조리 완료" />
           </div>
         )}

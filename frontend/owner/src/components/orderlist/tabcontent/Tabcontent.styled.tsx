@@ -11,11 +11,11 @@ const Container = styled.div.attrs<any>((props) => ({}))`
       background-color: ${gray};
 
       width: 100vw;
-      height: 100vh;
+      height: 85vh;
       position: fixed;
       z-index: 1;
-
       gap: 10px;
+      overflow-y: auto;
     `;
   }};
 `;
