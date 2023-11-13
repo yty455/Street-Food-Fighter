@@ -23,6 +23,7 @@ public class Address {
 		this.region1 = region1;
 		this.region2 = region2;
 		this.region3 = region3;
+		this.region4 = "";
 	}
 
 	public Address(String region1, String region2, String region3, String region4) {
