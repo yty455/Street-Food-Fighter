@@ -15,6 +15,7 @@ import useMainFilterStore from '@/stores/mainFilterStore';
 import { categories } from '@/assets/category';
 import Card from '@/components/main/card';
 import { useRouter } from 'next/navigation';
+import NearflagAPI from '@/apis/flag/NearflagAPI';
 
 const FundingPage = () => {
   const router = useRouter();
@@ -39,26 +40,35 @@ const FundingPage = () => {
   const [flags, setFlags] = useState<NearFlagType[]>([]);
   const { selectedCategories } = useMainFilterStore();
 
-  // 임시 : 가게 정보 불러오기
+  // 임시 : 깃발 정보 불러오기
   useEffect(() => {
-    // 1. 현재 위치 이동시
-    // 2. 현지도 검색시
-    // 3. 카테고리 선택시
-    // 4. 날짜 선택시
-    console.log('가게정보 불러오기(1,2)', addressName);
-    const selectedTypes = selectedCategories
-      .map((categoryName) => {
-        const category = categories.find((c) => c.name === categoryName);
-        return category ? category.type : null;
-      })
-      .filter((type) => type !== null);
-    console.log('가게정보 불러오기(3)', selectedTypes);
+    // 1. 현재 위치 이동시 / 2. 현지도 검색시 / 3. 카테고리 선택시 / 4. 날짜 선택시
 
-    const formattedDate = selectedDate ? selectedDate.toLocaleDateString('en-CA') : null;
-    console.log('깃발 정보 불러오기(4)', formattedDate);
+    const fetchFlags = async () => {
+      // console.log('가게정보 불러오기(1,2)', addressName);
+      const selectedTypes = selectedCategories
+        .map((categoryName) => {
+          const category = categories.find((c) => c.name === categoryName);
+          return category ? category.type : null;
+        })
+        .filter((type) => type !== null);
+      // console.log('가게정보 불러오기(3)', selectedTypes);
 
-    // 이후 api연동
-    setFlags(nearflags as NearFlagType[]);
+      const formattedDate = selectedDate ? selectedDate.toLocaleDateString('en-CA') : null;
+      // console.log('깃발 정보 불러오기(4)', formattedDate);
+
+      const nearFlagsData = await NearflagAPI({
+        addressname: addressName,
+        categories: selectedTypes,
+        date: formattedDate,
+      });
+      if (nearFlagsData) {
+        setFlags(nearFlagsData);
+      } else {
+        console.error('Failed to fetch near flag data');
+      }
+    };
+    fetchFlags();
   }, [addressName, selectedCategories, selectedDate]);
 
   return (
