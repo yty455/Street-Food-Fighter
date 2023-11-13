@@ -11,25 +11,29 @@ import {
   CategoryImage,
   CategoryItem,
 } from './WishList.styled';
-import useMainFilterStore from '@/stores/mainFilterStore';
+import useWishListStore from '@/stores/wishListStore';
 import { categories } from '@/assets/category';
 
 const WishList = () => {
-  const { selectedCategories, toggleCategory, clearCategories } = useMainFilterStore();
-
-  const handleCategoryClick = (categoryname: any) => {
-    if (categoryname === '메뉴 전체') {
-      clearCategories();
-    } else {
-      toggleCategory(categoryname);
+  const { selectedCategories, toggleCategory } = useWishListStore();
+  const maxSelectedLength = 3;
+  const handleCategoryClick = (categoryname: string) => {
+    if (selectedCategories.length >= maxSelectedLength) {
+      if (selectedCategories.includes(categoryname)) {
+        toggleCategory(categoryname);
+      }
+      return;
     }
+    toggleCategory(categoryname);
   };
 
   return (
     <WishListStyle>
       <Topbar>먹고 싶은걸 골라봐요</Topbar>
       <Title>희망 메뉴</Title>
-      <CategoryCount>2/3</CategoryCount>
+      <CategoryCount>
+        {selectedCategories.length}/{maxSelectedLength}
+      </CategoryCount>
       <CategoriesContainer>
         {categories.map((category: any) => (
           <CategoryItem key={category.id} onClick={() => handleCategoryClick(category.name)} selected={selectedCategories.includes(category.name)}>
