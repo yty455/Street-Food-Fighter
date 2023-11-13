@@ -50,8 +50,6 @@ public class OrderPaymentService {
                 sendNotificationToOwner(orderCreateRequest.getStoreId());
                 // 주문 정보 복구(RollBack) - 주문정보가 삭제되기에 불필요
 
-                throw new BaseException(new ApiError("일부러낸 에러", 20000));
-
             }catch(BaseException e){
                 // 회원 포인트 추가(RollBack)
                 userClient.updateUserPoint(userId, new PointUpdateRequest(
