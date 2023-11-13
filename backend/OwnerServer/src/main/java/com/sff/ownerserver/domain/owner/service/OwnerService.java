@@ -1,9 +1,6 @@
 package com.sff.ownerserver.domain.owner.service;
 
-import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
-import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
-import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
-import com.sff.ownerserver.domain.owner.dto.SignupRequest;
+import com.sff.ownerserver.domain.owner.dto.*;
 
 public interface OwnerService {
     void signUp(SignupRequest signupRequest);
@@ -12,7 +9,9 @@ public interface OwnerService {
 
     OwnerInfoResponse getOwner(Long ownerId);
 
-    void updateMember(Long ownerId, MyInfoRequest myInfoRequest);
+    void updateOwner(Long ownerId, MyInfoRequest myInfoRequest);
 
     void updatePoint(Long ownerId, PointUpdateRequest pointUpdateRequest);
+
+    OwnerFcmTokenResponse getFcmToken(Long ownerId);
 }

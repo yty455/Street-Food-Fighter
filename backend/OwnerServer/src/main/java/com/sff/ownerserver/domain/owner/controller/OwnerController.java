@@ -1,9 +1,8 @@
 package com.sff.ownerserver.domain.owner.controller;
 
-import com.sff.ownerserver.domain.owner.dto.MyInfoRequest;
-import com.sff.ownerserver.domain.owner.dto.OwnerInfoResponse;
-import com.sff.ownerserver.domain.owner.dto.PointUpdateRequest;
-import com.sff.ownerserver.domain.owner.dto.SignupRequest;
+import com.sff.ownerserver.domain.common.annotation.UserIdRequired;
+import com.sff.ownerserver.domain.common.aspect.UserIdHolder;
+import com.sff.ownerserver.domain.owner.dto.*;
 import com.sff.ownerserver.domain.owner.service.OwnerService;
 import com.sff.ownerserver.global.utils.ApiResult;
 import com.sff.ownerserver.global.utils.ApiUtils;
@@ -23,28 +22,36 @@ public class OwnerController {
         return ApiUtils.success("회원 가입 성공");
     }
 
-    @DeleteMapping("/{ownerId}")
-    public ApiResult<?> deleteOwner(@PathVariable Long ownerId) {
-        ownerService.deleteOwner(ownerId);
+    @DeleteMapping("/me")
+    @UserIdRequired
+    public ApiResult<?> deleteOwner(UserIdHolder userIdHolder) {
+        ownerService.deleteOwner(userIdHolder.getUserId());
         return ApiUtils.success("회원 탈퇴 완료");
     }
 
     @GetMapping("/me")
-    public ApiResult<?> getOwner() {
-        OwnerInfoResponse owner = ownerService.getOwner(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> getOwner(UserIdHolder userIdHolder) {
+        OwnerInfoResponse owner = ownerService.getOwner(userIdHolder.getUserId());
         return ApiUtils.success(owner);
     }
 
     @PatchMapping("/me")
-    public ApiResult<?> updateOwner(@RequestBody MyInfoRequest myInfoRequest) {
-        ownerService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> updateOwner(@RequestBody MyInfoRequest myInfoRequest, UserIdHolder userIdHolder) {
+        ownerService.updateOwner(userIdHolder.getUserId(), myInfoRequest);
         return ApiUtils.success("내 정보 수정 성공");
     }
 
-    @PutMapping("/{ownerId}/points")
+    @PutMapping("/owners/{ownerId}/points")
     public ApiResult<?> updatePoint(@PathVariable Long ownerId, @RequestBody PointUpdateRequest pointUpdateRequest) {
         ownerService.updatePoint(ownerId, pointUpdateRequest);
         return ApiUtils.success("포인트 업데이트 성공");
     }
 
+    @GetMapping("/owners/{ownerId}/fcm-token")
+    public ApiResult<?> getFcmToken(@PathVariable Long ownerId) {
+        OwnerFcmTokenResponse fcmToken = ownerService.getFcmToken(ownerId);
+        return ApiUtils.success(fcmToken);
+    }
 }
