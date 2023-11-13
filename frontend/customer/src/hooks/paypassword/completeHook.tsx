@@ -68,7 +68,8 @@ const useCompleteHandler = (slug: string) => {
       if (curPwdPage === 1) {
         if (currentPassword === user.paymentPassword) {
           setPassword(1, currentPassword);
-          router.push('/ordercheck');
+          // 다른 경로로 이후에 변경
+          // router.push('/ordercheck');
         } else {
           alert('Incorrect password.');
           resetCurrentPassword();
