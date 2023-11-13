@@ -485,6 +485,12 @@ public class OrderService {
         return new StoreStatsResponse(menuStatsResponseList, totalPrice);
     }
 
+    @Transactional
+    public void deleteOrder(Long orderId) {
+        OrderRecord orderRecord = getOrderRecord(orderId);
+        orderRepository.delete(orderRecord);
+    }
+
     private Bucket getBucket(Long bucketId) {
         return bucketRepository.findById(bucketId).orElseThrow(
                 () -> new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
@@ -563,4 +569,5 @@ public class OrderService {
         }
         return result.getResponse();
     }
+
 }
