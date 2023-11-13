@@ -3,29 +3,42 @@ import { useRouter } from 'next/navigation';
 import { Requested, TopBox, Title, Content, VendorBox, FlexColumn, Location, Orderlist, More, Airfont, Cashline, FlexRow } from './Topurchase.styled';
 import BottomBtn from '@/components/common/bottombtn';
 import { useVendorStore } from '@/stores/curvendoridStore';
-import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
 import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/common/input';
 import { buckets } from '@/temp/buckets';
 import { user } from '@/temp/user';
 import Button from '@/components/common/button';
+import { VendorData } from '@/types/vendortype';
+import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
 
 const PurchasePage = () => {
   const router = useRouter();
   const { curnav } = useNavStore();
 
   const storedVendorId = useVendorStore((state) => state.vendorId);
-  const vendor = vendordata.find((v) => v.id === storedVendorId);
+  const [vendor, setVendor] = useState<VendorData | null>(null);
+
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      const data = await VendorDetailAPI({ storeId: storedVendorId });
+      if (data) {
+        setVendor(data);
+      }
+    };
+
+    fetchVendorData();
+  }, [storedVendorId]);
 
   if (!vendor) {
     console.log('가게가 없어졌어요');
     router.push('/');
     return <div>'가게가 없어졌어요 🥺'</div>;
   }
-  const catImage = categories.find((cat) => cat.id === vendor.category)?.image || '/images/category/16.png';
+
+  const catImage = categories.find((cat) => cat.type === vendor.categoryType)?.image || '/images/category/16.png';
 
   const { order } = useOrderStore();
   // console.log('order', order);
@@ -66,7 +79,7 @@ const PurchasePage = () => {
             <img src={`/images/category/${catImage}`} style={{ width: '45px', height: '45px' }} />
             <FlexColumn>
               <Title>{vendor.name}</Title>
-              <Location>{vendor.loc}</Location>
+              <Location>{vendor.activeArea}</Location>
             </FlexColumn>
           </VendorBox>
           <Requested>
