@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.store.dto;
 
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class StoreDetailResponse {
 
     // 손님 - 가게 상세 조회  ( 메뉴-가게/정보 , 리뷰 )
     // 가게 기본 정보
-    // 가게 이름, 소개, 운영 시간, 전화번호, 위치, 안내
+    // 가게 이름, 소개, 운영 시간, 전화번호, 위치, 안내, 카테고리
     // 메뉴
     // 리뷰 점수
 
@@ -30,6 +31,8 @@ public class StoreDetailResponse {
     private String activeArea;
     private String information;
     private String introduction;
+    private CategoryType categoryType;
+
 
     private List<MenuInfoResponse> menuInfoResponseList;
     private Double score;
@@ -44,6 +47,7 @@ public class StoreDetailResponse {
                 .activeArea(store.getActiveArea())
                 .information(store.getInformation())
                 .introduction(store.getIntroduction())
+                .categoryType(store.getCategory())
                 .menuInfoResponseList(menuInfoResponseList)
                 .score(score)
                 .build();
