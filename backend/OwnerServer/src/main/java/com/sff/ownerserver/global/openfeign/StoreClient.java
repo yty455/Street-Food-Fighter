@@ -3,6 +3,7 @@ package com.sff.ownerserver.global.openfeign;
 import com.sff.ownerserver.domain.owner.dto.StoreSignUpRequest;
 import com.sff.ownerserver.global.utils.ApiResult;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -10,4 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface StoreClient {
     @PostMapping("/stores")
     ApiResult<?> storeSignUp(@RequestBody StoreSignUpRequest storeSignUpRequest);
+
+    @DeleteMapping("/stores")
+    ApiResult<?> deleteStore();
 }

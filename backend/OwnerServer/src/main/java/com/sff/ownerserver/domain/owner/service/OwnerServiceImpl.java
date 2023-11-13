@@ -29,10 +29,10 @@ public class OwnerServiceImpl implements OwnerService {
         Owner owner = signupRequest.toEntity();
         owner.passwordEncode(passwordEncoder);
         Owner saveOwner = ownerRepository.save(owner);
-        sendToStore(signupRequest, saveOwner);
+        sendToStoreForSignUp(signupRequest, saveOwner);
     }
 
-    private void sendToStore(SignupRequest signupRequest, Owner saveOwner) {
+    private void sendToStoreForSignUp(SignupRequest signupRequest, Owner saveOwner) {
         StoreSignUpRequest storeSignUpRequest = StoreSignUpRequest.builder().ownerId(saveOwner.getId()).signupRequest(signupRequest).build();
         ApiResult<?> apiResult = storeClient.storeSignUp(storeSignUpRequest);
         if (apiResult.getApiError() != null) {
@@ -45,10 +45,19 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     @Transactional
     public void deleteOwner(Long ownerId) {
+        sendToStoreForWithdraw();
         if (ownerRepository.existsById(ownerId)) {
             ownerRepository.deleteById(ownerId);
         } else {
             throw new BaseException(new ApiError("존재하지 않는 사용자입니다.", 1201));
+        }
+    }
+
+    private void sendToStoreForWithdraw() {
+        ApiResult<?> apiResult = storeClient.deleteStore();
+        if (apiResult.getApiError() != null) {
+            log.error("회원탈퇴 진행 중 가게 탈퇴가 올바르지 않습니다. 에러 메세지 : {}", apiResult.getApiError().getMessage());
+            throw new BaseException(new ApiError("가게 정보가 탈퇴되지 못했습니다.", 1101));
         }
     }
 
