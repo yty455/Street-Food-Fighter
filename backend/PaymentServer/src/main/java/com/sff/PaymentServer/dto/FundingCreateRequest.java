@@ -12,5 +12,5 @@ public class FundingCreateRequest {
     private Long storeId;
     private Long flagId;
     private String requirement;
-
+    private String paymentPassword;
 }

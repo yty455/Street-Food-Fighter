@@ -59,7 +59,7 @@ public class RefundService {
         ApiResult result;
         try{
             result = userClient.updateUserPoint(paymentRecord.getUserId(), new PointUpdateRequest(
-                    paymentRecord.getPrice(), true));
+                    paymentRecord.getPrice(), true, null));
         }catch (Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
         }
@@ -145,7 +145,7 @@ public class RefundService {
         for(PaymentRecord paymentRecord : paymentRecords){
             ApiResult result;
             try{
-                result = userClient.updateUserPoint(paymentRecord.getUserId(), new PointUpdateRequest(paymentRecord.getPrice(), true));
+                result = userClient.updateUserPoint(paymentRecord.getUserId(), new PointUpdateRequest(paymentRecord.getPrice(), true, null));
             }catch (Exception e){
                 throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
             }

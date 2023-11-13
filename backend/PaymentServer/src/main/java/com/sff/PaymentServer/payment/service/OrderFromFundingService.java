@@ -115,7 +115,7 @@ public class OrderFromFundingService {
         ApiResult result;
         try {
             result = userClient.updateUserPoint(userId,
-                    new PointUpdateRequest((int) Math.floor(price * 0.9), true));
+                    new PointUpdateRequest((int) Math.floor(price * 0.9), true, null));
         }catch(Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
         }

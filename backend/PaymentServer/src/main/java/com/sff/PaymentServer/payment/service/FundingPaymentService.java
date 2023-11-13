@@ -33,7 +33,7 @@ public class FundingPaymentService {
         FundingCreateResponse fundingCreateResponse = createFundingRecord(fundingCreateRequest);
 
         // 결제 (회원 포인트 차감)
-        subtractUser(userId, fundingCreateResponse.getTotalPrice());
+        subtractUser(userId, fundingCreateResponse.getTotalPrice(), fundingCreateRequest.getPaymentPassword());
 
         // 결제 정보 저장
         savePaymentRecord(userId, fundingCreateRequest.getStoreId(), fundingCreateResponse);
@@ -57,10 +57,10 @@ public class FundingPaymentService {
         return result.getResponse();
     }
 
-    private void subtractUser(Long userId, Integer totalPrice){
+    private void subtractUser(Long userId, Integer totalPrice, String paymentPassword){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false, paymentPassword));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
