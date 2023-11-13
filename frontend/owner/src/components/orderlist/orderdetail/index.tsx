@@ -1,5 +1,4 @@
 import Topbar from '@/components/common/topbar';
-import { orderdetail } from '@/temp/orderdetail';
 import { Container, TableContainer, TableHeader, TableCell, Content, FlexRow, TextBox, Title, ReviewList, ReviewScore } from './Orderdetail.styled';
 import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
@@ -9,12 +8,21 @@ import { useEffect, useState } from 'react';
 import DetailOrderAPI from '@/apis/orders/DetailOrderAPI';
 import DetailType from '@/types/orderdetail.type';
 import ToProcessingAPI from '@/apis/orderstate/ToProcessingAPI';
-import { useRouter } from 'next/navigation';
+import ToCompletionAPI from '@/apis/orderstate/ToCompletionAPI';
 
-const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
+const OrderDetail = ({
+  order,
+  activeTab,
+  closeModal,
+  onOrderStateChanged,
+}: {
+  order: Order;
+  activeTab: any;
+  closeModal: any;
+  onOrderStateChanged: () => void;
+}) => {
   // console.log('order : ', order);
   const [detail, setDetail] = useState<DetailType>({} as DetailType);
-  const router = useRouter();
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const fetchedDetails = await DetailOrderAPI({ orderId: order.orderId });
@@ -42,7 +50,17 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
     const response = await ToProcessingAPI({ orderId: order.orderId });
     if (response) {
       // console.log('Order processing response:', response);
-      router.push('/orderlist');
+      closeModal();
+      onOrderStateChanged();
+    }
+  };
+  // 조리완료 클릭
+  const handleOrderFinish = async () => {
+    const response = await ToCompletionAPI({ orderId: order.orderId });
+    if (response) {
+      console.log('Order finish response:', response);
+      closeModal();
+      onOrderStateChanged();
     }
   };
 
@@ -92,7 +110,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
           </FlexRow>
         )}
         {order.orderState == 'PROCESSING' && (
-          <div style={{ width: '100%', height: '45px' }}>
+          <div style={{ width: '100%', height: '45px' }} onClick={handleOrderFinish}>
             <Button fontSize="22px" text="조리 완료" />
           </div>
         )}
