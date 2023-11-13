@@ -74,7 +74,8 @@ public class OrderService {
 
     @Transactional
     public OrderCreateResponse createOrder(OrderCreateRequest orderCreateRequest, Long userId) {
-        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(), LocalDateTime.now());
+        Integer orderCount = orderRepository.countOrdersByStoreId(orderCreateRequest.getStoreId(),
+                LocalDateTime.now());
         Bucket bucket = getBucket(orderCreateRequest.getBucketId());
         if (orderRepository.findByBucket(bucket).isPresent()) {
             throw new BaseException(new ApiError(OrderError.EXIST_ORDER_RECORD));
@@ -461,8 +462,8 @@ public class OrderService {
     public StoreStatsResponse getStats(Long ownerId) {
         Long storeId = getStoreInfo(ownerId);
         List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
-        List<OrderRecord> orderList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(storeId,
-                LocalDateTime.now());
+        List<OrderRecord> orderList = orderRepository.findCurrentOrdersByDate(storeId,
+                OrderState.COMPLETED, LocalDateTime.now());
 
         HashMap<String, MenuStatsResponse> map = new HashMap<>();
         for (OrderRecord orderRecord : orderList) {
