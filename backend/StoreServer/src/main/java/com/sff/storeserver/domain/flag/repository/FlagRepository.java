@@ -19,6 +19,6 @@ public interface FlagRepository extends JpaRepository<Flag, Long> {
 
     List<Flag> findByDateAndState(LocalDate date, FlagType state);
 
-    @Query(value = "SELECT f.* FROM flag f join store s on f.store_id = s.store_id WHERE ST_DISTANCE(ST_PointFromText(CONCAT('POINT(', CAST(f.lati AS CHAR), ' ', CAST(f.longi AS CHAR), ')')), ST_GeomFromText(CONCAT('POINT(', :lati, ' ', :longi, ')'))) <= 1500 and f.date = :date and f.state = 'WAITING' ", nativeQuery = true)
-    List<Flag> findNearFlag(@Param("lati") double lati, @Param("longi") double longi, @Param("date") LocalDate date);
+    @Query("select f from Flag f where f.addressRegion.region1 = :region1 and f.addressRegion.region2 = :region2 and f.addressRegion.region3 = :region3 and f.addressRegion.region4 = :region4 and f.date = :date and f.state = 'WAITING'")
+    List<Flag> findNearFlag(@Param("region1") String region1, @Param("region2") String region2, @Param("region3") String region3, @Param("region4") String region4, @Param("date") LocalDate date);
 }

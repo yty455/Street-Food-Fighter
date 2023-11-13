@@ -3,6 +3,7 @@ package com.sff.storeserver.domain.flag.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.entity.FlagType;
+import com.sff.storeserver.domain.store.entity.Address;
 import com.sff.storeserver.domain.store.entity.Store;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,6 +36,11 @@ public class FlagRequest {
     private double lati;
     @NotNull(message = "경도 값이 공백입니다.")
     private double longi;
+    private String region1;
+    private String region2;
+    private String region3;
+    private String region4;
+
 
     public void setStoreId(Long storeId) {
         this.storeId = storeId;
@@ -49,6 +55,7 @@ public class FlagRequest {
                 .address(address)
                 .lati(lati)
                 .longi(longi)
+                .addressRegion(new Address(region1, region2, region3, region4))
                 .state(FlagType.WAITING)
                 .build();
     }

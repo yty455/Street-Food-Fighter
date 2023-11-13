@@ -2,6 +2,7 @@ package com.sff.storeserver.domain.store.entity;
 
 import com.sff.storeserver.common.BaseEntity;
 import com.sff.storeserver.domain.flag.entity.Flag;
+import com.sff.storeserver.domain.store.dto.StoreStartInfo;
 import com.sff.storeserver.domain.store.dto.StoreUpdateCategory;
 import com.sff.storeserver.domain.store.dto.StoreUpdateInfo;
 import jakarta.persistence.*;
@@ -41,6 +42,8 @@ public class Store extends BaseEntity {
     private double longi;
     @Enumerated(EnumType.STRING)
     private BusinessType state;
+    @Embedded
+    private Address address;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus;
@@ -63,17 +66,28 @@ public class Store extends BaseEntity {
         this.businessCategory = storeUpdateCategory.getBusinessCategory();
     }
 
+    public void updateAddress(String region1, String region2, String region3, String region4) {
+        if (region1 != null && region2 != null && region3 != null) {
+            if (region4 != null) {
+                this.address = new Address(region1, region2, region3, region4);
+            } else {
+                this.address = new Address(region1, region2, region3);
+            }
+        }
+    }
+
     public void delete() {
         this.deleteStatus();
         menus.forEach(Menu::delete);
         flags.forEach(Flag::delete);
     }
 
-    public void startBusiness(double lati, double longi, String activeArea) {
+    public void startBusiness(StoreStartInfo storeStartInfo) {
         state = BusinessType.OPEN;
-        this.lati = lati;
-        this.longi = longi;
-        this.activeArea = activeArea;
+        lati = storeStartInfo.getLati();
+        longi = storeStartInfo.getLongi();
+        activeArea = storeStartInfo.getActiveArea();
+        updateAddress(storeStartInfo.getRegion1(), storeStartInfo.getRegion2(), storeStartInfo.getRegion3(), storeStartInfo.getRegion4());
     }
 
     public void closeBusiness() {

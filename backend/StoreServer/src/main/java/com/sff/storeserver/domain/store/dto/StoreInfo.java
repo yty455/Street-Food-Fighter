@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sff.storeserver.domain.store.entity.Address;
 import com.sff.storeserver.domain.store.entity.BusinessType;
 import com.sff.storeserver.domain.store.entity.CategoryType;
 import com.sff.storeserver.domain.store.entity.Store;
@@ -60,6 +61,7 @@ public class StoreInfo {
                 .activeArea("")
                 .lati(0)
                 .longi(0)
+                .address(new Address("", "", "", ""))
                 .state(BusinessType.CLOSE).build();
     }
 }
