@@ -5,7 +5,9 @@ import { useState } from 'react';
 import useOrderStore from '@/stores/orderStore';
 
 const Optioncard = ({ menuid, menudata }: any) => {
-  const optionlist = menudata.options || [];
+  console.log(menudata);
+
+  const optionlist = menudata.optionInfoList || [];
   const { order, addOption, removeOption, setQuantity } = useOrderStore();
 
   const menu = order.find((o) => o.menuId === menuid);
@@ -31,22 +33,24 @@ const Optioncard = ({ menuid, menudata }: any) => {
   // console.log(order);
   return (
     <OptionList>
-      <OptionBox>
-        <Title> 옵션선택</Title>
-        {optionlist &&
-          optionlist.map((option: Option) => (
-            <div key={option.id}>
-              <Content>
-                <Checkbox
-                  text={option.name}
-                  price={option.price}
-                  checked={order.some((o) => o.menuId === menuid && o.selectedOptions.includes(option.id))}
-                  onChange={(e: any) => handleCheckboxChange(option.id, e.target.checked)}
-                />
-              </Content>
-            </div>
-          ))}
-      </OptionBox>
+      {optionlist.length > 0 && (
+        <OptionBox>
+          <Title> 옵션선택</Title>
+          {optionlist &&
+            optionlist.map((option: Option) => (
+              <div key={option.id}>
+                <Content>
+                  <Checkbox
+                    text={option.name}
+                    price={option.price}
+                    checked={order.some((o) => o.menuId === menuid && o.selectedOptions.includes(option.id))}
+                    onChange={(e: any) => handleCheckboxChange(option.id, e.target.checked)}
+                  />
+                </Content>
+              </div>
+            ))}
+        </OptionBox>
+      )}
       <CountBox>
         <Title> 수량</Title>
         <RowBox>

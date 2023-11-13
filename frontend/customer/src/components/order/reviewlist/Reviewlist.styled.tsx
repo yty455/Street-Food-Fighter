@@ -9,7 +9,7 @@ const BoxContainer = styled.div.attrs<any>((props) => ({}))`
       background-color: ${lightgray};
       gap: 6px;
 
-      height: calc(100vh - 265px);
+      height: calc(100vh - 203px);
       overflow-y: auto;
     `;
   }};

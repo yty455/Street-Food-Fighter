@@ -15,7 +15,7 @@ const NavItem = ({ id, label, curnav, link, onClick }: any) => {
   const handleClick = () => {
     onClick();
     router.push(link);
-    setSelectedDate(null);
+    // setSelectedDate(null);
     clearCategories();
   };
   return (

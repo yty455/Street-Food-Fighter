@@ -23,7 +23,7 @@ const Curpos = styled.div`
   z-index: 3;
   position: fixed;
   right: 10px;
-  bottom: 70px;
+  bottom: 170px;
 `;
 const Topbar2 = styled.div`
   width: 100%;
@@ -38,4 +38,20 @@ const ResearchBox = styled.div`
   justify-content: center;
   flex-grow: 1;
 `;
-export { Day, Curpos, Topbar2, ResearchBox };
+const CardList = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    return css`
+      position: fixed;
+      bottom: 70px;
+      z-index: 3;
+      display: flex;
+      gap: 20px;
+      width: 100vw;
+      overflow-x: scroll;
+      white-space: nowrap;
+      flex-direction: row;
+    `;
+  }};
+`;
+
+export { Day, Curpos, Topbar2, ResearchBox, CardList };

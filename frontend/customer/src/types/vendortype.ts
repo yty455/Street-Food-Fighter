@@ -1,44 +1,27 @@
-export interface Option {
+export type OptionInfo = {
   id: number;
   name: string;
   price: number;
-}
+};
 
-export interface MenuOption {
+export type MenuInfo = {
   id: number;
   name: string;
   price: number;
-}
+  menuUrl: string;
+  optionInfoList: OptionInfo[];
+};
 
-export interface MenuItem {
-  id: number;
+export type VendorData = {
   name: string;
-  menuimg: string;
-  options: MenuOption[];
-  price: number;
-}
-
-export interface Review {
-  reviewid: number;
-  userid: number;
-  username: string;
-  stars: number;
-  content: string;
-}
-
-export interface Vendor {
-  id: number;
-  name: string;
-  lat: number;
-  lng: number;
-  category: number;
-  review: number;
+  ownerName: string;
   phone: string;
+  openTime: string;
+  closeTime: string;
+  activeArea: string;
+  information: string;
   introduction: string;
-  starttime: string;
-  endtime: string;
-  loc: string;
-  notice: string;
-  menulist: MenuItem[];
-  reviewlist: Review[];
-}
+  categoryType: string;
+  menuInfoResponseList: MenuInfo[];
+  score: number;
+};
