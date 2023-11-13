@@ -1,7 +1,7 @@
 import useCurrentLocation from '@/hooks/currentHook';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Filter, Position, Research, StyledTop, Topbar } from '../main/Main.styled';
-import { Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
+import { CardList, Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
 import { Map } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import FilterComponent from '@/components/common/filter';
@@ -9,12 +9,22 @@ import useSelectedDateStore from '@/stores/selectdateStore';
 import useDateOptions from '@/hooks/sevendaysHook';
 import useSetPlaceHook from '@/hooks/setplaceHook';
 import SearchPlace from '@/components/common/searchplace';
+import { nearflags } from '@/temp/nearflags';
+import { NearFlagType } from '@/types/nearflags.type';
+import useMainFilterStore from '@/stores/mainFilterStore';
+import { categories } from '@/assets/category';
+import Card from '@/components/main/card';
+import { useRouter } from 'next/navigation';
 
 const FundingPage = () => {
+  const router = useRouter();
+
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
+
   const { selectedDate } = useSelectedDateStore();
   const { formatDate } = useDateOptions();
+
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
@@ -25,6 +35,31 @@ const FundingPage = () => {
   const togglePosition = () => setPositionVisible(!isPositionVisible);
 
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
+
+  const [flags, setFlags] = useState<NearFlagType[]>([]);
+  const { selectedCategories } = useMainFilterStore();
+
+  // 임시 : 가게 정보 불러오기
+  useEffect(() => {
+    // 1. 현재 위치 이동시
+    // 2. 현지도 검색시
+    // 3. 카테고리 선택시
+    // 4. 날짜 선택시
+    console.log('가게정보 불러오기(1,2)', addressName);
+    const selectedTypes = selectedCategories
+      .map((categoryName) => {
+        const category = categories.find((c) => c.name === categoryName);
+        return category ? category.type : null;
+      })
+      .filter((type) => type !== null);
+    console.log('가게정보 불러오기(3)', selectedTypes);
+
+    const formattedDate = selectedDate ? selectedDate.toLocaleDateString('en-CA') : null;
+    console.log('깃발 정보 불러오기(4)', formattedDate);
+
+    // 이후 api연동
+    setFlags(nearflags as NearFlagType[]);
+  }, [addressName, selectedCategories, selectedDate]);
 
   return (
     <div style={{ height: '93vh' }}>
@@ -50,6 +85,19 @@ const FundingPage = () => {
       <Curpos onClick={updateLocation}>
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
       </Curpos>
+      <CardList>
+        <div />
+        {flags.map((vendor) => (
+          <Card
+            key={vendor.storeId}
+            vendor={vendor}
+            onClick={() => {
+              router.push(`/vendor/${vendor.storeId}`);
+            }}
+          />
+        ))}
+        <div />
+      </CardList>
     </div>
   );
 };

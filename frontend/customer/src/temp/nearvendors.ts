@@ -1,6 +1,6 @@
 export const nearvendors = [
   {
-    storeId: 1,
+    storeId: 10,
     ownerId: 1,
     name: '가게이름',
     ownerName: '사장이름',
