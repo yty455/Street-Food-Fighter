@@ -5,9 +5,24 @@ import { Order, ordermap } from '@/types/order.type';
 import Button from '@/components/common/button';
 import Badge from '@/components/common/badge';
 import Receipt from '@/components/common/receipt';
+import { useEffect, useState } from 'react';
+import DetailOrderAPI from '@/apis/orders/DetailOrderAPI';
+import DetailType from '@/types/orderdetail.type';
 
 const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
-  const detail = orderdetail;
+  // console.log('order : ', order);
+  const [detail, setDetail] = useState<DetailType>({} as DetailType);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      const fetchedDetails = await DetailOrderAPI({ orderId: order.orderId });
+      if (fetchedDetails) {
+        setDetail(fetchedDetails);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [order.orderId]);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
