@@ -15,6 +15,8 @@ const WrapContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       background-color: ${gray};
       height: 93vh;
+      padding-bottom: 30px;
+      overflow-y: auto;
     `;
   }};
 `;

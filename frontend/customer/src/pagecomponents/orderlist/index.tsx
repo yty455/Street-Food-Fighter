@@ -1,12 +1,25 @@
 import Topbar from '@/components/common/topbar';
-import { orders } from '@/temp/orderlist';
 import { Container, WrapContainer, OrderCardWrapper, CardTop, Topdown, VendorInfo, StoreName, Airfont } from './Orderlist.styled';
 import Button from '@/components/common/button';
 import { orderStateMapping } from '@/assets/orderstate';
 import { categories } from '@/assets/category';
-import { OrderState } from '@/types/orderstate.type';
+import { OrderState, OrdersType } from '@/types/orderlist.type';
+import { useEffect, useState } from 'react';
+import OrderListAPI from '@/apis/orderlist/OrderListAPI';
 
 const OrderListPage = () => {
+  const [orders, setOrders] = useState<OrdersType>([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const orderList = await OrderListAPI();
+      if (orderList) {
+        setOrders(orderList);
+      }
+    };
+    fetchOrders();
+  }, []);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];

@@ -1,4 +1,4 @@
-import { OrderState } from '@/types/orderstate.type';
+import { OrderState } from '@/types/orderlist.type';
 
 export const orderStateMapping: { [key in OrderState]: string } = {
   PAYMENT_IN_PROGRESS: '결제 전',
