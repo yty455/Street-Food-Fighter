@@ -25,7 +25,7 @@
       <!-- rollover daily -->
       <fileNamePattern>mylog-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy
-        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+              class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <!-- or whenever the file size reaches 100MB -->
         <maxFileSize>100MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
@@ -36,15 +36,15 @@
   </appender>
 
   <!-- Log Stash 사용시 사용할 TCP 통신 정보 -->
-  <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-    <destination>k9e205.p.ssafy.io:5000</destination>
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder"></encoder>
-  </appender>
+  <!--    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+  <!--        <destination>k9e205.p.ssafy.io:5000</destination>-->
+  <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder"></encoder>-->
+  <!--    </appender>-->
 
   <!-- root레벨 설정 -->
   <root level="INFO">
     <appender-ref ref="console"/>
-    <appender-ref ref="stash"/>
+    <!--        <appender-ref ref="stash"/>-->
   </root>
 
 </configuration>
