@@ -64,7 +64,7 @@ public class StoreService {
         List<MenuInfoResponse> menuInfoResponseList = menuRepository.findByStoreId(storeId).stream().map(MenuInfoResponse::fromEntity).toList();
         // 리뷰 점수
         Double score = reviewRepository.getAverageScoreByStoreId(storeId);
-        return StoreDetailResponse.fromEntity(store, menuInfoResponseList, score);
+        return StoreDetailResponse.fromEntity(store, menuInfoResponseList, score == null ? 0D : score);
     }
 
     @Transactional
