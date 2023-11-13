@@ -32,23 +32,39 @@ public class OrderPaymentService {
 
     @Transactional
     public void createOrderPayment(Long userId, OrderCreateRequest orderCreateRequest){
+
         // 주문 정보 추가 -> OrderServer
         OrderCreateResponse orderCreateResponse = createOrderRecord(orderCreateRequest);
+        try {
+            // 회원 포인트 차감 -> UserServer
+            subtractUser(userId, orderCreateResponse.getTotalPrice(), orderCreateRequest.getPaymentPassword());
+            try{
+                // 결제 정보 저장
+                savePaymentRecord(userId, orderCreateRequest.getStoreId(), orderCreateResponse);
+                // 결제 정보는 Transactional 처리가 되어 별도로 정의해주지 않아도 됨.
 
-        // 회원 포인트 차감 -> UserServer
-        subtractUser(userId, orderCreateResponse.getTotalPrice());
+                // 주문 정보 변경 - 주문 성공 + 바구니 상태 변경 -> OrderServer
+                updateOrderState(orderCreateResponse.getOrderId());
 
-        // 결제 정보 저장
-        savePaymentRecord(userId, orderCreateRequest.getStoreId(), orderCreateResponse);
+                // 주문 접수 대기 알림(to 사장) -> NotificationServer
+                sendNotificationToOwner(orderCreateRequest.getStoreId());
+                // 주문 정보 복구(RollBack) - 주문정보가 삭제되기에 불필요
 
-        // 주문 정보 변경 - 주문 성공 + 바구니 상태 변경 -> OrderServer
-        updateOrderState(orderCreateResponse.getOrderId());
+                throw new BaseException(new ApiError("일부러낸 에러", 20000));
 
-        // 주문 접수 대기 알림(to 사장) -> NotificationServer
-        sendNotificationToOwner(orderCreateRequest.getStoreId());
+            }catch(BaseException e){
+                // 회원 포인트 추가(RollBack)
+                userClient.updateUserPoint(userId, new PointUpdateRequest(
+                        orderCreateResponse.getTotalPrice(), true, null));
+                throw new BaseException(e.getApiError());
+            }
+        }catch(BaseException e){
+            // 주문 정보 삭제(RollBack)
+            orderClient.deleteOrder(orderCreateResponse.getOrderId());
+            throw new BaseException(e.getApiError());
+        }
     }
 
-    // 총액을 알아내는 것과 주문 정보 저장 동작을 한 번의 요청으로 할지 분리할지 고민.
     private OrderCreateResponse createOrderRecord(OrderCreateRequest orderCreateRequest){
         ApiResult<OrderCreateResponse> result;
         try{
@@ -63,10 +79,10 @@ public class OrderPaymentService {
         return result.getResponse();
     }
 
-    private void subtractUser(Long userId, Integer totalPrice){
+    private void subtractUser(Long userId, Integer totalPrice, String paymentPassword){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false, paymentPassword));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));

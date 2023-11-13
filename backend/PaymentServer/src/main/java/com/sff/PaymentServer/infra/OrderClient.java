@@ -10,6 +10,7 @@ import com.sff.PaymentServer.dto.OrderFromFundingResponse;
 import com.sff.PaymentServer.utils.ApiResult;
 import com.sff.PaymentServer.utils.ApiUtils;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,4 +56,11 @@ public interface OrderClient {
 
     @PutMapping("/api/order-server/fundings/chosen")
     ApiResult updateFundings(@RequestBody FundingChosen fundingChosen);
+
+
+    // ----- ROLL BACK -----
+
+    // 주문 결제 실패 - 주문삭제
+    @DeleteMapping("/api/order-server/orders/{orderId}")
+    ApiResult deleteOrder(@PathVariable Long orderId);
 }
