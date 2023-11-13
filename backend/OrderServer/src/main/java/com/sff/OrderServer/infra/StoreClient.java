@@ -1,5 +1,8 @@
 package com.sff.OrderServer.infra;
 
+import com.sff.OrderServer.bucket.dto.BucketRequest;
+import com.sff.OrderServer.bucket.dto.BucketRequestList;
+import com.sff.OrderServer.bucket.dto.Item;
 import com.sff.OrderServer.dto.FlagMSAResponse;
 import com.sff.OrderServer.dto.ReviewMSAResponse;
 import com.sff.OrderServer.dto.StoreMSARequest;
@@ -26,4 +29,9 @@ public interface StoreClient {
 
     @GetMapping("/api/store-service/store/storeId/{ownerId}")
     ApiResult<Long> getStore(@PathVariable Long ownerId);
+
+    // menu, option 정보 요청
+    @PostMapping("/api/store-service/menus/options")
+    ApiResult<List<Item>> getMenuAndOptionInformation(@RequestBody BucketRequestList bucketRequests);
+
 }

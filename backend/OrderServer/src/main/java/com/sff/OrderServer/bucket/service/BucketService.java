@@ -1,5 +1,7 @@
 package com.sff.OrderServer.bucket.service;
 
+import com.sff.OrderServer.bucket.dto.BucketRequest;
+import com.sff.OrderServer.bucket.dto.BucketRequestList;
 import com.sff.OrderServer.bucket.dto.Item;
 import com.sff.OrderServer.bucket.dto.Option;
 import com.sff.OrderServer.bucket.entity.Bucket;
@@ -8,8 +10,11 @@ import com.sff.OrderServer.bucket.entity.OrderOption;
 import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.error.code.BucketError;
+import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.type.BaseException;
+import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.utils.ApiError;
+import com.sff.OrderServer.utils.ApiResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +30,13 @@ public class BucketService {
     private final BucketRepository bucketRepository;
     private final OrderMenuRepository orderMenuRepository;
 
+    private final StoreClient storeClient;
+
     // Bucket 생성 및 OrderMenu, OrderOption 저장
     @Transactional
-    public Bucket createBucket(Long userId, List<Item> items){
+    public Bucket createBucket(Long userId, List<BucketRequest> bucketRequests){
+        List<Item> items = getMenuAndOptionInformation(new BucketRequestList(bucketRequests));
+
         Optional<Bucket> tempBucket = bucketRepository.findByUserIdAndPaymentStateFalse(userId);
         if(tempBucket.isPresent()){
             Bucket tBucket = tempBucket.get();
@@ -42,6 +51,20 @@ public class BucketService {
 
         orderMenuRepository.saveAll(getOrderMenuList(items, bucket));
         return bucket;
+    }
+    // store 서버로 메뉴, 옵션 정보 요청
+    private List<Item> getMenuAndOptionInformation(BucketRequestList bucketRequests){
+        ApiResult<List<Item>> result;
+        try{
+            result = storeClient.getMenuAndOptionInformation(bucketRequests);
+        }catch (Exception e){
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_STORE));
+        }
+
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
     }
 
     // bucket의 total price

@@ -1,5 +1,6 @@
 package com.sff.OrderServer.bucket.controller;
 
+import com.sff.OrderServer.bucket.dto.BucketRequest;
 import com.sff.OrderServer.bucket.dto.Item;
 import com.sff.OrderServer.bucket.service.BucketService;
 import com.sff.OrderServer.utils.ApiResult;
@@ -20,8 +21,8 @@ public class BucketController {
     private final BucketService bucketService;
 
     @PostMapping("/api/order-server/buckets")
-    public ApiResult<?> createBucket(@RequestHeader("UserId") Long userId, @RequestBody List<Item> items){
-        return ApiUtils.success(bucketService.createBucket(userId, items));
+    public ApiResult<?> createBucket(@RequestHeader("UserId") Long userId, @RequestBody List<BucketRequest> bucketRequests){
+        return ApiUtils.success(bucketService.createBucket(userId, bucketRequests));
     }
 
     // 주문, 펀딩과 통합 처리하도록 수정
