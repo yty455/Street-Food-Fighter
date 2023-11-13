@@ -40,6 +40,7 @@ dependencies {
 
     // third party
     implementation 'com.auth0:java-jwt:4.4.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // Eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

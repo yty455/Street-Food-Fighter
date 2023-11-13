@@ -1,15 +1,17 @@
 package com.sff.ownerserver.global.error;
 
 import com.sff.ownerserver.global.error.type.BaseException;
-import com.sff.ownerserver.global.error.type.ValidationException;
 import com.sff.ownerserver.global.utils.ApiResult;
 import com.sff.ownerserver.global.utils.ApiUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
