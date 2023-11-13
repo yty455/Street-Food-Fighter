@@ -4,28 +4,37 @@ import useOrderStore from '@/stores/orderStore';
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
+import BucketAPI from '@/apis/vendor/BucketAPI';
 const Menulist = ({ vendor }: any) => {
   const menulist = vendor.menuInfoResponseList || [];
 
   const { order, removeItem } = useOrderStore();
-  const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
+  const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.count > 0);
 
   const router = useRouter();
   const { curnav } = useNavStore();
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     order.forEach((menu) => {
-      if (menu.quantity === 0) {
+      if (menu.count === 0) {
         removeItem(menu.menuId);
       }
     });
 
     const updatedOrder = useOrderStore.getState().order;
 
-    const isOrderValid = updatedOrder.some((menu) => menu.quantity > 0);
+    console.log(updatedOrder);
+    const isOrderValid = updatedOrder.some((menu) => menu.count > 0);
+
+    const bucketResponse = await BucketAPI(updatedOrder);
+    if (bucketResponse) {
+      setBucket(bucketResponse);
+    } else {
+      console.error('Failed to fetch bucket data');
+    }
 
     if (isOrderValid) {
-      router.push('/topurchase');
+      // router.push('/topurchase');
     } else {
       console.error('Order is not valid');
     }
@@ -48,3 +57,6 @@ const Menulist = ({ vendor }: any) => {
 };
 
 export default Menulist;
+function setBucket(bucketResponse: any) {
+  throw new Error('Function not implemented.');
+}

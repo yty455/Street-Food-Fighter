@@ -3,14 +3,14 @@ import { create } from 'zustand';
 interface OptionState {
   menuId: number;
   selectedOptions: number[];
-  quantity: number;
+  count: number;
 }
 
 interface OptionStore {
   order: OptionState[];
   addOption: (menuId: number, optionId: number) => void;
   removeOption: (menuId: number, optionId: number) => void;
-  setQuantity: (menuId: number, quantity: number) => void;
+  setQuantity: (menuId: number, count: number) => void;
   clearOrder: () => void;
   removeItem: (menuId: number) => void;
 }
@@ -29,7 +29,7 @@ const useOrderStore = create<OptionStore>((set) => ({
         }
         newOrder[menuIndex] = menu;
       } else {
-        const newMenu = { menuId, selectedOptions: [optionId], quantity: 0 };
+        const newMenu = { menuId, selectedOptions: [optionId], count: 0 };
         newOrder.push(newMenu);
       }
 
@@ -45,17 +45,17 @@ const useOrderStore = create<OptionStore>((set) => ({
       return { order: [...state.order] };
     }),
 
-  setQuantity: (menuId, quantity) =>
+  setQuantity: (menuId, count) =>
     set((state) => {
       const menuIndex = state.order.findIndex((menu) => menu.menuId === menuId);
       if (menuIndex > -1) {
-        if (quantity > 0) {
-          state.order[menuIndex].quantity = quantity;
+        if (count > 0) {
+          state.order[menuIndex].count = count;
         } else {
           state.order.splice(menuIndex, 1);
         }
-      } else if (quantity > 0) {
-        state.order.push({ menuId, selectedOptions: [], quantity });
+      } else if (count > 0) {
+        state.order.push({ menuId, selectedOptions: [], count });
       }
       return { order: [...state.order] };
     }),
