@@ -7,7 +7,7 @@ import VendorReviewAPI from '@/apis/vendor/VendorReviewAPI';
 const Reviewlist = ({ vendor, vendorid }: any) => {
   const [reviewlist, setReviewlist] = useState([]);
 
-  console.log(vendor);
+  // console.log(vendor);
   useEffect(() => {
     const fetchReviews = async () => {
       const response = await VendorReviewAPI({ storeId: vendorid });

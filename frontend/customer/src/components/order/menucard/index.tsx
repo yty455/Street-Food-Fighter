@@ -18,7 +18,7 @@ const MenuCard = ({ menuid, menulist }: any) => {
       <CardContainer onClick={cardclick}>
         <LeftContainer>
           <div>
-            <img src={menudata.menuUrl} style={{ width: '60px' }} />
+            <img src={menudata.menuUrl} style={{ width: '60px' }} onError={(e) => (e.currentTarget.src = '/images/orderfunding/menuimg.png')} />
           </div>
           <InfoList>
             <Name>{menudata.name}</Name>

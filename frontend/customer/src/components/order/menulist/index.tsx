@@ -5,6 +5,7 @@ import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 import BucketAPI from '@/apis/vendor/BucketAPI';
+import useBucketStore from '@/stores/bucketStore';
 const Menulist = ({ vendor }: any) => {
   const menulist = vendor.menuInfoResponseList || [];
 
@@ -13,7 +14,7 @@ const Menulist = ({ vendor }: any) => {
 
   const router = useRouter();
   const { curnav } = useNavStore();
-
+  const { setBucket } = useBucketStore();
   const handleButtonClick = async () => {
     order.forEach((menu) => {
       if (menu.count === 0) {
@@ -23,7 +24,6 @@ const Menulist = ({ vendor }: any) => {
 
     const updatedOrder = useOrderStore.getState().order;
 
-    // console.log(updatedOrder);
     const isOrderValid = updatedOrder.some((menu) => menu.count > 0);
 
     const bucketResponse = await BucketAPI(updatedOrder);
@@ -34,7 +34,7 @@ const Menulist = ({ vendor }: any) => {
     }
 
     if (isOrderValid) {
-      // router.push('/topurchase');
+      router.push('/topurchase');
     } else {
       console.error('Order is not valid');
     }
@@ -57,6 +57,3 @@ const Menulist = ({ vendor }: any) => {
 };
 
 export default Menulist;
-function setBucket(bucketResponse: any) {
-  throw new Error('Function not implemented.');
-}
