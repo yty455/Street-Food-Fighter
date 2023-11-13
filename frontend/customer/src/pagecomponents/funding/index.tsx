@@ -40,7 +40,6 @@ const FundingPage = () => {
   const [flags, setFlags] = useState<NearFlagType[]>([]);
   const { selectedCategories } = useMainFilterStore();
 
-  // 임시 : 깃발 정보 불러오기
   useEffect(() => {
     // 1. 현재 위치 이동시 / 2. 현지도 검색시 / 3. 카테고리 선택시 / 4. 날짜 선택시
 
@@ -76,12 +75,12 @@ const FundingPage = () => {
       <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}>
         {flags &&
           flags.length > 0 &&
-          flags.map((vendor: any) => {
+          flags.map((vendor: any, index: number) => {
             const category = categories.find((c) => c.type === vendor.category);
             const imageSrc = `/images/category/${category?.image}`;
             return (
               <MapMarker
-                key={vendor.id || vendor.flag.flagId}
+                key={index}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
