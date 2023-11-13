@@ -10,4 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PayClient {
     @PutMapping(value = "/api/payment-server/flags/chosen")
     ApiResult<String> notifyFlag(@RequestBody FlagNotificationInfo flagNotificationInfo);
+
+    @PutMapping(value = "/api/payment-server/calculation")
+    ApiResult<String> requestForSettlement();
+
 }
