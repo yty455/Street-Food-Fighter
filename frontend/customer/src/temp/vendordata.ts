@@ -4,7 +4,7 @@ export const vendordata = {
   phone: '010-1234-2353',
   openTime: '11:00:00',
   closeTime: '23:00:00',
-  activeArea: '부산시 사상구 신호동',
+  activeArea: '부산광역시 강서구 녹산산단 335로 7',
   information: '가게 정보 입니다.',
   introduction: '안내 입니다.',
   categoryType: 'HOTTEOK', // 카테고리
