@@ -1,0 +1,1 @@
+export type OrderState = 'PAYMENT_IN_PROGRESS' | 'WAITING' | 'PROCESSING' | 'COMPLETED' | 'REFUSED';
