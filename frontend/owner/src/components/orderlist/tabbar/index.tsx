@@ -8,7 +8,7 @@ import AllOrdersAPI from '@/apis/orders/AllOrdersAPI';
 
 type TabName = 'waiting' | 'processing' | 'completion' | 'all';
 
-const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
+const TabBar = ({ onOrderClick, activeTab, setActiveTab, refreshKey }: any) => {
   const [list, setList] = useState([]);
   const [waitlist, setWaitList] = useState([]);
   const [processlist, setProcessList] = useState([]);
@@ -29,7 +29,7 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
     };
 
     fetchWaitingOrders();
-  }, [activeTab]);
+  }, [activeTab, refreshKey]);
 
   useEffect(() => {
     const fetchWaitingOrders = async () => {
@@ -52,7 +52,7 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
       }
     };
     fetchWaitingOrders();
-  }, []);
+  }, [refreshKey]);
 
   const handleTabClick = (tabName: TabName) => {
     setActiveTab(tabName);
