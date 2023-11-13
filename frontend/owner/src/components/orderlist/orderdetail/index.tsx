@@ -8,11 +8,13 @@ import Receipt from '@/components/common/receipt';
 import { useEffect, useState } from 'react';
 import DetailOrderAPI from '@/apis/orders/DetailOrderAPI';
 import DetailType from '@/types/orderdetail.type';
+import ToProcessingAPI from '@/apis/orderstate/ToProcessingAPI';
+import { useRouter } from 'next/navigation';
 
 const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab: any; closeModal: any }) => {
   // console.log('order : ', order);
   const [detail, setDetail] = useState<DetailType>({} as DetailType);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const fetchedDetails = await DetailOrderAPI({ orderId: order.orderId });
@@ -33,6 +35,15 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
     const formattedTime = date.toLocaleTimeString('ko-KR', optionsTime).slice(0, 5);
 
     return `${formattedDate} ${formattedTime}`;
+  };
+
+  // 주문 접수 클릭
+  const handleOrderAccept = async () => {
+    const response = await ToProcessingAPI({ orderId: order.orderId });
+    if (response) {
+      // console.log('Order processing response:', response);
+      router.push('/orderlist');
+    }
   };
 
   const formattedDate = formatDate(detail.createAt);
@@ -72,7 +83,7 @@ const OrderDetail = ({ order, activeTab, closeModal }: { order: Order; activeTab
         </TableContainer>
         {order.orderState == 'WAITING' && (
           <FlexRow>
-            <div style={{ width: '69%', height: '45px' }}>
+            <div style={{ width: '69%', height: '45px' }} onClick={handleOrderAccept}>
               <Button fontSize="22px" text="주문접수"></Button>
             </div>
             <div style={{ width: '29%', height: '45px' }}>
