@@ -96,19 +96,18 @@ public class StoreService {
         store.delete();
     }
 
-    public List<StoreInfoResponse> getNearStore(double lati, double longi, List<CategoryType> categories) {
-        List<Store> nearbyStores = storeRepository.findNearStore(lati, longi);
+    public List<StoreInfoResponse> getNearStore(String region1, String region2, String region3, String region4, List<CategoryType> categories) {
+        List<Store> nearbyStores = storeRepository.findNearStore(region1, region2, region3, region4);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        return nearbyStores
-                .stream()
+        return nearbyStores.stream()
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
     }
 
-    public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
-        List<Flag> nearByFlags = flagRepository.findNearFlag(lati, longi, date);
+    public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, String region1, String region2, String region3, String region4, List<CategoryType> categories) {
+        List<Flag> nearByFlags = flagRepository.findNearFlag(region1, region2, region3, region4, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
         return nearByFlags.stream()
@@ -134,17 +133,17 @@ public class StoreService {
     }
 
     @Transactional
-    public void startBusiness(Long ownerId, Long flagId, double lati, double longi, String activeArea) {
+    public void startBusiness(Long ownerId, StoreStartInfo storeStartInfo) {
 
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
 
         // 깃발 선택 했으면 펀딩 성공!!!
-        if (flagId != 0) {
+        if (storeStartInfo.getFlagId() != 0) {
             FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
             flags.forEach(flag -> {
-                if (flagId == flag.getId()) {
+                if (storeStartInfo.getFlagId() == flag.getId()) {
                     flag.fundingSuccess();
                     flagNotificationInfo.updatePicked(flag.getId());
                 } else {
@@ -160,7 +159,7 @@ public class StoreService {
                 throw new BaseException(FeignError.FEIGN_ERROR);
             }
         }
-        store.startBusiness(lati, longi, activeArea);
+        store.startBusiness(storeStartInfo);
     }
 
     @Transactional

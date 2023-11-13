@@ -1,6 +1,7 @@
 package com.sff.storeserver.domain.flag.entity;
 
 import com.sff.storeserver.common.BaseEntity;
+import com.sff.storeserver.domain.store.entity.Address;
 import com.sff.storeserver.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +31,8 @@ public class Flag extends BaseEntity {
     private LocalTime openTime;
     private LocalTime closeTime;
     private String address;
+    @Embedded
+    private Address addressRegion;
 
     private double lati;
     private double longi;

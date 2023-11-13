@@ -19,4 +19,9 @@ public class StoreStartInfo {
     private Double longi;
     @NotNull(message = "위치가 필요합니다.")
     private String activeArea;
+    private String region1;
+    private String region2;
+    private String region3;
+    private String region4;
+
 }
