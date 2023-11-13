@@ -4,6 +4,9 @@ import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useRegisterPageStore from '@/stores/registerStore';
 import { user } from '@/temp/user';
+import useBucketStore from '@/stores/bucketStore';
+import { useVendorStore } from '@/stores/curvendoridStore';
+import OrderAPI from '@/apis/vendor/OrderAPI';
 
 const useCompleteHandler = (slug: string) => {
   const router = useRouter();
@@ -13,8 +16,8 @@ const useCompleteHandler = (slug: string) => {
   const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
   const paypassword = useRegisterPageStore((state) => state.paypassword);
 
-  const handleComplete = () => {
-    // const currentPassword = useCurPasswordStore.getState().currentPassword;
+  const handleComplete = async () => {
+    const currentPassword = useCurPasswordStore.getState().currentPassword;
 
     if (slug == 'change') {
       if (curPwdPage === 1) {
@@ -55,6 +58,20 @@ const useCompleteHandler = (slug: string) => {
           console.log('비밀번호 입력 성공.');
           setCurPwdPage(1);
         } else {
+          resetCurrentPassword();
+        }
+      }
+    }
+    // 결제할 때,
+    if (slug == 'pay') {
+      setCurPwdPage(1);
+      if (curPwdPage === 1) {
+        if (currentPassword === user.paymentPassword) {
+          setPassword(1, currentPassword);
+          // 다른 경로로 이후에 변경
+          // router.push('/ordercheck');
+        } else {
+          alert('Incorrect password.');
           resetCurrentPassword();
         }
       }

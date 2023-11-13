@@ -1,6 +1,9 @@
 import { VendorContainer, BoxContainer, Title, Content, ContentTd } from './Vendorinfo.styled';
 
 const VendorInfo = ({ vendor }: any) => {
+  const formatTime = (timeString: string) => {
+    return timeString.substring(0, 5);
+  };
   return (
     <VendorContainer>
       <BoxContainer>
@@ -20,7 +23,7 @@ const VendorInfo = ({ vendor }: any) => {
             <tr>
               <ContentTd>운영시간</ContentTd>
               <ContentTd>
-                {vendor.openTime} ~ {vendor.closeTime}
+                {formatTime(vendor.openTime)} ~ {formatTime(vendor.closeTime)}
               </ContentTd>
             </tr>
             <tr>

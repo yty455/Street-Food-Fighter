@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 interface OptionState {
   menuId: number;
-  selectedOptions: number[];
+  optionIds: number[];
   count: number;
 }
 
@@ -24,12 +24,12 @@ const useOrderStore = create<OptionStore>((set) => ({
 
       if (menuIndex > -1) {
         const menu = { ...newOrder[menuIndex] };
-        if (!menu.selectedOptions.includes(optionId)) {
-          menu.selectedOptions = [...menu.selectedOptions, optionId];
+        if (!menu.optionIds.includes(optionId)) {
+          menu.optionIds = [...menu.optionIds, optionId];
         }
         newOrder[menuIndex] = menu;
       } else {
-        const newMenu = { menuId, selectedOptions: [optionId], count: 0 };
+        const newMenu = { menuId, optionIds: [optionId], count: 0 };
         newOrder.push(newMenu);
       }
 
@@ -40,7 +40,7 @@ const useOrderStore = create<OptionStore>((set) => ({
     set((state) => {
       const existingMenu = state.order.find((menu) => menu.menuId === menuId);
       if (existingMenu) {
-        existingMenu.selectedOptions = existingMenu.selectedOptions.filter((id) => id !== optionId);
+        existingMenu.optionIds = existingMenu.optionIds.filter((id) => id !== optionId);
       }
       return { order: [...state.order] };
     }),
@@ -55,7 +55,7 @@ const useOrderStore = create<OptionStore>((set) => ({
           state.order.splice(menuIndex, 1);
         }
       } else if (count > 0) {
-        state.order.push({ menuId, selectedOptions: [], count });
+        state.order.push({ menuId, optionIds: [], count });
       }
       return { order: [...state.order] };
     }),
