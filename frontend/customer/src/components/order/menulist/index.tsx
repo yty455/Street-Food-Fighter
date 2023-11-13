@@ -23,7 +23,7 @@ const Menulist = ({ vendor }: any) => {
 
     const updatedOrder = useOrderStore.getState().order;
 
-    // console.log(updatedOrder);
+    console.log(updatedOrder);
     const isOrderValid = updatedOrder.some((menu) => menu.count > 0);
 
     const bucketResponse = await BucketAPI(updatedOrder);
