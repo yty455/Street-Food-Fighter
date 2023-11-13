@@ -16,6 +16,7 @@ import { categories } from '@/assets/category';
 import Card from '@/components/main/card';
 import { useRouter } from 'next/navigation';
 import NearflagAPI from '@/apis/flag/NearflagAPI';
+import useFlagIdStore from '@/stores/flagidStore';
 
 const FundingPage = () => {
   const router = useRouter();
@@ -39,6 +40,8 @@ const FundingPage = () => {
 
   const [flags, setFlags] = useState<NearFlagType[]>([]);
   const { selectedCategories } = useMainFilterStore();
+
+  const { setFlagId } = useFlagIdStore();
 
   useEffect(() => {
     // 1. 현재 위치 이동시 / 2. 현지도 검색시 / 3. 카테고리 선택시 / 4. 날짜 선택시
@@ -125,6 +128,7 @@ const FundingPage = () => {
             key={index} // index를 key로 사용
             vendor={vendor}
             onClick={() => {
+              setFlagId(vendor.flag.flagId);
               router.push(`/vendor/${vendor.storeId}`);
             }}
           />
