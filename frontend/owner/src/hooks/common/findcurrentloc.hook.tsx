@@ -1,4 +1,3 @@
-import kakaomapApi from '@/apis/kakao/kakaoAPI';
 import kakaoAddressAPI from '@/apis/kakao/kakaoAddressAPI';
 import { useEffect, useState } from 'react';
 

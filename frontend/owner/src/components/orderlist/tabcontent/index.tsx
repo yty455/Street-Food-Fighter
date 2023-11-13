@@ -2,7 +2,7 @@ import OrderCard from '../ordercard';
 import { StyleDate } from '../tabbar/Tabbar.styled';
 import { Container } from './Tabcontent.styled';
 
-const TabContent = ({ activetab, list }: any) => {
+const TabContent = ({ activetab, list, onOrderClick }: any) => {
   const formatDate = (dateString: string) => {
     const options = { month: '2-digit', day: '2-digit' } as const;
     return new Date(dateString).toLocaleDateString('ko-KR', options).replace('. ', '월 ').replace('.', '일');
@@ -13,7 +13,7 @@ const TabContent = ({ activetab, list }: any) => {
     <Container>
       {/* {activetab === 'all' && <StyleDate>{formatDate(list[0].orderDate)}</StyleDate>} */}
       {list.map((item: any) => (
-        <OrderCard key={item.orderId} order={item} />
+        <OrderCard key={item.orderId} order={item} onClick={() => onOrderClick(item)} />
       ))}
     </Container>
   );

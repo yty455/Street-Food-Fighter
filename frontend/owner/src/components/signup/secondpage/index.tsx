@@ -10,14 +10,10 @@ const SignUpSecondPage = ({ params, ...props }: any) => {
   const { password, passwordCheck, setRegisterValue } = useSingUpPageStore();
 
   const moveNextPage = () => {
-    // if (email == '' || password == '' || passwordCheck == '') {
-    //   alert('모든 항목을 입력해야합니다.');
-    //   return;
-    // }
-    // if (password !== passwordCheck) {
-    //   alert('비밀번호가 같지 않습니다.');
-    //   return;
-    // }
+    if (password == '' || password != passwordCheck) {
+      alert('패스워드가 일치하지 않습니다.');
+      return;
+    }
     router.push('/signup/3');
   };
 

@@ -20,8 +20,5 @@ spring:
         show_sql: true
     open-in-view: false
   data:
-    User_Server: "http://192.168.30.143:8080"
-    Order_Server: "http://localhost:8080"
-    Notification_Server: "http://192.168.30.215:8080"
-    Store_Server: "http://192.168.30.215:8080"
-    Kafka_Server: "k9e205.p.ssafy.io:9092"
+    User_Server: "http://k9e205.p.ssafy.io:8100"
+    Store_Server: "http://k9e205.p.ssafy.io:8090"

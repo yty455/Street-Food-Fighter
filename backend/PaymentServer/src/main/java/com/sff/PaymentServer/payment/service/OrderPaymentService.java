@@ -2,7 +2,7 @@ package com.sff.PaymentServer.payment.service;
 
 import com.sff.PaymentServer.dto.OrderCreateRequest;
 import com.sff.PaymentServer.dto.OrderCreateResponse;
-import com.sff.PaymentServer.dto.PurposeCreateRequest;
+import com.sff.PaymentServer.dto.PointUpdateRequest;
 import com.sff.PaymentServer.error.code.NetworkError;
 import com.sff.PaymentServer.error.code.PaymentError;
 import com.sff.PaymentServer.error.type.BaseException;
@@ -15,6 +15,7 @@ import com.sff.PaymentServer.payment.repository.PaymentRecordRepository;
 import com.sff.PaymentServer.utils.ApiError;
 import com.sff.PaymentServer.utils.ApiResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,10 @@ public class OrderPaymentService {
     private final OrderClient orderClient;
     private final UserClient userClient;
     private final StoreClient storeClient;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Transactional
     public void createOrderPayment(Long userId, OrderCreateRequest orderCreateRequest){
         // 주문 정보 추가 -> OrderServer
         OrderCreateResponse orderCreateResponse = createOrderRecord(orderCreateRequest);
@@ -39,10 +44,8 @@ public class OrderPaymentService {
         // 주문 정보 변경 - 주문 성공 + 바구니 상태 변경 -> OrderServer
         updateOrderState(orderCreateResponse.getOrderId());
 
-        // 주문 결제 완료 알림(to 고객) -> NotificationServer
-
         // 주문 접수 대기 알림(to 사장) -> NotificationServer
-
+        sendNotificationToOwner(orderCreateRequest.getStoreId());
     }
 
     // 총액을 알아내는 것과 주문 정보 저장 동작을 한 번의 요청으로 할지 분리할지 고민.
@@ -63,7 +66,7 @@ public class OrderPaymentService {
     private void subtractUser(Long userId, Integer totalPrice){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PurposeCreateRequest(totalPrice, false));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
@@ -115,6 +118,14 @@ public class OrderPaymentService {
 
         if(result.getSuccess()==false){
             throw new BaseException(result.getApiError());
+        }
+    }
+
+    private void sendNotificationToOwner(Long storeId){
+        try {
+            kafkaTemplate.send("notification-service-notify-store", String.valueOf(storeId));
+        }catch (Exception e){
+            throw new BaseException(new ApiError(PaymentError.ERROR_NOTIFICATION_REQUEST));
         }
     }
 }

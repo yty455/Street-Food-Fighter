@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,9 +18,9 @@ public class GlobalExceptionHandler {
         return ApiUtils.error(be.getApiError());
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ApiResult<?> handleAllExceptions(ValidationException ex) {
+    public ApiResult<?> handleAllExceptions(MethodArgumentNotValidException ex) {
         for (FieldError fieldError : ex.getFieldErrors()) {
             String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage();

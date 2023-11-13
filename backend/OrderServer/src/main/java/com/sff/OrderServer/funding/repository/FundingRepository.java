@@ -29,4 +29,8 @@ public interface FundingRepository extends JpaRepository<Funding, Long> {
 
     List<Funding> findAllByUserIdAndFlagId(Long userId, Long flagId);
 
+    List<Funding> findAllByFlagId(Long flagId);
+
+    List<Funding> findAllByFlagIdIn(List<Long> flagIds);
+
 }

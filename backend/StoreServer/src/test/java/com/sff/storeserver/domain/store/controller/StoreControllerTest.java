@@ -65,14 +65,13 @@ class StoreControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.response.phone").value("010-1234-1234"))
                 .andExpect(jsonPath("$.response.category").value("FISHBREAD"))
                 .andExpect(jsonPath("$.response.businessCategory").value("포장마차"))
-                .andExpect(jsonPath("$.response.information").value("붕어빵집입니다."))
-                .andExpect(jsonPath("$.response.introduction").value("붕어빵집 입니다! 어서오세요."))
+                .andExpect(jsonPath("$.response.information").value(""))
+                .andExpect(jsonPath("$.response.introduction").value(""))
                 .andExpect(jsonPath("$.response.openTime").value("09:00:00"))
                 .andExpect(jsonPath("$.response.closeTime").value("11:00:00"))
-                .andExpect(jsonPath("$.response.activeArea").value("강서구"))
-                .andExpect(jsonPath("$.response.lati").value(48.87373649724122))
-                .andExpect(jsonPath("$.response.longi").value(2.2954639195323967))
-                .andExpect(jsonPath("$.response.storeUrl").value("www.naver.com"));
+                .andExpect(jsonPath("$.response.activeArea").value(""))
+                .andExpect(jsonPath("$.response.lati").value(0))
+                .andExpect(jsonPath("$.response.longi").value(0));
     }
 
     @DisplayName("가게 정보를 수정하고 성공을 반환 받는다.")
@@ -127,14 +126,13 @@ class StoreControllerTest extends ControllerTestSupport {
                 .phone("010-1234-1234")
                 .category(CategoryType.FISHBREAD)
                 .businessCategory("포장마차")
-                .information("붕어빵집입니다.")
-                .introduction("붕어빵집 입니다! 어서오세요.")
+                .information("")
+                .introduction("")
                 .openTime(fixedOpenTime)
                 .closeTime(fixedCloseTime)
-                .activeArea("강서구")
-                .lati(48.87373649724122)
-                .longi(2.2954639195323967)
-                .storeUrl("www.naver.com")
+                .activeArea("")
+                .lati(0)
+                .longi(0)
                 .build();
     }
 }

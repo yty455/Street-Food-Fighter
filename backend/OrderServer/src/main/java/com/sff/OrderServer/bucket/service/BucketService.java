@@ -29,7 +29,12 @@ public class BucketService {
     @Transactional
     public Bucket createBucket(Long userId, List<Item> items){
         Optional<Bucket> tempBucket = bucketRepository.findByUserIdAndPaymentStateFalse(userId);
-        tempBucket.ifPresent(this::deleteNonpaymentBucket);
+        if(tempBucket.isPresent()){
+            Bucket tBucket = tempBucket.get();
+            List<OrderMenu> orderMenuList = orderMenuRepository.findAllByBucket(tBucket);
+            orderMenuRepository.deleteAll(orderMenuList);
+            bucketRepository.delete(tBucket);
+        }
 
         Bucket bucket = new Bucket(userId, getTotalPrice(items));
 

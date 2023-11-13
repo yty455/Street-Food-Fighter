@@ -26,6 +26,7 @@ import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.infra.UserClient;
 import com.sff.OrderServer.order.dto.MenuItem;
 import com.sff.OrderServer.order.dto.MenuPerOrderResponse;
+import com.sff.OrderServer.order.dto.MenuStatsResponse;
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
 import com.sff.OrderServer.order.dto.OrderCreateResponse;
 import com.sff.OrderServer.order.dto.OrderDetailResponse;
@@ -35,6 +36,7 @@ import com.sff.OrderServer.order.dto.OrderPerUser;
 import com.sff.OrderServer.order.dto.OrderRecordOfState;
 import com.sff.OrderServer.order.dto.OrderResponse;
 import com.sff.OrderServer.order.dto.OwnerOrderDetailResponse;
+import com.sff.OrderServer.order.dto.StoreStatsResponse;
 import com.sff.OrderServer.order.entity.OrderRecord;
 import com.sff.OrderServer.order.entity.OrderState;
 import com.sff.OrderServer.order.entity.ReviewState;
@@ -44,7 +46,11 @@ import com.sff.OrderServer.utils.ApiResult;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -79,9 +85,9 @@ public class OrderService {
                     new OrderRecord(orderCreateRequest, orderCount, bucket, userId)).getOrderId();
             return new OrderCreateResponse(orderId, bucket.getTotalPrice());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BaseException(new ApiError(OrderError.FAILED_CREATE_ORDER));
         }
-
     }
 
     public List<OrderResponse> getOrderRecords(Long userId) {
@@ -163,7 +169,8 @@ public class OrderService {
         return menuList;
     }
 
-    public List<OrderRecordOfState> getWaitingOrders(Long storeId) {
+    public List<OrderRecordOfState> getWaitingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> waitingOrderList = new ArrayList<>();
         List<OrderRecord> watingOrderRecordList = orderRepository.findCurrentOrdersByDate(storeId,
                 OrderState.WAITING, LocalDateTime.now());
@@ -176,11 +183,11 @@ public class OrderService {
         return waitingOrderList;
     }
 
-    public List<OrderRecordOfState> getProcessingOrders(Long storeId) {
+    public List<OrderRecordOfState> getProcessingOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> processingOrderList = new ArrayList<>();
         List<OrderRecord> processingOrderRecordList = orderRepository.findCurrentOrdersByDate(
-                storeId,
-                OrderState.PROCESSING, LocalDateTime.now());
+                storeId, OrderState.PROCESSING, LocalDateTime.now());
         for (OrderRecord orderRecord : processingOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -190,11 +197,11 @@ public class OrderService {
         return processingOrderList;
     }
 
-    public List<OrderRecordOfState> getCompletedOrders(Long storeId) {
+    public List<OrderRecordOfState> getCompletedOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> completedOrderList = new ArrayList<>();
         List<OrderRecord> completedOrderRecordList = orderRepository.findCurrentOrdersByDate(
-                storeId,
-                OrderState.COMPLETED, LocalDateTime.now());
+                storeId, OrderState.COMPLETED, LocalDateTime.now());
         for (OrderRecord orderRecord : completedOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -204,10 +211,11 @@ public class OrderService {
         return completedOrderList;
     }
 
-    public List<OrderRecordOfState> getAllOrders(Long storeId) {
+    public List<OrderRecordOfState> getAllOrders(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
         List<OrderRecordOfState> allOrderList = new ArrayList<>();
         List<OrderRecord> allOrderRecordList = orderRepository.findAllByStoreIdOrderByCreatedAtDesc(
-                storeId);
+                storeId, LocalDateTime.now());
         for (OrderRecord orderRecord : allOrderRecordList) {
             Bucket bucket = orderRecord.getBucket();
             OrderRecordOfState orderRecordOfState = new OrderRecordOfState(orderRecord,
@@ -295,6 +303,34 @@ public class OrderService {
             e.printStackTrace();
             throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
         }
+        // Schedule 작업 시작
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.schedule(() -> {
+            try {
+                orderRecord.updateReviewState(ReviewState.REQUEST);
+            } catch (Exception e) {
+                throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_REQUEST));
+            }
+            try {
+                // 직렬화할 객체 생성
+                UserInfo userInfo = new UserInfo(orderRecord);
+                List<UserInfo> userInfoList = new ArrayList<>();
+                userInfoList.add(userInfo);
+                UserNotificationInfo userNotificationInfo = UserNotificationInfo.builder()
+                        .storeId(orderRecord.getStoreId()).type(NotificationType.REQUEST)
+                        .storeName("").userList(userInfoList).build();
+                // 객체를 JSON 문자열로 직렬화
+                String userInfoJson = objectMapper.writeValueAsString(userNotificationInfo);
+                kafkaTemplate.send("notification-service-notify-user", userInfoJson);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
+            }
+        }, 15, TimeUnit.MINUTES);
+
+        // 작업이 완료되면 executor를 종료합니다.
+        executorService.shutdown();
     }
 
     // msa o kafka o
@@ -423,6 +459,32 @@ public class OrderService {
                         ((Long) OrderPerUser[1]).intValue())).collect(Collectors.toList());
     }
 
+    public StoreStatsResponse getStats(Long ownerId) {
+        Long storeId = getStoreInfo(ownerId);
+        List<MenuStatsResponse> menuStatsResponseList = new ArrayList<>();
+        List<OrderRecord> orderList = orderRepository.findCurrentOrdersByDate(storeId,
+                OrderState.COMPLETED, LocalDateTime.now());
+
+        HashMap<String, MenuStatsResponse> map = new HashMap<>();
+        for (OrderRecord orderRecord : orderList) {
+            for (OrderItem orderItem : getOrderMenusDetail(orderRecord.getBucket())) {
+                if (!map.containsKey(orderItem.getName())) {
+                    map.put(orderItem.getName(), new MenuStatsResponse(orderItem));
+                    continue;
+                }
+                map.put(orderItem.getName(),
+                        new MenuStatsResponse(orderItem, map.get(orderItem.getName())));
+            }
+        }
+        int totalPrice = 0;
+        for (String key : map.keySet()) {
+            menuStatsResponseList.add(map.get(key));
+            totalPrice += map.get(key).getMenuTotalPrice();
+        }
+
+        return new StoreStatsResponse(menuStatsResponseList, totalPrice);
+    }
+
     private Bucket getBucket(Long bucketId) {
         return bucketRepository.findById(bucketId).orElseThrow(
                 () -> new BaseException(new ApiError(BucketError.NON_EXIST_BUCKET_USER))
@@ -478,6 +540,20 @@ public class OrderService {
         ApiResult<MemberInfoResponse> result;
         try {
             result = userClient.getMember();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
+
+    private Long getStoreInfo(Long ownerId) {
+        ApiResult<Long> result;
+        try {
+            result = storeClient.getStore(ownerId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));

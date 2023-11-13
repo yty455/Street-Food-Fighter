@@ -39,7 +39,6 @@ public class Store extends BaseEntity {
     private String activeArea;
     private double lati;
     private double longi;
-    private String storeUrl;
     @Enumerated(EnumType.STRING)
     private BusinessType state;
 

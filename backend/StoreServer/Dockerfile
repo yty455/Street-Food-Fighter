@@ -1,4 +1,4 @@
-FROM openjdk:17-oracle
+FROM openjdk:17-alpine
 
 COPY ./build/libs/StoreServer-0.0.1-SNAPSHOT.jar app.jar
 

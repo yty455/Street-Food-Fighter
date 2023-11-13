@@ -8,7 +8,7 @@ import TimeSelector from '@/components/timeselector';
 
 const SignUpThirdPage = ({ params, ...props }: any) => {
   const router = useRouter();
-  const { password, passwordCheck, setRegisterValue } = useSingUpPageStore();
+  const { storeName, bank, accountNumber, setRegisterValue } = useSingUpPageStore();
 
   const moveNextPage = () => {
     // if (email == '' || password == '' || passwordCheck == '') {
@@ -22,7 +22,7 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
     router.push('/signup/4');
   };
 
-  const handleChange = (e: any, key: 'password' | 'passwordCheck') => {
+  const handleChange = (e: any, key: 'storeName' | 'bank' | 'accountNumber') => {
     const { name, value } = e.target;
     // 스토어의 setField 함수를 사용하여 스토어의 상태를 업데이트합니다.
     setRegisterValue(key, value);
@@ -37,37 +37,22 @@ const SignUpThirdPage = ({ params, ...props }: any) => {
         <TimeSelector />
         <InputWrapper>
           <Input
-            onChange={(e: any) => handleChange(e, 'password')}
+            onChange={(e: any) => handleChange(e, 'storeName')}
             use="info"
             placeholder="가게 이름을 입력해주세요"
             label="가게 정보"
-            value={password}
+            value={storeName}
           ></Input>
         </InputWrapper>
         <InputWrapper>
-          <Input
-            onChange={(e: any) => handleChange(e, 'passwordCheck')}
-            use="info"
-            placeholder="은행을 입력해주세요"
-            label="정산 계좌"
-            value={passwordCheck}
-          ></Input>
+          <Input onChange={(e: any) => handleChange(e, 'bank')} use="info" placeholder="은행을 입력해주세요" label="정산 계좌" value={bank}></Input>
         </InputWrapper>
         <InputWrapper>
           <Input
-            onChange={(e: any) => handleChange(e, 'passwordCheck')}
+            onChange={(e: any) => handleChange(e, 'accountNumber')}
             use="info"
             placeholder="계좌번호를 입력해주세요"
-            value={passwordCheck}
-          ></Input>
-        </InputWrapper>
-        <InputWrapper>
-          <Input
-            onChange={(e: any) => handleChange(e, 'passwordCheck')}
-            use="info"
-            placeholder="활동 지역을 선택해 주세요"
-            label="활동 지역"
-            value={passwordCheck}
+            value={accountNumber}
           ></Input>
         </InputWrapper>
       </BodyStyle>

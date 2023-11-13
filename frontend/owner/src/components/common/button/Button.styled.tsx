@@ -5,7 +5,7 @@ const StyledButton = styled.div.attrs<any>((props) => ({}))`
     const main = props.theme.colors.main;
     const black = props.theme.colors.black;
     const bgcolor = props.color ? props.theme.colors[props.color] : main;
-    const color = props.color ? props.theme.colors.white : black;
+    const color = props.color ? props.theme.colors.light : black;
     const size = props.fontsize || '16px';
     return css`
       padding: 5px 15px;

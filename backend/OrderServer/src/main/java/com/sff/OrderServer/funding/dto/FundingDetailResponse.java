@@ -2,6 +2,7 @@ package com.sff.OrderServer.funding.dto;
 
 import com.sff.OrderServer.funding.entity.FundToOrderState;
 import com.sff.OrderServer.funding.entity.FundingState;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -19,10 +20,10 @@ public class FundingDetailResponse {
     private Long storeId;
 
     private String storeName;
-    private String storeUrl;
+    private String categoryType;
 
     private String flagAddress;
-    private LocalDateTime flagDate;
+    private LocalDate flagDate;
 
     private LocalDateTime createAt;
     private String requirement;

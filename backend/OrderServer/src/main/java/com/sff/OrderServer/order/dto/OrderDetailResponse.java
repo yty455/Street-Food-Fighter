@@ -17,7 +17,7 @@ public class OrderDetailResponse {
     private OrderState state;
     private Long storeId;
     private String storeName;
-    private String storeUrl;
+    private String categoryType;
     private String storeAddress;
     private LocalDateTime createAt;
     private String receiptNumber;
@@ -30,8 +30,8 @@ public class OrderDetailResponse {
         this.state = orderRecord.getOrderState();
         this.storeId = storeMSAResponse.getStoreId();
         this.storeName = storeMSAResponse.getName();
-        this.storeUrl = storeMSAResponse.getStoreUrl();
-        this.storeAddress = storeMSAResponse.getStoreUrl();
+        this.categoryType = storeMSAResponse.getCategoryType();
+        this.storeAddress = storeMSAResponse.getActiveArea();
         this.receiptNumber = orderRecord.getReceiptNumber();
         this.orderId = orderRecord.getOrderId();
         this.requirement = orderRecord.getRequirement();

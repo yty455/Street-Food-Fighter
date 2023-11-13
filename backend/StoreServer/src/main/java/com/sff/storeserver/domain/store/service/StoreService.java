@@ -1,9 +1,11 @@
 package com.sff.storeserver.domain.store.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sff.storeserver.common.error.code.FeignError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
+import com.sff.storeserver.common.feignClient.PayClient;
+import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.repository.FlagRepository;
@@ -15,14 +17,9 @@ import com.sff.storeserver.domain.store.repository.MenuRepository;
 import com.sff.storeserver.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,15 +35,8 @@ public class StoreService {
     private final ReviewRepository reviewRepository;
 
     private final OrderClient orderClient;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PayClient payClient;
 
-    @KafkaListener(topics = "#{createStoreTopic.name}", groupId = "store-service-create")
-    @Transactional
-    public void create(@Payload String storeInfo, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) throws IOException {
-        StoreInfo createStoreInfo = objectMapper.readValue(storeInfo, StoreInfo.class);
-        storeRepository.save(createStoreInfo.toEntity());
-        log.info("[store-server] 사장 회원가입 OwnerId : {}", createStoreInfo.getOwnerId());
-    }
 
     @Transactional
     public void createStore(StoreInfo storeInfo) {
@@ -115,18 +105,15 @@ public class StoreService {
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
-
     }
 
-    public List<StoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
-        List<Store> nearbyFlags = storeRepository.findNearFlag(lati, longi, date);
+    public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, double lati, double longi, List<CategoryType> categories) {
+        List<Flag> nearByFlags = flagRepository.findNearFlag(lati, longi, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-
-        return nearbyFlags
-                .stream()
-                .filter(store -> categories.contains(store.getCategory()))
-                .map(StoreInfoResponse::fromEntity)
+        return nearByFlags.stream()
+                .filter(flag -> categories.contains(flag.getStore().getCategory()))
+                .map(FlagStoreInfoResponse::fromEntity)
                 .toList();
     }
 
@@ -165,12 +152,15 @@ public class StoreService {
                     flagNotificationInfo.updateUnpicked(flag.getId());
                 }
             });
-
             // 깃발에 펀딩한 유저에게 알림 전송
-            orderClient.notifyFlag(flagNotificationInfo);
+            try {
+                ApiResult<String> result = payClient.notifyFlag(flagNotificationInfo);
+            } catch (Exception ex) {
+                log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
+                throw new BaseException(FeignError.FEIGN_ERROR);
+            }
         }
         store.startBusiness(lati, longi, activeArea);
-
     }
 
     @Transactional
@@ -179,8 +169,15 @@ public class StoreService {
         Store store = storeRepository.findByOwnerId(ownerId).orElseThrow(() ->
                 new BaseException(StoreError.NOT_FOUND_STORE));
 
-        // TODO - 영업 종료 후 주문 서비스에 보내서 정산 금액 받기
+        // 영업 종료 후 주문 서비스에 보내서 정산 금액 받기
+        payClient.requestForSettlement();
         store.closeBusiness();
 
+    }
+
+    public Long getStoreIdByOwnerId(Long ownerId) {
+        Store store = storeRepository.findByOwnerId(ownerId)
+                .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
+        return store.getId();
     }
 }

@@ -31,7 +31,19 @@ public class StoreInfo {
     private String activeArea;
     private double lati;
     private double longi;
-    private String storeUrl;
+
+
+    /*
+        "ownerId": 1,
+    "name": "가게이름",
+    "ownerName": "사장이름",
+    "phone": "010-1234-1234",
+    "businessCategory": "푸드트럭",
+    "category": "붕어빵",
+    "openTime": "10:00",
+    "closeTime": "16:00",
+
+     */
 
     public Store toEntity() {
         return Store.builder()
@@ -41,14 +53,13 @@ public class StoreInfo {
                 .phone(phone)
                 .category(category)
                 .businessCategory(businessCategory)
-                .information(information)
-                .introduction(introduction)
+                .information("")
+                .introduction("")
                 .openTime(openTime)
                 .closeTime(closeTime)
-                .activeArea(activeArea)
+                .activeArea("")
                 .lati(0)
                 .longi(0)
-                .storeUrl(storeUrl)
                 .state(BusinessType.CLOSE).build();
     }
 }

@@ -2,9 +2,7 @@ package com.sff.PaymentServer.payment.service;
 
 import com.sff.PaymentServer.dto.FundingCreateRequest;
 import com.sff.PaymentServer.dto.FundingCreateResponse;
-import com.sff.PaymentServer.dto.OrderCreateRequest;
-import com.sff.PaymentServer.dto.OrderCreateResponse;
-import com.sff.PaymentServer.dto.PurposeCreateRequest;
+import com.sff.PaymentServer.dto.PointUpdateRequest;
 import com.sff.PaymentServer.error.code.NetworkError;
 import com.sff.PaymentServer.error.code.PaymentError;
 import com.sff.PaymentServer.error.type.BaseException;
@@ -29,6 +27,7 @@ public class FundingPaymentService {
     private final UserClient userClient;
     private final StoreClient storeClient;
 
+    @Transactional
     public void createFundingPayment(Long userId, FundingCreateRequest fundingCreateRequest){
         // 펀딩 정보 추가 - 상태 : 결제중
         FundingCreateResponse fundingCreateResponse = createFundingRecord(fundingCreateRequest);
@@ -61,7 +60,7 @@ public class FundingPaymentService {
     private void subtractUser(Long userId, Integer totalPrice){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PurposeCreateRequest(totalPrice, false));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));

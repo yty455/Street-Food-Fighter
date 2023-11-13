@@ -1,6 +1,6 @@
 package com.sff.storeserver.domain.flag.service;
 
-import com.sff.storeserver.common.feignClient.OrderClient;
+import com.sff.storeserver.common.feignClient.PayClient;
 import com.sff.storeserver.domain.flag.dto.FlagNotificationInfo;
 import com.sff.storeserver.domain.flag.entity.Flag;
 import com.sff.storeserver.domain.flag.entity.FlagType;
@@ -18,20 +18,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FlagScheduler {
-
     private final FlagRepository flagRepository;
+    private final PayClient payClient;
 
-    private final OrderClient orderClient;
-
-    // TODO - 어제 사용 안한 깃발들 전부 펀딩 실패, 펀딩 3개중 1개 사용하면 나머지 2개 바로 펀딩 실패(영업시작에서 처리하기)
     @Scheduled(cron = "0 0 3 * * ?")
     @Transactional
     public void flagManager() {
         // 어제 날짜 펀딩 모두 불러 와서 사용안한 애들 펀딩 실패 처리
         LocalDate yesterday = LocalDate.now().minusDays(1);
         List<Flag> flagList = flagRepository.findByDateAndState(yesterday, FlagType.WAITING);
-        orderClient.notifyFlag(FlagNotificationInfo.builder().unpickedFlagIds(flagList.stream().map(Flag::getId).toList()).build());
+        payClient.notifyFlag(FlagNotificationInfo.builder().unpickedFlagIds(flagList.stream().map(Flag::getId).toList()).build());
         flagList.forEach(Flag::fundingFailed);
     }
-
 }
