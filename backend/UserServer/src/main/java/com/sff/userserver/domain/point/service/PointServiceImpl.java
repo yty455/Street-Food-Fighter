@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PointServiceImpl implements PointService {
     private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public PointAmountResponse getMyPoint(Long memberId) {
         Member member = memberRepository.findByIdWithPoint(memberId)
