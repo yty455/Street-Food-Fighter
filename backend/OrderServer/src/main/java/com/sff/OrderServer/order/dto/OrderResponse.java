@@ -19,7 +19,7 @@ public class OrderResponse {
     private OrderState orderState;
     private Long storeId;
     private String storeName;
-    private String storeUrl;
+    private String categoryType;
     private String menuName;
     private Integer menuCount;
     private Integer restCount;
@@ -31,7 +31,7 @@ public class OrderResponse {
         this.orderState = orderRecord.getOrderState();
         this.storeId = orderRecord.getStoreId();
         this.storeName = store.getName();
-        this.storeUrl = store.getStoreUrl();
+        this.categoryType = store.getCategoryType();
         this.bucketTotalPrice = bucketTotalPrice;
         this.menuName = orderMenu.getName();
         this.menuCount = orderMenu.getCount();
