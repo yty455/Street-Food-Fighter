@@ -22,9 +22,10 @@ public class OwnerController {
         return ApiUtils.success("회원 가입 성공");
     }
 
-    @DeleteMapping("/owners/{ownerId}")
-    public ApiResult<?> deleteOwner(@PathVariable Long ownerId) {
-        ownerService.deleteOwner(ownerId);
+    @DeleteMapping("/me")
+    @UserIdRequired
+    public ApiResult<?> deleteOwner(UserIdHolder userIdHolder) {
+        ownerService.deleteOwner(userIdHolder.getUserId());
         return ApiUtils.success("회원 탈퇴 완료");
     }
 
