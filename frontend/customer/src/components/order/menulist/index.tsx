@@ -1,19 +1,11 @@
-import { vendordata } from '@/temp/vendordata';
 import MenuCard from '../menucard';
-import { BoxContainer, Putin } from './Menulist.styled';
+import { BoxContainer } from './Menulist.styled';
 import useOrderStore from '@/stores/orderStore';
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
-const Menulist = ({ vendorid }: any) => {
-  const vendor = vendordata;
-
-  if (!vendor) {
-    return <div>가게가 없어졌어요 🥺</div>;
-  }
-
+const Menulist = ({ vendor }: any) => {
   const menulist = vendor.menuInfoResponseList || [];
-  // console.log(menulist);
 
   const { order, removeItem } = useOrderStore();
   const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
@@ -41,8 +33,8 @@ const Menulist = ({ vendorid }: any) => {
 
   return (
     <BoxContainer>
-      {menulist.map((menu) => (
-        <MenuCard key={menu.id} vendorid={vendorid} menuid={menu.id} />
+      {menulist.map((menu: any) => (
+        <MenuCard key={menu.id} menuid={menu.id} menulist={menulist} />
       ))}
       <div
         onClick={() => {

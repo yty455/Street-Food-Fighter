@@ -1,12 +1,6 @@
-import { vendordata } from '@/temp/vendordata';
 import { VendorContainer, BoxContainer, Title, Content, ContentTd } from './Vendorinfo.styled';
 
-const VendorInfo = ({ vendorid }: any) => {
-  const vendor = vendordata;
-  if (!vendor) {
-    return <div>가게가 없어졌어요 🥺</div>;
-  }
-  // console.log(vendor);
+const VendorInfo = ({ vendor }: any) => {
   return (
     <VendorContainer>
       <BoxContainer>

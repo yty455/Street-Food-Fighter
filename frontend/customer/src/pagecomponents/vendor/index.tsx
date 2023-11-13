@@ -1,21 +1,30 @@
 'use client';
-import { vendordata } from '@/temp/vendordata';
 import { useRouter } from 'next/navigation';
 import { VendorContainer, TopBox, StyledTop, VendorName, Review } from './Vendor.styled';
 import TabBar from '@/components/order/tab';
 import useOrderStore from '@/stores/orderStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useVendorStore } from '@/stores/curvendoridStore';
-import { vendorreviewlist } from '@/temp/vendorreviewlist';
 import { categories } from '@/assets/category';
+import { VendorData } from '@/types/vendortype';
+import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
 
 const VendorPage = ({ id }: { id: string }) => {
   const router = useRouter();
   const index = parseInt(id, 10);
 
-  // 데이터 가져오기
-  const vendor = vendordata;
-  const review = vendorreviewlist;
+  const [vendor, setVendor] = useState<VendorData | null>(null);
+
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      const data = await VendorDetailAPI({ storeId: index });
+      if (data) {
+        setVendor(data);
+      }
+    };
+
+    fetchVendorData();
+  }, [index]);
 
   const reviewImages = () => {
     if (!vendor) return [];
@@ -77,10 +86,10 @@ const VendorPage = ({ id }: { id: string }) => {
               <img key={index} src={`/images/category/${image}`} alt="Review" style={{ width: '30px' }} />
             ))}
           </div>
-          <div>{vendor.score.toFixed(1)}</div>
+          <div>{vendor.score || '0'}.0</div>
         </Review>
       </TopBox>
-      <TabBar vendorid={index} />
+      <TabBar vendor={vendor} />
     </VendorContainer>
   );
 };

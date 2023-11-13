@@ -4,7 +4,7 @@ import VendorInfo from '../vendorinfo';
 import Reviewlist from '../reviewlist';
 import Menulist from '../menulist';
 
-const TabBar = ({ vendorid }: any) => {
+const TabBar = ({ vendor }: any) => {
   const [activeTab, setActiveTab] = useState('menu');
 
   return (
@@ -21,9 +21,9 @@ const TabBar = ({ vendorid }: any) => {
         </Tab>
       </TabContainer>
       <Content>
-        {activeTab === 'menu' && <Menulist vendorid={vendorid}>메뉴 정보</Menulist>}
-        {activeTab === 'info' && <VendorInfo vendorid={vendorid} />}
-        {activeTab === 'review' && <Reviewlist vendorid={vendorid}></Reviewlist>}
+        {activeTab === 'menu' && <Menulist vendor={vendor}>메뉴 정보</Menulist>}
+        {activeTab === 'info' && <VendorInfo vendor={vendor} />}
+        {activeTab === 'review' && <Reviewlist vendor={vendor}></Reviewlist>}
       </Content>
     </div>
   );
