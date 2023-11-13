@@ -3,8 +3,7 @@ package com.sff.storeserver.domain.store.service;
 import com.sff.storeserver.common.error.code.MenuError;
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
-import com.sff.storeserver.domain.store.dto.MenuInfo;
-import com.sff.storeserver.domain.store.dto.MenuInfoResponse;
+import com.sff.storeserver.domain.store.dto.*;
 import com.sff.storeserver.domain.store.entity.Menu;
 import com.sff.storeserver.domain.store.entity.Store;
 import com.sff.storeserver.domain.store.repository.MenuRepository;
@@ -14,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -58,5 +58,22 @@ public class MenuService {
             throw new BaseException(MenuError.NOT_STORE_OWNER);
         }
         menu.delete();
+    }
+
+    public List<BucketResponse> getMenusOptionsByBucket(BucketRequestList bucketRequestList) {
+        List<BucketResponse> results = new ArrayList<>();
+        for (BucketRequest request : bucketRequestList.getBucketRequestList()) {
+            Menu menu = menuRepository.findById(request.getMenuId()).orElseThrow(() ->
+                    new BaseException(MenuError.NOT_FOUND_MENU));
+            results.add(BucketResponse.fromEntity(
+                    menu,
+                    menu.getOptions().stream()
+                            .filter((option) -> request.getOptionIds().contains(option.getId()))
+                            .map(BucketOptionResponse::fromEntity)
+                            .toList(),
+                    request.getCount()
+            ));
+        }
+        return results;
     }
 }

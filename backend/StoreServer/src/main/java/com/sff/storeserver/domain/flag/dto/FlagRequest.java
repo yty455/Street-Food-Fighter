@@ -33,12 +33,16 @@ public class FlagRequest {
     private String address;
 
     @NotNull(message = "위도 값이 공백입니다.")
-    private double lati;
+    private Double lati;
     @NotNull(message = "경도 값이 공백입니다.")
-    private double longi;
+    private Double longi;
+    @NotNull(message = "위치 뎁스1이 공백입니다.")
     private String region1;
+    @NotNull(message = "위치 뎁스2이 공백입니다.")
     private String region2;
+    @NotNull(message = "위치 뎁스3이 공백입니다.")
     private String region3;
+    @NotNull(message = "위치 뎁스4이 공백입니다.")
     private String region4;
 
 
