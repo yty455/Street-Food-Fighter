@@ -75,7 +75,7 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 사장님 회원 탈퇴", description = "사장님 회원 탈퇴")
-    @DeleteMapping("/store")
+    @DeleteMapping("/stores")
     @UserIdRequired
     public ApiResult<String> deleteStore(UserIdHolder userIdHolder) {
         storeService.deleteStore(userIdHolder.getUserId());
