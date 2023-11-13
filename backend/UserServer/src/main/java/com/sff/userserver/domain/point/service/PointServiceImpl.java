@@ -33,9 +33,20 @@ public class PointServiceImpl implements PointService {
                 .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101)));
         Point point = member.getPoint();
         if (pointUpdateRequest.getIsCharge()) {
-            point.addPoints(pointUpdateRequest.getAmount());
+            chargePoint(point, pointUpdateRequest.getAmount());
         } else {
-            point.deductPoints(pointUpdateRequest.getAmount());
+            usePoint(point, pointUpdateRequest.getPaymentPassword(), pointUpdateRequest.getAmount());
         }
+    }
+
+    private static void usePoint(Point point, String paymentPassword, int amount) {
+        if (!point.getPaymentPassword().equals(paymentPassword)) {
+            throw new BaseException(new ApiError("결제 비밀번호가 올바르지 않습니다.", 1120));
+        }
+        point.deductPoints(amount);
+    }
+
+    private static void chargePoint(Point point, int amount) {
+        point.addPoints(amount);
     }
 }
