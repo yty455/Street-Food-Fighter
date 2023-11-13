@@ -6,6 +6,7 @@ import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,5 +140,12 @@ public class OrderController {
     @GetMapping("/api/order-server/orders/stats")
     public ApiResult<?> getStats(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getStats(ownerId));
+    }
+
+    // 주문 정보 삭제
+    @DeleteMapping("/api/order-server/orders/{orderId}")
+    public ApiResult<?> deleteOrder(@PathVariable Long orderId){
+        orderService.deleteOrder(orderId);
+        return ApiUtils.success("성공적으로 주문 정보를 삭제했습니다.");
     }
 }
