@@ -71,7 +71,7 @@ const FundingPage = () => {
             const imageSrc = `/images/category/${category?.image}`;
             return (
               <MapMarker
-                key={vendor.id}
+                key={vendor.id || vendor.flag.flagId}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,

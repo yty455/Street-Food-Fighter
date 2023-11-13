@@ -11,8 +11,8 @@ export type FlagType = {
 };
 
 export type StoreType = {
-  storeId?: number;
-  ownerId?: number;
+  storeId: number;
+  ownerId: number;
   name: string;
   ownerName: string;
   phone: string;

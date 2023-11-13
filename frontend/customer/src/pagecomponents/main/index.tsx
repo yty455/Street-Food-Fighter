@@ -56,12 +56,12 @@ const MainPage = () => {
       <Map center={position} style={{ width: '100%', height: '100%' }} level={3} ref={mapRef}>
         {vendors &&
           vendors.length > 0 &&
-          vendors.map((vendor: any) => {
+          vendors.map((vendor: any, index: number) => {
             const category = categories.find((c) => c.type === vendor.category);
             const imageSrc = `/images/category/${category?.image}`;
             return (
               <MapMarker
-                key={vendor.id}
+                key={vendor.id || index}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
