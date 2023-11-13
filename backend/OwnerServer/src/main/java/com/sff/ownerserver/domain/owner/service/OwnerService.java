@@ -9,7 +9,7 @@ public interface OwnerService {
 
     OwnerInfoResponse getOwner(Long ownerId);
 
-    void updateMember(Long ownerId, MyInfoRequest myInfoRequest);
+    void updateOwner(Long ownerId, MyInfoRequest myInfoRequest);
 
     void updatePoint(Long ownerId, PointUpdateRequest pointUpdateRequest);
 

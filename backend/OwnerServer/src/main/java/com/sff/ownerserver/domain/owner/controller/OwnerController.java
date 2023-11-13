@@ -1,5 +1,7 @@
 package com.sff.ownerserver.domain.owner.controller;
 
+import com.sff.ownerserver.domain.common.annotation.UserIdRequired;
+import com.sff.ownerserver.domain.common.aspect.UserIdHolder;
 import com.sff.ownerserver.domain.owner.dto.*;
 import com.sff.ownerserver.domain.owner.service.OwnerService;
 import com.sff.ownerserver.global.utils.ApiResult;
@@ -27,14 +29,16 @@ public class OwnerController {
     }
 
     @GetMapping("/me")
-    public ApiResult<?> getOwner() {
-        OwnerInfoResponse owner = ownerService.getOwner(1L); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> getOwner(UserIdHolder userIdHolder) {
+        OwnerInfoResponse owner = ownerService.getOwner(userIdHolder.getUserId());
         return ApiUtils.success(owner);
     }
 
     @PatchMapping("/me")
-    public ApiResult<?> updateOwner(@RequestBody MyInfoRequest myInfoRequest) {
-        ownerService.updateMember(1L, myInfoRequest); // TODO: 실제 인증된 회원의 ID 넣기
+    @UserIdRequired
+    public ApiResult<?> updateOwner(@RequestBody MyInfoRequest myInfoRequest, UserIdHolder userIdHolder) {
+        ownerService.updateOwner(userIdHolder.getUserId(), myInfoRequest);
         return ApiUtils.success("내 정보 수정 성공");
     }
 

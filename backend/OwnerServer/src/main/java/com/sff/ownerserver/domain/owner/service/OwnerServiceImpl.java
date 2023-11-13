@@ -59,7 +59,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     @Transactional
-    public void updateMember(Long ownerId, MyInfoRequest myInfoRequest) {
+    public void updateOwner(Long ownerId, MyInfoRequest myInfoRequest) {
         Owner owner = findOwner(ownerId);
         owner.update(myInfoRequest);
     }
