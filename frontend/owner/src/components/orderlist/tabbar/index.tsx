@@ -36,6 +36,7 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
       const fetchedOrders1 = await WaitingOrdersAPI();
       if (fetchedOrders1) {
         setWaitList(fetchedOrders1);
+        setList(fetchedOrders1);
       }
       const fetchedOrders2 = await ProcessingOrdersAPI();
       if (fetchedOrders2) {
@@ -50,7 +51,6 @@ const TabBar = ({ onOrderClick, activeTab, setActiveTab }: any) => {
         setAllList(fetchedOrders4);
       }
     };
-
     fetchWaitingOrders();
   }, []);
 
