@@ -17,14 +17,15 @@ const Keypad = ({ slug }: { slug: string }) => {
   // slug 별 handler
   const { handleComplete, resetHandler } = useCompleteHandler(slug);
 
-  const handleKeyPress = (key: number) => {
-    const newPass = currentPassword.length < 6 ? currentPassword + key.toString() : currentPassword;
+  const handleKeyPress = async (key: number) => {
+    if (currentPassword.length < 7) {
+      const newPass = currentPassword + key.toString();
+      setCurrentPassword(newPass);
 
-    setCurrentPassword(newPass);
-
-    if (newPass.length === 6) {
-      handleComplete();
-      handleReset();
+      if (newPass.length === 6) {
+        await handleComplete();
+        handleReset();
+      }
     }
   };
 
