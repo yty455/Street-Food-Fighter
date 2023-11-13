@@ -32,16 +32,9 @@ const PurchasePage = () => {
     fetchVendorData();
   }, [storedVendorId]);
 
-  if (!vendor) {
-    console.log('가게가 없어졌어요');
-    router.push('/');
-    return <div>'가게가 없어졌어요 🥺'</div>;
-  }
-
-  const catImage = categories.find((cat) => cat.type === vendor.categoryType)?.image || '/images/category/16.png';
-
+  const catImage = categories.find((cat) => cat.type === vendor?.categoryType)?.image || '16.png';
   const { order } = useOrderStore();
-  // console.log('order', order);
+  // console.log(order);
 
   // input (요청사항)
   const [request, setRequest] = useState('');
@@ -78,8 +71,8 @@ const PurchasePage = () => {
           <VendorBox>
             <img src={`/images/category/${catImage}`} style={{ width: '45px', height: '45px' }} />
             <FlexColumn>
-              <Title>{vendor.name}</Title>
-              <Location>{vendor.activeArea}</Location>
+              <Title>{vendor?.name}</Title>
+              <Location>{vendor?.activeArea}</Location>
             </FlexColumn>
           </VendorBox>
           <Requested>
@@ -91,9 +84,8 @@ const PurchasePage = () => {
           </Requested>
           <Orderlist>
             <Title style={{ padding: '10px 15px' }}>주문 목록</Title>
-            {order.map((o, index) => (
-              <BagOrder key={index} curorder={o} vendor={vendor} />
-            ))}
+
+            {order && order.map((o, index) => <BagOrder key={index} curorder={o} />)}
             <More
               onClick={() => {
                 router.back();
@@ -108,13 +100,13 @@ const PurchasePage = () => {
           <Cashline>
             <Title> 보유 파이트 머니</Title>
             <FlexRow>
-              <Airfont>{Number(user.points).toLocaleString()} 원</Airfont>
+              <Airfont>{Number(user.points).toLocaleString()}원</Airfont>
               <Button text="충전"></Button>
             </FlexRow>
           </Cashline>
           <Cashline>
             <Title> 결제 예정 금액 </Title>
-            <div>{Number(buckets.totalPrice).toLocaleString()} 원</div>
+            <div>{Number(buckets.totalPrice).toLocaleString()}원</div>
           </Cashline>
         </Requested>
       </Content>

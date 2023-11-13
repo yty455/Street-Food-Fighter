@@ -40,5 +40,6 @@ const InfoList = styled.div`
   display: flex;
   gap: 5px;
   flex-direction: column;
+  width: 260px;
 `;
 export { Airfont, MenuBox, InfoBox, Title, InfoList };

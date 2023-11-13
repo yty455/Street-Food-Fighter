@@ -62,7 +62,7 @@ const FundingPage = () => {
         date: formattedDate,
       });
       if (nearFlagsData) {
-        console.log(nearFlagsData);
+        // console.log(nearFlagsData);
         setFlags(nearFlagsData);
       } else {
         console.error('Failed to fetch near flag data');

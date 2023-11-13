@@ -8,7 +8,7 @@ const VendorDetailAPI = async ({ storeId }: any) => {
     const response = await api.get(`/api/store-service/stores/${storeId}/detail`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('VendorDetailAPI', response.data);
+    console.log('VendorDetailAPI', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
