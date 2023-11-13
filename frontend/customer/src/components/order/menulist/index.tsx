@@ -6,12 +6,13 @@ import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
 const Menulist = ({ vendorid }: any) => {
-  const vendor = vendordata.find((v) => v.id === vendorid);
+  const vendor = vendordata;
+
   if (!vendor) {
     return <div>가게가 없어졌어요 🥺</div>;
   }
 
-  const menulist = vendor.menulist || [];
+  const menulist = vendor.menuInfoResponseList || [];
   // console.log(menulist);
 
   const { order, removeItem } = useOrderStore();

@@ -5,12 +5,13 @@ import Optioncard from '../optioncard';
 
 const MenuCard = ({ vendorid, menuid }: any) => {
   const [open, setOpen] = useState(false);
-  const vendor = vendordata.find((v) => v.id === vendorid);
+  //
+  const vendor = vendordata;
   if (!vendor) {
     return <div>가게가 없어졌어요 🥺</div>;
   }
 
-  const menulist = vendor.menulist || [];
+  const menulist = vendor.menuInfoResponseList || [];
   const menudata = menulist.find((menu) => menu.id === menuid);
 
   if (!menudata) return <div>메뉴가 없어요 🥺</div>;
@@ -23,7 +24,7 @@ const MenuCard = ({ vendorid, menuid }: any) => {
       <CardContainer onClick={cardclick}>
         <LeftContainer>
           <div>
-            <img src={menudata.menuimg} style={{ width: '60px' }} />
+            <img src={menudata.menuUrl} style={{ width: '60px' }} />
           </div>
           <InfoList>
             <Name>{menudata.name}</Name>

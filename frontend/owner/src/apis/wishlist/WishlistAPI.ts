@@ -15,6 +15,7 @@ const WishlistAPI = async ({ addressname }: any) => {
     // console.log('WishlistAPI', response.data);
     return response.data.response;
   } catch (error) {
+    z;
     console.error(error);
     return null;
   }
