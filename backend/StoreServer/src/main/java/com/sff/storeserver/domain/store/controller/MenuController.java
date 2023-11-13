@@ -4,6 +4,8 @@ import com.sff.storeserver.common.aop.UserIdHolder;
 import com.sff.storeserver.common.aop.UserIdRequired;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.common.utils.ApiUtils;
+import com.sff.storeserver.domain.store.dto.BucketRequestList;
+import com.sff.storeserver.domain.store.dto.BucketResponse;
 import com.sff.storeserver.domain.store.dto.MenuInfo;
 import com.sff.storeserver.domain.store.dto.MenuInfoResponse;
 import com.sff.storeserver.domain.store.service.MenuService;
@@ -49,5 +51,13 @@ public class MenuController {
     public ApiResult<String> deleteOptions(UserIdHolder userIdHolder, @PathVariable Long menuId) {
         menuService.deleteMenus(menuId, userIdHolder.getUserId());
         return ApiUtils.success("메뉴 삭제를 성공했습니다.");
+    }
+
+    @Operation(summary = "MSA 메뉴,옵션 정보들 불러오기", description = "")
+    @PostMapping("/menus/options")
+    @UserIdRequired
+    public ApiResult<?> getOptionStore(@RequestBody BucketRequestList bucketRequestList) {
+        List<BucketResponse> bucketResponses = menuService.getMenusOptionsByBucket(bucketRequestList);
+        return ApiUtils.success(bucketResponses);
     }
 }
