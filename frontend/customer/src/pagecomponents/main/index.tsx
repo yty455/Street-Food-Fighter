@@ -7,11 +7,11 @@ import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
 import SearchPlace from '@/components/common/searchplace';
 import useSetPlaceHook from '@/hooks/setplaceHook';
-import { nearvendors } from '@/temp/nearvendors';
 import { categories } from '@/assets/category';
 import { useRouter } from 'next/navigation';
 import { NearVendorsType } from '@/types/nearvendors.type';
 import useMainFilterStore from '@/stores/mainFilterStore';
+import NearVendorsAPI from '@/apis/vendor/NearVendorsAPI';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -22,22 +22,28 @@ const MainPage = () => {
 
   const { selectedCategories } = useMainFilterStore();
 
-  // 임시 : 가게 정보 불러오기
   useEffect(() => {
-    // 1. 현재 위치 이동시
-    // 2. 현지도 검색시
-    // 3. 카테고리 선택시
-    console.log('가게정보 불러오기(1,2)', addressName);
-    const selectedTypes = selectedCategories
-      .map((categoryName) => {
-        const category = categories.find((c) => c.name === categoryName);
-        return category ? category.type : null;
-      })
-      .filter((type) => type !== null);
-    console.log('가게정보 불러오기(3)', selectedTypes);
+    // 1. 현재 위치 이동시 2. 현지도 검색시 3. 카테고리 선택시
 
-    // 이후 api연동
-    setVendors(nearvendors as NearVendorsType);
+    const fetchVendors = async () => {
+      const selectedTypes = selectedCategories
+        .map((categoryName) => {
+          const category = categories.find((c) => c.name === categoryName);
+          return category ? category.type : null;
+        })
+        .filter((type) => type !== null);
+
+      const nearVendorsData = await NearVendorsAPI({
+        addressname: addressName,
+        categories: selectedTypes,
+      });
+      if (nearVendorsData) {
+        setVendors(nearVendorsData);
+      } else {
+        console.error('Failed to fetch near flag data');
+      }
+    };
+    fetchVendors();
   }, [addressName, selectedCategories]);
 
   // filter
