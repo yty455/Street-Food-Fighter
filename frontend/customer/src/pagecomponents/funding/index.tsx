@@ -2,7 +2,7 @@ import useCurrentLocation from '@/hooks/currentHook';
 import { useState, useRef, useEffect } from 'react';
 import { Filter, Position, Research, StyledTop, Topbar } from '../main/Main.styled';
 import { CardList, Curpos, Day, ResearchBox, Topbar2 } from './Funding.styled';
-import { Map } from 'react-kakao-maps-sdk';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import FilterComponent from '@/components/common/filter';
 import useSelectedDateStore from '@/stores/selectdateStore';
@@ -63,7 +63,30 @@ const FundingPage = () => {
 
   return (
     <div style={{ height: '93vh' }}>
-      <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}></Map>
+      <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}>
+        {flags &&
+          flags.length > 0 &&
+          flags.map((vendor: any) => {
+            const category = categories.find((c) => c.type === vendor.category);
+            const imageSrc = `/images/category/${category?.image}`;
+            return (
+              <MapMarker
+                key={vendor.id}
+                position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
+                image={{
+                  src: imageSrc,
+                  size: { width: 50, height: 50 },
+                  options: {
+                    offset: {
+                      x: 25,
+                      y: 25,
+                    },
+                  },
+                }}
+              />
+            );
+          })}
+      </Map>
       <StyledTop>
         <Topbar>
           <Filter onClick={toggleFilter}>

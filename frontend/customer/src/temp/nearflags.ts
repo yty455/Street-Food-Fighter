@@ -11,6 +11,8 @@ export const nearflags = [
       state: '깃발 상태', // WAITING | SUCCESS | FAILURE
       fundingAmount: 0, // 펀딩 금액 0으로 다 갈거임
     },
+    ownerId: 2,
+    storeId: 10,
     name: '가게이름',
     ownerName: '사장이름',
     phone: '휴대폰번호',
