@@ -13,6 +13,6 @@ public class StoreMSAResponse {
     private Long storeId;
     private String name;
     private String activeArea;
-    private String storeUrl;
+    private String categoryType;
 
 }
