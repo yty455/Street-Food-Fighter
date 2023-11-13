@@ -9,6 +9,7 @@ import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.dto.GradeUpdateRequest;
 import com.sff.OrderServer.dto.MemberInfoResponse;
+import com.sff.OrderServer.dto.MembersInfoRequest;
 import com.sff.OrderServer.dto.NotificationType;
 import com.sff.OrderServer.dto.ReviewMSAResponse;
 import com.sff.OrderServer.dto.StoreMSARequest;
@@ -231,8 +232,12 @@ public class OrderService {
         ReviewMSAResponse review = getReviewInfo(orderId);
         // 회원 ID 를 회원 서비스 에 보내서 회원 이름, 등급, 연락처 받기
         OrderRecord orderRecord = getOrderRecord(orderId);
-        MemberInfoResponse member = getMemberInfo();
-        return new OwnerOrderDetailResponse(orderRecord, member, review,
+//        MemberInfoResponse member = getMemberInfo();
+        List<Long> userIds = new ArrayList<>();
+        userIds.add(orderRecord.getUserId());
+        MembersInfoRequest membersInfoRequest = new MembersInfoRequest(userIds);
+        List<MemberInfoResponse> member = getMembersInfo(membersInfoRequest);
+        return new OwnerOrderDetailResponse(orderRecord, member.get(0), review,
                 getOrderMenusDetail(orderRecord.getBucket()));
     }
 
@@ -570,4 +575,17 @@ public class OrderService {
         return result.getResponse();
     }
 
+    private List<MemberInfoResponse> getMembersInfo(MembersInfoRequest membersInfoRequest) {
+        ApiResult<List<MemberInfoResponse>> result;
+        try {
+            result = userClient.getMembers(membersInfoRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
+        }
+        if (result.getSuccess() == false) {
+            throw new BaseException(result.getApiError());
+        }
+        return result.getResponse();
+    }
 }
