@@ -1,23 +1,45 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/common/filter';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
 import SearchPlace from '@/components/common/searchplace';
 import useSetPlaceHook from '@/hooks/setplaceHook';
-import { vendordata } from '@/temp/vendordata';
+import { nearvendors } from '@/temp/nearvendors';
 import { categories } from '@/assets/category';
 import { useRouter } from 'next/navigation';
+import { NearVendorsType } from '@/types/nearvendors.type';
+import useMainFilterStore from '@/stores/mainFilterStore';
 
 const MainPage = () => {
   const [addressName, setAddressName] = useState('');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 
+  const [vendors, setVendors] = useState<NearVendorsType>([]);
+
+  const { selectedCategories } = useMainFilterStore();
+
   // 임시 : 가게 정보 불러오기
-  const vendors = vendordata;
+  useEffect(() => {
+    // 1. 현재 위치 이동시
+    // 2. 현지도 검색시
+    // 3. 카테고리 선택시
+    console.log('가게정보 불러오기(1,2)', addressName);
+    const selectedTypes = selectedCategories
+      .map((categoryName) => {
+        const category = categories.find((c) => c.name === categoryName);
+        return category ? category.type : null;
+      })
+      .filter((type) => type !== null);
+    console.log('가게정보 불러오기(3)', selectedTypes);
+
+    // 이후 api연동
+    setVendors(nearvendors as NearVendorsType);
+  }, [addressName, selectedCategories]);
+
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
@@ -35,12 +57,12 @@ const MainPage = () => {
         {vendors &&
           vendors.length > 0 &&
           vendors.map((vendor: any) => {
-            const category = categories.find((c) => c.id === vendor.category);
+            const category = categories.find((c) => c.type === vendor.category);
             const imageSrc = `/images/category/${category?.image}`;
             return (
               <MapMarker
                 key={vendor.id}
-                position={{ lat: parseFloat(vendor.lat), lng: parseFloat(vendor.lng) }}
+                position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
                   size: { width: 50, height: 50 },
@@ -75,10 +97,10 @@ const MainPage = () => {
         <div />
         {vendors.map((vendor) => (
           <Card
-            key={vendor.id}
+            key={vendor.storeId}
             vendor={vendor}
             onClick={() => {
-              router.push(`/vendor/${vendor.id}`);
+              router.push(`/vendor/${vendor.storeId}`);
             }}
           />
         ))}

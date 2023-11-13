@@ -4,7 +4,7 @@ import Badge from '@/components/common/badge';
 
 const Card = ({ vendor, onClick }: any) => {
   // console.log(vendor);
-  const catImage = categories.find((cat) => cat.id === vendor.category)?.image;
+  const catImage = categories.find((cat) => cat.type === vendor.category)?.image;
 
   return (
     <CardBox onClick={onClick}>
