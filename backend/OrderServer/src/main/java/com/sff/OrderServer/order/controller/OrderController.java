@@ -42,25 +42,25 @@ public class OrderController {
 
     // 주문 목록 조회-접수대기
     @GetMapping("/api/order-server/orders-waiting")
-    public ApiResult<?> getWaitingOrders(@RequestHeader("OwnerId") Long ownerId) {
+    public ApiResult<?> getWaitingOrders(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getWaitingOrders(ownerId));
     }
 
     // 주문 목록 조회-처리중
     @GetMapping("/api/order-server/orders-processing")
-    public ApiResult<?> getProcessingOrders(@RequestHeader("OwnerId") Long ownerId) {
+    public ApiResult<?> getProcessingOrders(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getProcessingOrders(ownerId));
     }
 
     // 주문 목록 조회-완료
     @GetMapping("/api/order-server/order-completion")
-    public ApiResult<?> getCompletedOrders(@RequestHeader("OwnerId") Long ownerId) {
+    public ApiResult<?> getCompletedOrders(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getCompletedOrders(ownerId));
     }
 
     // 주문 목록 조회-전체 일자별
     @GetMapping("/api/order-server/owner/orders")
-    public ApiResult<?> getAllOrders(@RequestHeader("OwnerId") Long ownerId) {
+    public ApiResult<?> getAllOrders(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getAllOrders(ownerId));
     }
 
@@ -138,7 +138,7 @@ public class OrderController {
 
     // 영업 종료 - 메뉴명 / 판매수 / 옵션 포함 판매 금액
     @GetMapping("/api/order-server/orders/stats")
-    public ApiResult<?> getStats(@RequestHeader("OwnerId") Long ownerId) {
+    public ApiResult<?> getStats(@RequestHeader("UserId") Long ownerId) {
         return ApiUtils.success(orderService.getStats(ownerId));
     }
 
