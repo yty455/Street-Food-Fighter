@@ -1,8 +1,19 @@
 import Button from '@/components/common/button';
 import { ChargeBox, Point, PointContainer, TitleBox } from './Fightmoney.styled';
+import { useEffect, useState } from 'react';
+import GetPointAPI from '@/apis/user/GetPointAPI';
 
 const Fightmoney = ({ toggleCharge }: any) => {
-  const userpoint = 10000;
+  const [userpoint, setUserpoint] = useState(0);
+  useEffect(() => {
+    const fetchPoints = async () => {
+      const res = await GetPointAPI();
+      if (res) setUserpoint(res.amount);
+    };
+
+    fetchPoints();
+  }, []);
+
   return (
     <PointContainer>
       <TitleBox>
