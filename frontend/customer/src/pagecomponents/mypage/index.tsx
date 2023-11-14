@@ -2,7 +2,7 @@ import WishList from '@/components/mypage/wishlist';
 import { MypageContainer, Topbar } from './Mypage.styled';
 import Profile from '@/components/mypage/profile';
 import Fightmoney from '@/components/mypage/fightmoney';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LevelModal from '@/components/mypage/levelmodal';
 import Charge from '@/components/mypage/charge';
 

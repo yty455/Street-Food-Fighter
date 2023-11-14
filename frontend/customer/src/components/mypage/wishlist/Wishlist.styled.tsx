@@ -26,4 +26,39 @@ const TitleBox = styled.div`
   gap: 20px;
 `;
 
-export { WishListContainer, TitleBox };
+const CategoryItem = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    let bgcolor = props.$selected ? props.theme.colors.main : props.theme.colors.white;
+    bgcolor = props.$islight == 'light' ? props.theme.colors.light : bgcolor;
+    return css`
+      display: flex;
+      align-items: center;
+      width: 30%;
+      height: 80px;
+      border-radius: 10px;
+      flex-direction: column;
+      justify-content: space-around;
+      background-color: ${bgcolor};
+      cursor: pointer;
+    `;
+  }};
+`;
+
+const CategoryImage = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const CategoryName = styled.div`
+  font-size: 18px;
+`;
+
+const WishBody = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+export { WishBody, CategoryImage, CategoryItem, CategoryName, WishListContainer, TitleBox };

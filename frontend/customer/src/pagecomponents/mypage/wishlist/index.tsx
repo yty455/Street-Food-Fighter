@@ -3,20 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { CategoryCount, Title, WishListStyle, CategoryName, CategoriesContainer, CategoryImage, CategoryItem } from './WishList.styled';
 import useWishListStore from '@/stores/wishListStore';
 import { categories } from '@/assets/category';
-import GetWishListAPI from '@/apis/user/GetWishListAPI';
 import Topbar from '@/components/common/topbar';
 
 const WishList = () => {
-  const { selectedCategories, toggleCategory } = useWishListStore();
+  const { selectedCategories, toggleCategory, refreshWishList } = useWishListStore();
   const maxSelectedLength = 3;
-
-  const refreshWishList = async () => {
-    const wishListData = await GetWishListAPI();
-    if (wishListData.success) {
-      wishListData.response.map((name: any) => toggleCategory(name.foodType));
-    }
-    console.log(wishListData);
-  };
 
   useEffect(() => {
     refreshWishList();

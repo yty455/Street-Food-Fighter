@@ -1,7 +1,6 @@
 'use client';
-
-import WishListPage from '@/pagecomponents/mypage/wishlist';
+import ReviewPage from '@/pagecomponents/mypage/review';
 
 export default function Mypage() {
-  return <WishListPage />;
+  return <ReviewPage />;
 }

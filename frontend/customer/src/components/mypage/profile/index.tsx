@@ -38,7 +38,7 @@ const Profile = ({ toggleModal }: any) => {
           <img src="/images/mypage/funding.png" style={{ height: '40px' }} />
           <Airfont>펀딩내역</Airfont>
         </StyledButton>
-        <StyledButton>
+        <StyledButton onClick={() => router.push('/mypage/review')}>
           <img src="/images/mypage/review.png" style={{ height: '40px' }} />
           <Airfont>리뷰관리</Airfont>
         </StyledButton>
