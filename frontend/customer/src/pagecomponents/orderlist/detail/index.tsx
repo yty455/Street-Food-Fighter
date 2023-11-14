@@ -1,8 +1,9 @@
 import Topbar from '@/components/common/topbar';
-import { StoreName, OrderState, OrderDetailStyle, OrderInfo, StoreAddress, StoreTextLine } from './Detail.styled';
+import { StoreName, OrderState, OrderDetailStyle, OrderInfo, StoreAddress, StoreTextLine, ReceiptTabble } from './Detail.styled';
 import { useEffect, useState } from 'react';
 import GetOrderDetailAPI from '@/apis/orderlist/GetOrderDetail';
 import { categories } from '@/assets/category';
+import Receipt from '@/components/common/receipt';
 
 const OrderDetailPage = ({ params, ...props }: any) => {
   const [orderInfo, setOrderInfo] = useState<any>();
@@ -33,26 +34,34 @@ const OrderDetailPage = ({ params, ...props }: any) => {
     <OrderDetailStyle>
       <Topbar text="주문확인" />
       {orderInfo && (
-        <OrderInfo>
-          <OrderState>{stateText[orderInfo.state] || stateText['REFUSED']}</OrderState>
-          <StoreName>
-            <img
-              src={`/images/category/${getCategoryImage(orderInfo.categoryType)}`}
-              style={{ width: '60px', height: '60px', marginRight: '10px' }}
-            />
-            {orderInfo.storeName}
-          </StoreName>
-          <StoreAddress>{orderInfo.storeAddress}</StoreAddress>
-          <StoreTextLine>
-            주문일시 <span>: {formatDate(orderInfo.createAt)}</span>
-          </StoreTextLine>
-          <StoreTextLine>
-            주문 번호 : <span>{orderInfo.orderId}</span>
-          </StoreTextLine>
-          <StoreTextLine>
-            요청사항 : <span>{orderInfo.requirement}</span>
-          </StoreTextLine>
-        </OrderInfo>
+        <>
+          <OrderInfo>
+            <OrderState>{stateText[orderInfo.state] || stateText['REFUSED']}</OrderState>
+            <StoreName>
+              <img
+                src={`/images/category/${getCategoryImage(orderInfo.categoryType)}`}
+                style={{ width: '60px', height: '60px', marginRight: '10px' }}
+              />
+              {orderInfo.storeName}
+            </StoreName>
+            <StoreAddress>{orderInfo.storeAddress}</StoreAddress>
+            <StoreTextLine>
+              주문일시 <span>: {formatDate(orderInfo.createAt)}</span>
+            </StoreTextLine>
+            <StoreTextLine>
+              주문 번호 : <span>{orderInfo.orderId}</span>
+            </StoreTextLine>
+            <StoreTextLine>
+              요청사항 : <span>{orderInfo.requirement}</span>
+            </StoreTextLine>
+          </OrderInfo>
+          <ReceiptTabble>
+            <Receipt
+              orderItemList={orderInfo.orderItemList}
+              totalPrice={orderInfo.orderItemList.reduce((acc: number, cur: any) => acc + cur.menuTotalPrice, 0)}
+            ></Receipt>
+          </ReceiptTabble>
+        </>
       )}
     </OrderDetailStyle>
   );

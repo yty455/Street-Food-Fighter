@@ -53,4 +53,15 @@ const StoreTextLine = styled.div.attrs<any>((props) => ({}))`
     `;
   }};
 `;
-export { StoreTextLine, StoreAddress, StoreName, OrderState, OrderInfo, OrderDetailStyle };
+const ReceiptTabble = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const white = props.theme.colors.white;
+
+    return css`
+      background-color: ${white};
+      padding: 20px;
+      margin-top: 10px;
+    `;
+  }};
+`;
+export { ReceiptTabble, StoreTextLine, StoreAddress, StoreName, OrderState, OrderInfo, OrderDetailStyle };
