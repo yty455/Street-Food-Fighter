@@ -7,7 +7,7 @@ const GetMyReviewsAPI = async (page: any, size: any) => {
     const response = await api.get(`/api/store-service/review?page=${page}&size=${size}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log('review = ', response.data);
+    // console.log('review = ', response.data);
     return response.data;
   } catch (error) {
     console.error(error);

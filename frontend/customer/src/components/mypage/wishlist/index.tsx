@@ -23,7 +23,6 @@ const WishList = () => {
       <WishBody>
         {categories.map((category: any) => {
           if (selectedCategories.includes(category.type)) {
-            console.log(category.type);
             return (
               <CategoryItem key={category.id} $selected={selectedCategories.includes(category.type)}>
                 <CategoryImage src={`/images/category/${category.image}`} alt={category.name} />
