@@ -6,7 +6,7 @@ const OrderAPI = async (data: any) => {
 
   // console.log('data', data);
   try {
-    const response = await api.post(`/api/order-server/orders`, data, {
+    const response = await api.post(`/api/payment-server/orders`, data, {
       headers: { Authorization: `${accessToken}` },
     });
     // console.log('OrderAPI', response.data.response);
