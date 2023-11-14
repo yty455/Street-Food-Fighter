@@ -25,8 +25,8 @@ const Receipt = ({ orderItemList, totalPrice, type }: any) => {
             item.orderOptionList
               ? item.orderOptionList.map((option: any) => (
                   <tr key={option.optionId}>
-                    <CenterTd>1</CenterTd>
                     <OptionNameTd> + {option.name}</OptionNameTd>
+                    <CenterTd>1</CenterTd>
                     <PriceTd>{Number(option.price).toLocaleString()}원</PriceTd>
                   </tr>
                 ))

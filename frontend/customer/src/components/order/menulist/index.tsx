@@ -1,35 +1,37 @@
-import { vendordata } from '@/temp/vendordata';
 import MenuCard from '../menucard';
-import { BoxContainer, Putin } from './Menulist.styled';
+import { BoxContainer } from './Menulist.styled';
 import useOrderStore from '@/stores/orderStore';
 import { useNavStore } from '@/stores/curnavStore';
 import { useRouter } from 'next/navigation';
 import BottomBtn from '@/components/common/bottombtn';
-const Menulist = ({ vendorid }: any) => {
-  const vendor = vendordata.find((v) => v.id === vendorid);
-  if (!vendor) {
-    return <div>가게가 없어졌어요 🥺</div>;
-  }
-
-  const menulist = vendor.menulist || [];
-  // console.log(menulist);
+import BucketAPI from '@/apis/vendor/BucketAPI';
+import useBucketStore from '@/stores/bucketStore';
+const Menulist = ({ vendor }: any) => {
+  const menulist = vendor.menuInfoResponseList || [];
 
   const { order, removeItem } = useOrderStore();
-  const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.quantity > 0);
+  const isOrderNotEmpty = order.length > 0 && order.some((menu) => menu.count > 0);
 
   const router = useRouter();
   const { curnav } = useNavStore();
-
-  const handleButtonClick = () => {
+  const { setBucket } = useBucketStore();
+  const handleButtonClick = async () => {
     order.forEach((menu) => {
-      if (menu.quantity === 0) {
+      if (menu.count === 0) {
         removeItem(menu.menuId);
       }
     });
 
     const updatedOrder = useOrderStore.getState().order;
 
-    const isOrderValid = updatedOrder.some((menu) => menu.quantity > 0);
+    const isOrderValid = updatedOrder.some((menu) => menu.count > 0);
+
+    const bucketResponse = await BucketAPI(updatedOrder);
+    if (bucketResponse) {
+      setBucket(bucketResponse);
+    } else {
+      console.error('Failed to fetch bucket data');
+    }
 
     if (isOrderValid) {
       router.push('/topurchase');
@@ -40,8 +42,8 @@ const Menulist = ({ vendorid }: any) => {
 
   return (
     <BoxContainer>
-      {menulist.map((menu) => (
-        <MenuCard key={menu.id} vendorid={vendorid} menuid={menu.id} />
+      {menulist.map((menu: any) => (
+        <MenuCard key={menu.id} menuid={menu.id} menulist={menulist} />
       ))}
       <div
         onClick={() => {

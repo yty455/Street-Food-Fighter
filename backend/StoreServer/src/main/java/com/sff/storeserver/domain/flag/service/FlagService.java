@@ -36,14 +36,16 @@ public class FlagService {
 
     @Transactional
     public Long createFlag(Long ownerId, FlagRequest flagRequest) {
-        Store findStore = storeRepository.findById(ownerId)
+        Store findStore = storeRepository.findByOwnerId(ownerId)
                 .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
         flagRequest.setStoreId(findStore.getId());
         return flagRepository.save(flagRequest.toEntity(findStore)).getId();
     }
 
-    public List<FlagResponse> getFlags(Long storeId, LocalDate date) {
-        List<Flag> flagList = flagRepository.findByStoreIdAndDate(storeId, date);
+    public List<FlagResponse> getFlags(Long ownerId, LocalDate date) {
+        Store findStore = storeRepository.findByOwnerId(ownerId)
+                .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
+        List<Flag> flagList = flagRepository.findByStoreIdAndDate(findStore.getId(), date);
         List<Long> flagIdList = flagList.stream()
                 .map(Flag::getId)
                 .toList();
