@@ -237,6 +237,10 @@ public class OrderService {
         userIds.add(orderRecord.getUserId());
         MembersInfoRequest membersInfoRequest = new MembersInfoRequest(userIds);
         List<MemberInfoResponse> member = getMembersInfo(membersInfoRequest);
+        if(review == null){
+            return new OwnerOrderDetailResponse(orderRecord, member.get(0), null,
+                    getOrderMenusDetail(orderRecord.getBucket()));
+        }
         return new OwnerOrderDetailResponse(orderRecord, member.get(0), review,
                 getOrderMenusDetail(orderRecord.getBucket()));
     }
@@ -542,6 +546,9 @@ public class OrderService {
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_ORDER));
         }
         if (result.getSuccess() == false) {
+            if(result.getApiError().getStatus() == 0){
+                return null;
+            }
             throw new BaseException(result.getApiError());
         }
         return result.getResponse();
