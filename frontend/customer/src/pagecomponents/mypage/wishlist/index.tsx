@@ -1,9 +1,10 @@
 // firebase 연동
 import { useEffect, useRef, useState } from 'react';
-import { CategoryCount, Title, WishListStyle, Topbar, CategoryName, CategoriesContainer, CategoryImage, CategoryItem } from './WishList.styled';
+import { CategoryCount, Title, WishListStyle, CategoryName, CategoriesContainer, CategoryImage, CategoryItem } from './WishList.styled';
 import useWishListStore from '@/stores/wishListStore';
 import { categories } from '@/assets/category';
 import GetWishListAPI from '@/apis/user/GetWishListAPI';
+import Topbar from '@/components/common/topbar';
 
 const WishList = () => {
   const { selectedCategories, toggleCategory } = useWishListStore();
@@ -34,7 +35,7 @@ const WishList = () => {
 
   return (
     <WishListStyle>
-      <Topbar>먹고 싶은걸 골라봐요</Topbar>
+      <Topbar text="먹고 싶은걸 골라봐요" />
       <Title>희망 메뉴</Title>
       <CategoryCount>
         {selectedCategories.length}/{maxSelectedLength}

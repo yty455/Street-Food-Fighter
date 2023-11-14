@@ -14,11 +14,10 @@ const Topbar = ({ text, type, closeModal }: any) => {
 
   return (
     <StyledTopbar>
-      <BackButton onClick={handleClick}>
-        <img src="/images/top/back.png" style={{ width: '30px', height: '30px' }} />
+      <BackButton>
+        <img onClick={handleClick} src="/images/top/back.png" style={{ width: '30px', height: '30px' }} />
       </BackButton>
       <Text>{text}</Text>
-      <div style={{ width: '30%' }}></div>
     </StyledTopbar>
   );
 };

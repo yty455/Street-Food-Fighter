@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components';
 
 const BackButton = styled.div`
-  display: flex;
-  width: 30%;
-  padding-left: 20px;
+  position: absolute;
+  left: 15px;
+  width: 30px;
+  height: 30px;
 `;
 const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
@@ -15,7 +16,7 @@ const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
       background-color: ${white};
       height: 55px;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
 
       font-size: 24px;
       width: 100%;
@@ -25,7 +26,7 @@ const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 const Text = styled.div`
-  width: 40%;
+  width: 100%;
   text-align: center;
 `;
 
