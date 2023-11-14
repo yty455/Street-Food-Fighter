@@ -65,7 +65,7 @@ const FlagPage = () => {
         <FlagList>
           {/* <h3>선택된 날짜: {selectedDate.getDate()}</h3> */}
           {curflag.map((flagItem, index) => (
-            <FlagCard key={index} flag={flagItem} onClick={() => handleFlagClick(index)} flagindex={index} />
+            <FlagCard key={index} flag={flagItem} onClick={() => handleFlagClick(flagItem)} flagindex={index} />
           ))}
         </FlagList>
       )}
