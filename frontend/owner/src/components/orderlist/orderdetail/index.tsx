@@ -133,13 +133,13 @@ const OrderDetail = ({
           <Receipt orderItemList={detail.orderItemList} totalPrice={detail.totalPrice}></Receipt>
         </div>
 
-        {order.orderState == 'COMPLETED' && (
+        {detail.review && (
           <div>
             <ReviewList>
               <Title>리뷰</Title>
-              <ReviewScore>{detail.score}.0</ReviewScore>
+              <ReviewScore>{detail.review.score}.0</ReviewScore>
             </ReviewList>
-            <TextBox>{detail.content}</TextBox>
+            <TextBox>{detail.review.content}</TextBox>
           </div>
         )}
       </Content>
