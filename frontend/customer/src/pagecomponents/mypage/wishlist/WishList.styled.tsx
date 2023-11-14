@@ -7,7 +7,7 @@ const WishListStyle = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      height: 93vh;
       background-color: ${light};
       align-items: center;
       gap: 20px;
@@ -44,10 +44,8 @@ const CategoriesContainer = styled.div`
 
 const CategoryItem = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    let bgcolor = props.selected ? props.theme.colors.main : props.theme.colors.white;
-    bgcolor = props.isLight == 'light' ? props.theme.colors.light : bgcolor;
-    console.log(bgcolor);
-    console.log(props.isLight);
+    let bgcolor = props.$selected ? props.theme.colors.main : props.theme.colors.white;
+    bgcolor = props.$islight == 'light' ? props.theme.colors.light : bgcolor;
     return css`
       display: flex;
       align-items: center;

@@ -1,9 +1,11 @@
-import { user } from '@/temp/user';
 import { LevelType } from '@/types/level.type';
 import Level from '../level';
 import { RowDisplay, ProfileContainer, List, StyledButton, Airfont, LevelList, Nickname, ProfileList } from './Profile.styled';
 import { useRouter } from 'next/navigation';
+import userInfoStore from '@/stores/userInfoStore';
+
 const Profile = ({ toggleModal }: any) => {
+  const userInfo = userInfoStore();
   const router = useRouter();
   return (
     <ProfileContainer>
@@ -11,9 +13,9 @@ const Profile = ({ toggleModal }: any) => {
         <RowDisplay>
           <img src="/images/common/profile.png" style={{ height: '80px' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <Nickname>붕어빵 조아</Nickname>
+            <Nickname>{userInfo && userInfo.nickname}</Nickname>
             <LevelList>
-              <Level level={user.grade as LevelType}></Level>
+              <Level level={userInfo.grade as LevelType}></Level>
               <img src="/images/mypage/quest.png" style={{ height: '20px' }} onClick={toggleModal} />
             </LevelList>
           </div>
@@ -36,7 +38,7 @@ const Profile = ({ toggleModal }: any) => {
           <img src="/images/mypage/funding.png" style={{ height: '40px' }} />
           <Airfont>펀딩내역</Airfont>
         </StyledButton>
-        <StyledButton>
+        <StyledButton onClick={() => router.push('/mypage/review')}>
           <img src="/images/mypage/review.png" style={{ height: '40px' }} />
           <Airfont>리뷰관리</Airfont>
         </StyledButton>

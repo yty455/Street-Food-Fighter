@@ -5,11 +5,26 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../styles/DefaultTheme';
 import Navbar from '@/components/common/navbar';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import UserInfotAPI from '@/apis/user/UserInfoAPI';
+import userInfoStore from '@/stores/userInfoStore';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register', '/success', '/ordercheck'];
 
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register', '/success', '/ordercheck'];
+  const { setUserInfo } = userInfoStore();
+
+
+  useEffect(() => {
+    const GetUserInfo = async () => {
+      const data = await UserInfotAPI();
+      if (data != null) {
+        setUserInfo(data);
+      }
+    };
+    GetUserInfo();
+  }, []);
   return (
     <html>
       <head>
