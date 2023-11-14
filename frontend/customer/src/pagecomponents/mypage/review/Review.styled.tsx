@@ -57,9 +57,9 @@ const ReviewIcon = styled.div`
 const MenuContainer = styled.div`
   display: flex;
   gap: 10px;
-  overflow: scroll;
-  /* height: 50px; */
   align-items: center;
+  overflow-y: auto;
+  white-space: nowrap;
   padding: 5px;
 `;
 
