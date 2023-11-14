@@ -6,7 +6,7 @@ import { useState } from 'react';
 import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
 import useSelectFlagHook from '@/hooks/apis/selectflag.hook';
 
-const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
+const SelectFlag = ({ flags, onClose, onStartOperation, onBack }: any) => {
   const [selectedFlagId, setSelectedFlagId] = useState(null);
 
   const handleFlagClick = (flagId: any) => {
@@ -40,7 +40,7 @@ const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
 
   return (
     <Container>
-      <Topbar text="영업 시작" type="close" closeModal={onClose} />
+      <Topbar text="영업 시작" type="start" closeModal={onClose} onBack={onBack} />
       <TitleBox>
         <Title> 깃발 선택</Title>
         <Today>{formattedDate}</Today>

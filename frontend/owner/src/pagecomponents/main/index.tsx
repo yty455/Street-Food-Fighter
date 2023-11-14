@@ -22,6 +22,7 @@ const MainPage = () => {
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
   const handleStartOperation = () => {
+    setVendorOpen(true);
     setModalContent(<StartPopup onClose={closeModal} />);
   };
 
@@ -35,7 +36,9 @@ const MainPage = () => {
   //   }
   // }, [todayflag, position, addressName]);
   const callSelectFlagAPI = useSelectFlagHook();
-
+  const handleBackFromSelectFlag = () => {
+    setVendorOpen(false);
+  };
   const switchVendor = async () => {
     if (!isVendorOpen) {
       if (todayflag.length === 0) {
@@ -45,12 +48,15 @@ const MainPage = () => {
           longi: position.lng,
           activeArea: addressName,
         };
+        console.log('address:', addressName);
         const response = await callSelectFlagAPI(data);
         // console.log(response);
 
         setModalContent(<StartPopup onClose={closeModal} />);
       } else {
-        setModalContent(<SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} />);
+        setModalContent(
+          <SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} onBack={handleBackFromSelectFlag} />,
+        );
       }
       openModal(); // 모달 열기
     } else {
