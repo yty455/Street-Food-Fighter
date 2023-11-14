@@ -72,6 +72,8 @@ const PurchasePage = () => {
       }
 
       router.push('/password/pay');
+    } else {
+      console.log('장바구니 없음');
     }
   };
 
@@ -95,7 +97,7 @@ const PurchasePage = () => {
           src="/images/orderfunding/tohome.png"
           style={{ width: '25px' }}
           onClick={() => {
-            router.push('/');
+            router.push('/main');
           }}
         />
       </TopBox>

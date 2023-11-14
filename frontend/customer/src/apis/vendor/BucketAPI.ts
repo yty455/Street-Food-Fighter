@@ -9,9 +9,10 @@ const BucketAPI = async (data: any) => {
     const response = await api.post(`/api/order-server/buckets`, data, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('BucketAPI', response.data.response);
+    console.log('BucketAPI', response);
     return response.data.response;
   } catch (error) {
+    console.log(error);
     return null;
   }
 };
