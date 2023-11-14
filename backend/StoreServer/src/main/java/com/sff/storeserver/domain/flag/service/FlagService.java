@@ -42,7 +42,7 @@ public class FlagService {
         return flagRepository.save(flagRequest.toEntity(findStore)).getId();
     }
 
-    public List<FlagResponse> getFlags(Long storeId, LocalDate date) {
+    public List<FlagResponse> getFlags(Long ownerId, LocalDate date) {
         Store findStore = storeRepository.findById(ownerId)
                 .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
         List<Flag> flagList = flagRepository.findByStoreIdAndDate(findStore.getId(), date);
