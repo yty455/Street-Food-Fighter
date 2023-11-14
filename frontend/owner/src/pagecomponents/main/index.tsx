@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
-import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
 import CloseAPI from '@/apis/close/CloseAPI';
 import useDateFlagHook from '@/hooks/apis/dateflag.hook';
 import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
-import useSelectFlagHook from '@/hooks/apis/selectflag.hook';
 import SelectFlag from '@/components/main/seletflag';
+import SelectFlagAPI from '@/apis/flag/SelectFlagAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
 
 const MainPage = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const MainPage = () => {
 
   const today = new Date().toISOString().split('T')[0];
   const todayflag = useDateFlagHook(today); // 깃발조회
-  // const todayflag = Flag2; // 깃발조회
+  // console.log('todayflag : ', todayflag);
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
@@ -30,26 +30,27 @@ const MainPage = () => {
   const [addressName, setAddressName] = useState('');
   const { position } = useFindCurrentLoc(setAddressName);
 
-  // useEffect(() => {
-  //   if (todayflag.length === 0) {
-  //     console.log(`현재 위치: 위도 ${position.lat}, 경도 ${position.lng}, 주소: ${addressName}`);
-  //   }
-  // }, [todayflag, position, addressName]);
-  const callSelectFlagAPI = useSelectFlagHook();
   const handleBackFromSelectFlag = () => {
     setVendorOpen(false);
   };
+
   const switchVendor = async () => {
     if (!isVendorOpen) {
-      if (todayflag.length === 0) {
+      const addressDetails = await kakaomapApi({ latitude: position.lat, longitude: position.lng });
+
+      if (todayflag.length == 0) {
+        const addressParts = addressDetails.split(' ');
         const data = {
           flagId: 0,
           lati: position.lat,
           longi: position.lng,
           activeArea: addressName,
+          region1: addressParts[0] || '부산광역시',
+          region2: addressParts[1] || '강서구',
+          region3: addressParts[2] || '송정동',
+          region4: addressParts[3] || '',
         };
-        console.log('address:', addressName);
-        const response = await callSelectFlagAPI(data);
+        const response = await SelectFlagAPI(data);
         // console.log(response);
 
         setModalContent(<StartPopup onClose={closeModal} />);
