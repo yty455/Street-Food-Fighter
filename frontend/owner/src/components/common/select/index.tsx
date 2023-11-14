@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChoiceContainer, Option } from './Select.styled';
 const Select = ({ a, b, onSelect, selected }: any) => {
   const [selectedOption, setSelectedOption] = useState(selected);
+
+  useEffect(() => {
+    setSelectedOption(selected);
+  }, [selected]);
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);

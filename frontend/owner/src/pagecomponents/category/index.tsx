@@ -1,17 +1,28 @@
 import Select from '@/components/common/select';
 import Topbar from '@/components/common/topbar';
 import { Container, SettingBox, TypeBox, Title, CategoriesContainer, CategoryImage, CategoryName, CategoryItem } from './Category.styled';
-import { categories } from '@/assets/category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BottomBtn from '@/components/common/bottombtn';
-import { vendorcat } from '@/temp/category';
 import CategorySelector from '@/components/common/categoryselector';
+import GetCategoryAPI from '@/apis/category/GetCategoryAPI';
+import EditCategoryAPI from '@/apis/category/EditCategoryAPI';
 
 const CategoryPage = () => {
-  const initialCategoryName = vendorcat.category;
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const [selectedType, setSelectedType] = useState(vendorcat.businessCategory);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategoryName);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categoryData = await GetCategoryAPI();
+      if (categoryData) {
+        setSelectedType(categoryData.businessCategory);
+        setSelectedCategory(categoryData.category);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  console.log(selectedType, selectedCategory);
 
   const selectCategory = (categoryName: string) => {
     setSelectedCategory(categoryName);
@@ -20,10 +31,18 @@ const CategoryPage = () => {
     setSelectedType(type);
   };
 
-  const handleSave = () => {
-    console.log('선택된 업태:', selectedType);
-    console.log('선택된 대표 카테고리:', selectedCategory);
-    //이후 api 호출 추가
+  const handleSave = async () => {
+    const data = {
+      businessCategory: selectedType,
+      category: selectedCategory,
+    };
+
+    const response = await EditCategoryAPI({ data });
+    if (response) {
+      console.log('카테고리 수정 성공:', response);
+    } else {
+      console.error('카테고리 수정 실패');
+    }
   };
 
   return (
@@ -36,7 +55,7 @@ const CategoryPage = () => {
         </TypeBox>
         <TypeBox>
           <Title>대표 카테고리</Title>
-          <CategorySelector categories={categories} selectedCategory={selectedCategory} selectCategory={selectCategory} />
+          <CategorySelector selectedCategory={selectedCategory} selectCategory={selectCategory} />
         </TypeBox>
       </SettingBox>
       <BottomBtn text="수정 하기" onClick={handleSave} />

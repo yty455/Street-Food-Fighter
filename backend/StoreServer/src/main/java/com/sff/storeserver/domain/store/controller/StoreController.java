@@ -51,7 +51,7 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 정보 수정", description = "가게 정보를 수정합니다.")
-    @PatchMapping("/stores")
+    @PutMapping("/stores")
     @UserIdRequired
     public ApiResult<String> updateStore(UserIdHolder userIdHolder, @RequestBody StoreUpdateInfo storeUpdateInfo) {
         storeService.updateStore(storeUpdateInfo, userIdHolder.getUserId());
@@ -67,7 +67,7 @@ public class StoreController {
     }
 
     @Operation(summary = "사장 - 가게 카테고리, 업태 수정", description = "가게 카테고리, 업태를 수정합니다.")
-    @PatchMapping("/stores/categories")
+    @PutMapping("/stores/categories")
     @UserIdRequired
     public ApiResult<String> updateStoreCategory(UserIdHolder userIdHolder, @RequestBody StoreUpdateCategory storeUpdateCategory) {
         storeService.updateStoreCategory(storeUpdateCategory, userIdHolder.getUserId());
