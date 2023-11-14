@@ -6,9 +6,11 @@ import { categories } from '@/assets/category';
 import { OrderState, OrdersType } from '@/types/orderlist.type';
 import { useEffect, useState } from 'react';
 import OrderListAPI from '@/apis/orderlist/OrderListAPI';
+import { useRouter } from 'next/navigation';
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState<OrdersType>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -33,6 +35,10 @@ const OrderListPage = () => {
     return category ? category.image : null;
   };
 
+  const moveDetailPage = (number: any) => {
+    router.push('/orderlist/detail/' + number);
+  };
+
   return (
     <WrapContainer>
       <Topbar text="주문 내역" />
@@ -44,7 +50,7 @@ const OrderListPage = () => {
                 {formatDate(order.createdAt)} {orderStateMapping[order.orderState as OrderState]}
               </Airfont>
               <div style={{ width: '93px' }}>
-                <Button text="주문 상세"></Button>
+                <Button onClick={() => moveDetailPage(order.orderId)} text="주문 상세"></Button>
               </div>
             </CardTop>
 

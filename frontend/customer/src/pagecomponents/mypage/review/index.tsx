@@ -58,24 +58,25 @@ const ReviewPage = () => {
 };
 
 const ReviewIconComponent = ({ categoryType, score }: any) => {
+  const getCategoryImage = (type: any) => {
+    const category = categories.find((cat) => cat.type === type);
+    return category ? category.image : null;
+  };
+
+  const getCategoryReviewImage = (type: any) => {
+    const category = categories.find((cat) => cat.type === type);
+    return category ? category.reviewImage : null;
+  };
   const fillIcons = Array.from({ length: score });
   const noFillIcons = Array.from({ length: 5 - score });
   return (
     <>
-      {categories.map((category: any, index: number) => {
-        if (category.type == categoryType) {
-          return (
-            <>
-              {fillIcons.map((_, fillIndex) => (
-                <ReviewIcon key={`fill-${index}-${fillIndex}`} src={`/images/category/${category.image}`} alt={category.name} />
-              ))}
-              {noFillIcons.map((_, noFillIndex) => (
-                <ReviewIcon key={`noFill-${index}-${noFillIndex}`} src={`/images/category/${category.reviewImage}`} alt={category.name} />
-              ))}
-            </>
-          );
-        }
-      })}
+      {fillIcons.map((_, fillIndex) => (
+        <ReviewIcon key={`fill-${fillIndex}`} src={`/images/category/${getCategoryImage(categoryType)}`} alt="" />
+      ))}
+      {noFillIcons.map((_, noFillIndex) => (
+        <ReviewIcon key={`noFill-${noFillIndex}`} src={`/images/category/${getCategoryReviewImage(categoryType)}`} alt="" />
+      ))}
     </>
   );
 };
