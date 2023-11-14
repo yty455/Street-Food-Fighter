@@ -1,17 +1,19 @@
 import { useRouter } from 'next/navigation';
 import { StyledTopbar, BackButton, Text } from './Topbar.styled';
 
-const Topbar = ({ text, type, closeModal }: any) => {
+const Topbar = ({ text, type, closeModal, onBack }: any) => {
   const router = useRouter();
 
   const handleClick = () => {
     if (type === 'close' && closeModal) {
       closeModal();
+    } else if (type === 'start' && closeModal && onBack) {
+      onBack();
+      closeModal();
     } else {
       router.back();
     }
   };
-
   return (
     <StyledTopbar>
       <BackButton onClick={handleClick}>
