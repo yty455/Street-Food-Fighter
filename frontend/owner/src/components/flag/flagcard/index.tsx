@@ -1,9 +1,9 @@
 import { CardWrapper, Row, Title, Content, ContentBox } from './Flagcard.styled';
 
-const FlagCard = ({ flag, onClick }: any) => {
+const FlagCard = ({ flag, onClick, flagindex }: any) => {
   return (
     <CardWrapper onClick={onClick}>
-      <img src={`/images/flag/flag${flag.flagId}.png`} style={{ width: '40px' }} />
+      <img src={`/images/flag/flag${flagindex + 1}.png`} style={{ width: '40px' }} />
       <ContentBox>
         <Row>
           <Title>펀딩 금액</Title>
