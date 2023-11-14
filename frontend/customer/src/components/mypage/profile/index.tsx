@@ -30,11 +30,11 @@ const Profile = ({ toggleModal }: any) => {
       </ProfileList>
 
       <List>
-        <StyledButton>
+        <StyledButton onClick={() => router.push('/orderlist')}>
           <img src="/images/common/list.png" style={{ height: '40px' }} />
           <Airfont> 주문내역</Airfont>
         </StyledButton>
-        <StyledButton>
+        <StyledButton onClick={() => router.push('/orderlist/fundinglist')}>
           <img src="/images/mypage/funding.png" style={{ height: '40px' }} />
           <Airfont>펀딩내역</Airfont>
         </StyledButton>
