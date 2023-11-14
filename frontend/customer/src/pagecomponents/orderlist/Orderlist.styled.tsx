@@ -6,6 +6,9 @@ const Container = styled.div`
   align-items: center;
   gap: 20px;
   padding-top: 10px;
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 8vh;
 `;
 
 const WrapContainer = styled.div.attrs<any>((props) => ({}))`
@@ -15,8 +18,7 @@ const WrapContainer = styled.div.attrs<any>((props) => ({}))`
     return css`
       background-color: ${gray};
       height: 93vh;
-      padding-bottom: 30px;
-      overflow-y: auto;
+      overflow: hidden;
     `;
   }};
 `;
