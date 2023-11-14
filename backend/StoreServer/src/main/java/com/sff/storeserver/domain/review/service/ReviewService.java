@@ -4,6 +4,7 @@ import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
 import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.common.feignClient.UserClient;
+import com.sff.storeserver.common.utils.ApiError;
 import com.sff.storeserver.common.utils.ApiResult;
 import com.sff.storeserver.domain.review.dto.*;
 import com.sff.storeserver.domain.review.repository.ReviewRepository;
@@ -50,7 +51,18 @@ public class ReviewService {
         Page<MyReviewResponse> myReviewResponseList = reviewRepository.findByUserId(userId, pageRequest);
 
         // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
-        List<ReviewMenuInfo> reviewMenuInfos = orderClient.getMenus(myReviewResponseList.getContent().stream().map(MyReviewResponse::getOrderId).toList()).getResponse();
+        ApiResult<List<ReviewMenuInfo>> result;
+        try{
+            List<Long> orders = myReviewResponseList.getContent().stream().map(MyReviewResponse::getOrderId).toList();
+            result = orderClient.getMenus(orders);
+        }catch(Exception e){
+            throw new BaseException(new ApiError("주문서버와 통신 에러", 1));
+        }
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+
+        List<ReviewMenuInfo> reviewMenuInfos = result.getResponse();
         // 합쳐서 내려주기
         for (int idx = 0; idx < reviewMenuInfos.size(); idx++) {
             myReviewResponseList.getContent().get(idx).updateMenu(reviewMenuInfos.get(idx).getMenuList());
