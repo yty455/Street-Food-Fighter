@@ -4,7 +4,7 @@ import Profile from '@/components/mypage/profile';
 import Fightmoney from '@/components/mypage/fightmoney';
 import { useState, useEffect } from 'react';
 import LevelModal from '@/components/mypage/levelmodal';
-import Charge from '@/components/mypage/charge';
+import Charge from '@/components/common/charge';
 
 const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
