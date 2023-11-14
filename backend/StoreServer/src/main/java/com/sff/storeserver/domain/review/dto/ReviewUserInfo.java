@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewUserInfo {
-
+    private Long userId;
     private String nickname;
     private String imageUrl;
 
