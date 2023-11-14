@@ -43,7 +43,9 @@ public class FlagService {
     }
 
     public List<FlagResponse> getFlags(Long storeId, LocalDate date) {
-        List<Flag> flagList = flagRepository.findByStoreIdAndDate(storeId, date);
+        Store findStore = storeRepository.findById(ownerId)
+                .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
+        List<Flag> flagList = flagRepository.findByStoreIdAndDate(findStore.getId(), date);
         List<Long> flagIdList = flagList.stream()
                 .map(Flag::getId)
                 .toList();
