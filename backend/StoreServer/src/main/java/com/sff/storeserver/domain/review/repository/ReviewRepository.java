@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query("select new com.sff.storeserver.domain.review.dto.MyReviewResponse(s.id, s.name, r.createdDate, r.score, r.content, r.orderId) from Review r join r.store s where r.userId = :userId")
+    @Query("select new com.sff.storeserver.domain.review.dto.MyReviewResponse(s.id, s.name, s.category, r.createdDate, r.score, r.content, r.orderId) from Review r join r.store s where r.userId = :userId")
     Page<MyReviewResponse> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("select new com.sff.storeserver.domain.review.dto.StoreReviewResponse(r.createdDate, r.score, r.content, r.userId) from Review r where r.store.id = :storeId")

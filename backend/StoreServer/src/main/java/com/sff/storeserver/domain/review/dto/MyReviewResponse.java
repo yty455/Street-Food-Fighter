@@ -1,5 +1,6 @@
 package com.sff.storeserver.domain.review.dto;
 
+import com.sff.storeserver.domain.store.entity.CategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class MyReviewResponse {
     // 가게 정보
     private Long storeId;
     private String storeName;
+    private CategoryType categoryType;
 
     // 리뷰 정보
     private LocalDateTime createdDate;
