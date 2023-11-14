@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import BottomBtn from '@/components/common/bottombtn';
 import CategorySelector from '@/components/common/categoryselector';
 import GetCategoryAPI from '@/apis/category/GetCategoryAPI';
+import EditCategoryAPI from '@/apis/category/EditCategoryAPI';
 
 const CategoryPage = () => {
   const [selectedType, setSelectedType] = useState('');
@@ -30,10 +31,18 @@ const CategoryPage = () => {
     setSelectedType(type);
   };
 
-  const handleSave = () => {
-    console.log('선택된 업태:', selectedType);
-    console.log('선택된 대표 카테고리:', selectedCategory);
-    //이후 api 호출 추가
+  const handleSave = async () => {
+    const data = {
+      businessCategory: selectedType,
+      category: selectedCategory,
+    };
+
+    const response = await EditCategoryAPI({ data });
+    if (response) {
+      console.log('카테고리 수정 성공:', response);
+    } else {
+      console.error('카테고리 수정 실패');
+    }
   };
 
   return (
