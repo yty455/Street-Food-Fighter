@@ -11,8 +11,10 @@ import userInfoStore from '@/stores/userInfoStore';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register', '/success'];
+
+  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register', '/success', '/ordercheck'];
   const { setUserInfo } = userInfoStore();
+
 
   useEffect(() => {
     const GetUserInfo = async () => {
