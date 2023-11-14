@@ -46,7 +46,13 @@ const SelectFlag = ({ flags, onClose, onStartOperation }: any) => {
         <Today>{formattedDate}</Today>
       </TitleBox>
       {flags.map((flagItem: any, index: any) => (
-        <FlagCard key={index} flag={flagItem} selected={selectedFlagId === flagItem.flagId} onClick={() => handleFlagClick(flagItem.flagId)} />
+        <FlagCard
+          key={index}
+          flag={flagItem}
+          selected={selectedFlagId === flagItem.flagId}
+          onClick={() => handleFlagClick(flagItem.flagId)}
+          flagidx={index}
+        />
       ))}
       <BottomBtn text="영업 시작" onClick={handleStartClick} />
     </Container>
