@@ -1,5 +1,5 @@
 import Topbar from '@/components/common/topbar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PageTitle, TabBox, FlagList, NoFlag } from './Flag.styled';
 import FlagCard from '@/components/flag/flagcard';
 import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
@@ -14,6 +14,19 @@ import DateFlagAPI from '@/apis/flag/DateFlagAPI';
 const FlagPage = () => {
   const { selectedDate, setSelectedDate } = useSelectedDateStore();
   const [curflag, setCurFlag] = useState([]);
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+      const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+      const res = await DateFlagAPI(formattedDate);
+      const flags = res.response;
+      if (flags) {
+        setCurFlag(flags);
+      }
+    };
+
+    loadInitialData();
+  }, [selectedDate]);
 
   const selectTab = async (date: any) => {
     setSelectedDate(date);
@@ -43,18 +56,19 @@ const FlagPage = () => {
       <TabBox>
         <WeekTabs selectedDate={selectedDate} selectTab={selectTab} />
       </TabBox>
-      {curflag.length == 0 && (
+      {curflag.length == 0 ? (
         <NoFlag>
           <div>깃발 꽂기 버튼이 </div>
           <div>여러분을 기다리고 있어요! 🚀</div>
         </NoFlag>
+      ) : (
+        <FlagList>
+          {/* <h3>선택된 날짜: {selectedDate.getDate()}</h3> */}
+          {curflag.map((flagItem, index) => (
+            <FlagCard key={index} flag={flagItem} onClick={() => handleFlagClick(index)} flagindex={index} />
+          ))}
+        </FlagList>
       )}
-      <FlagList>
-        {/* <h3>선택된 날짜: {selectedDate.getDate()}</h3> */}
-        {curflag.map((flagItem, index) => (
-          <FlagCard key={index} flag={flagItem} onClick={() => handleFlagClick(index)} />
-        ))}
-      </FlagList>
       <BottomBtn
         text="깃발 추가"
         disabled={curflag.length === 3}
