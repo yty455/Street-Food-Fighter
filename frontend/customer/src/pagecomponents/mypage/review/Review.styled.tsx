@@ -25,8 +25,6 @@ const ReviewTitle = styled.div`
   font-size: 35px;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 1;
 `;
 
 const ReviewItem = styled.div`
