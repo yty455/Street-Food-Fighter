@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import GetFundingList from '@/apis/fundinglist/GetFundingList';
 
-const OrderListPage = () => {
+const FundingListPage = () => {
   const [fundings, setFundings] = useState<any>([]);
   const router = useRouter();
 
@@ -35,15 +35,15 @@ const OrderListPage = () => {
   };
 
   const moveDetailPage = (number: any) => {
-    router.push('/orderlist/detail/' + number);
+    router.push('/orderlist/fundinglist/detail/' + number);
   };
 
   return (
     <WrapContainer>
       <Topbar text="펀딩 내역" />
       <Container>
-        {fundings.map((funding: any) => (
-          <OrderCardWrapper key={fundings.fundingId}>
+        {fundings.map((funding: any, index) => (
+          <OrderCardWrapper key={'funding- ' + index}>
             <CardTop>
               <Airfont>
                 {formatDate(funding.createdAt)} {orderStateMapping[funding.fundingState as OrderState]}
@@ -69,4 +69,4 @@ const OrderListPage = () => {
   );
 };
 
-export default OrderListPage;
+export default FundingListPage;
