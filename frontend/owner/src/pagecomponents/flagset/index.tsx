@@ -8,6 +8,9 @@ import BottomBtn from '@/components/common/bottombtn';
 import { MarkerPosition } from '@/types/map.type';
 import SettingBox from '@/components/flagset/settingbox';
 import SearchPlace from '@/components/common/searchplace';
+import useFormatDate from '@/hooks/common/formatDate.hook';
+import useSelectedDateStore from '@/stores/flag/selectedDateStore';
+import AddFlagAPI from '@/apis/flag/AddFlagAPI';
 
 const FlagSetPage = () => {
   const [addressName, setAddressName] = useState('');
@@ -23,6 +26,46 @@ const FlagSetPage = () => {
 
   const [markerPosition, setMarkerPosition] = useState<MarkerPosition>(null);
 
+  //
+  const { selectedDate } = useSelectedDateStore();
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  const handleAddClick = async () => {
+    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+    const latitude = markerPosition?.lat || 0;
+    const longitude = markerPosition?.lng || 0;
+    const addressParts = addressName.split(' ');
+    const [region1, region2, region3, region4 = ''] = addressParts;
+
+    const flagData = {
+      date: formattedDate,
+      openTime: startTime,
+      closeTime: endTime,
+      address: addressName,
+      lati: latitude,
+      longi: longitude,
+      region1,
+      region2,
+      region3,
+      region4,
+    };
+
+    if (latitude == 0 || longitude == 0) {
+      alert('깃발을 꽂아주세요');
+    } else if (startTime.length == 0 || endTime.length == 0) {
+      alert('시간 선택을 완료해주세요');
+    } else {
+      console.log(flagData);
+      const result = await AddFlagAPI(flagData);
+      if (result) {
+        console.log('API 호출 성공:', result);
+        router.push('/flag');
+      } else {
+        console.log('API 호출 실패');
+      }
+    }
+  };
   return (
     <div>
       <Map
@@ -73,8 +116,8 @@ const FlagSetPage = () => {
         <img src="/images/common/curpos.png" style={{ width: '50px' }} />
       </Curpos>
 
-      <SettingBox />
-      <BottomBtn text="깃발 추가" />
+      <SettingBox setStartTime={setStartTime} setEndTime={setEndTime} startTime={startTime} endTime={endTime} />
+      <BottomBtn text="깃발 추가" onClick={handleAddClick} />
     </div>
   );
 };

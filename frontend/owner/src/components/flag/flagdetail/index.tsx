@@ -1,5 +1,4 @@
 import Topbar from '@/components/common/topbar';
-import { flagdetail } from '@/temp/flagdetail';
 import { UserGrades } from '@/types/usergrade.type';
 import {
   Container,
@@ -16,33 +15,49 @@ import {
   UserRight,
 } from './Flagdetail.styled';
 import { gradeMapping } from '@/assets/grade';
+import { useEffect, useState } from 'react';
+import DetailFlagAPI from '@/apis/flag/FlagDetailAPI';
+import { FlagDetailType, FundingUserInfo } from '@/types/flagdetail.type';
+import useFormatDate from '@/hooks/common/formatDate.hook';
 
 const FlagDetail = ({ flag, closeModal }: any) => {
-  const detail = flagdetail; // 이후 flag이용해서 detail 가져오기
+  const [detail, setDetail] = useState<FlagDetailType | null>(null);
 
-  const getGradeCount = (grade: UserGrades) => detail.fundingUserGrade[grade] || 0;
+  useEffect(() => {
+    const fetchDetail = async () => {
+      const data = await DetailFlagAPI(flag.flagId); // flag의 id를 사용하여 API 호출
+      if (data) {
+        setDetail(data); // 응답 데이터로 상태 업데이트
+        console.log(data);
+      }
+    };
+    fetchDetail();
+  }, [flag]);
 
+  const getGradeCount = (grade: UserGrades) => detail?.fundingUserGrade[grade] || 0;
+
+  const { formatTime24To12 } = useFormatDate();
   return (
     <Container>
       <Topbar text="펀딩 현황" type="close" closeModal={closeModal} />
       <BigContentBox>
         <ContentBox>
           <Title> 영업 일자</Title>
-          <Content>{detail.date}</Content>
+          <Content>{detail?.date}</Content>
           <Content>
-            {detail.openTime} ~ {detail.closeTime}
+            {detail?.openTime ? formatTime24To12(detail.openTime) : ''} ~{detail?.closeTime ? formatTime24To12(detail.closeTime) : ''}
           </Content>
         </ContentBox>
         <ContentBox>
           <Title> 상세 주소</Title>
-          <Content> {detail.address}</Content>
+          <Content> {detail?.address}</Content>
         </ContentBox>
       </BigContentBox>
 
       <BigContentBox>
         <ContentBox>
           <Title>총 펀딩 금액</Title>
-          <Content>{Number(detail.fundingAmount).toLocaleString()}원</Content>
+          <Content>{Number(detail?.fundingAmount).toLocaleString()}원</Content>
         </ContentBox>
         <div>
           <Title>펀딩한 회원 등급</Title>
@@ -69,20 +84,16 @@ const FlagDetail = ({ flag, closeModal }: any) => {
 
       <BigContentBox>
         <Title>펀딩한 회원</Title>
-        {detail.fundingUserInfoList.map((user, userIndex) => (
+        {detail?.fundingUserInfoList?.map((user: FundingUserInfo, userIndex: number) => (
           <UserList key={userIndex}>
-            <UserGradeImage src={gradeMapping[user.userGrade as UserGrades]} />
-
+            <UserGradeImage src={gradeMapping[user.userGrade]} />
             <UserRight>
               <UserTitle>
                 {user.userName} / {Number(user.totalPrice).toLocaleString()}원
               </UserTitle>
-              {user.fundingMenuInfoList.length > 0 && (
-                <UserMenu>
-                  {user.fundingMenuInfoList[0].menuName} {user.fundingMenuInfoList[0].count}개
-                  {user.fundingMenuInfoList.length > 1 && ` 외 다른 메뉴${user.fundingMenuInfoList.length - 1}개`}
-                </UserMenu>
-              )}
+              <UserMenu>
+                {user.menuName} {user.menuCount}개{user.restCount > 1 && ` 외 다른 메뉴${user.restCount}개`}
+              </UserMenu>
             </UserRight>
           </UserList>
         ))}

@@ -4,14 +4,12 @@ import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 import { useState } from 'react';
 import SelectTime from '../selecttime';
 
-const SettingBox = () => {
+const SettingBox = ({ setStartTime, setEndTime, startTime, endTime }: any) => {
   // 선택한 날짜와 포맷
   const { selectedDate } = useSelectedDateStore();
   const { formatDate, formatTime24To12 } = useFormatDate();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
 
   const handleTimeSelection = () => {
     setShowTimePicker(true);
