@@ -1,17 +1,27 @@
 import Select from '@/components/common/select';
 import Topbar from '@/components/common/topbar';
 import { Container, SettingBox, TypeBox, Title, CategoriesContainer, CategoryImage, CategoryName, CategoryItem } from './Category.styled';
-import { categories } from '@/assets/category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BottomBtn from '@/components/common/bottombtn';
-import { vendorcat } from '@/temp/category';
 import CategorySelector from '@/components/common/categoryselector';
+import GetCategoryAPI from '@/apis/category/GetCategoryAPI';
 
 const CategoryPage = () => {
-  const initialCategoryName = vendorcat.category;
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const [selectedType, setSelectedType] = useState(vendorcat.businessCategory);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategoryName);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categoryData = await GetCategoryAPI();
+      if (categoryData) {
+        setSelectedType(categoryData.businessCategory);
+        setSelectedCategory(categoryData.category);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  console.log(selectedType, selectedCategory);
 
   const selectCategory = (categoryName: string) => {
     setSelectedCategory(categoryName);
@@ -36,7 +46,7 @@ const CategoryPage = () => {
         </TypeBox>
         <TypeBox>
           <Title>대표 카테고리</Title>
-          <CategorySelector categories={categories} selectedCategory={selectedCategory} selectCategory={selectCategory} />
+          <CategorySelector selectedCategory={selectedCategory} selectCategory={selectCategory} />
         </TypeBox>
       </SettingBox>
       <BottomBtn text="수정 하기" onClick={handleSave} />
