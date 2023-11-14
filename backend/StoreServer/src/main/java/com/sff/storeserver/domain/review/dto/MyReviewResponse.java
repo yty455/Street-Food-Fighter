@@ -29,9 +29,10 @@ public class MyReviewResponse {
     private Long orderId;
     private List<String> menu;
 
-    public MyReviewResponse(Long storeId, String storeName, LocalDateTime createdDate, int score, String content, Long orderId) {
+    public MyReviewResponse(Long storeId, String storeName, CategoryType categoryType, LocalDateTime createdDate, int score, String content, Long orderId) {
         this.storeId = storeId;
         this.storeName = storeName;
+        this.categoryType = categoryType;
         this.createdDate = createdDate;
         this.score = score;
         this.content = content;
