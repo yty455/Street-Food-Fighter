@@ -36,7 +36,7 @@ public class FlagService {
 
     @Transactional
     public Long createFlag(Long ownerId, FlagRequest flagRequest) {
-        Store findStore = storeRepository.findById(ownerId)
+        Store findStore = storeRepository.findByOwnerId(ownerId)
                 .orElseThrow(() -> new BaseException(StoreError.NOT_FOUND_STORE));
         flagRequest.setStoreId(findStore.getId());
         return flagRepository.save(flagRequest.toEntity(findStore)).getId();
