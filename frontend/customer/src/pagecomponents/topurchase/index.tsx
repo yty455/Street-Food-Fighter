@@ -17,6 +17,7 @@ import useBucketStore from '@/stores/bucketStore';
 import OrderAPI from '@/apis/vendor/OrderAPI';
 import useFlagIdStore from '@/stores/flagidStore';
 import FundingAPI from '@/apis/vendor/FundingAPI';
+import Charge from '@/components/common/charge';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -73,6 +74,12 @@ const PurchasePage = () => {
       router.push('/password/pay');
     }
   };
+
+  // 포인트 충전 모달
+  const [showCharge, setShowCharge] = useState(false);
+  const toggleCharge = () => {
+    setShowCharge(!showCharge);
+  };
   return (
     <div>
       <TopBox>
@@ -128,7 +135,7 @@ const PurchasePage = () => {
             <Title> 보유 파이트 머니</Title>
             <FlexRow>
               <Airfont>{Number(user.points).toLocaleString()}원</Airfont>
-              <Button text="충전"></Button>
+              <Button text="충전" onClick={toggleCharge}></Button>
             </FlexRow>
           </Cashline>
           <Cashline>
@@ -139,6 +146,7 @@ const PurchasePage = () => {
       </Content>
 
       <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
+      {showCharge && <Charge toggleCharge={toggleCharge} />}
     </div>
   );
 };
