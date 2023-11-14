@@ -3,6 +3,7 @@ package com.sff.storeserver.domain.review.repository;
 import com.sff.storeserver.domain.review.dto.MyReviewResponse;
 import com.sff.storeserver.domain.review.dto.StoreReviewResponse;
 import com.sff.storeserver.domain.review.entity.Review;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,5 +22,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select AVG(r.score) from Review r where r.store.id = :storeId")
     Double getAverageScoreByStoreId(@Param("storeId") Long storeId);
 
-    Review findByOrderId(Long orderId);
+    Optional<Review> findByOrderId(Long orderId);
 }
