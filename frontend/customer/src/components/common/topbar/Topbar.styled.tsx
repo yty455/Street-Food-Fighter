@@ -14,9 +14,11 @@ const StyledTopbar = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       flex-direction: row;
       background-color: ${white};
-      height: 55px;
+      min-height: 55px;
       align-items: center;
       justify-content: center;
+      position: absolute;
+      top: 0;
 
       font-size: 24px;
       width: 100%;
