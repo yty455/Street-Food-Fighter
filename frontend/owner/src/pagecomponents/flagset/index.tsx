@@ -13,7 +13,7 @@ import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 import AddFlagAPI from '@/apis/flag/AddFlagAPI';
 
 const FlagSetPage = () => {
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 
