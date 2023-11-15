@@ -9,7 +9,7 @@ import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [loginInfo, setLoginInfo] = useState({ email: 'owner@owner.com', password: '1234' });
+  const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
   const setOwner = useSetOwnerInfoHook();
 
   const moveRegisterPage = (e: any) => {
@@ -56,7 +56,14 @@ const LoginPage = () => {
           ></Input>
         </InputWrapper>
         <InputWrapper margintop="30px">
-          <Input use="info" name="password" value={loginInfo.password} onChange={changeLoginInfo} placeholder="비밀번호를 입력해주세요"></Input>
+          <Input
+            use="info"
+            name="password"
+            type="password"
+            value={loginInfo.password}
+            onChange={changeLoginInfo}
+            placeholder="비밀번호를 입력해주세요"
+          ></Input>
         </InputWrapper>
         <ButtonList>
           <ButtonWrapper>
