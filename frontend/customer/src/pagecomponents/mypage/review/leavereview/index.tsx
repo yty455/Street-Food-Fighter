@@ -1,17 +1,31 @@
 // firebase 연동
 import { useEffect, useState } from 'react';
-import { ReviewIcon, ReviewTitle, LeaveReviewPageStyle } from './LeaveReview.styled';
+import {
+  ButtonWrapper,
+  InputWrapper,
+  ReviewIconContainer,
+  MenuText,
+  MenuContainer,
+  ReviewIcon,
+  ReviewTitle,
+  LeaveReviewPageStyle,
+} from './LeaveReview.styled';
 import Topbar from '@/components/common/topbar';
-import GetMyReviewsAPI from '@/apis/user/GetMyReviews';
 import { categories } from '@/assets/category';
+import GetOrderDetailAPI from '@/apis/orderlist/GetOrderDetail';
+import Input from '@/components/common/input';
+import Button from '@/components/common/button';
 
 const LeaveReviewPage = ({ params, ...props }: any) => {
-  const [reviews, setReviews] = useState([]);
+  const [reviewInfo, setReviewInfo] = useState<any>();
+  const [score, setScore] = useState<number>(0);
+  const [reviewText, setReviewTest] = useState<string>('');
 
   useEffect(() => {
     const getReviews = async () => {
-      const result = await GetMyReviewsAPI(0, 10);
-      setReviews(result.response.content);
+      const result = await GetOrderDetailAPI(params.id);
+      setReviewInfo(result.response);
+      console.log(result);
     };
     getReviews();
   }, []);
@@ -19,13 +33,25 @@ const LeaveReviewPage = ({ params, ...props }: any) => {
   return (
     <LeaveReviewPageStyle>
       <Topbar text="리뷰 관리" />
-      <ReviewTitle>내가 쓴 총 리뷰 {reviews.length} 개</ReviewTitle>
-      {/* <ReviewIconComponent categoryType={review.categoryType} score={review.score} /> */}
+      <ReviewTitle>리뷰를 남겨주세요!</ReviewTitle>
+      <ReviewIconContainer>
+        {reviewInfo && <ReviewIconComponent categoryType={reviewInfo.categoryType} score={score} setScore={setScore} />}
+      </ReviewIconContainer>
+      <MenuContainer>
+        {reviewInfo?.orderItemList &&
+          reviewInfo.orderItemList.map((menu: any, index: number) => <MenuText key={'menu-text-' + index}>{menu.name}</MenuText>)}
+      </MenuContainer>
+      <InputWrapper>
+        <Input value={reviewText} onChange={(e: any) => setReviewTest(e.target.value)} placeholder="리뷰를 작성해주세요" use="info"></Input>
+      </InputWrapper>
+      <ButtonWrapper>
+        <Button text="작성하기"> </Button>
+      </ButtonWrapper>
     </LeaveReviewPageStyle>
   );
 };
 
-const ReviewIconComponent = ({ categoryType, score }: any) => {
+const ReviewIconComponent = ({ categoryType, score, setScore }: any) => {
   const getCategoryImage = (type: any) => {
     const category = categories.find((cat) => cat.type === type);
     return category ? category.image : null;
@@ -37,13 +63,24 @@ const ReviewIconComponent = ({ categoryType, score }: any) => {
   };
   const fillIcons = Array.from({ length: score });
   const noFillIcons = Array.from({ length: 5 - score });
+
   return (
     <>
-      {fillIcons.map((_, fillIndex) => (
-        <ReviewIcon key={`fill-${fillIndex}`} src={`/images/category/${getCategoryImage(categoryType)}`} alt="" />
+      {fillIcons.map((_, fillIndex: number) => (
+        <ReviewIcon
+          onClick={() => setScore(fillIndex + 1)}
+          key={`fill-${fillIndex}`}
+          src={`/images/category/${getCategoryImage(categoryType)}`}
+          alt=""
+        />
       ))}
-      {noFillIcons.map((_, noFillIndex) => (
-        <ReviewIcon key={`noFill-${noFillIndex}`} src={`/images/category/${getCategoryReviewImage(categoryType)}`} alt="" />
+      {noFillIcons.map((_, noFillIndex: number) => (
+        <ReviewIcon
+          onClick={() => setScore((prev: number) => prev + noFillIndex + 1)}
+          key={`noFill-${noFillIndex}`}
+          src={`/images/category/${getCategoryReviewImage(categoryType)}`}
+          alt=""
+        />
       ))}
     </>
   );
