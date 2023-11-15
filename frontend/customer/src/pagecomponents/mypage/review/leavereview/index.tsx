@@ -15,11 +15,14 @@ import { categories } from '@/assets/category';
 import GetOrderDetailAPI from '@/apis/orderlist/GetOrderDetail';
 import Input from '@/components/common/input';
 import Button from '@/components/common/button';
+import PostReviewAPI from '@/apis/review/PostReviewAPI';
+import { useRouter } from 'next/navigation';
 
 const LeaveReviewPage = ({ params, ...props }: any) => {
   const [reviewInfo, setReviewInfo] = useState<any>();
   const [score, setScore] = useState<number>(0);
-  const [reviewText, setReviewTest] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const router = useRouter();
 
   useEffect(() => {
     const getReviews = async () => {
@@ -29,6 +32,20 @@ const LeaveReviewPage = ({ params, ...props }: any) => {
     };
     getReviews();
   }, []);
+
+  const leaveReview = async () => {
+    const data = {
+      orderId: params.id,
+      content,
+      score,
+    };
+    const result = await PostReviewAPI(data);
+    console.log(result);
+    if (result.success) {
+      alert('리뷰남기기에 성공했습니다');
+      router.push('/mypage/review');
+    }
+  };
 
   return (
     <LeaveReviewPageStyle>
@@ -42,10 +59,12 @@ const LeaveReviewPage = ({ params, ...props }: any) => {
           reviewInfo.orderItemList.map((menu: any, index: number) => <MenuText key={'menu-text-' + index}>{menu.name}</MenuText>)}
       </MenuContainer>
       <InputWrapper>
-        <Input value={reviewText} onChange={(e: any) => setReviewTest(e.target.value)} placeholder="리뷰를 작성해주세요" use="info"></Input>
+        <Input value={content} onChange={(e: any) => setContent(e.target.value)} placeholder="리뷰를 작성해주세요" use="info"></Input>
       </InputWrapper>
       <ButtonWrapper>
-        <Button text="작성하기"> </Button>
+        <Button onClick={leaveReview} text="작성하기">
+          {' '}
+        </Button>
       </ButtonWrapper>
     </LeaveReviewPageStyle>
   );

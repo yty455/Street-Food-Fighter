@@ -43,7 +43,6 @@ const MenuContainer = styled.div.attrs<any>((props) => ({}))`
       align-items: center;
       overflow-y: auto;
       white-space: nowrap;
-      padding: 5px;
     `;
   }};
 `;
@@ -75,6 +74,7 @@ const ReviewIconContainer = styled.div`
 
 const InputWrapper = styled.div`
   width: 80%;
+  margin-top: 55px;
 `;
 const ButtonWrapper = styled.div`
   width: 80%;
