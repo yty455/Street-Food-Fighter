@@ -44,7 +44,9 @@ const OrderDetailPage = ({ params, ...props }: any) => {
               />
               {orderInfo.storeName}
             </StoreName>
-            <StoreAddress>{orderInfo.storeAddress}</StoreAddress>
+            <StoreTextLine>
+              영업장소 <span>: {orderInfo.storeAddress}</span>
+            </StoreTextLine>
             <StoreTextLine>
               주문일시 <span>: {formatDate(orderInfo.createAt)}</span>
             </StoreTextLine>

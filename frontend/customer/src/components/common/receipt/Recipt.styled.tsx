@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 const Table = styled.table`
   width: 100%;
-  font-size: 16px;
+  font-size: 17px;
 `;
 const LineTr = styled.tr`
   border-top: 0.5px solid black;
@@ -14,7 +14,7 @@ const TableHead = styled.th.attrs<any>((props) => ({}))`
     return css`
       padding: 5px;
       font-family: ${font};
-      font-size: 16px;
+      font-size: 18px;
     `;
   }};
 `;

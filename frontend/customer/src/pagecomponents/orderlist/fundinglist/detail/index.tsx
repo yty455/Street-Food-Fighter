@@ -46,13 +46,13 @@ const FundingDetailPage = ({ params, ...props }: any) => {
               {fundingInfo.storeName}
             </StoreName>
             <StoreTextLine>
-              영업주소 : <span>: {fundingInfo.flagAddress}</span>
+              영업주소 <span>: {fundingInfo.flagAddress}</span>
             </StoreTextLine>
             <StoreTextLine>
-              영업일자 : <span>: {formatDate2(fundingInfo.flagDate)}</span>
+              영업일자 <span>: {formatDate2(fundingInfo.flagDate)}</span>
             </StoreTextLine>
             <StoreTextLine>
-              펀딩일자 : <span>: {formatDate(fundingInfo.createAt)}</span>
+              펀딩일자 <span>: {formatDate(fundingInfo.createAt)}</span>
             </StoreTextLine>
             <StoreTextLine>
               요청사항 : <span>{fundingInfo.requirement}</span>
