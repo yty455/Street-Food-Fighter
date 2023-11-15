@@ -59,7 +59,7 @@ const OrderDetail = ({
   const handleOrderReject = async () => {
     const response = await ToRejectAPI({ orderId: order.orderId });
     if (response) {
-      console.log('Order Reject response:', response);
+      // console.log('Order Reject response:', response);
       closeModal();
       onOrderStateChanged();
     }
@@ -68,7 +68,7 @@ const OrderDetail = ({
   const handleOrderFinish = async () => {
     const response = await ToCompletionAPI({ orderId: order.orderId });
     if (response) {
-      console.log('Order finish response:', response);
+      // console.log('Order finish response:', response);
       closeModal();
       onOrderStateChanged();
     }

@@ -6,7 +6,7 @@ const AddFlagAPI = async (data: any) => {
     const response = await api.post(`/api/store-service/flags`, data, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     return null;

@@ -56,13 +56,9 @@ const FlagSetPage = () => {
     } else if (startTime.length == 0 || endTime.length == 0) {
       alert('시간 선택을 완료해주세요');
     } else {
-      console.log(flagData);
       const result = await AddFlagAPI(flagData);
       if (result) {
-        console.log('API 호출 성공:', result);
         router.push('/flag');
-      } else {
-        console.log('API 호출 실패');
       }
     }
   };

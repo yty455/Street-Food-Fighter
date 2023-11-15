@@ -8,7 +8,7 @@ const MenuInfoAPI = async () => {
     const response = await api.get(`/api/store-service/menus`, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log('MenuInfoAPI', response.data);
+    // console.log('MenuInfoAPI', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);

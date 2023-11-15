@@ -24,8 +24,6 @@ const CategoryPage = () => {
     fetchCategories();
   }, []);
 
-  console.log(selectedType, selectedCategory);
-
   const selectCategory = (categoryName: string) => {
     setSelectedCategory(categoryName);
   };
@@ -41,10 +39,9 @@ const CategoryPage = () => {
 
     const response = await EditCategoryAPI({ data });
     if (response) {
-      console.log('카테고리 수정 성공:', response);
       router.push('/');
     } else {
-      console.error('카테고리 수정 실패');
+      // console.error('카테고리 수정 실패');
     }
   };
 

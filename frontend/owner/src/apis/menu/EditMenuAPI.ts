@@ -9,7 +9,7 @@ const EditMenuAPI = async ({ menuId, data }: any) => {
     // console.log('EditMenu', response.data);
     return response.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return null;
   }
 };

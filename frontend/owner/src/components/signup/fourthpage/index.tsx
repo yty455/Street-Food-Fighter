@@ -37,7 +37,7 @@ const SignUpFourthPage = ({ params, ...props }: any) => {
     // router.push('/signup/5');
   };
   useEffect(() => {
-    console.log(category);
+    // console.log(category);
   }, [category]);
 
   const handleChangeBusinessCategory = (value: string) => {
