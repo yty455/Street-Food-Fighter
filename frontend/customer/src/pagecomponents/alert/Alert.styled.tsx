@@ -30,6 +30,9 @@ const AlertContainer = styled.div.attrs<any>((props) => ({}))`
       align-items: center;
       gap: 20px;
       padding-top: 20px;
+
+      overflow-y: auto;
+      padding-bottom: 50px;
     `;
   }};
 `;

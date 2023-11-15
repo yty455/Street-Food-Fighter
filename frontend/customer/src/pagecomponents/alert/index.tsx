@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Topbar, Title, AlertImage, AlertContainer, ShowBeforeAlert } from './Alert.styled';
-import { alerts } from '@/temp/alerts';
+// import { alerts } from '@/temp/alerts';
 import AlertCard from '@/components/alert/alertcard';
+import GetMyAlertAPI from '@/apis/alert/GetMyAlertAPI';
 
 const AlertPage = () => {
   const [isAlertOn, setIsAlertOn] = useState(true);
@@ -9,6 +10,18 @@ const AlertPage = () => {
   const toggleAlert = () => {
     setIsAlertOn(!isAlertOn);
   };
+
+  const [alerts, setAlerts] = useState([]);
+
+  useEffect(() => {
+    const getAlerts = async () => {
+      const res = await GetMyAlertAPI(0, 10);
+      setAlerts(res.notificationInfos.content);
+      console.log(res);
+      console.log(res.notificationInfos.content);
+    };
+    getAlerts();
+  }, []);
   return (
     <div style={{ height: '93vh' }}>
       <Topbar>
