@@ -1,7 +1,7 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/common/filter';
-import { useEffect, useRef, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
@@ -57,6 +57,19 @@ const MainPage = () => {
 
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
+  // 캐러셀 시작
+  const scrollRef = useRef<any>([]);
+
+  useEffect(() => {
+    if (vendors.length > 0) scrollRef.current[0].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  }, [vendors]); // vendors가 변경될 때마다 useEffect 실행
+
+  const moveCardCenter = (event: any, index: number) => {
+    scrollRef.current[index].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  };
+
+  // 캐러셀 끝
+
   return (
     <div style={{ height: '93vh' }}>
       <Map center={position} style={{ width: '100%', height: '100%' }} level={3} ref={mapRef}>
@@ -68,6 +81,7 @@ const MainPage = () => {
             return (
               <MapMarker
                 key={vendor.id || index}
+                onClick={(e: any) => moveCardCenter(e, index)}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
@@ -100,17 +114,19 @@ const MainPage = () => {
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
       </Curpos>
       <CardList>
-        <div />
-        {vendors.map((vendor) => (
-          <Card
-            key={vendor.storeId}
-            vendor={vendor}
-            onClick={() => {
-              router.push(`/vendor/${vendor.storeId}`);
-            }}
-          />
+        <div style={{ minWidth: '225px' }} />
+        {vendors.map((vendor, index: any) => (
+          <div key={vendor.storeId} ref={(el) => (scrollRef.current[index] = el)}>
+            <Card
+              className="card"
+              vendor={vendor}
+              onClick={() => {
+                router.push(`/vendor/${vendor.storeId}`);
+              }}
+            />
+          </div>
         ))}
-        <div />
+        <div style={{ minWidth: '225px' }} />
       </CardList>
     </div>
   );

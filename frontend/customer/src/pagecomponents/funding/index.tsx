@@ -73,6 +73,19 @@ const FundingPage = () => {
     fetchFlags();
   }, [addressName, selectedCategories, selectedDate]);
 
+  // 캐러셀 시작
+  const scrollRef = useRef<any>([]);
+
+  useEffect(() => {
+    if (flags.length > 0) scrollRef.current[0].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  }, [flags]); // vendors가 변경될 때마다 useEffect 실행
+
+  const moveCardCenter = (event: any, index: number) => {
+    scrollRef.current[index].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  };
+
+  // 캐러셀 끝
+
   return (
     <div style={{ height: '93vh' }}>
       <Map center={position} style={{ width: '100%', height: '100%' }} ref={mapRef}>
@@ -84,6 +97,7 @@ const FundingPage = () => {
             return (
               <MapMarker
                 key={index}
+                onClick={(e: any) => moveCardCenter(e, index)}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
@@ -121,18 +135,20 @@ const FundingPage = () => {
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
       </Curpos>
       <CardList>
-        <div />
+        <div style={{ minWidth: '225px' }} />
         {flags.map((vendor, index) => (
-          <Card
-            key={index} // index를 key로 사용
-            vendor={vendor}
-            onClick={() => {
-              setFlagId(vendor.flag.flagId);
-              router.push(`/vendor/${vendor.storeId}`);
-            }}
-          />
+          <div key={vendor.storeId} ref={(el) => (scrollRef.current[index] = el)}>
+            <Card
+              key={index} // index를 key로 사용
+              vendor={vendor}
+              onClick={() => {
+                setFlagId(vendor.flag.flagId);
+                router.push(`/vendor/${vendor.storeId}`);
+              }}
+            />
+          </div>
         ))}
-        <div />
+        <div style={{ minWidth: '225px' }} />
       </CardList>
     </div>
   );
