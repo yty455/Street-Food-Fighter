@@ -2,6 +2,7 @@ package com.sff.storeserver.domain.review.service;
 
 import com.sff.storeserver.common.error.code.StoreError;
 import com.sff.storeserver.common.error.type.BaseException;
+import com.sff.storeserver.common.feignClient.NotiClient;
 import com.sff.storeserver.common.feignClient.OrderClient;
 import com.sff.storeserver.common.feignClient.UserClient;
 import com.sff.storeserver.common.utils.ApiError;
@@ -33,6 +34,7 @@ public class ReviewService {
 
     private final UserClient userClient;
     private final OrderClient orderClient;
+    private final NotiClient notiClient;
 
     @Transactional
     public void createReview(ReviewRequest reviewRequest, Long userId) {
@@ -44,6 +46,9 @@ public class ReviewService {
                 .orElseThrow(() -> (new BaseException(StoreError.NOT_FOUND_STORE)));
 
         reviewRepository.save(reviewRequest.toEntity(store, userId));
+
+        // 알림 서버로 업데이트 보내기
+        notiClient.updateType(NotificationUpdateRequest.builder().targetId(reviewRequest.getOrderId()).type("DONE_R").build());
     }
 
     public Page<MyReviewResponse> getMyReviews(Long userId, int page, int size) {
@@ -54,13 +59,13 @@ public class ReviewService {
 
         // 주문 아이디 리스트 -> 주문 서비스에 보내서 주문 메뉴 받아오기 (List<String>)
         ApiResult<List<ReviewMenuInfo>> result;
-        try{
+        try {
             List<Long> orders = myReviewResponseList.getContent().stream().map(MyReviewResponse::getOrderId).toList();
             result = orderClient.getMenus(orders);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new BaseException(new ApiError("주문서버와 통신 에러", 1));
         }
-        if(!result.getSuccess()){
+        if (!result.getSuccess()) {
             throw new BaseException(result.getApiError());
         }
 
@@ -81,12 +86,12 @@ public class ReviewService {
 
         // 유저 아이디 리스트 -> 회원 서비스에 보내서 회원 정보 받아오기 (userName, userProfileUrl)
         ApiResult<List<ReviewUserInfo>> result;
-        try{
+        try {
             result = userClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new BaseException(new ApiError("회원서버와 통신 에러", 1));
         }
-        if(!result.getSuccess()){
+        if (!result.getSuccess()) {
             throw new BaseException(result.getApiError());
         }
 
