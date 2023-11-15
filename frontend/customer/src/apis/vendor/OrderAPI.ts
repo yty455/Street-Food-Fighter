@@ -9,8 +9,9 @@ const OrderAPI = async (data: any) => {
     const response = await api.post(`/api/payment-server/orders`, data, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('OrderAPI', response.data.response);
-    return response.data.response;
+
+    // console.log('OrderAPI', response);
+    return response.data;
   } catch (error) {
     return null;
   }

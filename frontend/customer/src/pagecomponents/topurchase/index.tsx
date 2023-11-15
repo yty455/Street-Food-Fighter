@@ -65,12 +65,14 @@ const PurchasePage = () => {
         requirement: request,
       };
       if (curnav === 1) {
-        await OrderAPI(data1);
+        const res = await OrderAPI(data1);
+        // console.log('order...');
+        router.push('/password/pay');
       } else {
-        await FundingAPI(data2);
+        const res = await FundingAPI(data2);
+        // console.log('funding...');
+        router.push('/password/pay');
       }
-
-      router.push('/password/pay');
     } else {
       console.log('장바구니 없음');
     }
