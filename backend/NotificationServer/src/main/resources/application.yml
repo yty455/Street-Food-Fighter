@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: local
+    logging.level:
+      org.hibernate.SQL: debug
+      org.hibernate.type: trace # ??? ?? 2.x, hibernate5
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: 'false'
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  kafka:
+    bootstrap-servers: k9e205.p.ssafy.io:9092
+  cloud:
+    config:
+      enabled: false
+
+springdoc:
+  packages-to-scan: com.sff.notificationserver.domain
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /swagger-ui
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+project:
+  properties:
+    firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
+    firebase-topic: "diet_record_notification"
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info # 이부분은 알아서 변경
+
+feign:
+  storeserver:
+    url: k9e205.p.ssafy.io:8090
+  userserver:
+    url: k9e205.p.ssafy.io:8100

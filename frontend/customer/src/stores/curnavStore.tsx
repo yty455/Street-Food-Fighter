@@ -7,5 +7,5 @@ type NavState = {
 
 export const useNavStore = create<NavState>((set) => ({
   curnav: 1,
-  setCurnav: (id) => set({ curnav: id }),
+  setCurnav: (id = 1) => set({ curnav: id }),
 }));

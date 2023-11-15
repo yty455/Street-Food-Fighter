@@ -20,6 +20,7 @@ public class MemberInfoResponse {
     private String region2;
     private String region3;
     private String region4;
+    private Long userId;
 
     @Builder
     public MemberInfoResponse(Member member) {
@@ -34,5 +35,6 @@ public class MemberInfoResponse {
         this.region2 = member.getAddress().getRegion2();
         this.region3 = member.getAddress().getRegion3();
         this.region4 = member.getAddress().getRegion4();
+        this.userId = member.getId();
     }
 }
