@@ -6,10 +6,13 @@ import { useRouter } from 'next/navigation';
 import LoginAPI from '@/apis/user/LoginAPI';
 import UserInfotAPI from '@/apis/user/UserInfoAPI';
 import userInfoStore from '@/stores/userInfoStore';
+import GetMyPasswordAPI from '@/apis/user/GetMyPasswordAPI';
+import usePayPwdStore from '@/stores/userpwdStore';
 const LoginPage = () => {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
   const { setUserInfo } = userInfoStore();
+  const { setPayPassword } = usePayPwdStore();
 
   const login = async () => {
     try {
@@ -20,6 +23,13 @@ const LoginPage = () => {
       localStorage.setItem('user-accessToken', accessToken);
       const userInfo = await UserInfotAPI();
       setUserInfo(userInfo);
+
+      //
+      const res = await GetMyPasswordAPI();
+      if (res) {
+        setPayPassword(res.paymentPassword);
+        // console.log(res.paymentPassword);
+      }
       router.push('/main');
       // alert('로그인에 성공하셨습니다.');
     } catch (error) {
