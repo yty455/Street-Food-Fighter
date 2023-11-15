@@ -13,5 +13,4 @@ public class PointUpdateRequest {
     private Integer amount;
     @NotNull(message = "충전인지 아닌지 입력해주세요.")
     private Boolean isCharge;
-    private String paymentPassword;
 }

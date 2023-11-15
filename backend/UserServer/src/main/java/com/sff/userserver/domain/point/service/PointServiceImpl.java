@@ -2,6 +2,7 @@ package com.sff.userserver.domain.point.service;
 
 import com.sff.userserver.domain.member.entity.Member;
 import com.sff.userserver.domain.member.repository.MemberRepository;
+import com.sff.userserver.domain.point.dto.PaymentPasswordResponse;
 import com.sff.userserver.domain.point.dto.PointAmountResponse;
 import com.sff.userserver.domain.point.dto.PointUpdateRequest;
 import com.sff.userserver.domain.point.entity.Point;
@@ -36,14 +37,20 @@ public class PointServiceImpl implements PointService {
         if (pointUpdateRequest.getIsCharge()) {
             chargePoint(point, pointUpdateRequest.getAmount());
         } else {
-            usePoint(point, pointUpdateRequest.getPaymentPassword(), pointUpdateRequest.getAmount());
+            usePoint(point, pointUpdateRequest.getAmount());
         }
     }
 
-    private static void usePoint(Point point, String paymentPassword, int amount) {
-        if (!point.getPaymentPassword().equals(paymentPassword)) {
-            throw new BaseException(new ApiError("결제 비밀번호가 올바르지 않습니다.", 1120));
-        }
+    @Transactional
+    @Override
+    public PaymentPasswordResponse getPaymentPassword(Long memberId) {
+        Point point = memberRepository.findByIdWithPoint(memberId)
+                .orElseThrow(() -> new BaseException(new ApiError("존재하지 않는 사용자입니다", 1101))).getPoint();
+
+        return new PaymentPasswordResponse(point.getPaymentPassword());
+    }
+
+    private static void usePoint(Point point, int amount) {
         point.deductPoints(amount);
     }
 
