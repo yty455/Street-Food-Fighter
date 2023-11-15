@@ -9,6 +9,7 @@ import usePayPwdStore from '@/stores/userpwdStore';
 const useCompleteHandler = (slug: string) => {
   const router = useRouter();
   const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { payPassword } = usePayPwdStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const { setPassword, resetPasswords, wantPwd } = usePasswordStore();
   const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
@@ -17,7 +18,6 @@ const useCompleteHandler = (slug: string) => {
 
   const handleComplete = async () => {
     const currentPassword = useCurPasswordStore.getState().currentPassword;
-    const { payPassword } = usePayPwdStore();
 
     if (slug == 'change') {
       if (curPwdPage === 1) {
