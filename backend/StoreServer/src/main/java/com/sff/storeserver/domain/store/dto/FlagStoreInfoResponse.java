@@ -38,6 +38,8 @@ public class FlagStoreInfoResponse {
     private String introduction;
     private BusinessType state;
 
+    private Double score;
+
     public static FlagStoreInfoResponse fromEntity(Flag flag) {
         Store store = flag.getStore();
         return FlagStoreInfoResponse.builder()
@@ -59,5 +61,9 @@ public class FlagStoreInfoResponse {
                 .state(store.getState())
                 .build();
 
+    }
+
+    public void updateScore(Double score) {
+        this.score = score == null ? 0D : score;
     }
 }
