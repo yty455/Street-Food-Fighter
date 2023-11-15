@@ -9,6 +9,7 @@ export const Charge = ({ toggleCharge, onBack }: any) => {
   const [change, setChange] = useState('');
   const [formatChange, setFormatChange] = useState('');
   const [success, setSuccess] = useState(false);
+
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const numericValue = inputValue.replace(/[^0-9]/g, '');
@@ -19,7 +20,7 @@ export const Charge = ({ toggleCharge, onBack }: any) => {
 
   const handleToCharge = async () => {
     const data = {
-      amount: parseInt(change),
+      amount: parseInt(change.replaceAll(',', '')),
       isCharge: true,
       paymentPassword: '',
     };
@@ -55,7 +56,7 @@ export const Charge = ({ toggleCharge, onBack }: any) => {
           <SuccessContentBox>
             <img src="/images/signup/finish.png" style={{ width: '130px' }} />
             <div>
-              <FinishText>{Number(change).toLocaleString()} 파이트 머니가</FinishText>
+              <FinishText>{formatChange} 파이트 머니가</FinishText>
               <FinishText> 충전이 완료되었습니다.</FinishText>
             </div>
             <StyledButton onClick={toggleCharge}>

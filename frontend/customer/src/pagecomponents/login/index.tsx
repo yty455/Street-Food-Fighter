@@ -4,20 +4,28 @@ import Input from '@/components/common/input';
 import RoundButton from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
 import LoginAPI from '@/apis/user/LoginAPI';
+import UserInfotAPI from '@/apis/user/UserInfoAPI';
+import userInfoStore from '@/stores/userInfoStore';
 const LoginPage = () => {
   const router = useRouter();
   const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
+  const { setUserInfo } = userInfoStore();
 
   const login = async () => {
     try {
       const result: any = await LoginAPI(loginInfo);
       const accessToken = result.headers['authorization'];
       const refreshToken = result.headers['authorization-refresh'];
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('accessToken', accessToken);
-      console.log(result);
+      localStorage.setItem('user-refreshToken', refreshToken);
+      localStorage.setItem('user-accessToken', accessToken);
+      const userInfo = await UserInfotAPI();
+      setUserInfo(userInfo);
+      router.push('/main');
       // alert('로그인에 성공하셨습니다.');
     } catch (error) {
+      localStorage.removeItem('user-refreshToken');
+      localStorage.removeItem('user-accessToken');
+
       alert('로그인에 실패하셨습니다.');
     }
   };
