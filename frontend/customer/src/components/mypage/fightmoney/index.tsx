@@ -3,7 +3,7 @@ import { ChargeBox, Point, PointContainer, TitleBox } from './Fightmoney.styled'
 import { useEffect, useState } from 'react';
 import GetPointAPI from '@/apis/user/GetPointAPI';
 
-const Fightmoney = ({ toggleCharge }: any) => {
+const Fightmoney = ({ toggleCharge, fetchPointsKey }: any) => {
   const [userpoint, setUserpoint] = useState(0);
   useEffect(() => {
     const fetchPoints = async () => {
@@ -12,7 +12,7 @@ const Fightmoney = ({ toggleCharge }: any) => {
     };
 
     fetchPoints();
-  }, []);
+  }, [fetchPointsKey]);
 
   return (
     <PointContainer>

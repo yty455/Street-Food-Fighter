@@ -5,7 +5,7 @@ import { Topbar, ContentBox, ModalOverlay, TopContent, Title, StyledButton, Succ
 import RoundButton from '../roundbtn';
 import ChargeAPI from '@/apis/user/ChargeAPI';
 
-export const Charge = ({ toggleCharge }: any) => {
+export const Charge = ({ toggleCharge, onBack }: any) => {
   const [change, setChange] = useState('');
   const [formatChange, setFormatChange] = useState('');
   const [success, setSuccess] = useState(false);
@@ -26,6 +26,9 @@ export const Charge = ({ toggleCharge }: any) => {
     const res = await ChargeAPI({ data });
     if (res) {
       setSuccess(true);
+      if (onBack) {
+        onBack();
+      }
     }
   };
   return (

@@ -79,12 +79,12 @@ const PurchasePage = () => {
   };
 
   const [userpoint, setUserpoint] = useState(0);
-  useEffect(() => {
-    const fetchPoints = async () => {
-      const res = await GetPointAPI();
-      if (res) setUserpoint(res.amount);
-    };
+  const fetchPoints = async () => {
+    const res = await GetPointAPI();
+    if (res) setUserpoint(res.amount);
+  };
 
+  useEffect(() => {
     fetchPoints();
   }, []);
 
@@ -93,6 +93,7 @@ const PurchasePage = () => {
   const toggleCharge = () => {
     setShowCharge(!showCharge);
   };
+
   return (
     <div>
       <TopBox>
@@ -159,7 +160,7 @@ const PurchasePage = () => {
       </Content>
 
       <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
-      {showCharge && <Charge toggleCharge={toggleCharge} />}
+      {showCharge && <Charge toggleCharge={toggleCharge} onBack={fetchPoints} />}
     </div>
   );
 };
