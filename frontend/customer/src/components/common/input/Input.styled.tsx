@@ -9,7 +9,6 @@ const StyledInput = styled.input.attrs<any>((props) => ({
   type: props.type || 'text',
 }))`
   ${(props) => {
-    console.log('?ASD?AS?D?AS');
     const light = props.theme.colors.light;
     const main = props.theme.colors.main;
     const gray = props.theme.colors.gray;
