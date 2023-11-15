@@ -15,6 +15,7 @@ type RegisterState = {
   businessCategory: string;
   category: string;
   storeName: string;
+  fcmToken: string;
   setRegisterValue: <K extends keyof RegisterState>(field: K, value: RegisterState[K]) => void;
 };
 
@@ -22,6 +23,7 @@ const useRegisterPageStore = create<RegisterState>((set) => ({
   email: '',
   password: '',
   passwordCheck: '',
+  fcmToken: '',
   name: '',
   bank: '',
   phone: '',

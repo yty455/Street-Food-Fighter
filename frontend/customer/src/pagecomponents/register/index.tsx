@@ -7,7 +7,27 @@ import useRegisterPageStore from '@/stores/registerStore';
 
 const RegisterPage = ({ params, ...props }: any) => {
   const router = useRouter();
-  const { email, password, passwordCheck, nickname, phone, setRegisterValue } = useRegisterPageStore();
+  const { fcmToken, email, password, passwordCheck, nickname, phone, setRegisterValue } = useRegisterPageStore();
+
+  // 플러터 설정
+
+  const setToken = function () {
+    return new Promise((resolve) => {
+      if (window.flutter_inappwebview) {
+        window.flutter_inappwebview.callHandler('handleFoo').then(function (result) {
+          setRegisterValue('fcmToken', JSON.stringify(result.fcmT).slice(1, -1));
+          resolve(JSON.stringify(result.fcmT).slice(1, -1));
+        });
+      } else {
+        resolve(null);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setToken();
+  }, []);
+  // 플러터 섫정 끝
 
   const validateEmail = (email: string) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

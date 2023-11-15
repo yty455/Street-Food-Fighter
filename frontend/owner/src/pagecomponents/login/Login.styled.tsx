@@ -60,9 +60,11 @@ const InputWrapper = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const marginTop = props.margintop || '0px';
     return css`
-      width: 100%;
+      display: flex;
+      align-items: center;
       padding: 0px 30px;
-      margin-top: ${marginTop};
+      width: 100%;
+      height: 90px;
     `;
   }};
 `;
