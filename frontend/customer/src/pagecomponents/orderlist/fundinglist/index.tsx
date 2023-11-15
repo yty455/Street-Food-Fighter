@@ -21,6 +21,14 @@ const FundingListPage = () => {
     fetchOrders();
   }, []);
 
+  const fundingStateMapping: any = {
+    PAYMENT_IN_PROGRESS: '결제 전',
+    WAITING: '주문 대기',
+    PROCESSING: '조리중',
+    COMPLETED: '완료',
+    REFUSED: '주문 거절',
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
@@ -42,11 +50,11 @@ const FundingListPage = () => {
     <WrapContainer>
       <Topbar text="펀딩 내역" />
       <Container>
-        {fundings.map((funding: any, index) => (
+        {fundings.map((funding: any, index: number) => (
           <OrderCardWrapper key={'funding- ' + index}>
             <CardTop>
               <Airfont>
-                {formatDate(funding.createdAt)} {orderStateMapping[funding.fundingState as OrderState]}
+                {formatDate(funding.createdAt)} {fundingStateMapping[funding.fundingState]}
               </Airfont>
               <div style={{ width: '93px' }}>
                 <Button onClick={() => moveDetailPage(funding.fundingId)} text="펀딩 상세"></Button>
