@@ -14,7 +14,7 @@ import useMainFilterStore from '@/stores/mainFilterStore';
 import NearVendorsAPI from '@/apis/vendor/NearVendorsAPI';
 
 const MainPage = () => {
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 
@@ -64,7 +64,12 @@ const MainPage = () => {
     if (vendors.length > 0) scrollRef.current[0].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
   }, [vendors]); // vendors가 변경될 때마다 useEffect 실행
 
-  const moveCardCenter = (event: any, index: number) => {
+  const moveCenter = (event: any, index: number) => {
+    const vendor = vendors[index];
+    if (mapRef.current) {
+      mapRef.current.setCenter(new kakao.maps.LatLng(vendor.lati, vendor.longi));
+    }
+
     scrollRef.current[index].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
   };
 
@@ -81,7 +86,7 @@ const MainPage = () => {
             return (
               <MapMarker
                 key={vendor.id || index}
-                onClick={(e: any) => moveCardCenter(e, index)}
+                onClick={(e: any) => moveCenter(e, index)}
                 position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,

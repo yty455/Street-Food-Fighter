@@ -1,11 +1,11 @@
 import kakaomapApi from '@/apis/kakao/kakaoAPI';
 import { useEffect, useState } from 'react';
 const useCurrentLocation = (setAddressName: any, mapRef: any) => {
-  const [position, setPosition] = useState({ lat: 35.08541957184095, lng: 128.87934499308867 });
+  const [position, setPosition] = useState({ lat: 35.097459671169304, lng: 128.85800863435887 });
 
   const updateLocation = async () => {
     if (!navigator.geolocation) {
-      console.log('브라우저가 위치 정보를 지원하지 않음');
+      // console.log('브라우저가 위치 정보를 지원하지 않음');
       return;
     }
 
@@ -23,7 +23,7 @@ const useCurrentLocation = (setAddressName: any, mapRef: any) => {
         if (address) setAddressName(address);
       },
       () => {
-        console.log('현재 위치를 가져올 수 없음');
+        // console.log('현재 위치를 가져올 수 없음');
       },
     );
   };
