@@ -31,7 +31,7 @@ const ReviewPage = () => {
   return (
     <ReviewPageStyle>
       <Topbar text="My 스푸파" />
-      <ReviewTitle>내가 쓴 총 리뷰 28 개</ReviewTitle>
+      <ReviewTitle>내가 쓴 총 리뷰 {reviews.length} 개</ReviewTitle>
       <ReviewContainer>
         {reviews.length != 0 &&
           reviews.map((review: any, index: number) => {

@@ -3,12 +3,13 @@ import { AlertAPI, AlertType } from '@/types/alerttype';
 import { Airfont, AlertBox, Title, Vendorname, Daybefore, BottomBox, ButtonList } from './Alertcard.styled';
 import moment from 'moment';
 import Button from '@/components/common/button';
+import { useRouter } from 'next/navigation';
 
 interface AlertCardProps {
   alert: AlertAPI;
 }
 const AlertCard = ({ alert }: AlertCardProps) => {
-  const alertId = alertTypeToIdMapping[alert.recipient_type as AlertType] - 1;
+  const alertId = alertTypeToIdMapping[alert.type as AlertType] - 1;
   const alertMessage = alertMessages[alertId];
 
   const getTimeDifference = (date: string) => {
@@ -28,6 +29,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
     }
   };
 
+  const router = useRouter();
   return (
     <AlertBox>
       <Title>
@@ -36,18 +38,23 @@ const AlertCard = ({ alert }: AlertCardProps) => {
       </Title>
 
       <Airfont>
-        <Vendorname>{alert.vendorname}</Vendorname>
+        <Vendorname>{alert.storeName}</Vendorname>
         {alertMessage.content}
       </Airfont>
       <BottomBox>
-        <Daybefore>{getTimeDifference(alert.date)}</Daybefore>
+        <Daybefore>{getTimeDifference(alert.createdDate)}</Daybefore>
         {alertMessage.type === 'SUCCESS' && (
           <ButtonList>
             <div style={{ width: '80px' }}>
               <Button text="취소하기" color="light"></Button>
             </div>
             <div style={{ width: '80px' }}>
-              <Button text="주문하기"></Button>
+              <Button
+                text="주문하기"
+                onClick={() => {
+                  router.push(`orderlist/fundinglist/detail/${alert.targetId}`);
+                }}
+              ></Button>
             </div>
           </ButtonList>
         )}

@@ -20,9 +20,8 @@ const ProfileContainer = styled.div.attrs<any>((props) => ({}))`
 const List = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 270px;
-  height: 30px;
 `;
 const ProfileList = styled.div`
   display: flex;

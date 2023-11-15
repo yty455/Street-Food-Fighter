@@ -100,20 +100,30 @@ public class StoreService {
         List<Store> nearbyStores = storeRepository.findNearStore(region1, region2, region3, region4);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        return nearbyStores.stream()
+        List<StoreInfoResponse> storeInfoResponses = nearbyStores.stream()
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
+
+        // 리뷰 평점 주가
+        storeInfoResponses.forEach(info -> info.updateScore(reviewRepository.getAverageScoreByStoreId(info.getStoreId())));
+
+        return storeInfoResponses;
     }
 
     public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, String region1, String region2, String region3, String region4, List<CategoryType> categories) {
         List<Flag> nearByFlags = flagRepository.findNearFlag(region1, region2, region3, region4, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        return nearByFlags.stream()
+        List<FlagStoreInfoResponse> flagStoreInfoResponses = nearByFlags.stream()
                 .filter(flag -> categories.contains(flag.getStore().getCategory()))
                 .map(FlagStoreInfoResponse::fromEntity)
                 .toList();
+
+        // 리뷰 평점 추가
+        flagStoreInfoResponses.forEach(info -> info.updateScore(reviewRepository.getAverageScoreByStoreId(info.getStoreId())));
+
+        return flagStoreInfoResponses;
     }
 
     public Long getOwnerId(Long storeId) {

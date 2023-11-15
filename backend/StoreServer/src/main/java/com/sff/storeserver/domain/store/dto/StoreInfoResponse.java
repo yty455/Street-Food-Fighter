@@ -31,6 +31,7 @@ public class StoreInfoResponse {
     private String information;
     private String introduction;
     private BusinessType state;
+    private Double score;
 
     public static StoreInfoResponse fromEntity(Store store) {
         return StoreInfoResponse.builder()
@@ -51,5 +52,9 @@ public class StoreInfoResponse {
                 .state(store.getState())
                 .build();
 
+    }
+
+    public void updateScore(Double score) {
+        this.score = score == null ? 0D : score;
     }
 }

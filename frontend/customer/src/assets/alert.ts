@@ -30,9 +30,9 @@ export const alertMessages: AlertMessage[] = [
   },
   {
     type: 'REQUEST',
-    title: '주문이 접수되었어요',
+    title: '리뷰를 남겨주세요!',
     content: ' 에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!',
-    imgsrc: '/images/alert/alert.png',
+    imgsrc: '/images/alert/review.png',
   },
   {
     type: 'COMPLETED',

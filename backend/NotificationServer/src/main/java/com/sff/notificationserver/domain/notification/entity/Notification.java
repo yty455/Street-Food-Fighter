@@ -19,6 +19,7 @@ public class Notification {
     private Long id;
 
     private Long userId;
+    private String storeName;
     private NotificationType type;
     private int totalPrice;
     private Long targetId;
