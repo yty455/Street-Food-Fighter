@@ -8,7 +8,6 @@ import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
 import { useEffect, useState } from 'react';
 import Input from '@/components/common/input';
-import { buckets } from '@/temp/buckets';
 import Button from '@/components/common/button';
 import { VendorData } from '@/types/vendortype';
 import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
@@ -152,7 +151,7 @@ const PurchasePage = () => {
           </Cashline>
           <Cashline>
             <Title> 결제 예정 금액 </Title>
-            <div>{Number(buckets.totalPrice).toLocaleString()}원</div>
+            <div>{Number(bucket?.totalPrice).toLocaleString()}원</div>
           </Cashline>
         </Requested>
       </Content>
