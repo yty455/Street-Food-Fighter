@@ -85,7 +85,12 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         )}
         {alertMessage.type === 'REQUEST' && (
           <div style={{ width: '80px' }}>
-            <Button text="리뷰하기"></Button>
+            <Button
+              text="리뷰하기"
+              onClick={() => {
+                router.push(`/mypage/review/leaverreview/${alert.targetId}`);
+              }}
+            ></Button>
           </div>
         )}
       </BottomBox>
