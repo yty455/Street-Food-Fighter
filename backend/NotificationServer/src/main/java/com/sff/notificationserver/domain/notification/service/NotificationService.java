@@ -120,7 +120,7 @@ public class NotificationService {
             userNotificationInfo.getUserList().get(idx).setToken(userTokenInfos.get(idx).getFcmToken());
         }
 
-        userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType()));
+        userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType(), storeName));
     }
 
     @KafkaListener(topics = "#{notifyStoreTopic.name}", groupId = "notification-service-notify-store")
@@ -136,12 +136,13 @@ public class NotificationService {
     }
 
     @Transactional
-    public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type) {
+    public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type, String storeName) {
         log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
         notificationRepository.save(Notification.builder()
                 .userId(userInfo.getUserId())
                 .type(type)
                 .targetId(userInfo.getOrderId())
+                .storeName(storeName)
                 .totalPrice(userInfo.getAmount()).build());
     }
 
