@@ -322,4 +322,14 @@ public class FundingService {
         List<Long> unpickedFlags = fundingChosen.getUnpickedFlagIds();
         return new FundingList((fundingRepository.findAllByFlagIdIn(unpickedFlags)).stream().map(funding->funding.getFundingId()).toList());
     }
+
+    // ---------
+    @Transactional
+    public void deleteFunding(Long fundingId){
+        try {
+            fundingRepository.deleteById(fundingId);
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.DELETE_ERROR));
+        }
+    }
 }
