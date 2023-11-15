@@ -14,7 +14,7 @@ import useMainFilterStore from '@/stores/mainFilterStore';
 import NearVendorsAPI from '@/apis/vendor/NearVendorsAPI';
 
 const MainPage = () => {
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 

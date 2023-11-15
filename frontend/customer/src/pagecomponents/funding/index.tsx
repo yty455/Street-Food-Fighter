@@ -20,7 +20,7 @@ import useFlagIdStore from '@/stores/flagidStore';
 const FundingPage = () => {
   const router = useRouter();
 
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
 
   const { selectedDate } = useSelectedDateStore();
