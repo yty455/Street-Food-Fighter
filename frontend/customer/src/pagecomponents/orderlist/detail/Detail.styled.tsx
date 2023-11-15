@@ -24,20 +24,27 @@ const OrderInfo = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-const OrderState = styled.div`
-  font-size: 18px;
-  padding: 5px 0px;
+const OrderState = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const color = props.theme.colors.main;
+
+    return css`
+      font-size: 16px;
+      padding: 5px 0px;
+      color: ${color};
+    `;
+  }};
 `;
 
 const StoreName = styled.div`
-  font-size: 22px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   padding: 5px 0px;
 `;
 
 const StoreAddress = styled.div`
-  padding: 10px 0px;
+  padding: 5px 0px;
   font-size: 18px;
 `;
 
@@ -45,7 +52,7 @@ const StoreTextLine = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
     const font = props.theme.fonts.air;
     return css`
-      font-size: 20px;
+      font-size: 16px;
       padding: 3px 0px;
       span {
         font-family: ${font};

@@ -40,7 +40,7 @@ const OrderDetailPage = ({ params, ...props }: any) => {
             <StoreName>
               <img
                 src={`/images/category/${getCategoryImage(orderInfo.categoryType)}`}
-                style={{ width: '60px', height: '60px', marginRight: '10px' }}
+                style={{ width: '50px', height: '50px', marginRight: '10px' }}
               />
               {orderInfo.storeName}
             </StoreName>
