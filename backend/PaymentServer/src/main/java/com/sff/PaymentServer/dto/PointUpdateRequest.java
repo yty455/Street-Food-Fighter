@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class PointUpdateRequest {
     private Integer amount;
     private Boolean isCharge;
-    private String paymentPassword;
 }

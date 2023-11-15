@@ -7,10 +7,24 @@ const WishListStyle = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       flex-direction: column;
-      height: 93vh;
       background-color: ${light};
       align-items: center;
-      gap: 20px;
+    `;
+  }};
+`;
+
+const Content = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const light = props.theme.colors.light;
+
+    return css`
+      display: flex;
+      flex-direction: column;
+      height: 93vh;
+      background-color: ${light};
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
     `;
   }};
 `;
@@ -49,8 +63,8 @@ const CategoryItem = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       align-items: center;
-      width: 30%;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       border-radius: 10px;
       flex-direction: column;
       justify-content: space-around;
@@ -81,13 +95,24 @@ const CategoryName = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 32px;
-  padding: 20px;
+  font-size: 28px;
+  padding: 10px;
 `;
 
 const CategoryCount = styled.div`
-  font-size: 26px;
+  font-size: 24px;
   padding-bottom: 10px;
 `;
 
-export { CategoryLineContainer, CategoryCount, Title, WishListStyle, Topbar, CategoriesContainer, CategoryImage, CategoryItem, CategoryName };
+export {
+  Content,
+  CategoryLineContainer,
+  CategoryCount,
+  Title,
+  WishListStyle,
+  Topbar,
+  CategoriesContainer,
+  CategoryImage,
+  CategoryItem,
+  CategoryName,
+};

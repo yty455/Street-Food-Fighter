@@ -8,11 +8,26 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import UserInfotAPI from '@/apis/user/UserInfoAPI';
 import userInfoStore from '@/stores/userInfoStore';
+import { useRouter } from 'next/navigation';
+import GetTokenAPI from '@/apis/token/RefreshTokenAPI';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
 
-  const excludedPaths = ['/vendor', '/topurchase', '/userinfo', '/password', '/login', '/register', '/success', '/ordercheck', '/orderlist/detail'];
+  const excludedPaths = [
+    '/vendor',
+    '/topurchase',
+    '/userinfo',
+    '/password',
+    '/login',
+    '/register',
+    '/success',
+    '/ordercheck',
+    '/orderlist/detail',
+    '/orderlist/fundinglist/detail',
+    '/mypage/wishlist',
+  ];
   const { setUserInfo } = userInfoStore();
 
   useEffect(() => {
@@ -22,7 +37,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         setUserInfo(data);
       }
     };
-    GetUserInfo();
+
+    const updateAccessToken = async () => {
+      try {
+        const result = await GetTokenAPI();
+        if (result.data.success) {
+          localStorage.setItem('user-refreshToken', result.headers['authorization-refresh']);
+          localStorage.setItem('user-accessToken', result.headers['authorization']);
+          GetUserInfo();
+          return;
+        } else {
+          throw new Error('자동로그인 실패');
+        }
+      } catch (error) {
+        localStorage.removeItem('user-refreshToken');
+        localStorage.removeItem('user-accessToken');
+        console.error('Error fetching access token:', error);
+        router.push('/login');
+      }
+    };
+
+    updateAccessToken();
   }, []);
 
   return (

@@ -55,12 +55,15 @@ const OrderListPage = () => {
             </CardTop>
 
             <VendorInfo>
-              <img src={`/images/category/${getCategoryImage(order.categoryType)}`} style={{ width: '60px', height: '60px' }} />
+              <img src={`/images/category/${getCategoryImage(order.categoryType)}`} style={{ width: '50px', height: '50px' }} />
               <Topdown>
                 <StoreName>{order.storeName}</StoreName>
-                <Airfont>
-                  {order.menuName} 외 {order.restCount}개 {order.bucketTotalPrice}원
-                </Airfont>
+                <div style={{ display: 'flex', gap: '3px' }}>
+                  <Airfont>{order.menuName}</Airfont>
+                  {order.restCount > 0 ? <Airfont> 외 {order.restCount}개</Airfont> : <Airfont> 1개</Airfont>}
+
+                  <Airfont> {order.bucketTotalPrice}원</Airfont>
+                </div>
               </Topdown>
             </VendorInfo>
           </OrderCardWrapper>

@@ -30,7 +30,7 @@ const HeaderStyle = styled.div.attrs<any>((props) => ({}))`
   }};
 `;
 
-const BodyStyle = styled.div.attrs<any>((props) => ({}))`
+const BodyStyle = styled.form.attrs<any>((props) => ({}))`
   ${(props) => {
     return css`
       display: flex;
@@ -58,10 +58,13 @@ const FooterStyle = styled.div.attrs<any>((props) => ({}))`
 
 const InputWrapper = styled.div.attrs<any>((props) => ({}))`
   ${(props) => {
-    const marginTop = props.marginTop || '0px';
+    const marginTop = props.$margintop || '0px';
     return css`
+      display: flex;
+      align-items: center;
       padding: 0px 30px;
-      margin-top: ${marginTop};
+      width: 100%;
+      height: 90px;
     `;
   }};
 `;

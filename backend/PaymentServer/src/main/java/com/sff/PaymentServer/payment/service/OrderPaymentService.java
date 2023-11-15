@@ -37,7 +37,7 @@ public class OrderPaymentService {
         OrderCreateResponse orderCreateResponse = createOrderRecord(orderCreateRequest);
         try {
             // 회원 포인트 차감 -> UserServer
-            subtractUser(userId, orderCreateResponse.getTotalPrice(), orderCreateRequest.getPaymentPassword());
+            subtractUser(userId, orderCreateResponse.getTotalPrice());
             try{
                 // 결제 정보 저장
                 savePaymentRecord(userId, orderCreateRequest.getStoreId(), orderCreateResponse);
@@ -53,7 +53,7 @@ public class OrderPaymentService {
             }catch(BaseException e){
                 // 회원 포인트 추가(RollBack)
                 userClient.updateUserPoint(userId, new PointUpdateRequest(
-                        orderCreateResponse.getTotalPrice(), true, null));
+                        orderCreateResponse.getTotalPrice(), true));
                 throw new BaseException(e.getApiError());
             }
         }catch(BaseException e){
@@ -77,10 +77,10 @@ public class OrderPaymentService {
         return result.getResponse();
     }
 
-    private void subtractUser(Long userId, Integer totalPrice, String paymentPassword){
+    private void subtractUser(Long userId, Integer totalPrice){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false, paymentPassword));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
