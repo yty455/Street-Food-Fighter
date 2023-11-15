@@ -2,11 +2,11 @@ import kakaoAddressAPI from '@/apis/kakao/kakaoAddressAPI';
 import { useEffect, useState } from 'react';
 
 const useFindCurrentLoc = (setAddressName: any) => {
-  const [position, setPosition] = useState({ lat: 35.08541957184095, lng: 128.87934499308867 });
+  const [position, setPosition] = useState({ lat: 35.097459671169304, lng: 128.85800863435887 });
 
   const updateLocation = async () => {
     if (!navigator.geolocation) {
-      console.log('브라우저가 위치 정보를 지원하지 않음');
+      // console.log('브라우저가 위치 정보를 지원하지 않음');
       return;
     }
 
@@ -20,11 +20,11 @@ const useFindCurrentLoc = (setAddressName: any) => {
           const address = await kakaoAddressAPI({ latitude, longitude });
           if (address) setAddressName(address);
         } catch (error) {
-          console.error('주소를 불러오는 데 실패했습니다:', error);
+          // console.error('주소를 불러오는 데 실패했습니다:', error);
         }
       },
       (error) => {
-        console.error('현재 위치를 가져올 수 없음:', error);
+        // console.error('현재 위치를 가져올 수 없음:', error);
       },
     );
   };
