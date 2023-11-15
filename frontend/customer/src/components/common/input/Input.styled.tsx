@@ -15,7 +15,7 @@ const StyledInput = styled.input.attrs<any>((props) => ({
     const gray = props.theme.colors.gray;
     const airfont = props.theme.fonts.air;
     return css`
-      width: 80%;
+      width: 100%;
       font-family: ${airfont};
 
       padding: 10px;
@@ -25,7 +25,6 @@ const StyledInput = styled.input.attrs<any>((props) => ({
       box-sizing: border-box;
 
       border: none;
-      color: ${props.type === 'password' ? 'black' : 'red'};
       &::placeholder {
         color: ${gray};
         font-size: 14px;
