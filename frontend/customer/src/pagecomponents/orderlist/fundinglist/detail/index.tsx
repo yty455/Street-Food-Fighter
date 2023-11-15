@@ -1,5 +1,15 @@
 import Topbar from '@/components/common/topbar';
-import { StoreName, OrderState, OrderDetailStyle, OrderInfo, StoreAddress, StoreTextLine, ReceiptTabble } from './Detail.styled';
+import {
+  StoreName,
+  OrderState,
+  OrderDetailStyle,
+  OrderInfo,
+  StoreAddress,
+  StoreTextLine,
+  ReceiptTabble,
+  ButtonBox,
+  BottomButton,
+} from './Detail.styled';
 import { useEffect, useState } from 'react';
 import GetFundingDetail from '@/apis/fundinglist/GetFundingDetail';
 import { categories } from '@/assets/category';
@@ -64,6 +74,12 @@ const FundingDetailPage = ({ params, ...props }: any) => {
               totalPrice={fundingInfo.fundingItemList.reduce((acc: number, cur: any) => acc + cur.menuTotalPrice, 0)}
             ></Receipt>
           </ReceiptTabble>
+          {fundingInfo.orderState === 'BEFORE_ORDER' && (
+            <ButtonBox>
+              <BottomButton type="cancel">취소하기</BottomButton>
+              <BottomButton>주문하기</BottomButton>
+            </ButtonBox>
+          )}
         </>
       )}
     </OrderDetailStyle>
