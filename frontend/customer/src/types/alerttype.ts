@@ -1,4 +1,4 @@
-export type AlertType = 'FAILURE' | 'SUCCESS' | 'PROCESSING' | 'REQUEST' | 'COMPLETED' | 'REFUSED';
+export type AlertType = 'FAILURE' | 'SUCCESS' | 'PROCESSING' | 'REQUEST' | 'COMPLETED' | 'REFUSED' | 'DONE_F' | 'DONE_R';
 
 export interface AlertMessage {
   type: AlertType;

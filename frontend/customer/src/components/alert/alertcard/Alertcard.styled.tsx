@@ -65,4 +65,17 @@ const ButtonList = styled.div`
   flex-direction: row;
   gap: 5px;
 `;
-export { Airfont, AlertBox, Vendorname, Title, Daybefore, BottomBox, ButtonList };
+
+const WarnText = styled.div.attrs<any>((props) => ({}))`
+  ${(props) => {
+    const font = props.theme.fonts.air;
+    const red = props.theme.colors.red;
+    return css`
+      font-family: ${font};
+      color: ${red};
+      width: 100%;
+      padding-left: 10px;
+    `;
+  }};
+`;
+export { WarnText, Airfont, AlertBox, Vendorname, Title, Daybefore, BottomBox, ButtonList };
