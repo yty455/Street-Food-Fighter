@@ -1,10 +1,11 @@
 import { alertMessages, alertTypeToIdMapping } from '@/assets/alert';
 import { AlertAPI, AlertType } from '@/types/alerttype';
-import { Airfont, AlertBox, Title, Vendorname, Daybefore, BottomBox, ButtonList } from './Alertcard.styled';
+import { Airfont, AlertBox, Title, Vendorname, Daybefore, BottomBox, ButtonList, WarnText } from './Alertcard.styled';
 import moment from 'moment';
 import Button from '@/components/common/button';
 import { useRouter } from 'next/navigation';
 import CancelFundingAPI from '@/apis/funding/CancelFundingAPI';
+import { useState } from 'react';
 
 interface AlertCardProps {
   alert: AlertAPI;
@@ -12,6 +13,11 @@ interface AlertCardProps {
 const AlertCard = ({ alert }: AlertCardProps) => {
   const alertId = alertTypeToIdMapping[alert.type as AlertType] - 1;
   const alertMessage = alertMessages[alertId];
+
+  const [isCancelConfirm, setIsCancelConfirm] = useState(false);
+  const handleCancelConfirm = () => {
+    setIsCancelConfirm(true);
+  };
 
   const getTimeDifference = (date: string) => {
     const now = moment();
@@ -32,6 +38,10 @@ const AlertCard = ({ alert }: AlertCardProps) => {
 
   const router = useRouter();
   const handleCancel = async () => {
+    if (!isCancelConfirm) {
+      handleCancelConfirm();
+      return;
+    }
     const res = await CancelFundingAPI(alert.targetId);
     if (res) {
       console.log('성공');
@@ -50,6 +60,12 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         <Vendorname>{alert.storeName}</Vendorname>
         {alertMessage.content}
       </Airfont>
+      {isCancelConfirm && (
+        <div>
+          <WarnText> * 취소하면 수수료 10%를 제외하고 환불됩니다. </WarnText>
+          <WarnText>정말 취소하시겠습니까?</WarnText>
+        </div>
+      )}
       <BottomBox>
         <Daybefore>{getTimeDifference(alert.createdDate)}</Daybefore>
         {alertMessage.type === 'SUCCESS' && (

@@ -7,6 +7,8 @@ export const alertTypeToIdMapping: AlertTypeToIdMapping = {
   REQUEST: 4,
   COMPLETED: 5,
   REFUSED: 6,
+  DONE_F: 7,
+  DONE_R: 8,
 };
 
 export const alertMessages: AlertMessage[] = [
@@ -45,5 +47,17 @@ export const alertMessages: AlertMessage[] = [
     title: '주문이 거절 되었어요',
     content: ' 사장님이 집 가고 싶대요... 다음에 주문해줘요',
     imgsrc: '/images/alert/sad.png',
+  },
+  {
+    type: 'DONE_F',
+    title: '펀딩이 성공했어요',
+    content: '이 오픈했어요! 먹으러 슝~!',
+    imgsrc: '/images/alert/notice.png',
+  },
+  {
+    type: 'DONE_R',
+    title: '리뷰 작성 완료했어요',
+    content: ' 에서 맛있게 드셨나요? 멋진 리뷰 감사해요!',
+    imgsrc: '/images/alert/review.png',
   },
 ];
