@@ -20,6 +20,7 @@ public class Notification {
 
     private Long userId;
     private String storeName;
+    @Enumerated(EnumType.STRING)
     private NotificationType type;
     private int totalPrice;
     private Long targetId;
