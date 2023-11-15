@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,7 +60,7 @@ public class ReviewService {
         }catch(Exception e){
             throw new BaseException(new ApiError("주문서버와 통신 에러", 1));
         }
-        if(result.getSuccess()==false){
+        if(!result.getSuccess()){
             throw new BaseException(result.getApiError());
         }
 
@@ -78,10 +80,21 @@ public class ReviewService {
         Slice<StoreReviewResponse> storeReviewResponseList = reviewRepository.findByStoreId(storeId, pageRequest);
 
         // 유저 아이디 리스트 -> 회원 서비스에 보내서 회원 정보 받아오기 (userName, userProfileUrl)
-        ApiResult<List<ReviewUserInfo>> userInfo = userClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
+        ApiResult<List<ReviewUserInfo>> result;
+        try{
+            result = userClient.getUserInfo(ReviewUserInfoRequest.builder().memberIds(storeReviewResponseList.getContent().stream().map(StoreReviewResponse::getUserId).toList()).build());
+        }catch(Exception e){
+            throw new BaseException(new ApiError("회원서버와 통신 에러", 1));
+        }
+        if(!result.getSuccess()){
+            throw new BaseException(result.getApiError());
+        }
+
+        List<ReviewUserInfo> userInfoList = result.getResponse();
+        Map<Long, ReviewUserInfo> userInfoMap = userInfoList.stream().collect(Collectors.toMap(ReviewUserInfo::getUserId, reviewUserInfo -> reviewUserInfo));
         // 합쳐서 내려주기
         for (int idx = 0; idx < storeReviewResponseList.getContent().size(); idx++) {
-            storeReviewResponseList.getContent().get(idx).updateUserInfo(userInfo.getResponse().get(idx).getNickname(), userInfo.getResponse().get(idx).getImageUrl());
+            storeReviewResponseList.getContent().get(idx).updateUserInfo(userInfoMap.get(storeReviewResponseList.getContent().get(idx).getUserId()).getNickname(), userInfoMap.get(storeReviewResponseList.getContent().get(idx).getUserId()).getImageUrl());
         }
         return storeReviewResponseList;
     }

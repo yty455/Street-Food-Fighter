@@ -29,4 +29,12 @@ public class PointController {
         pointService.updatePoint(memberId, pointUpdateRequest);
         return ApiUtils.success("포인트 업데이트 성공");
     }
+
+    @PutMapping("/points")
+    @UserIdRequired
+    public ApiResult<?> updatePoint(UserIdHolder userIdHolder, @Valid @RequestBody PointUpdateRequest pointUpdateRequest) {
+        pointService.updatePoint(userIdHolder.getUserId(), pointUpdateRequest);
+        return ApiUtils.success("포인트 업데이트 성공");
+    }
+    
 }

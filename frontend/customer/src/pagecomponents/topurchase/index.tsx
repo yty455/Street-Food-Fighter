@@ -9,7 +9,6 @@ import BagOrder from '@/components/purchase/bagorder';
 import { useEffect, useState } from 'react';
 import Input from '@/components/common/input';
 import { buckets } from '@/temp/buckets';
-import { user } from '@/temp/user';
 import Button from '@/components/common/button';
 import { VendorData } from '@/types/vendortype';
 import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
@@ -17,6 +16,8 @@ import useBucketStore from '@/stores/bucketStore';
 import OrderAPI from '@/apis/vendor/OrderAPI';
 import useFlagIdStore from '@/stores/flagidStore';
 import FundingAPI from '@/apis/vendor/FundingAPI';
+import Charge from '@/components/common/charge';
+import GetPointAPI from '@/apis/user/GetPointAPI';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -71,7 +72,25 @@ const PurchasePage = () => {
       }
 
       router.push('/password/pay');
+    } else {
+      console.log('장바구니 없음');
     }
+  };
+
+  const [userpoint, setUserpoint] = useState(0);
+  useEffect(() => {
+    const fetchPoints = async () => {
+      const res = await GetPointAPI();
+      if (res) setUserpoint(res.amount);
+    };
+
+    fetchPoints();
+  }, []);
+
+  // 포인트 충전 모달
+  const [showCharge, setShowCharge] = useState(false);
+  const toggleCharge = () => {
+    setShowCharge(!showCharge);
   };
   return (
     <div>
@@ -88,7 +107,7 @@ const PurchasePage = () => {
           src="/images/orderfunding/tohome.png"
           style={{ width: '25px' }}
           onClick={() => {
-            router.push('/');
+            router.push('/main');
           }}
         />
       </TopBox>
@@ -127,8 +146,8 @@ const PurchasePage = () => {
           <Cashline>
             <Title> 보유 파이트 머니</Title>
             <FlexRow>
-              <Airfont>{Number(user.points).toLocaleString()}원</Airfont>
-              <Button text="충전"></Button>
+              <Airfont>{Number(userpoint).toLocaleString()}원</Airfont>
+              <Button text="충전" onClick={toggleCharge}></Button>
             </FlexRow>
           </Cashline>
           <Cashline>
@@ -139,6 +158,7 @@ const PurchasePage = () => {
       </Content>
 
       <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
+      {showCharge && <Charge toggleCharge={toggleCharge} />}
     </div>
   );
 };

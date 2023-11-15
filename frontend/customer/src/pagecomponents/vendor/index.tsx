@@ -86,7 +86,7 @@ const VendorPage = ({ id }: { id: string }) => {
               <img key={index} src={`/images/category/${image}`} alt="Review" style={{ width: '30px' }} />
             ))}
           </div>
-          <div>{vendor.score || '0'}.0</div>
+          <div>{vendor.score || '0'}</div>
         </Review>
       </TopBox>
       <TabBar vendor={vendor} vendorid={index} />
