@@ -11,7 +11,7 @@ const ToCompletionAPI = async ({ orderId }: any) => {
         headers: { Authorization: `${accessToken}` },
       },
     );
-    console.log('ToCompletionAPI', response.data.response);
+    // console.log('ToCompletionAPI', response.data.response);
     return response.data.response;
   } catch (error) {
     console.error(error);

@@ -16,7 +16,6 @@ const MainPage = () => {
 
   const today = new Date().toISOString().split('T')[0];
   const todayflag = useDateFlagHook(today); // 깃발조회
-  // console.log('todayflag : ', todayflag);
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
@@ -51,7 +50,6 @@ const MainPage = () => {
           region4: addressParts[3] || '',
         };
         const response = await SelectFlagAPI(data);
-        // console.log(response);
 
         setModalContent(<StartPopup onClose={closeModal} />);
       } else {
@@ -68,13 +66,10 @@ const MainPage = () => {
   const handleCloseAPI = async () => {
     try {
       const res = await CloseAPI();
-      console.log(res);
       if (res) {
         router.push('/close');
       }
-    } catch (error) {
-      console.log('error');
-    }
+    } catch (error) {}
   };
 
   return (

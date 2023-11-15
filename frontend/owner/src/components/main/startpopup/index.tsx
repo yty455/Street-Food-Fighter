@@ -17,7 +17,7 @@ const StartPopup = ({ onClose }: any) => {
         <Content>
           <Title>영업 시작 🚀</Title>
           <div>
-            <Text>{addressName || '위치 로딩 중...'}</Text>
+            <Text>{addressName || '부산광역시 강서구 녹산산업중로 333'}</Text>
             <Text>{currentTime}</Text>
           </div>
         </Content>

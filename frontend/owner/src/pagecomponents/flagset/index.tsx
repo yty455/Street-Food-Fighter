@@ -13,7 +13,7 @@ import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 import AddFlagAPI from '@/apis/flag/AddFlagAPI';
 
 const FlagSetPage = () => {
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 
@@ -56,13 +56,9 @@ const FlagSetPage = () => {
     } else if (startTime.length == 0 || endTime.length == 0) {
       alert('시간 선택을 완료해주세요');
     } else {
-      console.log(flagData);
       const result = await AddFlagAPI(flagData);
       if (result) {
-        console.log('API 호출 성공:', result);
         router.push('/flag');
-      } else {
-        console.log('API 호출 실패');
       }
     }
   };
