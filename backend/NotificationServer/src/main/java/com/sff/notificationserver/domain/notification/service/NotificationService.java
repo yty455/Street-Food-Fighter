@@ -8,6 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.sff.notificationserver.common.error.type.BaseException;
+import com.sff.notificationserver.common.feignClient.OwnerClient;
 import com.sff.notificationserver.common.feignClient.StoreClient;
 import com.sff.notificationserver.common.feignClient.UserClient;
 import com.sff.notificationserver.common.utils.ApiResult;
@@ -52,6 +53,7 @@ public class NotificationService {
 
     private final UserClient userClient;
     private final StoreClient storeClient;
+    private final OwnerClient ownerClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
@@ -145,7 +147,9 @@ public class NotificationService {
         // 가게 ID 가게 서비스에서 사장 ID 받기
         Long ownerId = storeClient.getOwnerId(Long.valueOf(stringStoreId)).getResponse();
         // 사장 ID 사장 서비스에서 Token 받기
-        OwnerTokenInfo ownerTokenInfo = userClient.getStoreFCM(ownerId).getResponse();
+        OwnerTokenInfo ownerTokenInfo = ownerClient.getStoreFCM(ownerId).getResponse();
+        if (ownerTokenInfo.getFcmToken() == null || ownerTokenInfo.getFcmToken().equals("0"))
+            return;
         log.info(sendNotificationByToken(new FCMNotificationRequest(Long.valueOf(stringStoreId), ownerTokenInfo.getFcmToken(), "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
 
     }
