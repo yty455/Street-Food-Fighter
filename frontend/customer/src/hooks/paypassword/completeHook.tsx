@@ -7,15 +7,15 @@ import { user } from '@/temp/user';
 import useBucketStore from '@/stores/bucketStore';
 import { useVendorStore } from '@/stores/curvendoridStore';
 import OrderAPI from '@/apis/vendor/OrderAPI';
-
+import SignUpAPI from '@/apis/user/SignUpAPI';
 const useCompleteHandler = (slug: string) => {
   const router = useRouter();
   const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const { setPassword, resetPasswords, wantPwd } = usePasswordStore();
   const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
-  const paypassword = useRegisterPageStore((state) => state.paypassword);
-
+  const { email, password, passwordCheck, nickname, phone, paymentPassword, region1, region2, region3, region4, socialId, fcmToken } =
+    useRegisterPageStore();
   const handleComplete = async () => {
     const currentPassword = useCurPasswordStore.getState().currentPassword;
 
@@ -48,14 +48,35 @@ const useCompleteHandler = (slug: string) => {
     if (slug == 'register') {
       if (curPwdPage === 1) {
         setPassword(1, currentPassword);
-        setRegisterValue('paypassword', currentPassword);
+        setRegisterValue('paymentPassword', currentPassword);
         setCurPwdPage(3);
       } else if (curPwdPage === 3) {
         setPassword(3, currentPassword);
-        if (paypassword === currentPassword) {
-          router.push('/success');
-          resetPasswords();
-          console.log('비밀번호 입력 성공.');
+        if (paymentPassword === currentPassword) {
+          const data = {
+            email,
+            password,
+            passwordCheck,
+            nickname,
+            phone,
+            paymentPassword,
+            region1,
+            region2,
+            region3,
+            region4,
+            fcmToken,
+            imageUrl: '',
+          };
+          console.log('요청 데이터', data);
+          const result = await SignUpAPI(data);
+          // console.log(result);
+          if (result?.data.success) {
+            router.push('/success');
+          } else {
+            console.log(result);
+            alert('회원가입에 실패했습니다.');
+          }
+          // resetPasswords();
           setCurPwdPage(1);
         } else {
           resetCurrentPassword();
