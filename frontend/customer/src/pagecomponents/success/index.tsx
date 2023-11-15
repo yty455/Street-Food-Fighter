@@ -14,7 +14,7 @@ const SuccessPage = () => {
       <StyledButton>
         <RoundButton
           onClick={() => {
-            router.push('/main');
+            router.push('/login');
           }}
           text="시작하기"
           color="main"

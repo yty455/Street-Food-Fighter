@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { StyleLogin, HeaderStyle, InputWrapper, BodyStyle, FooterStyle, ButtonWrapper } from './Login.styled';
 import Input from '@/components/common/input';
-import Button from '@/components/common/button';
 import RoundButton from '@/components/common/roundbtn';
 import { useRouter } from 'next/navigation';
 import LoginAPI from '@/apis/user/LoginAPI';
@@ -10,8 +9,17 @@ const LoginPage = () => {
   const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
 
   const login = async () => {
-    const result = await LoginAPI(loginInfo);
-    console.log(result);
+    try {
+      const result: any = await LoginAPI(loginInfo);
+      const accessToken = result.headers['authorization'];
+      const refreshToken = result.headers['authorization-refresh'];
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', accessToken);
+      console.log(result);
+      // alert('로그인에 성공하셨습니다.');
+    } catch (error) {
+      alert('로그인에 실패하셨습니다.');
+    }
   };
   const moveRegisterPage = () => {
     router.push('/register/1');
