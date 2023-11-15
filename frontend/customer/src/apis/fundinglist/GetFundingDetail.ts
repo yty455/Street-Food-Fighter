@@ -1,14 +1,14 @@
 import api from '../api';
 
-const GetFundingList = async () => {
+const GetFundingDetail = async (number: any) => {
   // const accessToken = localStorage.getItem('accessToken');
   const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
   try {
-    const response = await api.get(`/api/order-server/fundings`, {
+    const response = await api.get(`/api/order-server/fundings/${number}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('Funding', response.data);
+    // console.log('FundingDetail', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
@@ -16,4 +16,4 @@ const GetFundingList = async () => {
   }
 };
 
-export default GetFundingList;
+export default GetFundingDetail;
