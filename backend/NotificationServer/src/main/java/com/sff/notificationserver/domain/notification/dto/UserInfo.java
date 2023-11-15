@@ -10,6 +10,6 @@ import lombok.*;
 public class UserInfo {
     private Long userId;
     private String token;
-    private Long orderId;
+    private Long id;
     private int amount;
 }

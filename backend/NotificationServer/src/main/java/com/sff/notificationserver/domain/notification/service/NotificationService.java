@@ -152,13 +152,15 @@ public class NotificationService {
 
     @Transactional
     public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type, String storeName) {
-        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
         notificationRepository.save(Notification.builder()
                 .userId(userInfo.getUserId())
                 .type(type)
-                .targetId(userInfo.getOrderId())
+                .targetId(userInfo.getId())
                 .storeName(storeName)
                 .totalPrice(userInfo.getAmount()).build());
+        if (userInfo.getToken() == null || userInfo.getToken().equals("0"))
+            return;
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
     }
 
     @PostConstruct
