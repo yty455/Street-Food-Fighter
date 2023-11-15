@@ -4,6 +4,7 @@ import { Airfont, AlertBox, Title, Vendorname, Daybefore, BottomBox, ButtonList 
 import moment from 'moment';
 import Button from '@/components/common/button';
 import { useRouter } from 'next/navigation';
+import CancelFundingAPI from '@/apis/funding/CancelFundingAPI';
 
 interface AlertCardProps {
   alert: AlertAPI;
@@ -30,6 +31,14 @@ const AlertCard = ({ alert }: AlertCardProps) => {
   };
 
   const router = useRouter();
+  const handleCancel = async () => {
+    const res = await CancelFundingAPI(alert.targetId);
+    if (res) {
+      console.log('성공');
+      router.push('/main');
+    }
+  };
+
   return (
     <AlertBox>
       <Title>
@@ -46,7 +55,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         {alertMessage.type === 'SUCCESS' && (
           <ButtonList>
             <div style={{ width: '80px' }}>
-              <Button text="취소하기" color="light"></Button>
+              <Button text="취소하기" color="light" onClick={handleCancel}></Button>
             </div>
             <div style={{ width: '80px' }}>
               <Button
