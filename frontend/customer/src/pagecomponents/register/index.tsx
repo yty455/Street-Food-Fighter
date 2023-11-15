@@ -10,11 +10,10 @@ const RegisterPage = ({ params, ...props }: any) => {
   const { fcmToken, email, password, passwordCheck, nickname, phone, setRegisterValue } = useRegisterPageStore();
 
   // 플러터 설정
-
   const setToken = function () {
     return new Promise((resolve) => {
-      if (window.flutter_inappwebview) {
-        window.flutter_inappwebview.callHandler('handleFoo').then(function (result) {
+      if ((window as any).flutter_inappwebview) {
+        (window as any).flutter_inappwebview.callHandler('handleFoo').then(function (result: any) {
           setRegisterValue('fcmToken', JSON.stringify(result.fcmT).slice(1, -1));
           resolve(JSON.stringify(result.fcmT).slice(1, -1));
         });
