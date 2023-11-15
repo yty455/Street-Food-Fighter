@@ -1,17 +1,5 @@
 import { create } from 'zustand';
 
-email: 'test@test.com';
-grade: 'LIGHT';
-imageUrl: '';
-nickname: '김변경';
-phone: '010-0000-0000';
-region1: '경상남도';
-region2: '김해시';
-region3: '관동동';
-region4: '몰라용';
-role: 'USER';
-socialType: null;
-
 type UserInfoState = {
   email: string;
   grade: string;

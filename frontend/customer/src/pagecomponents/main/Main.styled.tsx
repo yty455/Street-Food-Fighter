@@ -88,9 +88,11 @@ const CardList = styled.div.attrs<any>((props) => ({}))`
       display: flex;
       gap: 20px;
       width: 100vw;
-      overflow-x: scroll;
+      /* overflow-x: scroll; */
       white-space: nowrap;
       flex-direction: row;
+      overflow-x: auto;
+      scroll-behavior: smooth;
     `;
   }};
 `;
