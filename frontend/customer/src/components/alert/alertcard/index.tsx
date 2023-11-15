@@ -5,6 +5,7 @@ import moment from 'moment';
 import Button from '@/components/common/button';
 import { useRouter } from 'next/navigation';
 import CancelFundingAPI from '@/apis/funding/CancelFundingAPI';
+import { useState } from 'react';
 
 interface AlertCardProps {
   alert: AlertAPI;
@@ -50,6 +51,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         <Vendorname>{alert.storeName}</Vendorname>
         {alertMessage.content}
       </Airfont>
+
       <BottomBox>
         <Daybefore>{getTimeDifference(alert.createdDate)}</Daybefore>
         {alertMessage.type === 'SUCCESS' && (

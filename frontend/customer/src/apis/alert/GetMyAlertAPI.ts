@@ -7,7 +7,7 @@ const GetMyAlertAPI = async (page: any, size: any) => {
     const response = await api.get(`/api/noti-server/user/notification?page=${page}&size=${size}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('GetMyAlertAPI = ', response.data);
+    console.log('GetMyAlertAPI = ', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
