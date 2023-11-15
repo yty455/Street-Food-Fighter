@@ -8,7 +8,7 @@ interface AlertCardProps {
   alert: AlertAPI;
 }
 const AlertCard = ({ alert }: AlertCardProps) => {
-  const alertId = alertTypeToIdMapping[alert.recipient_type as AlertType] - 1;
+  const alertId = alertTypeToIdMapping[alert.type as AlertType] - 1;
   const alertMessage = alertMessages[alertId];
 
   const getTimeDifference = (date: string) => {
@@ -36,11 +36,11 @@ const AlertCard = ({ alert }: AlertCardProps) => {
       </Title>
 
       <Airfont>
-        <Vendorname>{alert.vendorname}</Vendorname>
+        <Vendorname>{alert.storeName}</Vendorname>
         {alertMessage.content}
       </Airfont>
       <BottomBox>
-        <Daybefore>{getTimeDifference(alert.date)}</Daybefore>
+        <Daybefore>{getTimeDifference(alert.createdDate)}</Daybefore>
         {alertMessage.type === 'SUCCESS' && (
           <ButtonList>
             <div style={{ width: '80px' }}>
