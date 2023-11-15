@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '/ordercheck',
     '/orderlist/detail',
     '/orderlist/fundinglist/detail',
+    '/mypage/wishlist',
   ];
   const { setUserInfo } = userInfoStore();
 

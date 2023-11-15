@@ -1,6 +1,6 @@
 // firebase 연동
 import { useEffect, useRef, useState } from 'react';
-import { CategoryCount, Title, WishListStyle, CategoryName, CategoriesContainer, CategoryImage, CategoryItem } from './WishList.styled';
+import { CategoryCount, Title, WishListStyle, CategoryName, CategoriesContainer, CategoryImage, CategoryItem, Content } from './WishList.styled';
 import useWishListStore from '@/stores/wishListStore';
 import { categories } from '@/assets/category';
 import Topbar from '@/components/common/topbar';
@@ -27,20 +27,22 @@ const WishList = () => {
   return (
     <WishListStyle>
       <Topbar text="먹고 싶은걸 골라봐요" />
-      <Title>희망 메뉴</Title>
-      <CategoryCount>
-        {selectedCategories.length}/{maxSelectedLength}
-      </CategoryCount>
-      <CategoriesContainer>
-        {categories.map((category: any) => (
-          <CategoryItem key={category.id} onClick={() => handleCategoryClick(category.type)} $selected={selectedCategories.includes(category.type)}>
-            <CategoryImage src={`/images/category/${category.image}`} alt={category.name} />
-            <CategoryName>{category.name}</CategoryName>
-          </CategoryItem>
-        ))}
-        <CategoryItem $islight="light" />
-        <CategoryItem $islight="light" />
-      </CategoriesContainer>
+      <Content>
+        <Title>희망 메뉴</Title>
+        <CategoryCount>
+          {selectedCategories.length}/{maxSelectedLength}
+        </CategoryCount>
+        <CategoriesContainer>
+          {categories.map((category: any) => (
+            <CategoryItem key={category.id} onClick={() => handleCategoryClick(category.type)} $selected={selectedCategories.includes(category.type)}>
+              <CategoryImage src={`/images/category/${category.image}`} alt={category.name} />
+              <CategoryName>{category.name}</CategoryName>
+            </CategoryItem>
+          ))}
+          <CategoryItem $islight="light" />
+          <CategoryItem $islight="light" />
+        </CategoriesContainer>
+      </Content>
     </WishListStyle>
   );
 };

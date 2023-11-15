@@ -31,7 +31,7 @@ const WishList = () => {
             );
           }
         })}
-        <img onClick={moveWishListPage} src="/images/common/plus.png" style={{ width: '45px', height: '45px' }} />
+        <img onClick={moveWishListPage} src="/images/common/plus.png" style={{ width: '35px', height: '35px' }} />
       </WishBody>
     </WishListContainer>
   );
