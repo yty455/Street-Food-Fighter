@@ -1,9 +1,12 @@
 import Topbar from '@/components/common/topbar';
-import { StoreName, OrderState, OrderDetailStyle, OrderInfo, StoreAddress, StoreTextLine, ReceiptTabble } from './Detail.styled';
+import { StoreName, OrderState, OrderDetailStyle, OrderInfo, StoreTextLine, ReceiptTabble, ButtonBox, BottomButton } from './Detail.styled';
 import { useEffect, useState } from 'react';
 import GetFundingDetail from '@/apis/fundinglist/GetFundingDetail';
 import { categories } from '@/assets/category';
 import Receipt from '@/components/common/receipt';
+import OrderFundingAPI from '@/apis/funding/OrderFundingAPI';
+import { useRouter } from 'next/navigation';
+import CancelFundingAPI from '@/apis/funding/CancelFundingAPI';
 
 const FundingDetailPage = ({ params, ...props }: any) => {
   const [fundingInfo, setFundingInfo] = useState<any>();
@@ -31,13 +34,28 @@ const FundingDetailPage = ({ params, ...props }: any) => {
     return category ? category.image : null;
   };
 
+  const router = useRouter();
+  const handleOrder = async () => {
+    const res = await OrderFundingAPI(params.id);
+    if (res) {
+      // console.log('성공');
+      router.push('/main');
+    }
+  };
+  const handleCancel = async () => {
+    const res = await CancelFundingAPI(params.id);
+    if (res) {
+      console.log('성공');
+      router.push('/main');
+    }
+  };
   return (
     <OrderDetailStyle>
       <Topbar text="펀딩 확인" />
       {fundingInfo && (
         <>
           <OrderInfo>
-            <OrderState>{stateText[fundingInfo.state] || stateText['FAILED']}</OrderState>
+            <OrderState>{stateText[fundingInfo.orderState] || stateText['FAILED']}</OrderState>
             <StoreName>
               <img
                 src={`/images/category/${getCategoryImage(fundingInfo.categoryType)}`}
@@ -64,6 +82,14 @@ const FundingDetailPage = ({ params, ...props }: any) => {
               totalPrice={fundingInfo.fundingItemList.reduce((acc: number, cur: any) => acc + cur.menuTotalPrice, 0)}
             ></Receipt>
           </ReceiptTabble>
+          {fundingInfo.orderState === 'BEFORE_ORDER' && (
+            <ButtonBox>
+              <BottomButton type="cancel" onClick={handleCancel}>
+                취소하기
+              </BottomButton>
+              <BottomButton onClick={handleOrder}>주문하기</BottomButton>
+            </ButtonBox>
+          )}
         </>
       )}
     </OrderDetailStyle>
