@@ -1,6 +1,7 @@
 package com.sff.OrderServer.order.controller;
 
 import com.sff.OrderServer.order.dto.OrderCreateRequest;
+import com.sff.OrderServer.order.service.OrderMSAService;
 import com.sff.OrderServer.order.service.OrderService;
 import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
@@ -20,21 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderMSAService orderMSAService;
 
     // 주문 추가
     @PostMapping("/api/order-server/orders")
     public ApiResult<?> createOrder(@RequestHeader("UserId") Long userId,
             @RequestBody OrderCreateRequest orderCreateRequest) {
-        return ApiUtils.success(orderService.createOrder(orderCreateRequest, userId));
+        return ApiUtils.success(orderMSAService.createOrder(orderCreateRequest, userId));
     }
 
-    // 주문 내역 조회
+    // 주문 내역 조회 - 손님
     @GetMapping("/api/order-server/orders")
     public ApiResult<?> getOrders(@RequestHeader("UserId") Long userId) {
         return ApiUtils.success(orderService.getOrderRecords(userId));
     }
 
-    // 주문 확인 (상세 조회)
+    // 주문 확인 (상세 조회) - 손님
     @GetMapping("/api/order-server/orders/{orderId}")
     public ApiResult<?> getOrder(@PathVariable Long orderId) {
         return ApiUtils.success(orderService.getOrderRecordDetail(orderId));
@@ -73,7 +75,7 @@ public class OrderController {
     // 주문 상태 변경 - 주문 대기
     @PutMapping("/api/order-server/state-waiting/{orderId}")
     public ApiResult<?> updateOrderWaiting(@PathVariable Long orderId) {
-        orderService.updateOrderWaiting(orderId);
+        orderMSAService.updateOrderWaiting(orderId);
         return ApiUtils.success("주문을 완료하였습니다.");
     }
 
@@ -101,39 +103,39 @@ public class OrderController {
     // 주문 상태 변경 - 거절됨
     @PutMapping("/api/order-server/state-refused/{orderId}")
     public ApiResult<?> updateOrderRefused(@PathVariable Long orderId) {
-        return ApiUtils.success(orderService.updateOrderRefused(orderId));
+        return ApiUtils.success(orderMSAService.updateOrderRefused(orderId));
     }
 
     // 펀딩 - 주문 추가
     @PostMapping("/api/order-server/orders/funding-to-order/{fundingId}")
     public ApiResult<?> createOrderAboutFunding(@PathVariable Long fundingId) {
-        return ApiUtils.success(orderService.createOrderAboutFunding(fundingId));
+        return ApiUtils.success(orderMSAService.createOrderAboutFunding(fundingId));
     }
 
     // 주문 상태 변경 + 펀딩 주문 상태 변경
     @PutMapping("/api/order-server/funding-to-order/{fundingId}/state-waiting/{orderId}")
     public ApiResult<?> updateOrderAboutFunding(@PathVariable Long fundingId,
             @PathVariable Long orderId) {
-        orderService.updateOrderAboutFunding(fundingId, orderId);
+        orderMSAService.updateOrderAboutFunding(fundingId, orderId);
         return ApiUtils.success("펀딩에 대한 주문 상태를 변경하였습니다.");
     }
 
     // 주문 Id에 해당하는 주문의 가게 Id 조회
     @GetMapping("/api/order-server/{orderId}")
     public ApiResult<?> getStoreId(@PathVariable Long orderId) {
-        return ApiUtils.success(orderService.getStoreId(orderId));
+        return ApiUtils.success(orderMSAService.getStoreId(orderId));
     }
 
     // 주문별 메뉴 목록
     @PostMapping("/api/order-server/menus")
     public ApiResult<?> getMenusPerOrders(@RequestBody List<Long> orders) {
-        return ApiUtils.success(orderService.getMenusPerOrders(orders));
+        return ApiUtils.success(orderMSAService.getMenusPerOrders(orders));
     }
 
     // 회원별 이전 달 주문 수
     @GetMapping("/api/order-server/orders/counts")
     public ApiResult<?> getOrderPerUser() {
-        return ApiUtils.success(orderService.getOrderPerUser());
+        return ApiUtils.success(orderMSAService.getOrderPerUser());
     }
 
     // 영업 종료 - 메뉴명 / 판매수 / 옵션 포함 판매 금액
@@ -145,7 +147,7 @@ public class OrderController {
     // 주문 정보 삭제
     @DeleteMapping("/api/order-server/orders/{orderId}")
     public ApiResult<?> deleteOrder(@PathVariable Long orderId){
-        orderService.deleteOrder(orderId);
+        orderMSAService.deleteOrder(orderId);
         return ApiUtils.success("성공적으로 주문 정보를 삭제했습니다.");
     }
 }
