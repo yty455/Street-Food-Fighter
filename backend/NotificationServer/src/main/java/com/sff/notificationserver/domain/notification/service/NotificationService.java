@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.sff.notificationserver.common.error.type.BaseException;
 import com.sff.notificationserver.common.feignClient.StoreClient;
 import com.sff.notificationserver.common.feignClient.UserClient;
 import com.sff.notificationserver.common.utils.ApiResult;
@@ -80,6 +81,11 @@ public class NotificationService {
             NotificationType.REQUEST, "에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!"
     );
 
+    private final Map<NotificationType, NotificationType> typeMaker = Map.of(
+            NotificationType.DONE_F, NotificationType.SUCCESS,
+            NotificationType.DONE_R, NotificationType.REQUEST
+    );
+
 
     public NotificationResponse getNotifications(Long userId, int page, int size) {
 
@@ -97,6 +103,14 @@ public class NotificationService {
                 .userPoint(userPoint.getResponse().getAmount())
                 .notificationInfos(notificationInfos)
                 .build();
+    }
+
+    public void updateNotification(NotificationUpdateRequest notificationUpdateRequest) {
+
+        Notification notification = notificationRepository.findByTargetIdAndType(notificationUpdateRequest.getTargetId(), typeMaker.get(notificationUpdateRequest.getType()))
+                .orElseThrow(() -> new BaseException("NOT_FOUND_NOTIFICATION_BY_TARGET_ID"));
+        notification.updateType(notificationUpdateRequest.getType());
+
     }
 
     @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")

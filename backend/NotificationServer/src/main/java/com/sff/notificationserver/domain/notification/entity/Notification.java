@@ -28,4 +28,8 @@ public class Notification {
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdDate;
 
+    public void updateType(NotificationType type) {
+        this.type = type;
+    }
+
 }
