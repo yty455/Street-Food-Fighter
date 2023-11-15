@@ -41,6 +41,7 @@ public class OrderFromFundingService {
         // 주문 접수 대기 알림(to 사장)
         sendNotificationToOwner(orderFromFundingResponse.getStoreId());
 
+        // 알림의 상태변경 요청
     }
 
     private OrderFromFundingResponse createOrderRecord(Long fundingId){
