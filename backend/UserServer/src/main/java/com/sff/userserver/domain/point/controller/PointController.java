@@ -37,4 +37,11 @@ public class PointController {
         PaymentPasswordResponse paymentPassword = pointService.getPaymentPassword(userIdHolder.getUserId());
         return ApiUtils.success(paymentPassword);
     }
+
+    @PutMapping("/points")
+    @UserIdRequired
+    public ApiResult<?> updatePoint(UserIdHolder userIdHolder, @Valid @RequestBody PointUpdateRequest pointUpdateRequest) {
+        pointService.updatePoint(userIdHolder.getUserId(), pointUpdateRequest);
+        return ApiUtils.success("포인트 업데이트 성공");
+    }
 }
