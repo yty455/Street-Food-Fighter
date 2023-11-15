@@ -7,12 +7,14 @@ import ChargeAPI from '@/apis/user/ChargeAPI';
 
 export const Charge = ({ toggleCharge }: any) => {
   const [change, setChange] = useState('');
+  const [formatChange, setFormatChange] = useState('');
   const [success, setSuccess] = useState(false);
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const numericValue = inputValue.replace(/[^0-9]/g, '');
     const formattedValue = new Intl.NumberFormat('en-US').format(numericValue);
-    setChange(formattedValue);
+    setFormatChange(formattedValue);
+    setChange(inputValue);
   };
 
   const handleToCharge = async () => {
@@ -42,7 +44,7 @@ export const Charge = ({ toggleCharge }: any) => {
                 <img src="/images/common/fightmoney.png" style={{ width: '30px' }} />
                 <div style={{ fontSize: '20px' }}> 충전할 금액을 입력해주세요</div>
               </Title>
-              <Input value={change} onChange={handleChange} placeholder="충전할 금액을 입력해주세요" maxLength={25} use="info" />
+              <Input value={formatChange} onChange={handleChange} placeholder="충전할 금액을 입력해주세요" maxLength={25} use="info" />
             </ContentBox>
             <BottomBtn text="충전 하기" onClick={handleToCharge} />
           </div>
