@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    @Query("select new com.sff.notificationserver.domain.notification.dto.NotificationInfo(n.targetId, n.type, n.totalPrice, n.createdDate) from Notification n where n.userId = :userId")
+    @Query("select new com.sff.notificationserver.domain.notification.dto.NotificationInfo(n.targetId, n.type, n.totalPrice, n.createdDate, n.storeName) from Notification n where n.userId = :userId")
     Slice<NotificationInfo> findByUserId(@Param("userId") Long userId, Pageable pageable);
 }
