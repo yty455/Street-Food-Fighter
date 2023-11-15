@@ -9,7 +9,10 @@ export const Charge = ({ toggleCharge }: any) => {
   const [change, setChange] = useState('');
   const [success, setSuccess] = useState(false);
   const handleChange = (e: any) => {
-    setChange(e.target.value);
+    const inputValue = e.target.value;
+    const numericValue = inputValue.replace(/[^0-9]/g, '');
+    const formattedValue = new Intl.NumberFormat('en-US').format(numericValue);
+    setChange(formattedValue);
   };
 
   const handleToCharge = async () => {
