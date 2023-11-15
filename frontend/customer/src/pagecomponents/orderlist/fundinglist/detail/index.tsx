@@ -9,13 +9,13 @@ const FundingDetailPage = ({ params, ...props }: any) => {
   const [fundingInfo, setFundingInfo] = useState<any>();
 
   const stateText: any = {
-    BEFORE_ORDER: '주문 전',
-    ORDER_COMPLETED: '주문 완료',
-    CANCEL: '펀딩- 주문 취소',
-    FAILED: '펀딩 실패',
-    WAITING: '깃발 선택 대기',
-    SUCCESS: '깃발 선택 됨',
-    FAILURE: '깃발 선택 안됨',
+    BEFORE_ORDER: '펀딩에 성공했어요. 주문해주세요',
+    ORDER_COMPLETED: '주문이 완료됐어요',
+    CANCEL: '주문이 취소됐어요', //'펀딩- 주문 취소',
+    FAILED: '펀딩이 실패했어요', //'펀딩 실패',
+    WAITING: '아직 깃발 선택 전이에요', //'깃발 선택 대기',
+    SUCCESS: '펀딩에 성공했어요.', //'깃발 선택 됨',
+    FAILURE: '펀딩이 실패했어요', //'깃발 선택 안됨',
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const FundingDetailPage = ({ params, ...props }: any) => {
 
   return (
     <OrderDetailStyle>
-      <Topbar text="펀딩확인" />
+      <Topbar text="펀딩 확인" />
       {fundingInfo && (
         <>
           <OrderInfo>
@@ -45,12 +45,14 @@ const FundingDetailPage = ({ params, ...props }: any) => {
               />
               {fundingInfo.storeName}
             </StoreName>
-            <StoreAddress>{fundingInfo.storeAddress}</StoreAddress>
             <StoreTextLine>
-              주문일시 <span>: {formatDate(fundingInfo.createAt)}</span>
+              영업주소 <span>: {fundingInfo.flagAddress}</span>
             </StoreTextLine>
             <StoreTextLine>
-              주문 번호 : <span>{fundingInfo.orderId}</span>
+              영업일자 <span>: {formatDate2(fundingInfo.flagDate)}</span>
+            </StoreTextLine>
+            <StoreTextLine>
+              펀딩일자 <span>: {formatDate(fundingInfo.createAt)}</span>
             </StoreTextLine>
             <StoreTextLine>
               요청사항 : <span>{fundingInfo.requirement}</span>
@@ -85,4 +87,12 @@ const formatDate = (dateString: any) => {
   return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}:${minutes}`;
 };
 
+const formatDate2 = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
+};
 export default FundingDetailPage;

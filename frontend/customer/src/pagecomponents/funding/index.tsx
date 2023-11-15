@@ -9,7 +9,6 @@ import useSelectedDateStore from '@/stores/selectdateStore';
 import useDateOptions from '@/hooks/sevendaysHook';
 import useSetPlaceHook from '@/hooks/setplaceHook';
 import SearchPlace from '@/components/common/searchplace';
-import { nearflags } from '@/temp/nearflags';
 import { NearFlagType } from '@/types/nearflags.type';
 import useMainFilterStore from '@/stores/mainFilterStore';
 import { categories } from '@/assets/category';

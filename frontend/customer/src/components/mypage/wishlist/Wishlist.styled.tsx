@@ -33,8 +33,8 @@ const CategoryItem = styled.div.attrs<any>((props) => ({}))`
     return css`
       display: flex;
       align-items: center;
-      width: 30%;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       border-radius: 10px;
       flex-direction: column;
       justify-content: space-around;
@@ -45,12 +45,12 @@ const CategoryItem = styled.div.attrs<any>((props) => ({}))`
 `;
 
 const CategoryImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
 `;
 
 const CategoryName = styled.div`
-  font-size: 18px;
+  font-size: 14px;
 `;
 
 const WishBody = styled.div`
