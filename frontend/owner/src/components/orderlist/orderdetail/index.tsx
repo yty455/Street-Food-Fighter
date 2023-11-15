@@ -59,7 +59,7 @@ const OrderDetail = ({
   const handleOrderReject = async () => {
     const response = await ToRejectAPI({ orderId: order.orderId });
     if (response) {
-      console.log('Order Reject response:', response);
+      // console.log('Order Reject response:', response);
       closeModal();
       onOrderStateChanged();
     }
@@ -68,7 +68,7 @@ const OrderDetail = ({
   const handleOrderFinish = async () => {
     const response = await ToCompletionAPI({ orderId: order.orderId });
     if (response) {
-      console.log('Order finish response:', response);
+      // console.log('Order finish response:', response);
       closeModal();
       onOrderStateChanged();
     }
@@ -112,16 +112,16 @@ const OrderDetail = ({
         {order.orderState == 'WAITING' && (
           <FlexRow>
             <div style={{ width: '69%', height: '45px' }} onClick={handleOrderAccept}>
-              <Button fontSize="22px" text="주문접수"></Button>
+              <Button size="22px" text="주문접수"></Button>
             </div>
             <div style={{ width: '29%', height: '45px' }} onClick={handleOrderReject}>
-              <Button fontSize="22px" color="gray" text="주문거절"></Button>
+              <Button size="22px" color="gray" text="주문거절"></Button>
             </div>
           </FlexRow>
         )}
         {order.orderState == 'PROCESSING' && (
           <div style={{ width: '100%', height: '45px' }} onClick={handleOrderFinish}>
-            <Button fontSize="22px" text="조리 완료" />
+            <Button size="22px" text="조리 완료" />
           </div>
         )}
         <div>

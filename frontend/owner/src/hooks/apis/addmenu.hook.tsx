@@ -6,10 +6,10 @@ const useAddMenuHook = () => {
     try {
       const response = await AddMenuAPI(itemData);
       if (response) {
-        console.log('Response from AddMenuAPI:', response);
+        // console.log('Response from AddMenuAPI:', response);
       }
     } catch (error) {
-      console.error('Error:', error);
+      // console.error('Error:', error);
     }
   };
 

@@ -6,11 +6,13 @@ import BottomBtn from '@/components/common/bottombtn';
 import CategorySelector from '@/components/common/categoryselector';
 import GetCategoryAPI from '@/apis/category/GetCategoryAPI';
 import EditCategoryAPI from '@/apis/category/EditCategoryAPI';
+import { useRouter } from 'next/navigation';
 
 const CategoryPage = () => {
   const [selectedType, setSelectedType] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  const router = useRouter();
   useEffect(() => {
     const fetchCategories = async () => {
       const categoryData = await GetCategoryAPI();
@@ -21,8 +23,6 @@ const CategoryPage = () => {
     };
     fetchCategories();
   }, []);
-
-  console.log(selectedType, selectedCategory);
 
   const selectCategory = (categoryName: string) => {
     setSelectedCategory(categoryName);
@@ -39,9 +39,9 @@ const CategoryPage = () => {
 
     const response = await EditCategoryAPI({ data });
     if (response) {
-      console.log('카테고리 수정 성공:', response);
+      router.push('/');
     } else {
-      console.error('카테고리 수정 실패');
+      // console.error('카테고리 수정 실패');
     }
   };
 

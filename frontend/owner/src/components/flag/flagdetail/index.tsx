@@ -28,7 +28,7 @@ const FlagDetail = ({ flag, closeModal }: any) => {
       const data = await DetailFlagAPI(flag.flagId); // flag의 id를 사용하여 API 호출
       if (data) {
         setDetail(data); // 응답 데이터로 상태 업데이트
-        console.log(data);
+        // console.log(data);
       }
     };
     fetchDetail();

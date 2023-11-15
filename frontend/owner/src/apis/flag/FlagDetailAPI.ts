@@ -7,7 +7,7 @@ const DetailFlagAPI = async (flagId: any) => {
     const response = await api.get(`/api/store-service/store/flags/${flagId}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    console.log('DetailFlagAPI', response.data);
+    // console.log('DetailFlagAPI', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
