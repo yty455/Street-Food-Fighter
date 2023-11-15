@@ -27,6 +27,14 @@ const FundingListPage = () => {
     PROCESSING: '조리중',
     COMPLETED: '완료',
     REFUSED: '주문 거절',
+
+    //
+    BEFORE_ORDER: '주문 전',
+    ORDER_COMPLETED: '주문 완료',
+    CANCEL: '주문 취소',
+    FAILED: '펀딩 실패',
+    SUCCESS: '펀딩 성공.',
+    FAILURE: '펀딩 실패',
   };
 
   const formatDate = (dateString: string) => {
