@@ -17,7 +17,7 @@ const AlertPage = () => {
     const getAlerts = async () => {
       const res = await GetMyAlertAPI(0, 10);
       setAlerts(res.notificationInfos.content);
-      console.log(res);
+      // console.log(res);
       console.log(res.notificationInfos.content);
     };
     getAlerts();

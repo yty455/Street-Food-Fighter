@@ -9,7 +9,7 @@ const GetFundingDetail = async (number: any) => {
     const response = await api.get(`/api/order-server/fundings/${number}`, {
       headers: { Authorization: `${accessToken}` },
     });
-    // console.log('FundingDetail', response.data);
+    console.log('FundingDetail', response.data);
     return response.data.response;
   } catch (error) {
     console.error(error);
