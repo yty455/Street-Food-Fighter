@@ -2,6 +2,7 @@ package com.sff.userserver.domain.point.controller;
 
 import com.sff.userserver.domain.common.annotation.UserIdRequired;
 import com.sff.userserver.domain.common.aspect.UserIdHolder;
+import com.sff.userserver.domain.point.dto.PaymentPasswordResponse;
 import com.sff.userserver.domain.point.dto.PointAmountResponse;
 import com.sff.userserver.domain.point.dto.PointUpdateRequest;
 import com.sff.userserver.domain.point.service.PointService;
@@ -30,11 +31,10 @@ public class PointController {
         return ApiUtils.success("포인트 업데이트 성공");
     }
 
-    @PutMapping("/points")
+    @GetMapping("/me/payment-password")
     @UserIdRequired
-    public ApiResult<?> updatePoint(UserIdHolder userIdHolder, @Valid @RequestBody PointUpdateRequest pointUpdateRequest) {
-        pointService.updatePoint(userIdHolder.getUserId(), pointUpdateRequest);
-        return ApiUtils.success("포인트 업데이트 성공");
+    public ApiResult<?> getPaymentPassword(UserIdHolder userIdHolder) {
+        PaymentPasswordResponse paymentPassword = pointService.getPaymentPassword(userIdHolder.getUserId());
+        return ApiUtils.success(paymentPassword);
     }
-    
 }
