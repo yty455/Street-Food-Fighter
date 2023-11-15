@@ -105,6 +105,7 @@ public class NotificationService {
                 .build();
     }
 
+    @Transactional
     public void updateNotification(NotificationUpdateRequest notificationUpdateRequest) {
 
         Notification notification = notificationRepository.findByTargetIdAndType(notificationUpdateRequest.getTargetId(), typeMaker.get(notificationUpdateRequest.getType()))
