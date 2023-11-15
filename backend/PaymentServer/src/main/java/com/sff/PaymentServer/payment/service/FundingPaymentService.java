@@ -65,7 +65,7 @@ public class FundingPaymentService {
     private void subtractUser(Long userId, Integer totalPrice, String paymentPassword){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false, paymentPassword));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));

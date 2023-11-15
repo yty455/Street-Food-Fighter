@@ -12,5 +12,4 @@ public class OrderCreateRequest {
     private Long bucketId;
     private Long storeId;
     private String requirement;
-    private String paymentPassword;
 }
