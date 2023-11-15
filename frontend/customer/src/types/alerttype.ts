@@ -12,8 +12,9 @@ export type AlertTypeToIdMapping = {
 };
 
 export interface AlertAPI {
-  recipient_type: string;
-  refundpoint: number | null;
-  date: string;
-  vendorname: string;
+  targetId: number;
+  type: string;
+  totalPrice: number | null;
+  createdDate: string;
+  storeName: string;
 }
