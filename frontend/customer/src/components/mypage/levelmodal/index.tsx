@@ -14,21 +14,21 @@ const LevelModal = ({ toggleModal }: any) => {
           <img src="/images/level/light.png" style={{ width: '80px' }} />
           <Content>
             <LevelTitle> 라이트</LevelTitle>
-            <Airfont> 월 5회 이상 주문</Airfont>
+            <Airfont> 월 5회 미만 주문</Airfont>
           </Content>
         </LevelBox>
         <LevelBox>
           <img src="/images/level/middle.png" style={{ width: '80px' }} />
           <Content>
             <LevelTitle> 미들</LevelTitle>
-            <Airfont> 월 10회 이상 주문</Airfont>
+            <Airfont> 월 5회 이상 주문</Airfont>
           </Content>
         </LevelBox>
         <LevelBox>
           <img src="/images/level/heavy.png" style={{ width: '80px' }} />
           <Content>
             <LevelTitle> 헤비</LevelTitle>
-            <Airfont> 월 15회 이상 주문</Airfont>
+            <Airfont> 월 10회 이상 주문</Airfont>
           </Content>
         </LevelBox>
         <LevelBox>

@@ -8,7 +8,6 @@ import useOrderStore from '@/stores/orderStore';
 import BagOrder from '@/components/purchase/bagorder';
 import { useEffect, useState } from 'react';
 import Input from '@/components/common/input';
-import { buckets } from '@/temp/buckets';
 import Button from '@/components/common/button';
 import { VendorData } from '@/types/vendortype';
 import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
@@ -66,24 +65,26 @@ const PurchasePage = () => {
         requirement: request,
       };
       if (curnav === 1) {
-        await OrderAPI(data1);
+        const res = await OrderAPI(data1);
+        // console.log('order...');
+        router.push('/password/pay');
       } else {
-        await FundingAPI(data2);
+        const res = await FundingAPI(data2);
+        // console.log('funding...');
+        router.push('/password/pay');
       }
-
-      router.push('/password/pay');
     } else {
       console.log('장바구니 없음');
     }
   };
 
   const [userpoint, setUserpoint] = useState(0);
-  useEffect(() => {
-    const fetchPoints = async () => {
-      const res = await GetPointAPI();
-      if (res) setUserpoint(res.amount);
-    };
+  const fetchPoints = async () => {
+    const res = await GetPointAPI();
+    if (res) setUserpoint(res.amount);
+  };
 
+  useEffect(() => {
     fetchPoints();
   }, []);
 
@@ -92,6 +93,7 @@ const PurchasePage = () => {
   const toggleCharge = () => {
     setShowCharge(!showCharge);
   };
+
   return (
     <div>
       <TopBox>
@@ -152,13 +154,13 @@ const PurchasePage = () => {
           </Cashline>
           <Cashline>
             <Title> 결제 예정 금액 </Title>
-            <div>{Number(buckets.totalPrice).toLocaleString()}원</div>
+            <div>{Number(bucket?.totalPrice).toLocaleString()}원</div>
           </Cashline>
         </Requested>
       </Content>
 
       <BottomBtn text="결제하기" onClick={handleSubmit}></BottomBtn>
-      {showCharge && <Charge toggleCharge={toggleCharge} />}
+      {showCharge && <Charge toggleCharge={toggleCharge} onBack={fetchPoints} />}
     </div>
   );
 };

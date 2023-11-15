@@ -16,7 +16,7 @@ const Card = ({ vendor, onClick }: any) => {
         </div>
         <ContentBox2>
           <img src="/images/orderfunding/star.png" style={{ width: '16px' }} />
-          <Text> {vendor.review}/5.0</Text>
+          <Text> {vendor.score.toFixed(1)}/5.0</Text>
         </ContentBox2>
       </ContentBox>
     </CardBox>

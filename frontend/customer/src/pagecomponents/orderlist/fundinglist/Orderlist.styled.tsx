@@ -55,11 +55,11 @@ const Topdown = styled.div`
 
 const VendorInfo = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 15px;
 `;
 
 const StoreName = styled.div`
-  font-size: 24px;
+  font-size: 18px;
 `;
 
 const Airfont = styled.div.attrs<any>((props) => ({}))`
@@ -68,6 +68,7 @@ const Airfont = styled.div.attrs<any>((props) => ({}))`
 
     return css`
       font-family: ${font};
+      font-size: 14px;
     `;
   }};
 `;
