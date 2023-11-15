@@ -3,25 +3,25 @@ import useCurPasswordStore from '@/stores/curpwdStore';
 import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useRegisterPageStore from '@/stores/registerStore';
-import { user } from '@/temp/user';
-import useBucketStore from '@/stores/bucketStore';
-import { useVendorStore } from '@/stores/curvendoridStore';
-import OrderAPI from '@/apis/vendor/OrderAPI';
 import SignUpAPI from '@/apis/user/SignUpAPI';
+import usePayPwdStore from '@/stores/userpwdStore';
+
 const useCompleteHandler = (slug: string) => {
   const router = useRouter();
   const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { payPassword } = usePayPwdStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const { setPassword, resetPasswords, wantPwd } = usePasswordStore();
   const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
   const { email, password, passwordCheck, nickname, phone, paymentPassword, region1, region2, region3, region4, socialId, fcmToken } =
     useRegisterPageStore();
+
   const handleComplete = async () => {
     const currentPassword = useCurPasswordStore.getState().currentPassword;
 
     if (slug == 'change') {
       if (curPwdPage === 1) {
-        if (currentPassword === user.paymentPassword) {
+        if (currentPassword === payPassword) {
           setCurPwdPage(2);
           setPassword(1, currentPassword);
         } else {
@@ -39,7 +39,7 @@ const useCompleteHandler = (slug: string) => {
           alert('Password changed successfully.');
         } else {
           resetCurrentPassword();
-          // 변경 비밀번호로 api호출 (이후 코드 추가)
+          // 변경 비밀번호로 api호출
         }
       }
     }
@@ -87,7 +87,7 @@ const useCompleteHandler = (slug: string) => {
     if (slug == 'pay') {
       setCurPwdPage(1);
       if (curPwdPage === 1) {
-        if (currentPassword === user.paymentPassword) {
+        if (currentPassword === payPassword) {
           setPassword(1, currentPassword);
           router.push('/ordercheck');
         } else {
