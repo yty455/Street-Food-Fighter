@@ -55,7 +55,7 @@ const FundingDetailPage = ({ params, ...props }: any) => {
       {fundingInfo && (
         <>
           <OrderInfo>
-            <OrderState>{stateText[fundingInfo.state] || stateText['FAILED']}</OrderState>
+            <OrderState>{stateText[fundingInfo.orderState] || stateText['FAILED']}</OrderState>
             <StoreName>
               <img
                 src={`/images/category/${getCategoryImage(fundingInfo.categoryType)}`}
