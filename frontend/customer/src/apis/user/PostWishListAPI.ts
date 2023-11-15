@@ -2,7 +2,9 @@ import api from '../api';
 
 const PostWishListAPI = async (categoryName: string) => {
   // const accessToken = localStorage.getItem('accessToken');
-  const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+  // const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+  const accessToken = localStorage.getItem('user-accessToken');
+
   const body = { foodType: categoryName };
   try {
     const response = await api.post(`/api/user-server/wishlist/add`, body, {
