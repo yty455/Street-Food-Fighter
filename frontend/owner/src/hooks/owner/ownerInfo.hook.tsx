@@ -8,6 +8,7 @@ const useSetOwnerInfoHook = () => {
     localStorage.setItem('accessToken', accessToken);
     const ownerInfo = await OwnerInfoAPI(accessToken);
     const storeInfo = await StoreInfoAPI(accessToken);
+    // console.log(storeInfo);
     setOwnerValue(ownerInfo.response);
     setStoreValue(storeInfo.response);
     setLogin();

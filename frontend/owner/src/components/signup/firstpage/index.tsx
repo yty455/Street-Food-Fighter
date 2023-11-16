@@ -7,7 +7,27 @@ import useSignUpPageStore from '@/stores/signUpStore';
 
 const SignUpFirstPage = ({ params, ...props }: any) => {
   const router = useRouter();
-  const { email, name, phone, setRegisterValue } = useSignUpPageStore();
+  const { email, name, phone, fcmToken, setRegisterValue } = useSignUpPageStore();
+
+  // 플러터 설정
+  const setToken = function () {
+    return new Promise((resolve) => {
+      if ((window as any).flutter_inappwebview) {
+        (window as any).flutter_inappwebview.callHandler('handleFoo').then(function (result: any) {
+          setRegisterValue('fcmToken', JSON.stringify(result.fcmT).slice(1, -1));
+          resolve(JSON.stringify(result.fcmT).slice(1, -1));
+        });
+      } else {
+        resolve(null);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setToken();
+  }, []);
+
+  // 플러터 설정 끝
 
   const moveNextPage = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

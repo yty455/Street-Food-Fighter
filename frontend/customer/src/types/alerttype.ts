@@ -1,4 +1,4 @@
-export type AlertType = 'FAILURE' | 'SUCCESS' | 'PROCESSING' | 'REQUEST' | 'COMPLETED' | 'REFUSED';
+export type AlertType = 'FAILURE' | 'SUCCESS' | 'PROCESSING' | 'REQUEST' | 'COMPLETED' | 'REFUSED' | 'DONE_F' | 'DONE_R';
 
 export interface AlertMessage {
   type: AlertType;
@@ -12,8 +12,9 @@ export type AlertTypeToIdMapping = {
 };
 
 export interface AlertAPI {
-  recipient_type: string;
-  refundpoint: number | null;
-  date: string;
-  vendorname: string;
+  targetId: number;
+  type: string;
+  totalPrice: number | null;
+  createdDate: string;
+  storeName: string;
 }

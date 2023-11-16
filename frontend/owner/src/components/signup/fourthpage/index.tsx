@@ -11,7 +11,8 @@ import SignUpAPI from '@/apis/signup/SignUpAPI';
 const SignUpFourthPage = ({ params, ...props }: any) => {
   const router = useRouter();
   const { businessCategory, category, setRegisterValue } = useSignUpPageStore();
-  const { email, password, storeName, name, bank, phone, accountNumber, openHour, openMinute, closeHour, closeMinute } = useSignUpPageStore();
+  const { email, password, storeName, name, bank, phone, accountNumber, openHour, openMinute, closeHour, closeMinute, fcmToken } =
+    useSignUpPageStore();
   const initialCategoryName = categories.find((cat) => cat.type === 'HOTTEOK')?.name || null;
 
   const moveNextPage = async () => {
@@ -22,12 +23,12 @@ const SignUpFourthPage = ({ params, ...props }: any) => {
       phone,
       bank,
       accountNumber,
-      fcmToken: '',
       storeName,
       openTime: openHour + ':' + openMinute,
       closeTime: closeHour + ':' + closeMinute,
       businessCategory,
       category,
+      fcmToken,
     };
     const result = await SignUpAPI(data);
     if (result.success) {
@@ -37,7 +38,7 @@ const SignUpFourthPage = ({ params, ...props }: any) => {
     // router.push('/signup/5');
   };
   useEffect(() => {
-    console.log(category);
+    // console.log(category);
   }, [category]);
 
   const handleChangeBusinessCategory = (value: string) => {

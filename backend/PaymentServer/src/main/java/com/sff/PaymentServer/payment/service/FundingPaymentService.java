@@ -32,15 +32,20 @@ public class FundingPaymentService {
         // 펀딩 정보 추가 - 상태 : 결제중
         FundingCreateResponse fundingCreateResponse = createFundingRecord(fundingCreateRequest);
 
-        // 결제 (회원 포인트 차감)
-        subtractUser(userId, fundingCreateResponse.getTotalPrice(), fundingCreateRequest.getPaymentPassword());
+        try {
+            // 결제 (회원 포인트 차감)
+            subtractUser(userId, fundingCreateResponse.getTotalPrice(),
+                    fundingCreateRequest.getPaymentPassword());
+            // 결제 정보 저장
+            savePaymentRecord(userId, fundingCreateRequest.getStoreId(), fundingCreateResponse);
 
-        // 결제 정보 저장
-        savePaymentRecord(userId, fundingCreateRequest.getStoreId(), fundingCreateResponse);
-
-        // 펀딩 상태 변경 - 펀딩 대기 상태 + 바구니 상태 변경
-        updateFundingState(fundingCreateResponse.getFundingId());
-
+            // 펀딩 상태 변경 - 펀딩 대기 상태 + 바구니 상태 변경
+            updateFundingState(fundingCreateResponse.getFundingId());
+        }catch (BaseException e){
+            // 펀딩 삭제
+            orderClient.deleteFunding(fundingCreateResponse.getFundingId());
+            throw new BaseException(e.getApiError());
+        }
     }
 
     private FundingCreateResponse createFundingRecord(FundingCreateRequest fundingCreateRequest){
@@ -60,7 +65,7 @@ public class FundingPaymentService {
     private void subtractUser(Long userId, Integer totalPrice, String paymentPassword){
         ApiResult result;
         try{
-            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false, paymentPassword));
+            result = userClient.updateUserPoint(userId, new PointUpdateRequest(totalPrice, false));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));

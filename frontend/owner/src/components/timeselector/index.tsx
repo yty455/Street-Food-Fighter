@@ -16,7 +16,7 @@ const TimeSelector = () => {
     }
   };
   useEffect(() => {
-    console.log(openHour, openMinute, closeHour, closeMinute);
+    // console.log(openHour, openMinute, closeHour, closeMinute);
   }, [openHour, openMinute, closeHour, closeMinute]);
   return (
     <TimeSelectorStyle>

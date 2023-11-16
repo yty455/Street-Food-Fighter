@@ -17,19 +17,19 @@ public class FundingResponse {
     private FundingState fundingState;
     private Long storeId;
     private String storeName;
-    private String storeUrl;
+    private String categoryType;
     private String menuName;
     private Integer menuCount;
     private Integer restCount;
     private Integer bucketTotalPrice;
 
-    public FundingResponse(Funding funding, String storeName, String storeUrl, Integer bucketTotalPrice, OrderMenu orderMenu, Integer restCount){
+    public FundingResponse(Funding funding, String storeName, String categoryType, Integer bucketTotalPrice, OrderMenu orderMenu, Integer restCount){
         this.FundingId = funding.getFundingId();
         this.createdAt = funding.getCreatedAt();
         this.fundingState = funding.getFundingState();
         this.storeId = funding.getStoreId();
         this.storeName = storeName;
-        this.storeUrl = storeUrl;
+        this.categoryType = categoryType;
         this.bucketTotalPrice = bucketTotalPrice;
         this.menuName = orderMenu.getName();
         this.menuCount = orderMenu.getCount();

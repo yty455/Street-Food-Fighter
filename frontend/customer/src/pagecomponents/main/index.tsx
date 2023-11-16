@@ -1,23 +1,51 @@
 import { Curpos, Filter, Research, Position, StyledTop, Topbar, CardList } from './Main.styled';
 import Card from '@/components/main/card';
 import FilterComponent from '@/components/common/filter';
-import { useRef, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import handleRefreshClick from '@/hooks/refreshHook';
 import useCurrentLocation from '@/hooks/currentHook';
 import SearchPlace from '@/components/common/searchplace';
 import useSetPlaceHook from '@/hooks/setplaceHook';
-import { vendordata } from '@/temp/vendordata';
 import { categories } from '@/assets/category';
 import { useRouter } from 'next/navigation';
+import { NearVendorsType } from '@/types/nearvendors.type';
+import useMainFilterStore from '@/stores/mainFilterStore';
+import NearVendorsAPI from '@/apis/vendor/NearVendorsAPI';
 
 const MainPage = () => {
-  const [addressName, setAddressName] = useState('');
+  const [addressName, setAddressName] = useState('부산광역시 강서구 송정동');
   const mapRef = useRef<kakao.maps.Map>(null);
   const router = useRouter();
 
-  // 임시 : 가게 정보 불러오기
-  const vendors = vendordata;
+  const [vendors, setVendors] = useState<NearVendorsType>([]);
+
+  const { selectedCategories } = useMainFilterStore();
+
+  useEffect(() => {
+    // 1. 현재 위치 이동시 2. 현지도 검색시 3. 카테고리 선택시
+
+    const fetchVendors = async () => {
+      const selectedTypes = selectedCategories
+        .map((categoryName) => {
+          const category = categories.find((c) => c.name === categoryName);
+          return category ? category.type : null;
+        })
+        .filter((type) => type !== null);
+
+      const nearVendorsData = await NearVendorsAPI({
+        addressname: addressName,
+        categories: selectedTypes,
+      });
+      if (nearVendorsData) {
+        setVendors(nearVendorsData);
+      } else {
+        console.error('Failed to fetch near flag data');
+      }
+    };
+    fetchVendors();
+  }, [addressName, selectedCategories]);
+
   // filter
   const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilter = () => setFilterVisible(!isFilterVisible);
@@ -29,18 +57,37 @@ const MainPage = () => {
 
   const setPlace = useSetPlaceHook(mapRef, setAddressName, setPositionVisible);
 
+  // 캐러셀 시작
+  const scrollRef = useRef<any>([]);
+
+  useEffect(() => {
+    if (vendors.length > 0) scrollRef.current[0].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  }, [vendors]); // vendors가 변경될 때마다 useEffect 실행
+
+  const moveCenter = (event: any, index: number) => {
+    const vendor = vendors[index];
+    if (mapRef.current) {
+      mapRef.current.setCenter(new kakao.maps.LatLng(vendor.lati, vendor.longi));
+    }
+
+    scrollRef.current[index].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
+  };
+
+  // 캐러셀 끝
+
   return (
     <div style={{ height: '93vh' }}>
       <Map center={position} style={{ width: '100%', height: '100%' }} level={3} ref={mapRef}>
         {vendors &&
           vendors.length > 0 &&
-          vendors.map((vendor: any) => {
-            const category = categories.find((c) => c.id === vendor.category);
+          vendors.map((vendor: any, index: number) => {
+            const category = categories.find((c) => c.type === vendor.category);
             const imageSrc = `/images/category/${category?.image}`;
             return (
               <MapMarker
-                key={vendor.id}
-                position={{ lat: parseFloat(vendor.lat), lng: parseFloat(vendor.lng) }}
+                key={vendor.id || index}
+                onClick={(e: any) => moveCenter(e, index)}
+                position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
                 image={{
                   src: imageSrc,
                   size: { width: 50, height: 50 },
@@ -72,17 +119,19 @@ const MainPage = () => {
         <img src="/images/orderfunding/curpos.png" style={{ width: '50px' }} />
       </Curpos>
       <CardList>
-        <div />
-        {vendors.map((vendor) => (
-          <Card
-            key={vendor.id}
-            vendor={vendor}
-            onClick={() => {
-              router.push(`/vendor/${vendor.id}`);
-            }}
-          />
+        <div style={{ minWidth: '225px' }} />
+        {vendors.map((vendor, index: any) => (
+          <div key={vendor.storeId} ref={(el) => (scrollRef.current[index] = el)}>
+            <Card
+              className="card"
+              vendor={vendor}
+              onClick={() => {
+                router.push(`/vendor/${vendor.storeId}`);
+              }}
+            />
+          </div>
         ))}
-        <div />
+        <div style={{ minWidth: '225px' }} />
       </CardList>
     </div>
   );

@@ -9,6 +9,8 @@ import com.sff.OrderServer.bucket.repository.BucketRepository;
 import com.sff.OrderServer.bucket.repository.OrderMenuRepository;
 import com.sff.OrderServer.dto.FlagMSAResponse;
 import com.sff.OrderServer.dto.NotificationType;
+import com.sff.OrderServer.dto.StoreMSARequest;
+import com.sff.OrderServer.dto.StoreMSAResponse;
 import com.sff.OrderServer.dto.UserInfo;
 import com.sff.OrderServer.dto.UserNotificationInfo;
 import com.sff.OrderServer.error.code.BucketError;
@@ -32,7 +34,11 @@ import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.utils.ApiError;
 import com.sff.OrderServer.utils.ApiResult;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -76,21 +82,44 @@ public class FundingService {
         List<Funding> fundings = fundingRepository.findAllByUserId(userId);
         List<FundingResponse> fundingResponses = new ArrayList<>();
         List<Long> storeIdList = fundings.stream().map(Funding::getStoreId).toList();
+
+        Map<Long, String[]> storeInfos = getStoreInfo(storeIdList);
+
         for(Funding funding : fundings){
             Long storeId = funding.getStoreId();
-            // storeId로 가게 이름, 이미지 URL 가져와야함.(MSA)
-            String storeName = "temp";
-            String storeUrl = "url";
+
+            String storeName = storeInfos.get(storeId)[0];
+            String categoryType = storeInfos.get(storeId)[1];
 
             Bucket bucket = funding.getBucket();
             List<OrderMenu> menus = orderMenuRepository.findAllByBucket(bucket);
             OrderMenu menu = menus.get(0);
             Integer restCount = menus.size()-1;
 
-            fundingResponses.add(new FundingResponse(funding, storeName, storeUrl, bucket.getTotalPrice(), menu, restCount));
+            fundingResponses.add(new FundingResponse(funding, storeName, categoryType, bucket.getTotalPrice(), menu, restCount));
         }
         return fundingResponses;
     }
+
+    private Map<Long, String[]> getStoreInfo(List<Long> storeIds){
+        StoreMSARequest storeMSARequest = new StoreMSARequest(storeIds);
+        ApiResult<List<StoreMSAResponse>> result;
+        try {
+            result = storeClient.getStores(storeMSARequest);
+        } catch (Exception e) {
+            throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_STORE));
+        }
+        if(result.getSuccess()==false){
+            throw new BaseException(result.getApiError());
+        }
+
+        return result.getResponse().stream()
+                .collect(Collectors.toMap(
+                        StoreMSAResponse::getStoreId, // key
+                        storeMsaResponse -> new String[]{storeMsaResponse.getName(), storeMsaResponse.getCategoryType()} // value
+                ));
+    }
+
 
     public FundingDetailResponse getFunding(Long userId, Long fundingId){
         Funding funding = fundingRepository.findByFundingIdAndUserId(fundingId, userId).orElseThrow(
@@ -290,5 +319,15 @@ public class FundingService {
     public FundingList getUnpickedFlagFundings(FundingChosen fundingChosen){
         List<Long> unpickedFlags = fundingChosen.getUnpickedFlagIds();
         return new FundingList((fundingRepository.findAllByFlagIdIn(unpickedFlags)).stream().map(funding->funding.getFundingId()).toList());
+    }
+
+    // ---------
+    @Transactional
+    public void deleteFunding(Long fundingId){
+        try {
+            fundingRepository.deleteById(fundingId);
+        }catch(Exception e){
+            throw new BaseException(new ApiError(FundingError.DELETE_ERROR));
+        }
     }
 }

@@ -41,6 +41,7 @@ public class OrderFromFundingService {
         // 주문 접수 대기 알림(to 사장)
         sendNotificationToOwner(orderFromFundingResponse.getStoreId());
 
+        // 알림의 상태변경 요청
     }
 
     private OrderFromFundingResponse createOrderRecord(Long fundingId){
@@ -115,7 +116,7 @@ public class OrderFromFundingService {
         ApiResult result;
         try {
             result = userClient.updateUserPoint(userId,
-                    new PointUpdateRequest((int) Math.floor(price * 0.9), true, null));
+                    new PointUpdateRequest((int) Math.floor(price * 0.9), true));
         }catch(Exception e){
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_USER));
         }

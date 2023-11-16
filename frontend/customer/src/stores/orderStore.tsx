@@ -2,15 +2,15 @@ import { create } from 'zustand';
 
 interface OptionState {
   menuId: number;
-  selectedOptions: number[];
-  quantity: number;
+  optionIds: number[];
+  count: number;
 }
 
 interface OptionStore {
   order: OptionState[];
   addOption: (menuId: number, optionId: number) => void;
   removeOption: (menuId: number, optionId: number) => void;
-  setQuantity: (menuId: number, quantity: number) => void;
+  setQuantity: (menuId: number, count: number) => void;
   clearOrder: () => void;
   removeItem: (menuId: number) => void;
 }
@@ -24,12 +24,12 @@ const useOrderStore = create<OptionStore>((set) => ({
 
       if (menuIndex > -1) {
         const menu = { ...newOrder[menuIndex] };
-        if (!menu.selectedOptions.includes(optionId)) {
-          menu.selectedOptions = [...menu.selectedOptions, optionId];
+        if (!menu.optionIds.includes(optionId)) {
+          menu.optionIds = [...menu.optionIds, optionId];
         }
         newOrder[menuIndex] = menu;
       } else {
-        const newMenu = { menuId, selectedOptions: [optionId], quantity: 0 };
+        const newMenu = { menuId, optionIds: [optionId], count: 0 };
         newOrder.push(newMenu);
       }
 
@@ -40,22 +40,22 @@ const useOrderStore = create<OptionStore>((set) => ({
     set((state) => {
       const existingMenu = state.order.find((menu) => menu.menuId === menuId);
       if (existingMenu) {
-        existingMenu.selectedOptions = existingMenu.selectedOptions.filter((id) => id !== optionId);
+        existingMenu.optionIds = existingMenu.optionIds.filter((id) => id !== optionId);
       }
       return { order: [...state.order] };
     }),
 
-  setQuantity: (menuId, quantity) =>
+  setQuantity: (menuId, count) =>
     set((state) => {
       const menuIndex = state.order.findIndex((menu) => menu.menuId === menuId);
       if (menuIndex > -1) {
-        if (quantity > 0) {
-          state.order[menuIndex].quantity = quantity;
+        if (count > 0) {
+          state.order[menuIndex].count = count;
         } else {
           state.order.splice(menuIndex, 1);
         }
-      } else if (quantity > 0) {
-        state.order.push({ menuId, selectedOptions: [], quantity });
+      } else if (count > 0) {
+        state.order.push({ menuId, optionIds: [], count });
       }
       return { order: [...state.order] };
     }),

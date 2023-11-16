@@ -7,6 +7,8 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.sff.notificationserver.common.error.type.BaseException;
+import com.sff.notificationserver.common.feignClient.OwnerClient;
 import com.sff.notificationserver.common.feignClient.StoreClient;
 import com.sff.notificationserver.common.feignClient.UserClient;
 import com.sff.notificationserver.common.utils.ApiResult;
@@ -51,6 +53,7 @@ public class NotificationService {
 
     private final UserClient userClient;
     private final StoreClient storeClient;
+    private final OwnerClient ownerClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
@@ -80,6 +83,11 @@ public class NotificationService {
             NotificationType.REQUEST, "에서 맛있게 드셨나요? 멋진 리뷰 하나만 남겨주세요!"
     );
 
+    private final Map<NotificationType, NotificationType> typeMaker = Map.of(
+            NotificationType.DONE_F, NotificationType.SUCCESS,
+            NotificationType.DONE_R, NotificationType.REQUEST
+    );
+
 
     public NotificationResponse getNotifications(Long userId, int page, int size) {
 
@@ -97,6 +105,15 @@ public class NotificationService {
                 .userPoint(userPoint.getResponse().getAmount())
                 .notificationInfos(notificationInfos)
                 .build();
+    }
+
+    @Transactional
+    public void updateNotification(NotificationUpdateRequest notificationUpdateRequest) {
+
+        Notification notification = notificationRepository.findByTargetIdAndType(notificationUpdateRequest.getTargetId(), typeMaker.get(notificationUpdateRequest.getType()))
+                .orElseThrow(() -> new BaseException("NOT_FOUND_NOTIFICATION_BY_TARGET_ID"));
+        notification.updateType(notificationUpdateRequest.getType());
+
     }
 
     @KafkaListener(topics = "#{notifyUserTopic.name}", groupId = "notification-service-notify-user")
@@ -120,7 +137,7 @@ public class NotificationService {
             userNotificationInfo.getUserList().get(idx).setToken(userTokenInfos.get(idx).getFcmToken());
         }
 
-        userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType()));
+        userNotificationInfo.getUserList().forEach(userInfo -> sendNotification(userInfo, title, content, userNotificationInfo.getType(), storeName));
     }
 
     @KafkaListener(topics = "#{notifyStoreTopic.name}", groupId = "notification-service-notify-store")
@@ -130,19 +147,24 @@ public class NotificationService {
         // 가게 ID 가게 서비스에서 사장 ID 받기
         Long ownerId = storeClient.getOwnerId(Long.valueOf(stringStoreId)).getResponse();
         // 사장 ID 사장 서비스에서 Token 받기
-        OwnerTokenInfo ownerTokenInfo = userClient.getStoreFCM(ownerId).getResponse();
+        OwnerTokenInfo ownerTokenInfo = ownerClient.getStoreFCM(ownerId).getResponse();
+        if (ownerTokenInfo.getFcmToken() == null || ownerTokenInfo.getFcmToken().equals("0"))
+            return;
         log.info(sendNotificationByToken(new FCMNotificationRequest(Long.valueOf(stringStoreId), ownerTokenInfo.getFcmToken(), "주문이 접수 되었습니다!", "앱을 열어 주문을 확인해 주세요.")));
 
     }
 
     @Transactional
-    public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type) {
-        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
+    public void sendNotification(UserInfo userInfo, String title, String content, NotificationType type, String storeName) {
         notificationRepository.save(Notification.builder()
                 .userId(userInfo.getUserId())
                 .type(type)
-                .targetId(userInfo.getOrderId())
+                .targetId(userInfo.getId())
+                .storeName(storeName)
                 .totalPrice(userInfo.getAmount()).build());
+        if (userInfo.getToken() == null || userInfo.getToken().equals("0"))
+            return;
+        log.info(sendNotificationByToken(new FCMNotificationRequest(userInfo.getUserId(), userInfo.getToken(), title, content)));
     }
 
     @PostConstruct

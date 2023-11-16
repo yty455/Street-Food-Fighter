@@ -48,3 +48,5 @@ feign:
     url: k9e205.p.ssafy.io:8090
   userserver:
     url: k9e205.p.ssafy.io:8100
+  ownerserver:
+    url: k9e205.p.ssafy.io:8140

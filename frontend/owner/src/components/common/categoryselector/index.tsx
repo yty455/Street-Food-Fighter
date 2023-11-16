@@ -1,7 +1,7 @@
-import React from 'react';
 import { CategoriesContainer, CategoryImage, CategoryName, CategoryItem } from './Categoryselector.styled';
+import { categories } from '@/assets/category';
 
-const CategorySelector = ({ categories, selectedCategory, selectCategory }: any) => {
+const CategorySelector = ({ selectedCategory, selectCategory }: any) => {
   return (
     <CategoriesContainer>
       {categories.map((category: any) => (

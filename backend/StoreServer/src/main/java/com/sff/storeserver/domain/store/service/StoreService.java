@@ -100,20 +100,30 @@ public class StoreService {
         List<Store> nearbyStores = storeRepository.findNearStore(region1, region2, region3, region4);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        return nearbyStores.stream()
+        List<StoreInfoResponse> storeInfoResponses = nearbyStores.stream()
                 .filter(store -> categories.contains(store.getCategory()))
                 .map(StoreInfoResponse::fromEntity)
                 .toList();
+
+        // 리뷰 평점 주가
+        storeInfoResponses.forEach(info -> info.updateScore(reviewRepository.getAverageScoreByStoreId(info.getStoreId())));
+
+        return storeInfoResponses;
     }
 
     public List<FlagStoreInfoResponse> getNearFlag(LocalDate date, String region1, String region2, String region3, String region4, List<CategoryType> categories) {
         List<Flag> nearByFlags = flagRepository.findNearFlag(region1, region2, region3, region4, date);
 
         // 카테고리 필터링 (예: 선택한 카테고리에 속하는 가게만 선택)
-        return nearByFlags.stream()
+        List<FlagStoreInfoResponse> flagStoreInfoResponses = nearByFlags.stream()
                 .filter(flag -> categories.contains(flag.getStore().getCategory()))
                 .map(FlagStoreInfoResponse::fromEntity)
                 .toList();
+
+        // 리뷰 평점 추가
+        flagStoreInfoResponses.forEach(info -> info.updateScore(reviewRepository.getAverageScoreByStoreId(info.getStoreId())));
+
+        return flagStoreInfoResponses;
     }
 
     public Long getOwnerId(Long storeId) {
@@ -142,15 +152,28 @@ public class StoreService {
         if (storeStartInfo.getFlagId() != 0) {
             FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
-            flags.forEach(flag -> {
+            Flag pickedFlag = null;
+
+            for (Flag flag : flags) {
                 if (storeStartInfo.getFlagId() == flag.getId()) {
                     flag.fundingSuccess();
                     flagNotificationInfo.updatePicked(flag.getId());
+                    pickedFlag = flag;
                 } else {
                     flag.fundingFailed();
                     flagNotificationInfo.updateUnpicked(flag.getId());
                 }
-            });
+            }
+            store.startBusiness(StoreStartInfo.builder()
+                    .lati(pickedFlag.getLati())
+                    .longi(pickedFlag.getLongi())
+                    .activeArea(pickedFlag.getAddress())
+                    .region1(pickedFlag.getAddressRegion().getRegion1())
+                    .region2(pickedFlag.getAddressRegion().getRegion2())
+                    .region3(pickedFlag.getAddressRegion().getRegion3())
+                    .region4(pickedFlag.getAddressRegion().getRegion4())
+                    .build());
+
             // 깃발에 펀딩한 유저에게 알림 전송
             try {
                 ApiResult<String> result = payClient.notifyFlag(flagNotificationInfo);
@@ -158,8 +181,9 @@ public class StoreService {
                 log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
                 throw new BaseException(FeignError.FEIGN_ERROR);
             }
+        } else {
+            store.startBusiness(storeStartInfo);
         }
-        store.startBusiness(storeStartInfo);
     }
 
     @Transactional

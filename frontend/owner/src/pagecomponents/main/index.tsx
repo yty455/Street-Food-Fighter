@@ -1,27 +1,45 @@
 import { useEffect, useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
-import { Flag0, Flag1, Flag2, Flag3 } from '@/temp/flag';
 import useModal from '@/hooks/common/modal.hook';
 import StartPopup from '@/components/main/startpopup';
 import CloseAPI from '@/apis/close/CloseAPI';
 import useDateFlagHook from '@/hooks/apis/dateflag.hook';
 import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
-import useSelectFlagHook from '@/hooks/apis/selectflag.hook';
 import SelectFlag from '@/components/main/seletflag';
+import SelectFlagAPI from '@/apis/flag/SelectFlagAPI';
+import kakaomapApi from '@/apis/kakao/kakaoAPI';
+import OwnerInfoStore from '@/stores/ownerinfo/ownerInfoStore';
+import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
 
 const MainPage = () => {
   const router = useRouter();
+  const { state } = OwnerInfoStore();
+  const setOwner = useSetOwnerInfoHook();
+
   const [isVendorOpen, setVendorOpen] = useState(false);
+
+  useEffect(() => {
+    if (state === 'OPEN') {
+      setVendorOpen(true);
+    } else {
+      setVendorOpen(false);
+    }
+  }, [state]);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    setOwner(accessToken);
+  }, []);
 
   const today = new Date().toISOString().split('T')[0];
   const todayflag = useDateFlagHook(today); // 깃발조회
-  // const todayflag = Flag2; // 깃발조회
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
   const handleStartOperation = () => {
+    setVendorOpen(true);
     setModalContent(<StartPopup onClose={closeModal} />);
   };
 
@@ -29,28 +47,33 @@ const MainPage = () => {
   const [addressName, setAddressName] = useState('');
   const { position } = useFindCurrentLoc(setAddressName);
 
-  // useEffect(() => {
-  //   if (todayflag.length === 0) {
-  //     console.log(`현재 위치: 위도 ${position.lat}, 경도 ${position.lng}, 주소: ${addressName}`);
-  //   }
-  // }, [todayflag, position, addressName]);
-  const callSelectFlagAPI = useSelectFlagHook();
+  const handleBackFromSelectFlag = () => {
+    setVendorOpen(false);
+  };
 
   const switchVendor = async () => {
     if (!isVendorOpen) {
-      if (todayflag.length === 0) {
+      const addressDetails = await kakaomapApi({ latitude: position.lat, longitude: position.lng });
+
+      if (todayflag.length == 0) {
+        const addressParts = addressDetails.split(' ');
         const data = {
           flagId: 0,
           lati: position.lat,
           longi: position.lng,
           activeArea: addressName,
+          region1: addressParts[0] || '부산광역시',
+          region2: addressParts[1] || '강서구',
+          region3: addressParts[2] || '송정동',
+          region4: addressParts[3] || '',
         };
-        const response = await callSelectFlagAPI(data);
-        // console.log(response);
+        const response = await SelectFlagAPI(data);
 
         setModalContent(<StartPopup onClose={closeModal} />);
       } else {
-        setModalContent(<SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} />);
+        setModalContent(
+          <SelectFlag flags={todayflag} onStartOperation={handleStartOperation} onClose={closeModal} onBack={handleBackFromSelectFlag} />,
+        );
       }
       openModal(); // 모달 열기
     } else {
@@ -61,13 +84,10 @@ const MainPage = () => {
   const handleCloseAPI = async () => {
     try {
       const res = await CloseAPI();
-      console.log(res);
       if (res) {
         router.push('/close');
       }
-    } catch (error) {
-      console.log('error');
-    }
+    } catch (error) {}
   };
 
   return (

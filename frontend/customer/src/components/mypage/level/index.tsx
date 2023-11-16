@@ -1,8 +1,8 @@
 import levels from '@/assets/level';
 import { LevelContainer, LevelText } from './Level.styled';
-import { LevelProps } from '@/types/level.type';
+import { LevelProps, LevelType } from '@/types/level.type';
 
-const Level = ({ level }: LevelProps) => {
+const Level = ({ level = 'LIGHT' }: LevelProps) => {
   const levelInfo = levels[level];
   return (
     <LevelContainer>

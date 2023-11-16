@@ -8,6 +8,7 @@ import com.sff.OrderServer.funding.service.FundingUpdateService;
 import com.sff.OrderServer.utils.ApiResult;
 import com.sff.OrderServer.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,6 +93,13 @@ public class FundingController {
         fundingService.updateFundingStates(fundingChosen);
         fundingService.sendFundingResultToUsers(fundingChosen);
         return ApiUtils.success("펀딩 성공, 실패 상태 변경 완료 및 알림 전송 요청 성공");
+    }
+
+    // 펀딩 결제 실패 시 롤백을 위한 API
+    @DeleteMapping("/api/order-server/fundings/{fundingId}")
+    public ApiResult<?> deleteFunding(@PathVariable Long fundingId){
+        fundingService.deleteFunding(fundingId);
+        return ApiUtils.success("펀딩 정보 삭제. 롤백 성공");
     }
 
 }

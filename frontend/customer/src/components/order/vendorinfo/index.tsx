@@ -1,17 +1,14 @@
-import { vendordata } from '@/temp/vendordata';
 import { VendorContainer, BoxContainer, Title, Content, ContentTd } from './Vendorinfo.styled';
 
-const VendorInfo = ({ vendorid }: any) => {
-  const vendor = vendordata.find((v) => v.id === vendorid);
-  if (!vendor) {
-    return <div>가게가 없어졌어요 🥺</div>;
-  }
-  // console.log(vendor);
+const VendorInfo = ({ vendor }: any) => {
+  const formatTime = (timeString: string) => {
+    return timeString.substring(0, 5);
+  };
   return (
     <VendorContainer>
       <BoxContainer>
         <Title>가게소개</Title>
-        <Content>{vendor.introduction}</Content>
+        <Content>{vendor.information}</Content>
       </BoxContainer>
 
       <BoxContainer>
@@ -26,7 +23,7 @@ const VendorInfo = ({ vendorid }: any) => {
             <tr>
               <ContentTd>운영시간</ContentTd>
               <ContentTd>
-                {vendor.starttime} ~ {vendor.endtime}
+                {formatTime(vendor.openTime)} ~ {formatTime(vendor.closeTime)}
               </ContentTd>
             </tr>
             <tr>
@@ -35,14 +32,14 @@ const VendorInfo = ({ vendorid }: any) => {
             </tr>
             <tr>
               <ContentTd>위치</ContentTd>
-              <ContentTd>{vendor.loc}</ContentTd>
+              <ContentTd>{vendor.activeArea}</ContentTd>
             </tr>
           </tbody>
         </table>
       </BoxContainer>
       <BoxContainer>
         <Title>안내</Title>
-        <Content> {vendor.notice}</Content>
+        <Content> {vendor.introduction}</Content>
       </BoxContainer>
     </VendorContainer>
   );

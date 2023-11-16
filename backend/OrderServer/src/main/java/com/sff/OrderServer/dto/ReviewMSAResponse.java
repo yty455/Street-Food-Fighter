@@ -11,7 +11,7 @@ public class ReviewMSAResponse {
 
     private Long reviewId;
     private Long userId;
-    private int score;
+    private Integer score;
     private String content;
 
 }

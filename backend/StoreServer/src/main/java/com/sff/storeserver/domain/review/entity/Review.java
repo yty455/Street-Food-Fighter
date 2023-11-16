@@ -10,7 +10,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Builder(toBuilder = true)
 public class Review extends BaseEntity {
     @Id
@@ -26,6 +26,6 @@ public class Review extends BaseEntity {
     private Long orderId;
 
     private String content;
-    private int score;
+    private Integer score;
 
 }

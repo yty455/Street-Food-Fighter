@@ -15,11 +15,13 @@ public class NotificationInfo {
     private NotificationType type;
     private int totalPrice;
     private LocalDateTime createdDate;
+    private String storeName;
 
-    public NotificationInfo(Long targetId, NotificationType type, int totalPrice, LocalDateTime createdDate) {
+    public NotificationInfo(Long targetId, NotificationType type, int totalPrice, LocalDateTime createdDate, String storeName) {
         this.targetId = targetId;
         this.type = type;
         this.totalPrice = totalPrice;
         this.createdDate = createdDate;
+        this.storeName = storeName;
     }
 }

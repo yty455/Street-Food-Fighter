@@ -3,22 +3,39 @@ import useCurPasswordStore from '@/stores/curpwdStore';
 import usePwdPageStore from '@/stores/pwdpageStore';
 import usePasswordStore from '@/stores/passwordStore';
 import useRegisterPageStore from '@/stores/registerStore';
-import { user } from '@/temp/user';
+import SignUpAPI from '@/apis/user/SignUpAPI';
+import usePayPwdStore from '@/stores/userpwdStore';
+import OrderAPI from '@/apis/vendor/OrderAPI';
+import FundingAPI from '@/apis/vendor/FundingAPI';
+import { useNavStore } from '@/stores/curnavStore';
+import { useVendorStore } from '@/stores/curvendoridStore';
+import useBucketStore from '@/stores/bucketStore';
+import { useRequestStore } from '@/stores/requestStore';
+import useFlagIdStore from '@/stores/flagidStore';
 
 const useCompleteHandler = (slug: string) => {
   const router = useRouter();
   const { currentPassword, resetCurrentPassword } = useCurPasswordStore();
+  const { payPassword } = usePayPwdStore();
   const { curPwdPage, setCurPwdPage } = usePwdPageStore();
   const { setPassword, resetPasswords, wantPwd } = usePasswordStore();
   const setRegisterValue = useRegisterPageStore((state) => state.setRegisterValue);
-  const paypassword = useRegisterPageStore((state) => state.paypassword);
+  const { email, password, passwordCheck, nickname, phone, paymentPassword, region1, region2, region3, region4, socialId, fcmToken } =
+    useRegisterPageStore();
 
-  const handleComplete = () => {
-    // const currentPassword = useCurPasswordStore.getState().currentPassword;
+  // 결제하기
+  const { curnav } = useNavStore();
+  const storedVendorId = useVendorStore((state) => state.vendorId);
+  const bucket = useBucketStore((state) => state.bucket);
+  const { finalRequest } = useRequestStore();
+  const { flagId } = useFlagIdStore();
+
+  const handleComplete = async () => {
+    const currentPassword = useCurPasswordStore.getState().currentPassword;
 
     if (slug == 'change') {
       if (curPwdPage === 1) {
-        if (currentPassword === user.paymentPassword) {
+        if (currentPassword === payPassword) {
           setCurPwdPage(2);
           setPassword(1, currentPassword);
         } else {
@@ -36,7 +53,7 @@ const useCompleteHandler = (slug: string) => {
           alert('Password changed successfully.');
         } else {
           resetCurrentPassword();
-          // 변경 비밀번호로 api호출 (이후 코드 추가)
+          // 변경 비밀번호로 api호출
         }
       }
     }
@@ -45,16 +62,68 @@ const useCompleteHandler = (slug: string) => {
     if (slug == 'register') {
       if (curPwdPage === 1) {
         setPassword(1, currentPassword);
-        setRegisterValue('paypassword', currentPassword);
+        setRegisterValue('paymentPassword', currentPassword);
         setCurPwdPage(3);
       } else if (curPwdPage === 3) {
         setPassword(3, currentPassword);
-        if (paypassword === currentPassword) {
-          router.push('/success');
-          resetPasswords();
-          console.log('비밀번호 입력 성공.');
+        if (paymentPassword === currentPassword) {
+          const data = {
+            email,
+            password,
+            passwordCheck,
+            nickname,
+            phone,
+            paymentPassword,
+            region1,
+            region2,
+            region3,
+            region4,
+            fcmToken,
+            imageUrl: '',
+          };
+          const result = await SignUpAPI(data);
+          if (result?.data.success) {
+            router.push('/success');
+          } else {
+            alert('회원가입에 실패했습니다.');
+          }
+          // resetPasswords();
           setCurPwdPage(1);
         } else {
+          resetCurrentPassword();
+        }
+      }
+    }
+    // 결제할 때,
+    if (slug == 'pay') {
+      setCurPwdPage(1);
+      if (curPwdPage === 1) {
+        if (currentPassword === payPassword) {
+          setPassword(1, currentPassword);
+          if (bucket) {
+            // 결제 api
+            const data1 = {
+              bucketId: bucket.bucketId,
+              storeId: storedVendorId,
+              requirement: finalRequest,
+            };
+            const data2 = {
+              bucketId: bucket.bucketId,
+              storeId: storedVendorId,
+              flagId: flagId,
+              requirement: finalRequest,
+            };
+            if (curnav === 1) {
+              const res = await OrderAPI(data1);
+              // console.log('order...');
+            } else {
+              const res = await FundingAPI(data2);
+              // console.log('funding...');
+            }
+          }
+          router.push('/ordercheck');
+        } else {
+          alert('비밀번호가 틀렸습니다.');
           resetCurrentPassword();
         }
       }

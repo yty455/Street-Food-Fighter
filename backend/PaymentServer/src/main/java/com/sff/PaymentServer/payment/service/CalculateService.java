@@ -44,7 +44,7 @@ public class CalculateService {
 
         ApiResult result;
         try{
-            result = ownerClient.updateOwnerPoint(ownerId, new PointUpdateRequest(total, true, null));
+            result = ownerClient.updateOwnerPoint(ownerId, new PointUpdateRequest(total, true));
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException(new ApiError(NetworkError.NETWORK_ERROR_OWNER));

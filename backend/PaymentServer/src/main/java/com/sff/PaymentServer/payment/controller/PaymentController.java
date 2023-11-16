@@ -12,6 +12,7 @@ import com.sff.PaymentServer.utils.ApiResult;
 import com.sff.PaymentServer.utils.ApiUtils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,7 +48,7 @@ public class PaymentController {
         return ApiUtils.success("펀딩을 통한 주문 성공");
     }
 
-    @PutMapping("/api/payment-server/fundings/{fundingId}/cancel")
+    @PostMapping("/api/payment-server/fundings/{fundingId}/cancel")
     public ApiResult<?> updateFundingCancel(@PathVariable Long fundingId){
         orderFromFundingService.cancelFromFunding(fundingId);
         return ApiUtils.success("90퍼센트 환불의 펀딩 취소 성공");
