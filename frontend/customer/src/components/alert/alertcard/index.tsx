@@ -88,7 +88,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
             <Button
               text="리뷰하기"
               onClick={() => {
-                router.push(`/mypage/review/leaverreview/${alert.targetId}`);
+                router.push(`/mypage/review/${alert.targetId}`);
               }}
             ></Button>
           </div>
