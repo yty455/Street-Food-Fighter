@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MainContainer, OperButtonList, OperButton, OperText, Menu, MenuList } from './Main.styled';
 import { useRouter } from 'next/navigation';
 import useModal from '@/hooks/common/modal.hook';
@@ -9,10 +9,22 @@ import useFindCurrentLoc from '@/hooks/common/findcurrentloc.hook';
 import SelectFlag from '@/components/main/seletflag';
 import SelectFlagAPI from '@/apis/flag/SelectFlagAPI';
 import kakaomapApi from '@/apis/kakao/kakaoAPI';
+import OwnerInfoStore from '@/stores/ownerinfo/ownerInfoStore';
 
 const MainPage = () => {
   const router = useRouter();
+  const { state } = OwnerInfoStore();
+
   const [isVendorOpen, setVendorOpen] = useState(false);
+
+  useEffect(() => {
+    // console.log(state);
+    if (state === 'OPEN') {
+      setVendorOpen(true);
+    } else {
+      setVendorOpen(false);
+    }
+  }, [state]);
 
   const today = new Date().toISOString().split('T')[0];
   const todayflag = useDateFlagHook(today); // 깃발조회
