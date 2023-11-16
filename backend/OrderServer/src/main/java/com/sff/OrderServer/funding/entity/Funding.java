@@ -48,11 +48,6 @@ public class Funding {
     @Builder.Default
     private FundingState fundingState = FundingState.PAYMENT_IN_PROGRESS;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private FundToOrderState orderState = FundToOrderState.BEFORE_ORDER;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -65,30 +60,9 @@ public class Funding {
         this.userId = userId;
         this.requirement = fundingCreateRequest.getRequirement();
         this.fundingState = FundingState.PAYMENT_IN_PROGRESS;
-        this.orderState = FundToOrderState.BEFORE_ORDER;
     }
 
-    public void updateStateWaitting(){
-        this.fundingState = FundingState.WAITING;
-    }
-    public void updateStateFailure(){
-        this.fundingState = FundingState.FAILURE;
-    }
-    public void updateStateSuccess(){
-        this.fundingState = FundingState.SUCCESS;
-    }
-    public void updateStateCancel(){ this.fundingState = FundingState.CANCEL;}
-
-    public void updateOrderStateBefore(){
-        this. orderState = FundToOrderState.BEFORE_ORDER;
-    }
-    public void updateOrderStateComplete(){
-        this.orderState = FundToOrderState.ORDER_COMPLETED;
-    }
-    public void updateOrderStateCancel(){
-        this.orderState = FundToOrderState.CANCEL;
-    }
-    public void updateOrderStateFailed(){
-        this.orderState = FundToOrderState.FAILED;
+    public void updateState(FundingState fundingState){
+        this.fundingState = fundingState;
     }
 }

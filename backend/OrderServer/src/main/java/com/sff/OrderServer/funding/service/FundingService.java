@@ -26,11 +26,11 @@ import com.sff.OrderServer.funding.dto.FundingCreateRequest;
 import com.sff.OrderServer.funding.dto.FundingResponse;
 import com.sff.OrderServer.funding.dto.FundingUser;
 import com.sff.OrderServer.funding.entity.Funding;
+import com.sff.OrderServer.funding.entity.FundingState;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.utils.ApiError;
 import com.sff.OrderServer.utils.ApiResult;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,7 +104,6 @@ public class FundingService {
 
         return FundingDetailResponse.builder()
                 .state(funding.getFundingState())
-                .orderState(funding.getOrderState())
                 .storeId(funding.getStoreId())
                 .storeName(flag.getStoreName())
                 .categoryType(flag.getCategoryType())
@@ -154,7 +153,7 @@ public class FundingService {
         );
         // 결제 완료에 따른 펀딩 대기 상태로 변경
         try {
-            funding.updateStateWaitting();
+            funding.updateState(FundingState.WAITING);
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
@@ -187,7 +186,7 @@ public class FundingService {
         List<Funding> fundings = fundingRepository.findAllByFlagId(flagId);
         try{
             for(Funding funding : fundings) {
-                funding.updateStateSuccess();
+                funding.updateState(FundingState.BEFORE_ORDER); // 펀딩에 성공했어요. 주문해주세요.
             }
             fundingRepository.saveAll(fundings);
         }catch (Exception e){
@@ -200,8 +199,7 @@ public class FundingService {
         List<Funding> fundings = fundingRepository.findAllByFlagIdIn(flagIds);
         try {
             for (Funding funding : fundings) {
-                funding.updateStateFailure();
-                funding.updateOrderStateFailed();
+                funding.updateState(FundingState.FAILURE);
             }
             fundingRepository.saveAll(fundings);
         }catch (Exception e){

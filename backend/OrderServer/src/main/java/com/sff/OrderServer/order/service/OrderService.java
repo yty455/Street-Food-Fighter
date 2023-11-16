@@ -21,6 +21,7 @@ import com.sff.OrderServer.error.code.NetworkError;
 import com.sff.OrderServer.error.code.OrderError;
 import com.sff.OrderServer.error.type.BaseException;
 import com.sff.OrderServer.funding.entity.Funding;
+import com.sff.OrderServer.funding.entity.FundingState;
 import com.sff.OrderServer.funding.repository.FundingRepository;
 import com.sff.OrderServer.infra.StoreClient;
 import com.sff.OrderServer.infra.UserClient;
@@ -398,7 +399,7 @@ public class OrderService {
             throw new BaseException(new ApiError(OrderError.FAILED_UPDATE_STATE_WAITING));
         }
         try {
-            funding.updateOrderStateComplete();
+            funding.updateState(FundingState.ORDER_COMPLETED);
         } catch (Exception e) {
             throw new BaseException(new ApiError(FundingError.FAILED_UPDATE_STATE_ORDER_COMPLETED));
         }

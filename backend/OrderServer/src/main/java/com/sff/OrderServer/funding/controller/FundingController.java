@@ -49,19 +49,6 @@ public class FundingController {
         return ApiUtils.success("펀딩 주문 상태 취소로 변경 완료");
     }
 
-    // 펀딩 주문 상태 변경 - 주문 완료
-    @PutMapping("/api/order-server/fundings/{fundingId}/order-state/complete")
-    public ApiResult<?> updateFundingComplete(@RequestHeader("UserId") Long userId, @PathVariable Long fundingId){
-        fundingUpdateService.updateFundingOrderStateComplete(userId, fundingId);
-        return ApiUtils.success("펀딩 주문 상태 주문 완료로 변경 완료");
-    }
-    // 펀딩 주문 상태 변경 - 주문 전 (error 발생 시 rollback을 위한 API)
-    @PutMapping("/api/order-server/fundings/{fundingId}/order-state/before")
-    public ApiResult<?> updateFundingBefore(@RequestHeader("UserId") Long userId, @PathVariable Long fundingId){
-        fundingUpdateService.updateFundingOrderStateBefore(userId, fundingId);
-        return ApiUtils.success("펀딩 주문 상태 주문 전으로 변경 완료");
-    }
-
     // 펀딩 상태 변경 - 성공
     @PutMapping("/api/order-server/fundings/{fundingId}/funding-state/success")
     public ApiResult<?> updateFundingSuccess(@RequestHeader("UserId") Long userId, @PathVariable Long fundingId){
