@@ -10,21 +10,27 @@ import SelectFlag from '@/components/main/seletflag';
 import SelectFlagAPI from '@/apis/flag/SelectFlagAPI';
 import kakaomapApi from '@/apis/kakao/kakaoAPI';
 import OwnerInfoStore from '@/stores/ownerinfo/ownerInfoStore';
+import useSetOwnerInfoHook from '@/hooks/owner/ownerInfo.hook';
 
 const MainPage = () => {
   const router = useRouter();
   const { state } = OwnerInfoStore();
+  const setOwner = useSetOwnerInfoHook();
 
   const [isVendorOpen, setVendorOpen] = useState(false);
 
   useEffect(() => {
-    // console.log(state);
     if (state === 'OPEN') {
       setVendorOpen(true);
     } else {
       setVendorOpen(false);
     }
   }, [state]);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    setOwner(accessToken);
+  }, []);
 
   const today = new Date().toISOString().split('T')[0];
   const todayflag = useDateFlagHook(today); // 깃발조회

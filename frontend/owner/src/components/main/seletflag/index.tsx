@@ -8,7 +8,7 @@ import kakaomapApi from '@/apis/kakao/kakaoAPI';
 import SelectFlagAPI from '@/apis/flag/SelectFlagAPI';
 
 const SelectFlag = ({ flags, onClose, onStartOperation, onBack }: any) => {
-  const [selectedFlagId, setSelectedFlagId] = useState(null);
+  const [selectedFlagId, setSelectedFlagId] = useState(0);
 
   const handleFlagClick = (flagId: any) => {
     setSelectedFlagId(flagId);
