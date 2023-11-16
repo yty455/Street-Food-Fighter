@@ -17,6 +17,7 @@ const OrderlistPage = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const refreshTabList = async () => {
     setRefreshKey((prevKey) => prevKey + 1);
+    setActiveTab('waiting');
   };
   return (
     <div>
