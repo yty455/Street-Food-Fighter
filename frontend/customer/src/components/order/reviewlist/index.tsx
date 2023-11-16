@@ -23,7 +23,7 @@ const Reviewlist = ({ vendor, vendorid }: any) => {
     <BoxContainer>
       {reviewlist.length == 0 && <NoReview> 리뷰가 없어요 😢</NoReview>}
       {reviewlist.map((review, index) => (
-        <ReviewCard key={index} vendorid={vendor.storeId} reviewid={index} />
+        <ReviewCard key={index} vendorid={vendor.storeId} reviewdata={review} />
       ))}
     </BoxContainer>
   );
