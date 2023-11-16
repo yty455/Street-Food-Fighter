@@ -16,6 +16,10 @@ const VendorPage = ({ id }: { id: string }) => {
   const [vendor, setVendor] = useState<VendorData | null>(null);
 
   useEffect(() => {
+    clearOrder();
+  }, []);
+
+  useEffect(() => {
     const fetchVendorData = async () => {
       const data = await VendorDetailAPI({ storeId: index });
       if (data) {

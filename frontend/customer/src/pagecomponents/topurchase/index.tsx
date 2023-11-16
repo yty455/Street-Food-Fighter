@@ -37,7 +37,7 @@ const PurchasePage = () => {
   }, [storedVendorId]);
 
   const catImage = categories.find((cat) => cat.type === vendor?.categoryType)?.image || '16.png';
-  const { order } = useOrderStore();
+  const { order, clearOrder } = useOrderStore();
 
   // input (요청사항)
   const [request, setRequest] = useState('');
@@ -52,6 +52,7 @@ const PurchasePage = () => {
 
     if (bucket) {
       setFinalRequest(request);
+      clearOrder();
       router.push('/password/pay');
     } else {
       console.log('장바구니 없음');
