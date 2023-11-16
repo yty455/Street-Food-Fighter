@@ -48,7 +48,7 @@ public class ReviewService {
         reviewRepository.save(reviewRequest.toEntity(store, userId));
 
         // 알림 서버로 업데이트 보내기
-        // notiClient.updateType(NotificationUpdateRequest.builder().targetId(reviewRequest.getOrderId()).type("DONE_R").build());
+        notiClient.updateType(NotificationUpdateRequest.builder().targetId(reviewRequest.getOrderId()).type("DONE_R").build());
     }
 
     public Page<MyReviewResponse> getMyReviews(Long userId, int page, int size) {
