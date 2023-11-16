@@ -26,7 +26,7 @@ const RegisterPage = ({ params, ...props }: any) => {
   useEffect(() => {
     setToken();
   }, []);
-  // 플러터 섫정 끝
+  // 플러터 설정 끝
 
   const validateEmail = (email: string) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

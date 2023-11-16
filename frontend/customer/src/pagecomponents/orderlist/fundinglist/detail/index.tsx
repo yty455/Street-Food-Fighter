@@ -55,7 +55,7 @@ const FundingDetailPage = ({ params, ...props }: any) => {
       {fundingInfo && (
         <>
           <OrderInfo>
-            <OrderState>{stateText[fundingInfo.orderState] || stateText['FAILED']}</OrderState>
+            <OrderState>{stateText[fundingInfo.state] || stateText['FAILED']}</OrderState>
             <StoreName>
               <img
                 src={`/images/category/${getCategoryImage(fundingInfo.categoryType)}`}
@@ -82,7 +82,7 @@ const FundingDetailPage = ({ params, ...props }: any) => {
               totalPrice={fundingInfo.fundingItemList.reduce((acc: number, cur: any) => acc + cur.menuTotalPrice, 0)}
             ></Receipt>
           </ReceiptTabble>
-          {fundingInfo.orderState === 'BEFORE_ORDER' && (
+          {fundingInfo.state === 'BEFORE_ORDER' && (
             <ButtonBox>
               <BottomButton type="cancel" onClick={handleCancel}>
                 취소하기
