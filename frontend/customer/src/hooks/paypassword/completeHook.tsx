@@ -81,13 +81,10 @@ const useCompleteHandler = (slug: string) => {
             fcmToken,
             imageUrl: '',
           };
-          console.log('요청 데이터', data);
           const result = await SignUpAPI(data);
-          // console.log(result);
           if (result?.data.success) {
             router.push('/success');
           } else {
-            console.log(result);
             alert('회원가입에 실패했습니다.');
           }
           // resetPasswords();

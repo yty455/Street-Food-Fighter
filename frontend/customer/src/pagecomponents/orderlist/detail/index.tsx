@@ -19,7 +19,7 @@ const OrderDetailPage = ({ params, ...props }: any) => {
   useEffect(() => {
     const setDetail = async () => {
       const result = await GetOrderDetailAPI(params.id);
-      console.log(result);
+      // console.log(result);
       setOrderInfo(result.response);
     };
     setDetail();

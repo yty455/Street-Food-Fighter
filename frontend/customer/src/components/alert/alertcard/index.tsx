@@ -44,7 +44,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
     }
     const res = await CancelFundingAPI(alert.targetId);
     if (res) {
-      console.log('성공');
+      // console.log('성공');
       router.push('/main');
     }
   };
