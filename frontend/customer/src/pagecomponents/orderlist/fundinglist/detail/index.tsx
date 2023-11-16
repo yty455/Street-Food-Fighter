@@ -45,7 +45,7 @@ const FundingDetailPage = ({ params, ...props }: any) => {
   const handleCancel = async () => {
     const res = await CancelFundingAPI(params.id);
     if (res) {
-      console.log('성공');
+      // console.log('성공');
       router.push('/main');
     }
   };

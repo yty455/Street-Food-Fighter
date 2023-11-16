@@ -7,14 +7,12 @@ import { useVendorStore } from '@/stores/curvendoridStore';
 const BagOrder = ({ curorder }: any) => {
   const [vendor, setVendor] = useState<VendorData | null>(null);
 
-  // console.log('curorder: ', curorder);
   const storedVendorId = useVendorStore((state) => state.vendorId);
   useEffect(() => {
     const fetchVendorData = async () => {
       const data = await VendorDetailAPI({ storeId: storedVendorId });
       if (data) {
         setVendor(data);
-        // console.log('vendor :  ', data);
       }
     };
 
@@ -25,7 +23,6 @@ const BagOrder = ({ curorder }: any) => {
   if (!menu) {
     return <div>메뉴를 찾을 수 없습니다.</div>;
   }
-  // console.log('menu : ', menu);
 
   const optionsText = curorder.optionIds
     .map((selectedOptionId: number) => {
@@ -46,7 +43,6 @@ const BagOrder = ({ curorder }: any) => {
   };
 
   const totalPrice = calculateTotalPrice();
-  // console.log(totalPrice);
   return (
     <MenuBox>
       <Title>{menu.name}</Title>

@@ -28,7 +28,7 @@ const LeaveReviewPage = ({ params, ...props }: any) => {
     const getReviews = async () => {
       const result = await GetOrderDetailAPI(params.id);
       setReviewInfo(result.response);
-      console.log(result);
+      // console.log(result);
     };
     getReviews();
   }, []);
@@ -40,7 +40,7 @@ const LeaveReviewPage = ({ params, ...props }: any) => {
       score,
     };
     const result = await PostReviewAPI(data);
-    console.log(result);
+    // console.log(result);
     if (result.success) {
       alert('리뷰남기기에 성공했습니다');
       router.push('/mypage/review');

@@ -12,11 +12,9 @@ import Button from '@/components/common/button';
 import { VendorData } from '@/types/vendortype';
 import VendorDetailAPI from '@/apis/vendor/VendorDetailAPI';
 import useBucketStore from '@/stores/bucketStore';
-import OrderAPI from '@/apis/vendor/OrderAPI';
-import useFlagIdStore from '@/stores/flagidStore';
-import FundingAPI from '@/apis/vendor/FundingAPI';
 import Charge from '@/components/common/charge';
 import GetPointAPI from '@/apis/user/GetPointAPI';
+import { useRequestStore } from '@/stores/requestStore';
 
 const PurchasePage = () => {
   const router = useRouter();
@@ -26,7 +24,6 @@ const PurchasePage = () => {
   const [vendor, setVendor] = useState<VendorData | null>(null);
 
   const bucket = useBucketStore((state) => state.bucket);
-  const { flagId } = useFlagIdStore();
 
   useEffect(() => {
     const fetchVendorData = async () => {
@@ -47,32 +44,15 @@ const PurchasePage = () => {
   const handleRequestChange = (e: any) => {
     setRequest(e.target.value);
   };
+  const { setFinalRequest } = useRequestStore();
 
   // 결제하기 클릭
   const handleSubmit = async () => {
     // console.log('저장된 요청 사항:', request);
 
     if (bucket) {
-      const data1 = {
-        bucketId: bucket.bucketId,
-        storeId: storedVendorId,
-        requirement: request,
-      };
-      const data2 = {
-        bucketId: bucket.bucketId,
-        storeId: storedVendorId,
-        flagId: flagId,
-        requirement: request,
-      };
-      if (curnav === 1) {
-        const res = await OrderAPI(data1);
-        // console.log('order...');
-        router.push('/password/pay');
-      } else {
-        const res = await FundingAPI(data2);
-        // console.log('funding...');
-        router.push('/password/pay');
-      }
+      setFinalRequest(request);
+      router.push('/password/pay');
     } else {
       console.log('장바구니 없음');
     }
