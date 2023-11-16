@@ -25,7 +25,7 @@ const useRegisterPageStore = create<RegisterState>((set) => ({
   paymentPassword: '',
   region1: '부산광역시',
   region2: '강서구',
-  region3: '신호동',
+  region3: '송정동',
   region4: '',
   socialId: '', // socialId가 null이거나 빈값("")이면 일반 회원가입으로 취급
   fcmToken: '0', // 플러터에서 제공한 fcm 토큰 가져오기(필수)

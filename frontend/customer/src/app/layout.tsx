@@ -10,6 +10,9 @@ import UserInfotAPI from '@/apis/user/UserInfoAPI';
 import userInfoStore from '@/stores/userInfoStore';
 import { useRouter } from 'next/navigation';
 import GetTokenAPI from '@/apis/token/RefreshTokenAPI';
+import usePasswordStore from '@/stores/passwordStore';
+import GetMyPasswordAPI from '@/apis/user/GetMyPasswordAPI';
+import usePayPwdStore from '@/stores/userpwdStore';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -29,12 +32,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '/mypage/wishlist',
   ];
   const { setUserInfo } = userInfoStore();
+  const { setPayPassword } = usePayPwdStore();
 
   useEffect(() => {
     const GetUserInfo = async () => {
       const data = await UserInfotAPI();
       if (data != null) {
         setUserInfo(data);
+
+        const res = await GetMyPasswordAPI();
+        if (res) {
+          setPayPassword(res.paymentPassword);
+          console.log(res.paymentPassword);
+        }
       }
     };
 

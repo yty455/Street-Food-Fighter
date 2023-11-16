@@ -28,7 +28,7 @@ const LoginPage = () => {
       const res = await GetMyPasswordAPI();
       if (res) {
         setPayPassword(res.paymentPassword);
-        // console.log(res.paymentPassword);
+        //console.log(res.paymentPassword);
       }
       router.push('/main');
       // alert('로그인에 성공하셨습니다.');
