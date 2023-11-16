@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FundingRepository extends JpaRepository<Funding, Long> {
-    List<Funding> findAllByUserId(Long userId);
+    List<Funding> findAllByUserIdOrderByCreatedAtDesc(Long userId);
     Optional<Funding> findByFundingIdAndUserId(Long fundingId, Long userId);
 
     @Query("SELECT SUM(b.totalPrice) FROM Funding f JOIN f.bucket b WHERE f.flagId = :flagId AND f.fundingState = 'WAITING'")

@@ -79,7 +79,7 @@ public class FundingService {
     }
 
     public List<FundingResponse> getFundings(Long userId){
-        List<Funding> fundings = fundingRepository.findAllByUserId(userId);
+        List<Funding> fundings = fundingRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
         List<FundingResponse> fundingResponses = new ArrayList<>();
         List<Long> storeIdList = fundings.stream().map(Funding::getStoreId).toList();
 
