@@ -8,7 +8,6 @@ import BottomBtn from '@/components/common/bottombtn';
 import { MarkerPosition } from '@/types/map.type';
 import SettingBox from '@/components/flagset/settingbox';
 import SearchPlace from '@/components/common/searchplace';
-import useFormatDate from '@/hooks/common/formatDate.hook';
 import useSelectedDateStore from '@/stores/flag/selectedDateStore';
 import AddFlagAPI from '@/apis/flag/AddFlagAPI';
 

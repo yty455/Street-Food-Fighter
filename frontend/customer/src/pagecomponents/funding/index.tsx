@@ -69,6 +69,8 @@ const FundingPage = () => {
       } else {
         console.error('Failed to fetch near flag data');
       }
+
+      //console.log(nearFlagsData);
     };
     fetchFlags();
   }, [addressName, selectedCategories, selectedDate]);
@@ -82,6 +84,7 @@ const FundingPage = () => {
 
   const moveCenter = (event: any, index: number) => {
     const vendor = flags[index];
+
     if (mapRef.current) {
       mapRef.current.setCenter(new kakao.maps.LatLng(vendor.lati, vendor.longi));
     }
@@ -103,7 +106,7 @@ const FundingPage = () => {
               <MapMarker
                 key={index}
                 onClick={(e: any) => moveCenter(e, index)}
-                position={{ lat: parseFloat(vendor.lati), lng: parseFloat(vendor.longi) }}
+                position={{ lat: vendor.flag.lati, lng: vendor.flag.longi }}
                 image={{
                   src: imageSrc,
                   size: { width: 50, height: 50 },
