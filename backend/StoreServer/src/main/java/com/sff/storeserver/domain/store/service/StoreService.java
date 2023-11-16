@@ -152,15 +152,28 @@ public class StoreService {
         if (storeStartInfo.getFlagId() != 0) {
             FlagNotificationInfo flagNotificationInfo = new FlagNotificationInfo();
             List<Flag> flags = flagRepository.findByStoreIdAndDate(store.getId(), LocalDate.now());
-            flags.forEach(flag -> {
+            Flag pickedFlag = null;
+
+            for (Flag flag : flags) {
                 if (storeStartInfo.getFlagId() == flag.getId()) {
                     flag.fundingSuccess();
                     flagNotificationInfo.updatePicked(flag.getId());
+                    pickedFlag = flag;
                 } else {
                     flag.fundingFailed();
                     flagNotificationInfo.updateUnpicked(flag.getId());
                 }
-            });
+            }
+            store.startBusiness(StoreStartInfo.builder()
+                    .lati(pickedFlag.getLati())
+                    .longi(pickedFlag.getLongi())
+                    .activeArea(pickedFlag.getAddress())
+                    .region1(pickedFlag.getAddressRegion().getRegion1())
+                    .region2(pickedFlag.getAddressRegion().getRegion2())
+                    .region3(pickedFlag.getAddressRegion().getRegion3())
+                    .region4(pickedFlag.getAddressRegion().getRegion4())
+                    .build());
+
             // 깃발에 펀딩한 유저에게 알림 전송
             try {
                 ApiResult<String> result = payClient.notifyFlag(flagNotificationInfo);
@@ -168,8 +181,9 @@ public class StoreService {
                 log.error("[Store-server] Feign Client 에러 발생 {}", ex.getMessage());
                 throw new BaseException(FeignError.FEIGN_ERROR);
             }
+        } else {
+            store.startBusiness(storeStartInfo);
         }
-        store.startBusiness(storeStartInfo);
     }
 
     @Transactional
