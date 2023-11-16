@@ -23,7 +23,7 @@ public class FundingUpdateService {
                 ()-> new BaseException(new ApiError(FundingError.NOT_EXIST_FUNDING))
         );
         try {
-            funding.updateState(FundingState.SUCCESS);
+            funding.updateState(FundingState.BEFORE_ORDER);
         }catch (Exception e){
             throw new BaseException(new ApiError(FundingError.UPDATE_FUNDINGSTATE_ERROR));
         }
