@@ -69,7 +69,10 @@
 <br>
 
 ## 6. 팀원 소개
-
+| **[황재영](https://github.com/JJaeki)**|**[강동윤](https://github.com/yty455)**|**[구배성](https://github.com/deerKBS)**|**[김성인](https://github.com/ksi2564)**|**[박슬빈](https://github.com/slbin-park)**|**[곽보선](https://github.com/0214kbs)**|
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img title="" src="/uploads/3da8a2bf4e13b05b033a9e31dcfafc47/황재영.png" alt=""> | <img title="" src="/uploads/cbe2fe9b72d63160722bcd058bd08ff5/강동윤.png" alt="" > | <img title="" src="/uploads/8373c833c99918061a4a91d21b91c7f3/구배성.png" alt="" > | <img title="" src="/uploads/186f790c6ae2a7ffcd78cb7e3391818d/김성인.png" alt="" > | <img title="" src="/uploads/8389468d432ed19c2f569f9965cbb483/박슬빈.png" alt=""> | <img title="" src="/uploads/70e04ac14642f8875af091cfe01eac4f/곽보선.png" alt=""> |
+|Backend|Backend & Android|Backend|Backend|FullStack & CI/CD|Frontend|
 
 
 
