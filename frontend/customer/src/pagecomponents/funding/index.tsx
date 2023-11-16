@@ -86,7 +86,7 @@ const FundingPage = () => {
     const vendor = flags[index];
 
     if (mapRef.current) {
-      mapRef.current.setCenter(new kakao.maps.LatLng(vendor.lati, vendor.longi));
+      mapRef.current.setCenter(new kakao.maps.LatLng(vendor.flag.lati, vendor.flag.longi));
     }
 
     scrollRef.current[index].scrollIntoView({ inline: 'center', block: 'center', behavior: 'smooth' });
