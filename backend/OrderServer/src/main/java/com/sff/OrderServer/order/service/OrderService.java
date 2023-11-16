@@ -290,7 +290,7 @@ public class OrderService {
                 e.printStackTrace();
                 throw new BaseException(new ApiError(OrderError.FAILED_KAFKA));
             }
-        }, 15, TimeUnit.MINUTES);
+        }, 10, TimeUnit.SECONDS);
 
         // 작업이 완료되면 executor를 종료합니다.
         executorService.shutdown();
