@@ -11,7 +11,7 @@ const CancelFundingAPI = async (fundingId: any) => {
         headers: { Authorization: `${accessToken}` },
       },
     );
-    console.log('Cancel = ', response.data);
+    // console.log('Cancel = ', response.data);
     return response.data;
   } catch (error) {
     console.error(error);

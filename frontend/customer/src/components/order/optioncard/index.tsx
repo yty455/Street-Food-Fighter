@@ -5,8 +5,6 @@ import useOrderStore from '@/stores/orderStore';
 import { OptionInfo } from '@/types/vendortype';
 
 const Optioncard = ({ menuid, menudata }: any) => {
-  console.log(menudata);
-
   const optionlist = menudata.optionInfoList || [];
   const { order, addOption, removeOption, setQuantity } = useOrderStore();
 

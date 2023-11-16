@@ -1,8 +1,6 @@
 import api from '../api';
 
 const GetOrderDetailAPI = async (orderId: any) => {
-  // const accessToken = localStorage.getItem('accessToken');
-  // const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
   const accessToken = localStorage.getItem('user-accessToken');
 
   try {

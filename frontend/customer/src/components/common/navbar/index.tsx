@@ -43,7 +43,7 @@ const Navbar = () => {
   useEffect(() => {
     const matchingItem = NAV_ITEMS.find((item) => pathname.startsWith(item.link)) || NAV_ITEMS[0];
     setCurnav(matchingItem.id);
-    console.log(matchingItem);
+    // console.log(matchingItem);
   }, []);
 
   return (

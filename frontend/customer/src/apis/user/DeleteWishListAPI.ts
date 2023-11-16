@@ -1,8 +1,6 @@
 import api from '../api';
 
 const DeleteWishListAPI = async (categoryName: string) => {
-  // const accessToken = localStorage.getItem('accessToken');
-  // const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
   const accessToken = localStorage.getItem('user-accessToken');
 
   const body = { foodType: categoryName };
