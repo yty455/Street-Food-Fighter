@@ -1,10 +1,8 @@
-import { vendorreviewlist } from '@/temp/vendorreviewlist';
+// import { vendorreviewlist } from '@/temp/vendorreviewlist';
 import { CardContainer, Profile, Name, Content, Starlist, TitleList } from './Reviewcard.styled';
 import Stars from '@/components/common/stars';
 
-const ReviewCard = ({ vendorid, reviewid }: any) => {
-  const reviewlist = vendorreviewlist.content || [];
-  const reviewdata = reviewlist[reviewid];
+const ReviewCard = ({ vendorid, reviewdata }: any) => {
   if (!reviewdata) return null;
   return (
     <CardContainer>
