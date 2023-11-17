@@ -7,3 +7,5 @@
     - 도로명주소 변환
     
 https://developers.kakao.com/
+
+- Geolocation API
