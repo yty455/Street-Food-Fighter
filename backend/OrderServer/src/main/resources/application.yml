@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: local
+  cloud:
+    config:
+      enabled: false
+  kafka:
+    bootstrap-servers: k9e205.p.ssafy.io:9092
+  mvc:
+    static-path-pattern: /static/**
+
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: info # 이부분은 알아서 변경
+
+feign:
+  storeserver:
+    url: k9e205.p.ssafy.io:8090
+  userserver:
+    url: k9e205.p.ssafy.io:8100
+  payserver:
+    url: k9e205.p.ssafy.io:8110
+  notiserver:
+    url: k9e205.p.ssafy.io:8120
+  orderserver:
+    url: k9e205.p.ssafy.io:8130
