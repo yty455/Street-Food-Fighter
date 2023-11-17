@@ -73,7 +73,48 @@
 <br>
 
 ## 4. 개발 환경
+### ⚙ Management Tool
+- 형상 관리 : Gitlab
+- 이슈 관리 : Jira
+- 커뮤니케이션 : Mattermost, Notion, Discord
+- 디자인 : Figma, PowerPoint
 
+### 💻 IDE
+- Visual Studio Code `1.83.0`
+- IntelliJ `11.0.19`
+- Android Studio
+
+### 📱 Frontend
+- nextjs: 13.4.8
+- react: 18.2.0
+- styled-components: 6.0.2
+- typescript: 5.1.6
+- zustand: 4.3.9
+- firebase: 10.5.2
+- axios: 1.4.0
+- moment: 2.29.4
+- chart.js: 4.4.0
+- eslint: 8.2.0
+- prettier: 3.0.0
+
+### 💾 Backend
+- Java : 17
+- MySql : 8.1
+- Kafka : 3.5.1
+- SpringCloud : 2022.0.3
+- Spring Boot : 3.1.5
+- logstash-logback-encoder : 6.3
+
+### Mobile
+- Flutter
+- inapp_webview
+
+### Infra
+- FCM
+- AWS EC2
+- Docker 24.0.6
+- Ubuntu 20.04.6 LTS
+- Elastic Stack : 8.11.0
 <br>
 
 ## 5. 설계 문서
