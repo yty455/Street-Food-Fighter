@@ -68,6 +68,8 @@
 - Open Feign
     - 서버간 통신을 위해 사용
     - Spring Cloud의 기술인 Eureka와의 편리한 통합을 위해 사용
+- Elastic search + logtash + kibana
+    - ELK 스택 구축해서 분산 서버에서 로깅을 하나의 서버로 통합
 - 웹 기반 하이브리드 애플리케이션
     - Flutter를 활용하여 웹 및 모바일 앱 플랫폼 모두 사용 가능
 <br>
